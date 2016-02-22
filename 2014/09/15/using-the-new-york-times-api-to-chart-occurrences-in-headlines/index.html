@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using the New York Times API to Chart Occurrences in Headlines &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using the New York Times API to Chart Occurrences in Headlines" />
+<meta property="og:description" content="
+This weekend while at a conference, I discovered that the New York Times has a pretty deep developer API. It covers both their newspaper data as well as government and regional information. I played around with it a bit and found it very easy to use via JavaScript (I don&#39;t think they document it, but they do use CORS so you can skip JSONP) and thought I&#39;d try to build a little experiment. What if we could use the API to map the number of times a keyword appeared in headlines over time?
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2014/09/15/using-the-new-york-times-api-to-chart-occurrences-in-headlines" />
+
+
+<meta property="og:updated_time" content="2014-09-15T10:09:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using the New York Times API to Chart Occurrences in Headlines">
+<meta itemprop="description" content="
+This weekend while at a conference, I discovered that the New York Times has a pretty deep developer API. It covers both their newspaper data as well as government and regional information. I played around with it a bit and found it very easy to use via JavaScript (I don&#39;t think they document it, but they do use CORS so you can skip JSONP) and thought I&#39;d try to build a little experiment. What if we could use the API to map the number of times a keyword appeared in headlines over time?
+
+">
+
+
+<meta itemprop="dateModified" content="2014-09-15T10:09:00&#43;06:00" />
+<meta itemprop="wordCount" content="1280">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using the New York Times API to Chart Occurrences in Headlines"/>
+<meta name="twitter:description" content="
+This weekend while at a conference, I discovered that the New York Times has a pretty deep developer API. It covers both their newspaper data as well as government and regional information. I played around with it a bit and found it very easy to use via JavaScript (I don&#39;t think they document it, but they do use CORS so you can skip JSONP) and thought I&#39;d try to build a little experiment. What if we could use the API to map the number of times a keyword appeared in headlines over time?
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2014/09/15/using-the-new-york-times-api-to-chart-occurrences-in-headlines">
+    <h1 class="article-title" itemprop="name">
+        Using the New York Times API to Chart Occurrences in Headlines
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2014-09-15 10:09:00 &#43;0600 &#43;0600" itemprop="datePublished">2014-09-15</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>
+This weekend while at a conference, I discovered that the New York Times has a pretty deep <a href="http://developer.nytimes.com/page">developer API</a>. It covers both their newspaper data as well as government and regional information. I played around with it a bit and found it very easy to use via JavaScript (I don't think they document it, but they do use CORS so you can skip JSONP) and thought I'd try to build a little experiment. What if we could use the API to map the number of times a keyword appeared in headlines over time?
+</p>
+
+<p>
+I began by looking at the API documentation for <a href="http://developer.nytimes.com/docs/read/article_search_api_v2">article searching</a> and discovered that they let you narrow your search term to a specific part of the article. I began with a simple example that just searched the entire database for a term in the headline. 
+</p>
+
+<pre><code class="language-javascript">$.get(&quot;http:&#x2F;&#x2F;api.nytimes.com&#x2F;svc&#x2F;search&#x2F;v2&#x2F;articlesearch.json&quot;, {
+        &quot;api-key&quot;:API,
+        sort:&quot;oldest&quot;,
+        fq:&quot;headline:(\&quot;&quot;+term+&quot;\&quot;)&quot;,
+        fl:&quot;headline,snippet,multimedia,pub_date&quot;}, function(res) {
+        console.dir(res.response);
+    }, &quot;JSON&quot;);</code></pre>
+
+<p>
+Fairly simple. I also limited the result set back. I'm not currently displaying <i>any</i> actual result data, just aggregate data, but I focused on a few key items for the result that I thought I might add later. The important thing though is the response object. It contains a "meta" key with the total number of results.
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s124.png" />
+</p>
+
+<p>
+Ok, that's half way there. The next step was to limit the results to one calendar year. Again, the API makes this pretty darn simple. I wrote a function that accepted a year and search term and handled performing the search.
+</p>
+
+<pre><code class="language-javascript">function fetchForYear(year, term) {
+    &#x2F;&#x2F;YYYYMMDD
+    var startYearStr = year + &quot;0101&quot;;
+    var endYearStr = year + &quot;1231&quot;;
+    console.log(&#x27;doing year &#x27;+year);
+    
+    return $.get(&quot;http:&#x2F;&#x2F;api.nytimes.com&#x2F;svc&#x2F;search&#x2F;v2&#x2F;articlesearch.json&quot;, {
+        &quot;api-key&quot;:API,
+        sort:&quot;oldest&quot;,
+        begin_date:startYearStr,
+        end_date:endYearStr,
+        fq:&quot;headline:(\&quot;&quot;+term+&quot;\&quot;)&quot;,
+        fl:&quot;headline,snippet,multimedia,pub_date&quot;}, function(res) {
+            &#x2F;&#x2F;Ok, currently assume a good response
+            &#x2F;&#x2F;todo - check the response
+            &#x2F;&#x2F;console.dir(res.response);
+            totalDone++;
+    }, &quot;JSON&quot;);
+    
+}</code></pre>
+
+<p>
+Note that I'm returning the promise generated by the jQuery's Ajax handler. Why? Well I need to perform a large number of Ajax calls. To handle knowing when they are all done, I can combine them into an array and wait for them <i>all</i> to finish. Promises are seriously cool for stuff like this.
+</p>
+
+<pre><code class="language-javascript">function search() {
+    var term = $search.val();
+    if(term === &#x27;&#x27;) return;
+    totalDone = 0;
+    
+    console.log(&quot;Searching for &quot;+term);
+    var currentYear = START_YEAR;
+
+    var promises = [];
+    
+    &#x2F;&#x2F;Gather up all the promises...
+    for(var i=START_YEAR; i&lt;=END_YEAR; i++) {
+        promises.push(fetchForYear(i,term));    
+    }
+    
+    &#x2F;&#x2F;And when done, lets graph this!
+    $.when.apply($, promises).done(function() {
+        console.log(&#x27;DONE&#x27;);
+        console.dir(arguments);
+    });
+    
+}</code></pre>
+
+<p>
+The code above worked perfectly. I tested it on a bunch of calls and it correctly handled waiting for them all to finish and giving me easy access to all the results. Then I ran into a problem. I modified my data to go from 10 calls to 100 and I then hit the NYT's API rate limiter. For some silly reason (and honestly, this is <i>really</i> stupid) the NYT refuses to tell you what their rate limits are until you sign up and make an app. Now, it is free to sign up so it doesn't cost you anything, but there is <strong>no valid reason for this!</strong> If you provide an API, be up front and direct with what your limits are. Ok, rant done. So their limit is 10 per second. This threw me for a loop. I'm aware of code that will limit the number of calls per time period, but these methods kill (as far as I know) the "extra" calls. I wasn't able to find a library that said, "If I give you X in time period Y and the limit is some smaller number, just push the rest till after Y." A follower on Twitter recommended simply building a recursive function and adding a timeout, so that's the approach I took.
+</p>
+
+<p>
+I built a function called processSets, which basically looks at my desired data as a set of ... well sets. Given I want 100+ years of data, and given that the NYT wants no more than 10 hits per second, I thought doing 10 hits at once and then recursively calling myself in a timeout may work. I got this working, although I had to use a few global variables and I feel like this is a bit dirty. I should really abstract this out in a module. For now though, it works. Here is my current solution.
+</p>
+
+<pre><code class="language-javascript">&#x2F;*
+Given an array of data, I process X items async at a time.
+When done, I see if I need to do more, and if so, I call it in
+Y miliseconds. The idea being I do chunks of aysnc requests with
+a &#x27;pad&#x27; between them to slow down the requests.
+*&#x2F;
+var globalData;
+var searchTerm;
+var currentYear = START_YEAR;
+var PER_SET = 10;
+function processSets() {
+    var promises = [];
+    for(var i=0;i&lt;PER_SET;i++) {
+        var yearToGet = currentYear + i;
+        if(yearToGet &lt;= END_YEAR) {
+            promises.push(fetchForYear(yearToGet,searchTerm));
+        }
+    }
+    $.when.apply($, promises).done(function() {
+        console.log(&#x27;DONE with Set &#x27;+promises.length);
+        
+        &#x2F;&#x2F;update progress
+        var percentage = Math.floor(totalDone&#x2F;(END_YEAR-START_YEAR)*100);
+        $progress.text(&quot;Working on data, &quot;+percentage +&quot;% done.&quot;);
+        
+        &#x2F;&#x2F;massage into something simpler
+        &#x2F;&#x2F; handle cases where promises array is 1
+        if(promises.length === 1) {
+            var toAddRaw = arguments[0];
+            globalData.push({
+                year:currentYear,
+                results:toAddRaw.response.meta.hits
+            });         
+        } else {
+            for(var i=0,len=arguments.length;i&lt;len;i++) {
+                var toAddRaw = arguments[i][0];
+                var year = currentYear+i;
+                globalData.push({
+                    year:year,
+                    results:toAddRaw.response.meta.hits
+                });
+            }
+        }
+        currentYear += PER_SET;
+
+        &#x2F;&#x2F;Am I done yet?
+        if(currentYear &lt;= END_YEAR) {
+            setTimeout(processSets, 900);
+        } else {
+            $progress.text(&quot;&quot;);
+            render(globalData); 
+        }
+    });
+
+}
+
+function search() {
+    var term = $search.val();
+    if(term === &#x27;&#x27;) return;
+    totalDone = 0;
+    
+    console.log(&quot;Searching for &quot;+term);
+
+    globalData = [];
+    searchTerm = term;
+    $progress.text(&quot;Beginning work...&quot;);
+    processSets();
+}</code></pre>
+
+<p>
+Hopefully this makes <i>some</i> sense. Again, I'm sure some of my readers will tear me a new one for how I did this, but, this is version 0 so be nice. ;) The final part of the puzzle was rendering the result. I started off trying to use <a href="http://www.chartjs.org/">Chart.js</a>, but I was unable to get it to render a bar/line chart X-Axis with a smaller number of ticks than my dataset. I then switched to <a href="http://www.highcharts.com/">Highcharts</a>. I was able to find a demo pretty darn close to what I wanted, but it was a bit of a struggle to understand some of their documentation. In fact, it took me almost as long to get the chart right as it did to get past my "10 per second" issue. Highcharts is <i>very</i> complex, or I was very tired, but I was able to get it working. One <i>very</i> cool part of their docs is that they have links to JSFiddle. In fact, this is how I ended up finally solving my issue. I used one of their fiddles, modified it, and figured out what I needed to do. The final result is impressive I think. Remember that I'm no designer so this could be done better probably, but I really like the look.
+</p>
+
+<p>
+First, an example of a search for Internet. Click for larger image.
+</p>
+
+<p>
+<a href="http://www.raymondcamden.com/images/s219.png"><img src="http://www.raymondcamden.com/images/s2_small.png" /></a>
+</p>
+
+<p>
+And here is a search for War. Again, click for full size.
+</p>
+
+<p>
+<a href="http://www.raymondcamden.com/images/s311.png"><img src="http://www.raymondcamden.com/images/s3_small.png" /></a>
+</p>
+
+<p>
+Forgive the typo in the header - apparently my spelling skills are only slightly worse than my ability to dress well. So - want to play with this? I've attached a zip of my code to this blog entry, minus my API key. I'm also going to link to a demo, but please note that I only have 10K API hits allowed per day. My average blog post gets about 1000 page views, and if you all try it, it will quickly expire. I certainly don't fault the NYT for that, but keep it in mind if you try it. I don't have good error reporting (i.e. "any") so check the console. Because I'm assuming I <i>will</i> hit the limit, here is a video of it in action.
+</p>
+
+<iframe width="650" height="488" src="//www.youtube.com/embed/87hVm6Ik4rY?rel=0" frameborder="0" allowfullscreen></iframe>
+
+<p>
+<a href="http://www.raymondcamden.com/demos/2014/sep/15/test2.html"><img src="http://www.raymondcamden.com/images/icon_128.png" title="Demo, Baby" border="0"></a><p><a href='/enclosures/nytapi1.zip'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2014\/09\/15\/using-the-new-york-times-api-to-chart-occurrences-in-headlines'; 
+this.page.identifier = '/?p=5309'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/09/15/using-the-new-york-times-api-to-chart-occurrences-in-headlines" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using the New York Times API to Chart Occurrences in Headlines" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/09/15/using-the-new-york-times-api-to-chart-occurrences-in-headlines" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/09/15/using-the-new-york-times-api-to-chart-occurrences-in-headlines" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using the New York Times API to Chart Occurrences in Headlines" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/09/15/using-the-new-york-times-api-to-chart-occurrences-in-headlines" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/09/15/using-the-new-york-times-api-to-chart-occurrences-in-headlines" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

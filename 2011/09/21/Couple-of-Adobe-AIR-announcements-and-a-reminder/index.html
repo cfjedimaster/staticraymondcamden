@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Couple of Adobe AIR announcements, and a reminder... &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Couple of Adobe AIR announcements, and a reminder..." />
+<meta property="og:description" content="Today we published a few new Adobe AIR articles that I think my readers may be interested in: What&rsquo;s new in Adobe AIR 3 A darn good, concise, list of everything new in Adobe AIR 3. HTML updates in Adobe AIR 3 Do you remember that you can create full AIR apps (desktop anyway) using HTML and JavaScript? This article details some of the changes in that area. If you&rsquo;ve never explored this before, check out the main landing page for AIR and JavaScript development." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder" />
+
+
+<meta property="og:updated_time" content="2011-09-21T10:09:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Couple of Adobe AIR announcements, and a reminder...">
+<meta itemprop="description" content="Today we published a few new Adobe AIR articles that I think my readers may be interested in: What&rsquo;s new in Adobe AIR 3 A darn good, concise, list of everything new in Adobe AIR 3. HTML updates in Adobe AIR 3 Do you remember that you can create full AIR apps (desktop anyway) using HTML and JavaScript? This article details some of the changes in that area. If you&rsquo;ve never explored this before, check out the main landing page for AIR and JavaScript development.">
+
+
+<meta itemprop="dateModified" content="2011-09-21T10:09:00&#43;06:00" />
+<meta itemprop="wordCount" content="214">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Couple of Adobe AIR announcements, and a reminder..."/>
+<meta name="twitter:description" content="Today we published a few new Adobe AIR articles that I think my readers may be interested in: What&rsquo;s new in Adobe AIR 3 A darn good, concise, list of everything new in Adobe AIR 3. HTML updates in Adobe AIR 3 Do you remember that you can create full AIR apps (desktop anyway) using HTML and JavaScript? This article details some of the changes in that area. If you&rsquo;ve never explored this before, check out the main landing page for AIR and JavaScript development."/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder">
+    <h1 class="article-title" itemprop="name">
+        Couple of Adobe AIR announcements, and a reminder...
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-09-21 10:09:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-09-21</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/flex">Flex</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Today we published a few new Adobe AIR articles that I think my readers may be interested in:</p>
+
+<p><p></p>
+
+<p><a href="http://www.adobe.com/devnet/air/articles/air3_whatsnew.html">What&rsquo;s new in Adobe AIR 3</a><br/>
+A darn good, concise, list of everything new in Adobe AIR 3.</p>
+
+<p><p></p>
+
+<p><a href="http://www.adobe.com/devnet/air/ajax/articles/air_and_webkit.html">HTML updates in Adobe AIR 3</a><br/>
+Do you remember that you can create full AIR apps (desktop anyway) using HTML and JavaScript? This article details some of the changes in that area. If you&rsquo;ve never explored this before, check out the <a href="http://www.adobe.com/products/air/develop/javascript/">main landing page</a> for AIR and JavaScript development. I&rsquo;ve done quite a bit in this area myself and find it to be a great platform. I&rsquo;ll also remind folks that there is a <a href="https://groups.google.com/forum/#!forum/air-html-js">Google Group</a> just for this topic (as well as one for <a href="https://groups.google.com/forum/#!forum/adobe-air-for-devices">devices</a>).</p>
+
+<p><p></p>
+
+<p><a href="http://www.adobe.com/devnet/flex/articles/whats-new-flex-flash-builder-46.html">What&rsquo;s new in Flex 4.6 SDK and Flash Builder 4.6</a><br/>
+Exciting stuff here - especially the new components. Check out the SplitViewNavigator built specifically for tablets.</p>
+
+<p><p></p>
+
+<p><a href="http://www.adobe.com/devnet/air/native-extensions-for-air.html">Native extensions for Adobe AIR</a><br/>
+Good round of native extensions. Many link to complete articles on them as well so it&rsquo;s not just a list of downloads. New extensions include support for the gyroscope and vibration.</p>
+
+<p><p></p>
+
+<p><a href="http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html">Installation and deployment options in Adobe AIR 3</a><br/>
+This has a good look at the new captive runtime feature. I.e., no need to install the SDK when installing your apps!</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/09\/21\/Couple-of-Adobe-AIR-announcements-and-a-reminder'; 
+this.page.identifier = '/?p=4370'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Couple of Adobe AIR announcements, and a reminder..." class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Couple of Adobe AIR announcements, and a reminder..." class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

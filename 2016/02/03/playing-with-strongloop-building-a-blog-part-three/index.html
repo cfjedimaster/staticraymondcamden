@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Playing with StrongLoop - Building a Blog - Part Three &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Playing with StrongLoop - Building a Blog - Part Three" />
+<meta property="og:description" content="Welcome to the third in my series of building a (somewhat) real-world application using StrongLoop. In the first entry I built the beginnings of a simple blog engine. I defined two models (entry and category) and whipped up a quick front end for the blog. In the last entry I locked down the APIs so that unauthenticated visitors couldn&rsquo;t create content. Today I&rsquo;m going to demonstrate an administrator for my blog. My administrator will be a desktop tool built with Electron and Ionic. I first blogged about mixing Ionic and Electron about six months ago. It is still rather easy and you can check out the results on the GitHub repo for this project when your done reading. (I&rsquo;ll include the link at the end.)
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three" />
+
+
+<meta property="og:updated_time" content="2016-02-03T13:11:00-07:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Playing with StrongLoop - Building a Blog - Part Three">
+<meta itemprop="description" content="Welcome to the third in my series of building a (somewhat) real-world application using StrongLoop. In the first entry I built the beginnings of a simple blog engine. I defined two models (entry and category) and whipped up a quick front end for the blog. In the last entry I locked down the APIs so that unauthenticated visitors couldn&rsquo;t create content. Today I&rsquo;m going to demonstrate an administrator for my blog. My administrator will be a desktop tool built with Electron and Ionic. I first blogged about mixing Ionic and Electron about six months ago. It is still rather easy and you can check out the results on the GitHub repo for this project when your done reading. (I&rsquo;ll include the link at the end.)
+">
+
+
+<meta itemprop="dateModified" content="2016-02-03T13:11:00-07:00" />
+<meta itemprop="wordCount" content="794">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Playing with StrongLoop - Building a Blog - Part Three"/>
+<meta name="twitter:description" content="Welcome to the third in my series of building a (somewhat) real-world application using StrongLoop. In the first entry I built the beginnings of a simple blog engine. I defined two models (entry and category) and whipped up a quick front end for the blog. In the last entry I locked down the APIs so that unauthenticated visitors couldn&rsquo;t create content. Today I&rsquo;m going to demonstrate an administrator for my blog. My administrator will be a desktop tool built with Electron and Ionic. I first blogged about mixing Ionic and Electron about six months ago. It is still rather easy and you can check out the results on the GitHub repo for this project when your done reading. (I&rsquo;ll include the link at the end.)
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+            <img src="http://www.raymondcamden.com//images/banners/strongloop_ibm.png" class="article-banner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three">
+    <h1 class="article-title" itemprop="name">
+        Playing with StrongLoop - Building a Blog - Part Three
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2016-02-03 13:11:00 -0700 -0700" itemprop="datePublished">2016-02-03</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/strongloop">StrongLoop</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/ionic">Ionic</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Welcome to the third in my series of building a (somewhat) real-world application using <a href="http://www.strongloop.com/">StrongLoop</a>. In the <a href="http://www.raymondcamden.com/2016/01/05/playing-with-strongloop-building-a-blog-part-one">first entry</a> I built the beginnings of a simple blog engine. I defined two models (entry and category) and whipped up a quick front end for the blog. In the <a href="http://www.raymondcamden.com/2016/01/07/playing-with-strongloop-building-a-blog-part-two/">last entry</a> I locked down the APIs so that unauthenticated visitors couldn&rsquo;t create content. Today I&rsquo;m going to demonstrate an administrator for my blog. My administrator will be a desktop tool built with <a href="http://electron.atom.io/">Electron</a> and <a href="http://www.ionicframework.com">Ionic</a>. I first <a href="http://www.raymondcamden.com/2015/07/23/some-initial-thoughts-on-building-desktop-apps-with-ionic-and-electron/">blogged</a> about mixing Ionic and Electron about six months ago. It is still rather easy and you can check out the results on the GitHub repo for this project when your done reading. (I&rsquo;ll include the link at the end.)</p>
+
+<p>Let&rsquo;s take a quick tour through the app and then I&rsquo;ll demonstrate it in action with a quick video. On startup, the application prompts you to login. Please do not blame Ionic for my poor color choices.</p>
+
+<p><img src="/images/2016/02/blogeditor1.png" class="imgborder"></p>
+
+<p>After login, you&rsquo;re presented with a list of existing blog entries as well as a button to add a new one. For this quick demonstration, I did not add editing or deleting capabilities, but it wouldn&rsquo;t be too difficult.</p>
+
+<p><img src="/images/2016/02/blogeditor2.png" class="imgborder"></p>
+
+<p>Clicking Add Entry brings you to a simple form:</p>
+
+<p><img src="/images/2016/02/blogeditor3.png" class="imgborder"></p>
+
+<p>And that&rsquo;s it. As I said, proper edit/delete isn&rsquo;t built in yet, but that&rsquo;s all it would take to turn this into a real CRUD desktop app for the server.</p>
+
+<p>To be clear, I&rsquo;m really barely scratching the surface of what Electron can do. I&rsquo;ve basically used it as a simple wrapper for a web view and nothing more. Off the top of my head - here are some more interesting features I could add to it:</p>
+
+<ul>
+<li><p>Drag and drop images. I could capture the drop event - upload the file to the server, and automatically inject the HTML for the image into the source. This is how WordPress does it and it would certainly be possible with Electron.</p></li>
+
+<li><p>Of course, I could customize the icon like a &ldquo;proper&rdquo; desktop application.</p></li>
+
+<li><p>And probably more that I&rsquo;m not thinking about.</p></li>
+</ul>
+
+<p>So how about the code? First and foremost I want to point out that StrongLoop has an <a href="https://docs.strongloop.com/display/public/LB/AngularJS+JavaScript+SDK">AngularJS library</a> and I that I <em>should</em> have made use of it. I did not. I want to - eventually - but I thought it might be a good opportunity to work more with AngularJS&rsquo;s <a href="https://docs.angularjs.org/api/ngResource/service/$resource">$resource</a> feature. To be honest, I had a few problems with it and I should have taken that as a clue to just switch to StrongLoop&rsquo;s stuff, but I was stubborn.</p>
+
+<p>Here&rsquo;s how I designed my Services:</p>
+
+<pre><code class="language-javascript">
+angular.module('starter.services', [])
+.factory('userService', function($q,$resource) {
+
+    return $resource('http://localhost:3000/api/appusers/:id',{},
+    {
+        'login':{
+            'method':'POST',
+            'url':'http://localhost:3000/api/appusers/login'
+        }
+    });
+
+})
+.factory('entryService', function($q,$resource) {
+
+    return $resource('http://localhost:3000/api/entries/:id');
+
+});
+</code></pre>
+
+<p>As you can see - I simply $resource-wrapped my two main APIs - one for users and one for entries. (I&rsquo;m still not <em>really</em> supporting categories yet.) For users I had to add the custom login method that ships out of the box. On the calling side, here is the controller code for doing login.</p>
+
+<pre><code class="language-javascript">
+.controller('loginCtrl', ['$scope', '$rootScope', 'userService', '$state', '$http',
+    function($scope, $rootScope, userService, $state, $http) {
+    
+    $scope.user = {username:'raymondcamden@gmail.com',password:'password'};
+
+    $scope.doLogin = function() {
+        if($scope.user.username === '' || $scope.user.password === '') {
+            return;
+        }
+        userService.login({email:$scope.user.username,password:$scope.user.password},function(res) {
+            $rootScope.authToken = res.id; // don't really need to keep it
+            $http.defaults.headers.common['Authorization'] = $rootScope.authToken;
+            $state.go('root.Home'); 
+        },function(e) {
+            //for right now - generic error
+            alert('Login Failed');
+        });
+    };
+
+}])
+</code></pre> 
+
+<p>First off - I&rsquo;m hard coding the username and password in there just to save me on typing. That&rsquo;s a pro-tip there. The login call is pretty simple, but I need to remember the auth token returned by the Loopback API. I both store it in rootScope (that&rsquo;s bad, right? I&rsquo;m ok with bad) and add it to my $http headers. I did that because I had trouble getting custom headers to work with $resource. That&rsquo;s most likely my fault, but this worked for now. You can read more about authenticating requests and StrongLoop at the docs: <a href="https://docs.strongloop.com/display/public/LB/Making+authenticated+requests">Making authenticated requests</a>.</p>
+
+<p>Listing entries is simple - I had to include the ordering argument in the controller code which <em>also</em> feels like a mistake (it should be in the service I think), but it worked well enough:</p>
+
+<pre><code class="language-javascript">
+entryService.query({"filter[order]":"published desc"},function(res) {
+    $scope.entries = res;
+}, function(e) {
+    console.log('bad '+JSON.stringify(e));          
+});
+</code></pre>
+
+<p>Finally - here&rsquo;s how I save a new entry. Note I automate the slug and published values.</p>
+
+<pre><code class="language-javascript">
+$scope.doSave = function() {
+    var postedDate = new Date();
+
+    var newEntry = new entryService();
+    newEntry.title = $scope.entry.title;
+    newEntry.body = $scope.entry.body;
+    newEntry.released = true;
+    newEntry.published = new Date();
+    //not perfect...
+    newEntry.slug = newEntry.title.replace(/ /g,'-');
+    newEntry.$save();
+    $state.go('root.Home'); 
+
+}
+</code></pre>
+
+<p>You can find the source code for my app here: <a href="https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2/client/electron-quick-start">https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2/client/electron-quick-start</a>. I also built a quick video showing the app in action. Enjoy!</p>
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/TsLKg7notnA" frameborder="0" allowfullscreen></iframe>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2016\/02\/03\/playing-with-strongloop-building-a-blog-part-three'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Playing with StrongLoop - Building a Blog - Part Three" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Playing with StrongLoop - Building a Blog - Part Three" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

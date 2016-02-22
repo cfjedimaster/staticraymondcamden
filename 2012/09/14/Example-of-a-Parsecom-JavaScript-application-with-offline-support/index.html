@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Example of a Parse.com JavaScript application with offline support &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Example of a Parse.com JavaScript application with offline support" />
+<meta property="og:description" content="This morning I got a seemingly innocent question from a reader:
+
+
+Came across your blog post on Parse &#43; PhoneGap and wanted to get your opinion on the following use-case for that combo...
+
+I&#39;ve been exploring the possibilities of an app that essentially has a web form (similar to the contact form you&#39;ve got right here, actually) that would store the resulting data via Parse. The reason being...it would be important that the app would allow a form to submit, even if there wasn&#39;t an active Internet connection available.
+
+So, just wanted your thoughts on whether I am looking in the right direction to accomplish this. Don&#39;t have much experience in the way of iOS apps, but have to start somewhere, right?
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2012/09/14/Example-of-a-Parsecom-JavaScript-application-with-offline-support" />
+
+
+<meta property="og:updated_time" content="2012-09-14T12:09:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Example of a Parse.com JavaScript application with offline support">
+<meta itemprop="description" content="This morning I got a seemingly innocent question from a reader:
+
+
+Came across your blog post on Parse &#43; PhoneGap and wanted to get your opinion on the following use-case for that combo...
+
+I&#39;ve been exploring the possibilities of an app that essentially has a web form (similar to the contact form you&#39;ve got right here, actually) that would store the resulting data via Parse. The reason being...it would be important that the app would allow a form to submit, even if there wasn&#39;t an active Internet connection available.
+
+So, just wanted your thoughts on whether I am looking in the right direction to accomplish this. Don&#39;t have much experience in the way of iOS apps, but have to start somewhere, right?
+
+">
+
+
+<meta itemprop="dateModified" content="2012-09-14T12:09:00&#43;06:00" />
+<meta itemprop="wordCount" content="990">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Example of a Parse.com JavaScript application with offline support"/>
+<meta name="twitter:description" content="This morning I got a seemingly innocent question from a reader:
+
+
+Came across your blog post on Parse &#43; PhoneGap and wanted to get your opinion on the following use-case for that combo...
+
+I&#39;ve been exploring the possibilities of an app that essentially has a web form (similar to the contact form you&#39;ve got right here, actually) that would store the resulting data via Parse. The reason being...it would be important that the app would allow a form to submit, even if there wasn&#39;t an active Internet connection available.
+
+So, just wanted your thoughts on whether I am looking in the right direction to accomplish this. Don&#39;t have much experience in the way of iOS apps, but have to start somewhere, right?
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2012/09/14/Example-of-a-Parsecom-JavaScript-application-with-offline-support">
+    <h1 class="article-title" itemprop="name">
+        Example of a Parse.com JavaScript application with offline support
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2012-09-14 12:09:00 &#43;0600 &#43;0600" itemprop="datePublished">2012-09-14</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>This morning I got a seemingly innocent question from a reader:</p>
+
+<blockquote>
+Came across your blog post on Parse + PhoneGap and wanted to get your opinion on the following use-case for that combo...
+
+I've been exploring the possibilities of an app that essentially has a web form (similar to the contact form you've got right here, actually) that would store the resulting data via Parse. The reason being...it would be important that the app would allow a form to submit, even if there wasn't an active Internet connection available.
+
+So, just wanted your thoughts on whether I am looking in the right direction to accomplish this. Don't have much experience in the way of iOS apps, but have to start somewhere, right?
+</blockquote>
+
+<p>I replied to him with a basic outline:</p>
+
+<ul>
+<li>When you submit the form, hit Parse if you are online, hit WebSQL if not.
+<li>When the application starts, see if you have data in WebSQL, and if you are online, push it to parse.
+</ul>
+
+<p>That seemed simple enough, but I figured I might as well build a real demo just to prove it can be done. This is what I came up with. It&rsquo;s got some issues (don&rsquo;t we all?) but it covers the basics. As always though I&rsquo;m open to suggestions for how this could be done better.</p>
+
+<p>I began by creating the layout for an application. Since the reader just mentioned a form, I built the entire application around one form. I decided to build a simple UFO Report Form. It has a field for the number of UFOs, your name, and the description. I didn&rsquo;t make use of any UI framework but instead directed my incredible design skills at the task.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip121.png" /></p>
+
+<p>Here&rsquo;s the HTML behind the form, just in case your curious:</p>
+
+<script src="https://gist.github.com/3722917.js?file=gistfile1.html"></script>
+
+<p>Fancy, eh? Ok, now it&rsquo;s time to get into the code. I&rsquo;m going to tackle this piece by piece, and it may get a bit confusing, but I&rsquo;ll post the entire file in one chunk at the end for your perusal.</p>
+
+<p>Whether or not we are online, we need to set up the database. This is done via the WebSQL API. While this API is deprecated, it is fully supported in PhoneGap and works great in Chrome, the main browser I use for testing.</p>
+
+<script src="https://gist.github.com/3722935.js?file=gistfile1.js"></script>
+
+<p>I&rsquo;m not going to detail how this works as I&rsquo;ve covered it before (<a href="http://www.raymondcamden.com/index.cfm/2011/10/20/Example-of-PhoneGaps-Database-Support">Example of PhoneGap&rsquo;s Database Support</a>), but even if this is brand new to you I think you can get the idea.</p>
+
+<p>After the database is set up, our application needs to upload any existing data to Parse. We&rsquo;re going to skip that now though and look at the basic form handling aspects of the code.</p>
+
+<p>I wrote a function to wrap my check for online/offline support. Why? I wrote this demo <i>without</i> actually building it as a PhoneGap application. It should work fine when converting into a mobile application, and at that point my wrapper function can be modified to use PhoneGap&rsquo;s API, but for my initial testing I just wanted to use the navigator.onLine property. Having a wrapper also let me easily add in a hack (see the commented out line) to test being offline.</p>
+
+<script src="https://gist.github.com/3722958.js?file=gistfile1.js"></script>
+
+<p>If we are online, I need to initialize Parse support. I won&rsquo;t repeat what is already covered in the <a href="https://parse.com/docs/js_guide">Parse JavaScript Guide</a>. Instead, this is just an example of how I initialize Parse.com with my API keys and define an object type I&rsquo;m calling SightingObject (as in UFO sighting).</p>
+
+<script src="https://gist.github.com/3722975.js?file=gistfile1.js"></script>
+
+<p>Now let&rsquo;s look at the form handler. Remember, this needs to either save to Parse or to the database.</p>
+
+<script src="https://gist.github.com/3722987.js?file=gistfile1.js"></script>
+
+<p>This code block is a bit large, so let&rsquo;s break it down. The first thing I do is grab the values from the form. As mentioned in the comments, it would probably make sense to do some basic validation. Screw validation - this is a demo. Next I do some basic UI stuff to let the user know that exciting things are happening in the background (although in theory, not as exciting as the UFO in front of them). Then we have the online/offline block. I&rsquo;ve taken the Parse logic out into another function that I&rsquo;ll show in a moment. The other part of the conditional simply writes it out to the database. In both cases we run a function, resetForm, that handles resetting my UI.</p>
+
+<p>Here is saveToParse. Notice how darn easy this is. Just in case it isn&rsquo;t obvious - this is all the code I need to store my data, permanently, in the cloud. It would only be easier if the Parse.com engineers fed me grapes and lime jello shots while I wrote the code.</p>
+
+<script src="https://gist.github.com/3723019.js?file=gistfile1.js"></script>
+
+<p>Before we get into the synchronization aspect, here is resetForm. Again, it just handles updating the UI and letting the user know something happened with their important data.</p>
+
+<script src="https://gist.github.com/3723031.js?file=gistfile1.js"></script>
+
+<p>I did some quick testing and confirmed it was working. I used Parse.com&rsquo;s online data browser first:</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip122.png" /></p>
+
+<p>I then tested offline storage. Chrome makes it easy to check since it has a database viewer built in:</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip123.png" /></p>
+
+<p>That&rsquo;s almost it. The final piece of the puzzle is handling uploading the database data. This turned out to be simple too. If we are online, we can run a SQL against the table. If anything exists, we upload it and remove it.</p>
+
+<script src="https://gist.github.com/3723060.js?file=gistfile1.js"></script>
+
+<p>That&rsquo;s basically it. The biggest issue with this code is that it doesn&rsquo;t handle a <i>change</i> to your online/offline status, specifically, if you start the application offline, save some sightings, and then become online, it won&rsquo;t upload the old rows. That wouldn&rsquo;t be too hard to fix, but I was trying to keep it simple. At minimum, the next time you run the application it will upload those old records. For folks who want to see the entire code base, simply view the gist here: <a href="https://gist.github.com/3723074">https://gist.github.com/3723074</a></p>
+
+<p>I&rsquo;ve also included a zip attached to this blog entry. (Note that the animated gif is courtesy of jQuery Mobile.)<p><a href='enclosures/C%3A%5Chosts%5C2012%2Eraymondcamden%2Ecom%5Cenclosures%2Fparseofflinedemo%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2012\/09\/14\/Example-of-a-Parsecom-JavaScript-application-with-offline-support'; 
+this.page.identifier = '/?p=4732'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/09/14/Example-of-a-Parsecom-JavaScript-application-with-offline-support" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Example of a Parse.com JavaScript application with offline support" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/09/14/Example-of-a-Parsecom-JavaScript-application-with-offline-support" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/09/14/Example-of-a-Parsecom-JavaScript-application-with-offline-support" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Example of a Parse.com JavaScript application with offline support" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/09/14/Example-of-a-Parsecom-JavaScript-application-with-offline-support" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/09/14/Example-of-a-Parsecom-JavaScript-application-with-offline-support" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

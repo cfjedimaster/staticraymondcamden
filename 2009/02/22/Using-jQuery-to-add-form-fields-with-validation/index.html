@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using jQuery to add form fields - with validation &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using jQuery to add form fields - with validation" />
+<meta property="og:description" content="A few days back I posted a blog entry on using jQuery to dynamically add form fields to a form. The example I gave was a form that asked you to enter information about a person and then had a simple way to add new people to the form. I asked for - and got - a lot of feedback on other (better!) ways to write the code. I&rsquo;ve taken one of the suggestions from Brian Swartzfager (see his demo here) and used it for my next task - adding validation to the form, including validation on the new fields. Definitely view source on his demo as I&rsquo;ll be assuming you have read it.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/02/22/Using-jQuery-to-add-form-fields-with-validation" />
+
+
+<meta property="og:updated_time" content="2009-02-22T18:02:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using jQuery to add form fields - with validation">
+<meta itemprop="description" content="A few days back I posted a blog entry on using jQuery to dynamically add form fields to a form. The example I gave was a form that asked you to enter information about a person and then had a simple way to add new people to the form. I asked for - and got - a lot of feedback on other (better!) ways to write the code. I&rsquo;ve taken one of the suggestions from Brian Swartzfager (see his demo here) and used it for my next task - adding validation to the form, including validation on the new fields. Definitely view source on his demo as I&rsquo;ll be assuming you have read it.
+">
+
+
+<meta itemprop="dateModified" content="2009-02-22T18:02:00&#43;06:00" />
+<meta itemprop="wordCount" content="646">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using jQuery to add form fields - with validation"/>
+<meta name="twitter:description" content="A few days back I posted a blog entry on using jQuery to dynamically add form fields to a form. The example I gave was a form that asked you to enter information about a person and then had a simple way to add new people to the form. I asked for - and got - a lot of feedback on other (better!) ways to write the code. I&rsquo;ve taken one of the suggestions from Brian Swartzfager (see his demo here) and used it for my next task - adding validation to the form, including validation on the new fields. Definitely view source on his demo as I&rsquo;ll be assuming you have read it.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/02/22/Using-jQuery-to-add-form-fields-with-validation">
+    <h1 class="article-title" itemprop="name">
+        Using jQuery to add form fields - with validation
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-02-22 18:02:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-02-22</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>A few days back I posted a <a href="http://www.raymondcamden.com/index.cfm/2009/2/19/Using-jQuery-to-add-form-fields">blog entry</a> on using jQuery to dynamically add form fields to a form. The example I gave was a form that asked you to enter information about a person and then had a simple way to add new people to the form. I asked for - and got - a lot of feedback on other (better!) ways to write the code. I&rsquo;ve taken one of the <a href="http://www.coldfusionjedi.com/index.cfm/2009/2/19/Using-jQuery-to-add-form-fields#c90BBF0C2-19B9-E658-9D653A9820F0D3BB">suggestions</a> from Brian Swartzfager (see his demo <a href="http://www.swartzfager.org/blog/demoFiles/clonedFields/">here</a>) and used it for my next task - adding validation to the form, including validation on the new fields. Definitely view source on his demo as I&rsquo;ll be assuming you have read it.</p>
+
+<p>Alright - so the first thing I wanted to do was add validation to the form fields that showed up by default. I am a big believer in &lsquo;baby steps&rsquo; so before I even try to make the validation dynamic, I&rsquo;ll work with the static form fields first. Brian&rsquo;s code already had a (document).ready block, so I simply added the following:</p>
+
+<p><code>
+$(&ldquo;#demoForm&rdquo;).validate({</p>
+
+<pre><code>rules: {
+    firstname1: {
+        required: true,
+        minlength: 2
+    }
+    ,lastname1: {
+        required: true,
+        minlength: 2
+    }
+    ,email1: {
+        required: true,
+        email: true
+    }
+}
+</code></pre>
+
+<p></code></p>
+
+<p>If you have read my entries on form validation with jQuery than the above shouldn&rsquo;t be anything new. I verified this worked before going on.</p>
+
+<p>It is a bit off topic for this entry, but notice how my form uses one label for first and last name? Notice how since both are required, if you forget both, the error message displays by each field? It would be nice if there was a way to say &ldquo;Yes, firstname and lastname are required, but I want to treat them as a group and just one error message.&rdquo; Turns out - the plugin supports this out of the box. You can create a group of form fields using the groups value in the constructor. This will group the fields in terms of messaging. We still need a way to specify <i>where</i> the error should go. This can be done with yet another constructor value - errorPlacement. Consider:</p>
+
+<p><code>
+groups: {
+    fullname: &ldquo;firstname1 lastname1&rdquo;
+},
+errorPlacement: function(error, element) {
+    if (element.attr(&ldquo;name&rdquo;) == &ldquo;firstname1&rdquo; || element.attr(&ldquo;name&rdquo;) == &ldquo;lastname1&rdquo; )<br />
+        error.insertAfter(&ldquo;#lastname1&rdquo;);
+    else
+        error.insertAfter(element);
+},
+</code></p>
+
+<p>I&rsquo;ve created an arbitrary group name called fullname and linked it to my two name fields. The errorPlacement value is a function that can dynamically handle putting the message in the right place for my name &lsquo;set&rsquo;. FYI, I think this is a bit overly complex. I can see needing custom error placement about 100% of the time for groups. I&rsquo;ve filed an enhancement request for the plugin to make this a bit easier.</p>
+
+<p>Okay - sorry for the diversion there. So given that we can now validate the form fields built in, and we have an easy way to add more fields, how do we also add validation for the new rules? The Validation plugin makes this simple. For each new field we add, we can do:  X.rules(&ldquo;add&rdquo;, rule) where X is our selector the rule is the logic to add. Taking Brian&rsquo;s code he wrote for the addPerson logic, I just added:</p>
+
+<p><code>
+//add validation
+$(&ldquo;#firstname&rdquo;+current).rules(&ldquo;add&rdquo;, { required:true,minlength:2 });
+$(&ldquo;#lastname&rdquo;+current).rules(&ldquo;add&rdquo;, { required:true,minlength:2 });
+$(&ldquo;#email&rdquo;+current).rules(&ldquo;add&rdquo;, { required:true,email:true });
+</code></p>
+
+<p>Remember that current was a number that kept track of how many people we had in the form.</p>
+
+<p>You can see this in action here: <a href="http://www.coldfusionjedi.com/demos/jqueryvalidation/testadd.cfm">http://www.coldfusionjedi.com/demos/jqueryvalidation/testadd.cfm</a> View source to see the complete modification to Brian&rsquo;s code.</p>
+
+<p>This leaves us with one small little issue. While grouping nicely handles our default firstname/lastname pair, you can&rsquo;t add new groups after the form has been validated. (You know, I wonder what happens if you just run validate() again?) So the error display isn&rsquo;t terribly nice, but that could probably be worked on a bit more.</p>
+
+<p>Anyway - I hope this is helpful to folks.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/02\/22\/Using-jQuery-to-add-form-fields-with-validation'; 
+this.page.identifier = '/?p=3248'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/22/Using-jQuery-to-add-form-fields-with-validation" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using jQuery to add form fields - with validation" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/22/Using-jQuery-to-add-form-fields-with-validation" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/22/Using-jQuery-to-add-form-fields-with-validation" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using jQuery to add form fields - with validation" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/22/Using-jQuery-to-add-form-fields-with-validation" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/22/Using-jQuery-to-add-form-fields-with-validation" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

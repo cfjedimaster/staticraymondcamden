@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Transfer Caching and Performance Features &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Transfer Caching and Performance Features" />
+<meta property="og:description" content="It&rsquo;s been a while since I blogged about Transfer, but I finally got time to look into caching and performance issues with Transfer. I&rsquo;m pretty impressed by what I&rsquo;ve found. If I had known about some of this back when I was working on CFLib 2008, I probably would have done things quite a bit differently. (In fact, I may take a look at re-building things a bit and blogging about the changes.) Here is a quick summary of some of the things you can do to improve performance issues with Transfer.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2008/12/27/Transfer-Caching-and-Performance-Features" />
+
+
+<meta property="og:updated_time" content="2008-12-27T10:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Transfer Caching and Performance Features">
+<meta itemprop="description" content="It&rsquo;s been a while since I blogged about Transfer, but I finally got time to look into caching and performance issues with Transfer. I&rsquo;m pretty impressed by what I&rsquo;ve found. If I had known about some of this back when I was working on CFLib 2008, I probably would have done things quite a bit differently. (In fact, I may take a look at re-building things a bit and blogging about the changes.) Here is a quick summary of some of the things you can do to improve performance issues with Transfer.
+">
+
+
+<meta itemprop="dateModified" content="2008-12-27T10:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="1000">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Transfer Caching and Performance Features"/>
+<meta name="twitter:description" content="It&rsquo;s been a while since I blogged about Transfer, but I finally got time to look into caching and performance issues with Transfer. I&rsquo;m pretty impressed by what I&rsquo;ve found. If I had known about some of this back when I was working on CFLib 2008, I probably would have done things quite a bit differently. (In fact, I may take a look at re-building things a bit and blogging about the changes.) Here is a quick summary of some of the things you can do to improve performance issues with Transfer.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2008/12/27/Transfer-Caching-and-Performance-Features">
+    <h1 class="article-title" itemprop="name">
+        Transfer Caching and Performance Features
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2008-12-27 10:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2008-12-27</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>It&rsquo;s been a while since I blogged about Transfer, but I finally got time to look into caching and performance issues with Transfer. I&rsquo;m pretty impressed by what I&rsquo;ve found. If I had known about some of this back when I was working on <a href="http://www.cflib.org">CFLib 2008</a>, I probably would have done things quite a bit differently. (In fact, I may take a look at re-building things a bit and blogging about the changes.) Here is a quick summary of some of the things you can do to improve performance issues with Transfer.</p>
+
+<p>First, let me quickly address caching in Transfer. Out of the box, Transfer is pretty smart. Imagine this scenario based on the Employee Directory sample I&rsquo;ve used for my other entries. You have some employee that has a benefit. The benefit has an id of 5. If you fetch benefits later and grab the benefit with the primary key of 5, Transfer knows that it loaded it already when it fetched the employee. It will grab the data from it&rsquo;s own cache instead of requerying the database.</p>
+
+<p>Transfer will, by default, cache within itself. By that I mean it will cache everything within it&rsquo;s own factory object. This is called the &ldquo;instance&rdquo; caching. You have multiple other options for how Transfer will store it&rsquo;s cache:</p>
+
+<ul>
+<li>instance: Stores the data in the Transfer object. This is the default.
+<li>application: Stores data in the application scope. 
+<li>session: Stores data in the session scope.
+<li>transaction: Stores the data in the session scope, but notices changes made to objects across the board and will clear the object from the cache.
+<li>request: Stores data in the request scope.
+<li>server: Stores data in the server scope. This is useful for sharing a cache amongst multiple applications. I had a reader ping me about this just this past week.
+<li>none: No caching. Were you able to guess that?
+</ul>
+
+<p>To configure caching, you edit your transfer.xml and define the cache you want to use. For example:</p>
+
+<p><code>
+&lt;objectCache&gt;
+      &lt;defaultcache&gt;
+         &lt;scope type=&ldquo;none&rdquo; /&gt;
+      &lt;/defaultcache&gt;
+&lt;/objectCache&gt;
+</code></p>
+
+<p>Transfer can get really sexy here though. Along with specifying a default cache for the entire library, you can also specify caches for different classes of data.</p>
+
+<p><code>
+&lt;objectCache&gt;
+      &lt;defaultcache&gt;
+            &lt;scope type=&ldquo;none&rdquo; /&gt;
+      &lt;/defaultcache&gt;
+      &lt;cache class=&ldquo;employee&rdquo;&gt;
+            &lt;scope type=&ldquo;session&rdquo; /&gt;
+      &lt;/cache&gt;
+&lt;/objectCache&gt;
+</code></p>
+
+<p>This says: Turn off caching by default, but session objects will be stored in the session scope. Note that mixing caching types for objects that are related (like benefits to mployees) could cause, according to the <a href="http://docs.transfer-orm.com/wiki/Managing_the_Cache.cfm">docs</a>, &ldquo;indeterminate behaviour&rdquo;. (That sounds like a euphemism for &lsquo;your code will take a crap and die.&rsquo;)</p>
+
+<p>Now let&rsquo;s take a look at another feature - lazy loading. If you remember the Employee object used in the earlier blog posts, there were relations defined to benefits, departments, and positions. That means each time you grab an Employee object, Transfer has to load all that related data. That could, over time, slow down Transfer&rsquo;s retrieval of data. Benefits is a perfect example of something that - due it&rsquo;s very nature, is probably something you won&rsquo;t need to display very often. You certainly don&rsquo;t want the whole company to know that Bob is using his hair replacement benefit. It takes all of two seconds to modify the XML and tell Transfer to be lazy with benefits:</p>
+
+<p><code>
+&lt;manytomany name=&ldquo;benefits&rdquo; table=&ldquo;employees_benefits&rdquo; lazy=&ldquo;true&rdquo;&gt;
+    &lt;link to=&ldquo;employee&rdquo; column=&ldquo;employeeidfk&rdquo;/&gt;
+    &lt;link to=&ldquo;benefit&rdquo; column=&ldquo;benefitidfk&rdquo;/&gt;
+    &lt;collection type=&ldquo;array&rdquo;&gt;
+    &lt;order property=&ldquo;name&rdquo; order=&ldquo;asc&rdquo;/&gt;
+    &lt;/collection&gt;
+&lt;/manytomany&gt;
+</code></p>
+
+<p>Compare the memento dump and how it changes. With lazy not enabled, benefits is returned automatically:</p>
+
+<p><img src="http://www.raymondcamden.com/images//Picture 217.png"></p>
+
+<p>With lazy=true, the object is now slimmer:</p>
+
+<p><img src="http://www.coldfusionjedi.com/images//Picture 314.png"></p>
+
+<p>What&rsquo;s awesome though is that as soon as you need the data, Transfer has no trouble getting it. Consider:</p>
+
+<p><code>
+&lt;cfset emp = application.transfer.get(&ldquo;employee&rdquo;, 1)&gt;
+&lt;cfdump var=&ldquo;#emp.getMemento()#&rdquo; label=&ldquo;Employee Memento&rdquo;&gt;</p>
+
+<p>&lt;cfif structKeyExists(url, &ldquo;showbenefits&rdquo;)&gt;
+    &lt;cfdump var=&ldquo;#emp.getBenefitsArray()#&rdquo; label=&ldquo;Benefits&rdquo;&gt;
+&lt;/cfif&gt;
+&lt;cfabort/&gt;
+</code></p>
+
+<p>Running this template, if I simply add showbenefits=paris to the URL, Transfer will fetch the benefits data. A more real world example would be code that checks the current user&rsquo;s security level. If they were an administrator, it could show the employee&rsquo;s benefits, otherwise the data is hidden.</p>
+
+<p>Ok, so this works well and is fairly easy to add to an application. There is one small problem though. As soon as you decide to get benefit data, Transfer is going to load <b>all</b> the data. In a scenario with users and orders where one user could have thousands of orders, lazy loading alone wont cut it. (And this is exactly the issue I ran into with CFLib.) For users under ColdFusion 8, Transfer adds a feature called <a href="http://docs.transfer-orm.com/wiki/Using_TransferObject_Proxies.cfm">object proxies</a>.</p>
+
+<p>What are object proxies? Taking out Employee object, we can turn the positions data into proxies by simply adding proxied=true to the XML:</p>
+
+<p><code>
+&lt;onetomany name=&ldquo;positions&rdquo; lazy=&ldquo;true&rdquo; proxied=&ldquo;true&rdquo;&gt;
+    &lt;link to=&ldquo;position&rdquo; column=&ldquo;employeeidfk&rdquo; /&gt;
+    &lt;collection type=&ldquo;array&rdquo;&gt;
+    &lt;order property=&ldquo;startdate&rdquo; order=&ldquo;desc&rdquo; /&gt;
+    &lt;/collection&gt;
+&lt;/onetomany&gt;
+</code></p>
+
+<p>Now something interesting happens. When we get positions (getPositionsArray) from an Employee object, Transfer returns an array of TransferProxy objects. These objects contain the ID of each position, but nothing else. The object will remain &ldquo;shallow&rdquo; until we actually use it. A good example of this is pagination. Imagine getting 2000 Order objects back. We could page through these orders using normal pagination code and only fetching information for objects in the current &ldquo;slice&rdquo; of data that we care about. Here is a simpler example. While an employee may have a long history of positions, we will keep things simpler by just displaying his last position. The following code sample shows this in action, along with some debug information about the other positions:</p>
+
+<p><code>
+&lt;cfset emp = application.transfer.get(&ldquo;employee&rdquo;, 1)&gt;
+&lt;cfdump var=&ldquo;#emp.getMemento()#&rdquo; label=&ldquo;Employee Memento&rdquo;&gt;</p>
+
+<p>&lt;cfset positions = emp.getPositionsArray()&gt;
+&lt;cfoutput&gt;Total positions: #arrayLen(positions)#&lt;br/&gt;&lt;/cfoutput&gt;
+&lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#arrayLen(positions)#&rdquo;&gt;
+    &lt;cfif x is 1&gt;
+        &lt;cfoutput&gt;Current Job: #positions[x].getName()#&lt;br/&gt;&lt;/cfoutput&gt;
+    &lt;/cfif&gt;
+    &lt;cfoutput&gt;position id = #positions[x].getID()#, isLoaded? #positions[x].getIsLoaded()#&lt;br/&gt;&lt;/cfoutput&gt;
+&lt;/cfloop&gt;
+</code></p>
+
+<p>Notice that we only run getName() on the first position returned. For every position we show the ID and report if it is loaded. This outputs:</p>
+
+<p><img src="http://www.coldfusionjedi.com/images//Picture 45.png"></p>
+
+<p>Notice how the first object is reported as loaded while the second is not. Again, this is <b>exactly</b> the problem I ran into at CFLib.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2008\/12\/27\/Transfer-Caching-and-Performance-Features'; 
+this.page.identifier = '/?p=3163'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/27/Transfer-Caching-and-Performance-Features" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Transfer Caching and Performance Features" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/27/Transfer-Caching-and-Performance-Features" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/27/Transfer-Caching-and-Performance-Features" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Transfer Caching and Performance Features" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/27/Transfer-Caching-and-Performance-Features" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/27/Transfer-Caching-and-Performance-Features" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

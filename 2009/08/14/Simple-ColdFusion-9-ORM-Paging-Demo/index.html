@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Simple ColdFusion 9 ORM Paging Demo &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Simple ColdFusion 9 ORM Paging Demo" />
+<meta property="og:description" content="I whipped up a quick demo today of how you can do simple paging with ColdFusion 9 ORM code. It isn&rsquo;t incredibly pretty, but hopefully it will be useful for folks to see an example. Let me begin with my model. Yesterday I was doing some speed test on CFC creation time with ORM entities. I made a slightly &lsquo;fat&rsquo; CFC for the model. It isn&rsquo;t really related to this demo itself so I&rsquo;m going to chop some of the lines out, but when you download the zip, don&rsquo;t be too surprised if it doesn&rsquo;t match exactly with the CFC you see here." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/08/14/Simple-ColdFusion-9-ORM-Paging-Demo" />
+
+
+<meta property="og:updated_time" content="2009-08-14T16:08:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Simple ColdFusion 9 ORM Paging Demo">
+<meta itemprop="description" content="I whipped up a quick demo today of how you can do simple paging with ColdFusion 9 ORM code. It isn&rsquo;t incredibly pretty, but hopefully it will be useful for folks to see an example. Let me begin with my model. Yesterday I was doing some speed test on CFC creation time with ORM entities. I made a slightly &lsquo;fat&rsquo; CFC for the model. It isn&rsquo;t really related to this demo itself so I&rsquo;m going to chop some of the lines out, but when you download the zip, don&rsquo;t be too surprised if it doesn&rsquo;t match exactly with the CFC you see here.">
+
+
+<meta itemprop="dateModified" content="2009-08-14T16:08:00&#43;06:00" />
+<meta itemprop="wordCount" content="742">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Simple ColdFusion 9 ORM Paging Demo"/>
+<meta name="twitter:description" content="I whipped up a quick demo today of how you can do simple paging with ColdFusion 9 ORM code. It isn&rsquo;t incredibly pretty, but hopefully it will be useful for folks to see an example. Let me begin with my model. Yesterday I was doing some speed test on CFC creation time with ORM entities. I made a slightly &lsquo;fat&rsquo; CFC for the model. It isn&rsquo;t really related to this demo itself so I&rsquo;m going to chop some of the lines out, but when you download the zip, don&rsquo;t be too surprised if it doesn&rsquo;t match exactly with the CFC you see here."/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/08/14/Simple-ColdFusion-9-ORM-Paging-Demo">
+    <h1 class="article-title" itemprop="name">
+        Simple ColdFusion 9 ORM Paging Demo
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-08-14 16:08:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-08-14</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I whipped up a quick demo today of how you can do simple paging with ColdFusion 9 ORM code. It isn&rsquo;t incredibly pretty, but hopefully it will be useful for folks to see an example. Let me begin with my model. Yesterday I was doing some speed test on CFC creation time with ORM entities. I made a slightly &lsquo;fat&rsquo; CFC for the model. It isn&rsquo;t really related to this demo itself so I&rsquo;m going to chop some of the lines out, but when you download the zip, don&rsquo;t be too surprised if it doesn&rsquo;t match exactly with the CFC you see here. Ok, so with that out of the day, here is a simple Person CFC I created for my model.</p>
+
+<p><code>
+component persistent=&ldquo;true&rdquo; {
+    property name=&ldquo;id&rdquo; generator=&ldquo;native&rdquo; sqltype=&ldquo;integer&rdquo; fieldtype=&ldquo;id&rdquo;;
+    property name=&ldquo;firstname&rdquo; ormtype=&ldquo;string&rdquo;;
+    property name=&ldquo;lastname&rdquo; ormtype=&ldquo;string&rdquo;;
+    property name=&ldquo;email&rdquo; ormtype=&ldquo;string&rdquo;;
+    property name=&ldquo;salary&rdquo; ormtype=&ldquo;float&rdquo;;
+}
+</code></p>
+
+<p>People are defined as having an ID, first and lastname, email, and salary. I whipped up a quick demo to insert a few (60,000+) records so I had some data to play with. I opened up my MySQL Query tool and confirmed I had a database full of people.</p>
+
+<p>Now let&rsquo;s look at the paging code itself. When I write these up I typically begin with some simple parameters to handle the current start row, the sort, sort direction, and page size:</p>
+
+<p><code>
+&lt;cfparam name=&ldquo;url.start&rdquo; default=&ldquo;1&rdquo;&gt;
+&lt;cfparam name=&ldquo;url.sort&rdquo; default=&ldquo;lastname&rdquo;&gt;
+&lt;cfparam name=&ldquo;url.sortdir&rdquo; default=&ldquo;asc&rdquo;&gt;</p>
+
+<p>&lt;cfset pageSize = 10&gt;
+</code></p>
+
+<p>The sort and pageSize was totally arbitrary. Next up let&rsquo;s actually get our entities. ColdFusion 9&rsquo;s entityLoad function allows you to specify both a starting row and a max number of rows. Note though that entityLoad wants you to specify an offset. In other words - a 0 based index. Given that url.start=1 represents a 1 based index, I used simple subtraction to handle setting the offset:</p>
+
+<p><code>
+&lt;cfset items = entityLoad(&ldquo;person&rdquo;, {},url.sort &amp; &ldquo; &rdquo; &amp; url.sortdir, {maxresults=pageSize,offset=url.start-1})&gt;
+</code></p>
+
+<p>Two things to note here. The second argument, the empty struct, is my filter. As I&rsquo;m not filtering, I left it blank. Next - the CFML9 reference guide does <b>not</b> refer to the offset and has a type for maxresults. The CFML9 developer guide has the proper values and they are shown above.</p>
+
+<p>The next problem is a bit more tricky. How do we get the <i>total</i> number of records? Without that we won&rsquo;t know how often to present a &ldquo;Next&rdquo; link in our pagination. This ended up being pretty obvious - using count. In MySQL I could do a simple select count(id), and the exact same SQL worked fine via HQL as well. HQL is Hibernate Query Language, and is perfect for things like this when there isn&rsquo;t a native function to get what you need:</p>
+
+<p><code>
+&lt;cfset total = ormExecuteQuery(&ldquo;select count(id) from person&rdquo;, true)&gt;
+</code></p>
+
+<p>By the way, the true at the end tells the function to treat the result as a single entity. Normally I&rsquo;d get an array of values, but when I pass true, then I just get a number.</p>
+
+<p>And um&hellip; that&rsquo;s it. The rest is fairly standard (i.e. boring) HTML. I did do something a bit kind of fun in the header:</p>
+
+<p><code>
+&lt;cfoutput&gt;
+&lt;table border=&ldquo;1&rdquo;&gt;
+    &lt;tr&gt;
+        &lt;th&gt;
+            &lt;cfif url.sort neq &ldquo;lastname&rdquo;&gt;
+                &lt;a href=&ldquo;list.cfm?start=1&amp;sort=lastname&rdquo;&gt;Name&lt;/a&gt;
+            &lt;cfelse&gt;
+                &lt;a href=&ldquo;list.cfm?start=1&amp;sort=lastname&amp;sortdir=#url.sortdir eq &lsquo;asc&rsquo;?&lsquo;desc&rsquo;:&lsquo;asc&rsquo;#&rdquo;&gt;Name&lt;/a&gt;
+            &lt;/cfif&gt;
+        &lt;/th&gt;
+        &lt;th&gt;
+            &lt;cfif url.sort neq &ldquo;email&rdquo;&gt;
+                &lt;a href=&ldquo;list.cfm?start=1&amp;sort=email&rdquo;&gt;Email&lt;/a&gt;
+            &lt;cfelse&gt;
+                &lt;a href=&ldquo;list.cfm?start=1&amp;sort=email&amp;sortdir=#url.sortdir eq &lsquo;asc&rsquo;?&lsquo;desc&rsquo;:&lsquo;asc&rsquo;#&rdquo;&gt;Email&lt;/a&gt;
+            &lt;/cfif&gt;
+        &lt;/th&gt;
+        &lt;th&gt;
+            &lt;cfif url.sort neq &ldquo;salary&rdquo;&gt;
+                &lt;a href=&ldquo;list.cfm?start=1&amp;sort=salary&rdquo;&gt;Salary&lt;/a&gt;
+            &lt;cfelse&gt;
+                &lt;a href=&ldquo;list.cfm?start=1&amp;sort=salary&amp;sortdir=#url.sortdir eq &lsquo;asc&rsquo;?&lsquo;desc&rsquo;:&lsquo;asc&rsquo;#&rdquo;&gt;Salary&lt;/a&gt;
+            &lt;/cfif&gt;
+        &lt;/th&gt;
+    &lt;/tr&gt;
+&lt;/cfoutput&gt;
+</code></p>
+
+<p>Notice the use of a ternary operator to handle &ldquo;flipping&rdquo; the sort direction. I used to write a simple UDF for that but ColdFusion 9 lets me do it a bit slicker.</p>
+
+<p>Now that I&rsquo;ve output my header, here is the display of the actual data itself:</p>
+
+<p><code>
+&lt;cfloop index=&ldquo;person&rdquo; array=&ldquo;#items#&rdquo;&gt;
+    &lt;cfoutput&gt;
+        &lt;tr&gt;
+            &lt;td&gt;#person.getLastName()#, #person.getFirstName()#&lt;/td&gt;
+            &lt;td&gt;#person.getEmail()#&lt;/td&gt;
+            &lt;td&gt;#numberFormat(person.getSalary())#&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/cfoutput&gt;
+&lt;/cfloop&gt;
+</code></p>
+
+<p>I wish that was a bit more complex (joking), but I&rsquo;ll have to live with it as is. The rest of the file is no different than any other pagination code you have seen before. If we are past the first index, show a previous link, and then show a next link if we aren&rsquo;t on the last page:</p>
+
+<p><code>
+&lt;cfoutput&gt;
+&lt;cfif url.start gt 1&gt;
+    &lt;a href=&ldquo;list.cfm?sort=#url.sort#&amp;sortdir=#url.sortdir#&amp;start=#url.start-pageSize#&rdquo;&gt;Previous&lt;/a&gt;
+&lt;cfelse&gt;
+    Previous
+&lt;/cfif&gt;
+/
+&lt;cfif url.start+pagesize lt total&gt;
+    &lt;a href=&ldquo;list.cfm?sort=#url.sort#&amp;sortdir=#url.sortdir#&amp;start=#url.start+pageSize#&rdquo;&gt;Next&lt;/a&gt;
+&lt;cfelse&gt;
+    Next
+&lt;/cfif&gt;
+</code>
+</cfoutput></p>
+
+<p>I&rsquo;ve attached the code to the zip for folks to play around with. I used a MySQL datasource but - obviously - it should work in any database supported by ColdFusion 9.<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Farchive24%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/08\/14\/Simple-ColdFusion-9-ORM-Paging-Demo'; 
+this.page.identifier = '/?p=3487'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/08/14/Simple-ColdFusion-9-ORM-Paging-Demo" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Simple ColdFusion 9 ORM Paging Demo" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/08/14/Simple-ColdFusion-9-ORM-Paging-Demo" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/08/14/Simple-ColdFusion-9-ORM-Paging-Demo" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Simple ColdFusion 9 ORM Paging Demo" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/08/14/Simple-ColdFusion-9-ORM-Paging-Demo" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/08/14/Simple-ColdFusion-9-ORM-Paging-Demo" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

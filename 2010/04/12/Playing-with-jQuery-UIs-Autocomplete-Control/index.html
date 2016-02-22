@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Playing with jQuery UI&#39;s Autocomplete Control &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Playing with jQuery UI&#39;s Autocomplete Control" />
+<meta property="og:description" content=" jQuery UI 1.8 has been out for a while now (see details on their blog) but I&rsquo;ve yet to really find the time to play around with it. This weekend I finally took a look at it, specifically the new autocomplete widget, and I thought I&rsquo;d whip up a few quick examples showing the control being used with ColdFusion.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/04/12/Playing-with-jQuery-UIs-Autocomplete-Control" />
+
+
+<meta property="og:updated_time" content="2010-04-12T10:04:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Playing with jQuery UI&#39;s Autocomplete Control">
+<meta itemprop="description" content=" jQuery UI 1.8 has been out for a while now (see details on their blog) but I&rsquo;ve yet to really find the time to play around with it. This weekend I finally took a look at it, specifically the new autocomplete widget, and I thought I&rsquo;d whip up a few quick examples showing the control being used with ColdFusion.
+
+">
+
+
+<meta itemprop="dateModified" content="2010-04-12T10:04:00&#43;06:00" />
+<meta itemprop="wordCount" content="1345">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Playing with jQuery UI&#39;s Autocomplete Control"/>
+<meta name="twitter:description" content=" jQuery UI 1.8 has been out for a while now (see details on their blog) but I&rsquo;ve yet to really find the time to play around with it. This weekend I finally took a look at it, specifically the new autocomplete widget, and I thought I&rsquo;d whip up a few quick examples showing the control being used with ColdFusion.
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/04/12/Playing-with-jQuery-UIs-Autocomplete-Control">
+    <h1 class="article-title" itemprop="name">
+        Playing with jQuery UI&#39;s Autocomplete Control
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-04-12 10:04:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-04-12</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p><img src="http://www.raymondcamden.com/images/cfjedi/jqueryui.png" style="margin-right:5px" title="jQuery UI" align="left" /> jQuery UI 1.8 has been out for a while now (see details on their <a href="http://blog.jqueryui.com/2010/03/jquery-ui-18/">blog</a>) but I&rsquo;ve yet to really find the time to play around with it. This weekend I finally took a look at it, specifically the new autocomplete widget, and I thought I&rsquo;d whip up a few quick examples showing the control being used with ColdFusion.
+<br clear="left"></p>
+
+<p><p>
+To begin, I recommend taking a look at, and reading some of the docs, for the <a href="http://jqueryui.com/demos/autocomplete/">autocomplete</a> widget. I&rsquo;m only going to demonstrate a few aspects of it and the docs will give you the whole story. As with most things jQueryUIish (not a word, I know), you use the widget by simply pointing the library at a DOM item and &ldquo;enabling&rdquo; it. So for example, once I&rsquo;ve got my libraries loaded, I can turn an input control into an autosuggest with one line of code. Obviously I can, and probably will, use more code to get fine grained control over the widget, but it really is pretty simple to use.
+<p>
+Let&rsquo;s start with a super simple example. This one is taken directly from the docs. The only thing I&rsquo;ll point out is - and this bugs me about all the jQuery UI demos, I&rsquo;m going to show you the <i>full</i> source behind the code. It really bugs me that their View Source content never shows the included JavaScript and CSS commands. Yes, it is implied, but I know I had a hard time with this when I first began to use jQuery UI. When it comes to docs, I think it&rsquo;s always safe to assume less. Ok, mini rant aside. Here is a simple example of a static autocomplete. jQuery UI&rsquo;s autocomplete widget allows for both static, inline auto suggests as well as Ajax loaded content. We&rsquo;ll be looking at an example of that later on.
+<p>
+<code>
+&lt;script src=&ldquo;jqueryui/js/jquery-1.4.2.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;script src=&ldquo;jqueryui/js/jquery-ui-1.8.custom.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;link rel=&ldquo;stylesheet&rdquo; href=&ldquo;jqueryui/css/vader/jquery-ui-1.8.custom.css&rdquo; type=&ldquo;text/css&rdquo; /&gt;</p>
+
+<p>&lt;script type=&ldquo;text/javascript&rdquo;&gt;
+$(function() {
+    var availableTags = [&ldquo;c++&rdquo;, &ldquo;java&rdquo;, &ldquo;php&rdquo;, &ldquo;coldfusion&rdquo;, &ldquo;javascript&rdquo;, &ldquo;asp&rdquo;, &ldquo;ruby&rdquo;, &ldquo;python&rdquo;, &ldquo;c&rdquo;, &ldquo;scala&rdquo;, &ldquo;groovy&rdquo;, &ldquo;haskell&rdquo;, &ldquo;perl&rdquo;];
+    $(&ldquo;#tags&rdquo;).autocomplete({
+        source: availableTags
+    });
+});
+&lt;/script&gt;</p>
+
+<p>&lt;input id=&ldquo;tags&rdquo; /&gt;
+</code>
+<p>
+As you can see, we begin with our includes. We grab the core jQuery library, the jQuery UI library, and the style sheet. For my demos, I&rsquo;ve chosen the <a href="http://jqueryui.com/themeroller/#tr&ffDefault=Helvetica,+Arial,+sans-serif&fwDefault=normal&fsDefault=1.1&fsDefaultUnit=em&cornerRadius=5&cornerRadiusUnit=px&bgColorHeader=888888&bgTextureHeader=04_highlight_hard.png&bgImgOpacityHeader=15&borderColorHeader=404040&fcHeader=ffffff&iconColorHeader=cccccc&bgColorContent=121212&bgTextureContent=12_gloss_wave.png&bgImgOpacityContent=16&borderColorContent=404040&fcContent=eeeeee&iconColorContent=bbbbbb&bgColorDefault=adadad&bgTextureDefault=03_highlight_soft.png&bgImgOpacityDefault=35&borderColorDefault=cccccc&fcDefault=333333&iconColorDefault=666666&bgColorHover=dddddd&bgTextureHover=03_highlight_soft.png&bgImgOpacityHover=60&borderColorHover=dddddd&fcHover=000000&iconColorHover=c98000&bgColorActive=121212&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=15&borderColorActive=000000&fcActive=ffffff&iconColorActive=f29a00&bgColorHighlight=555555&bgTextureHighlight=04_highlight_hard.png&bgImgOpacityHighlight=55&borderColorHighlight=404040&fcHighlight=cccccc&iconColorHighlight=aaaaaa&bgColorError=fef1ec&bgTextureError=02_glass.png&bgImgOpacityError=95&borderColorError=cd0a0a&fcError=cd0a0a&iconColorError=cd0a0a">Vader</a> theme for obvious reasons.
+<p>
+My JavaScript consists of only two real parts. I&rsquo;ve got a hard coded list of values in an array. Next, I &ldquo;enable&rdquo; the autocomplete on a input control (identified by the ID tags) and tell it to source by my array. And that&rsquo;s it. I <i>really</i> love how easy jQuery UI makes things sometimes. You can test this online <ah ref="http://www.raymondcamden.com/demos/autocompletedemo/test1.html">here</a>.
+<p>
+Now let&rsquo;s make this a tiny bit dynamic. In my first ColdFusion version, I&rsquo;ll switch my categories to a ColdFusion variable. (And yes, this is still a static variable, but you can easily imagine it being sourced by the database.)
+<p>
+<code></p>
+
+<p>&lt;cfset cats = &ldquo;Adobe,Adoption,AIR,Books,ColdFusion,Flash,Flex,Groovy,Hardware,JavaScript,jQuery,Lost,MAX,Movies,Music,ORM,Politics,Television&rdquo;&gt;</p>
+
+<p>&lt;script src=&ldquo;jqueryui/js/jquery-1.4.2.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;script src=&ldquo;jqueryui/js/jquery-ui-1.8.custom.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;link rel=&ldquo;stylesheet&rdquo; href=&ldquo;jqueryui/css/vader/jquery-ui-1.8.custom.css&rdquo; type=&ldquo;text/css&rdquo; /&gt;</p>
+
+<p>&lt;script type=&ldquo;text/javascript&rdquo;&gt;
+$(function() {
+    &lt;cfoutput&gt;
+    var #toScript(listToArray(cats),&ldquo;availableCats&rdquo;)#;
+    &lt;/cfoutput&gt;
+    $(&ldquo;#category&rdquo;).autocomplete({
+        source: availableCats
+    });
+});
+&lt;/script&gt;</p>
+
+<p>category: &lt;input id=&ldquo;category&rdquo; /&gt;
+</code>
+<p>
+The first difference here is the cats variable. Again, this would normally come from the database but for now it&rsquo;s just a hard coded set of strings. Going down a bit, take a look at how I translate it to JavaScript. I make use of toScript, a ColdFusion function that translates variables into their relevant JavaScript versions. I first turn the list into an array however. After that, everything else is pretty much the same. You can take a look at this <a href="http://www.coldfusionjedi.com/demos/autocompletedemo/test1.cfm">here</a>. (And while there, do a View Source to see how the toScript generated my JavaScript.)
+<p>
+Ok, so while hard coded (or static) variables work, and are ok for small lists, most of the time you will want to load in the data via an Ajax call. The autosuggest widget makes that darn easy. If the value of the source attribute is a string, then jQuery treats it like a URL. In this example, I&rsquo;ve pointed my source to a CFC:
+<p>
+<code></p>
+
+<p>&lt;script src=&ldquo;jqueryui/js/jquery-1.4.2.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;script src=&ldquo;jqueryui/js/jquery-ui-1.8.custom.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;link rel=&ldquo;stylesheet&rdquo; href=&ldquo;jqueryui/css/vader/jquery-ui-1.8.custom.css&rdquo; type=&ldquo;text/css&rdquo; /&gt;</p>
+
+<p>&lt;script type=&ldquo;text/javascript&rdquo;&gt;
+$(function() {
+    $(&ldquo;#category&rdquo;).autocomplete({
+        source: &ldquo;service.cfc?method=searchcategories&amp;returnformat=json&rdquo;
+    });
+});
+&lt;/script&gt;</p>
+
+<p>category: &lt;input id=&ldquo;category&rdquo; /&gt;
+</code>
+<p>
+Notice that I pass in my method and returnformat. You need to remember that CFCs, by default, return WDDX. Luckily it is easy to get around that (in ColdFusion 8 and higher). The docs did not make it clear, but the name of the argument sent to your server is <b>term</b>. Here is the simple CFC I used.
+<p>
+<code>
+component {</p>
+
+<pre><code>remote function searchCategories(string term) {
+    var q = new com.adobe.coldfusion.query();
+    q.setDatasource(&quot;cfartgallery&quot;);
+    q.setSQL(&quot;select mediatype from media where mediatype like :search&quot;);
+    q.addParam(name=&quot;search&quot;,value=&quot;%#arguments.term#%&quot;,cfsqltype=&quot;cf_sql_varchar&quot;);
+    var result = q.execute().getResult();
+    return listToArray(valueList(result.mediatype));
+}
+</code></pre>
+
+<p>}
+</code>
+<p>
+As you can see, this is nothing more than a simple query. Notice my search string is dynamic on <i>both</i> sides of the term value. This allows me to handle partial matches, so a search for Cold would match both ColdFusion and Ice Cold Baby. If you want to match only results that begin with a term, you simply change how your server side logic works. You can demo this <a href="http://www.coldfusionjedi.com/demos/autocompletedemo/test2.cfm">here</a>. The search is against the media table of the cfartgallery demo, so try terms like &ldquo;Pa&rdquo; to see a few results.
+<p>
+Ok, so the final demo is pretty cool I think. One of the issues most autocomplete widgets suffer from is that while humans like to work with strings (like &ldquo;Beer&rdquo;), the database prefers unique identifiers (like 13). So given that you may return a string, again, &ldquo;Beer&rdquo;, when you post your form to the server, how do you handle knowing that the value &ldquo;Beer&rdquo; referred to row 13 in your database? Typically you need to do another database query. Not a big huge deal, but wouldn&rsquo;t it be nice if your autocomplete could work with both strings <i>and</i> numbers? jQuery UI&rsquo;s autocomplete does this and does it well! Let&rsquo;s begin by modifying our CFC.
+<p>
+<code>
+component {</p>
+
+<pre><code>remote function searchCategories(string term) {
+    var q = new com.adobe.coldfusion.query();
+    q.setDatasource(&quot;cfartgallery&quot;);
+    q.setSQL(&quot;select mediaid as id, mediatype as value from media where mediatype like :search&quot;);
+    q.addParam(name=&quot;search&quot;,value=&quot;%#arguments.term#%&quot;,cfsqltype=&quot;cf_sql_varchar&quot;);
+    var query = q.execute().getResult();
+    var result = [];
+    for(var i=1; i&amp;lt;=query.recordCount; i++) {
+        result[arrayLen(result)+1] = {};
+        result[arrayLen(result)][&quot;id&quot;] = query.id[i];
+        result[arrayLen(result)][&quot;value&quot;] = query.value[i];         
+    }
+    return result;
+}
+</code></pre>
+
+<p>}
+</code>
+<p>
+In this example I&rsquo;ve changed from returning an array of strings to returning an array of structs. Notice that I&rsquo;ve got an ID and VALUE key being returned. (*) These values will be recognized by the widget, specifically the value attribute. By itself this won&rsquo;t solve our problem, but we can use the &ldquo;select&rdquo; option to handle the user selection event:
+<p>
+<code>
+select:function(event,ui) {
+    $(&ldquo;#catid&rdquo;).val(ui.item.id)
+}
+</code>
+<p>
+This code says - when the user selects an item, grab the ID value and set it to the catid DOM  item&rsquo;s value. Let&rsquo;s look at the complete page so it makes more sense.
+<p></p>
+
+<p><code>
+&lt;script src=&ldquo;jqueryui/js/jquery-1.4.2.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;script src=&ldquo;jqueryui/js/jquery-ui-1.8.custom.min.js&rdquo;&gt;&lt;/script&gt;
+&lt;link rel=&ldquo;stylesheet&rdquo; href=&ldquo;jqueryui/css/vader/jquery-ui-1.8.custom.css&rdquo; type=&ldquo;text/css&rdquo; /&gt;</p>
+
+<p>&lt;script type=&ldquo;text/javascript&rdquo;&gt;
+$(function() {
+    $(&ldquo;#category&rdquo;).autocomplete({
+        source: &ldquo;service2.cfc?method=searchcategories&amp;returnformat=json&rdquo;,
+        select:function(event,ui) {
+            $(&ldquo;#catid&rdquo;).val(ui.item.id)
+        }
+    });
+});
+&lt;/script&gt;</p>
+
+<p>&lt;form action=&ldquo;test3.cfm&rdquo; method=&ldquo;post&rdquo;&gt;<br />
+category: &lt;input name=&ldquo;category&rdquo; id=&ldquo;category&rdquo; /&gt;
+&lt;input name=&ldquo;catid&rdquo; id=&ldquo;catid&rdquo; type=&ldquo;hidden&rdquo;&gt;
+&lt;input type=&ldquo;submit&rdquo; value=&ldquo;Submit&rdquo;&gt;
+&lt;/form&gt;</p>
+
+<p>&lt;cfif not structIsEmpty(form)&gt;
+    &lt;cfdump var=&ldquo;#form#&rdquo; label=&ldquo;Form&rdquo;&gt;
+&lt;/cfif&gt;
+</code>
+<p>
+As you can see, I&rsquo;ve added the select handler to my widget constructor. I&rsquo;ve also added the hidden form field catid. Finally I added a real submit button and a cfdump so I can see the result. Now when I select a media type, the user will see the nice string, and the hidden form field gets the proper primary key. You can see this for yourself <a href="http://www.coldfusionjedi.com/demos/autocompletedemo/test3.cfm">here</a>. All in all I think it works really nicely.
+<p>
+Again - please note there is more to this control then what I&rsquo;ve shown here. Check the <a href="http://jqueryui.com/demos/autocomplete/">docs</a> and have fun with it! (And if you are using it in production, please feel free to share the URL here.)
+<p>
+* Did you notice I used struct notation [&ldquo;id&rdquo;] instead of dot notation? Dot notation creates JSON with upper case keys. jQuery UI won&rsquo;t pick up on that automatically. By using bracket notation I ensure my JSON maintains the same case.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/04\/12\/Playing-with-jQuery-UIs-Autocomplete-Control'; 
+this.page.identifier = '/?p=3779'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/04/12/Playing-with-jQuery-UIs-Autocomplete-Control" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Playing with jQuery UI&#39;s Autocomplete Control" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/04/12/Playing-with-jQuery-UIs-Autocomplete-Control" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/04/12/Playing-with-jQuery-UIs-Autocomplete-Control" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Playing with jQuery UI&#39;s Autocomplete Control" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/04/12/Playing-with-jQuery-UIs-Autocomplete-Control" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/04/12/Playing-with-jQuery-UIs-Autocomplete-Control" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

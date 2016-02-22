@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Testing Camera Quality Settings and PhoneGap/Cordova &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Testing Camera Quality Settings and PhoneGap/Cordova" />
+<meta property="og:description" content="As you know, when using the Camera plugin with PhoneGap/Cordova, you have an optional quality setting. It accepts values from 0 to 100 with 50 being the default. I was curious as to how much of an impact this setting had on the final result. Obviously quality can be subjective, but I thought it would be interesting to build a simple tool that would let me test the settings and compare the results.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/04/27/testing-camera-quality-settings-and-phonegapcordova" />
+
+
+<meta property="og:updated_time" content="2015-04-27T13:03:31&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Testing Camera Quality Settings and PhoneGap/Cordova">
+<meta itemprop="description" content="As you know, when using the Camera plugin with PhoneGap/Cordova, you have an optional quality setting. It accepts values from 0 to 100 with 50 being the default. I was curious as to how much of an impact this setting had on the final result. Obviously quality can be subjective, but I thought it would be interesting to build a simple tool that would let me test the settings and compare the results.
+">
+
+
+<meta itemprop="dateModified" content="2015-04-27T13:03:31&#43;06:00" />
+<meta itemprop="wordCount" content="1090">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Testing Camera Quality Settings and PhoneGap/Cordova"/>
+<meta name="twitter:description" content="As you know, when using the Camera plugin with PhoneGap/Cordova, you have an optional quality setting. It accepts values from 0 to 100 with 50 being the default. I was curious as to how much of an impact this setting had on the final result. Obviously quality can be subjective, but I thought it would be interesting to build a simple tool that would let me test the settings and compare the results.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/04/27/testing-camera-quality-settings-and-phonegapcordova">
+    <h1 class="article-title" itemprop="name">
+        Testing Camera Quality Settings and PhoneGap/Cordova
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-04-27 13:03:31 &#43;0600 &#43;0600" itemprop="datePublished">2015-04-27</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/ionic">ionic</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>As you know, when using the <a href="http://plugins.cordova.io/#/package/org.apache.cordova.camera">Camera plugin</a> with PhoneGap/Cordova, you have an optional quality setting. It accepts values from 0 to 100 with 50 being the default. I was curious as to how much of an impact this setting had on the final result. Obviously quality can be subjective, but I thought it would be interesting to build a simple tool that would let me test the settings and compare the results.</p>
+
+<p>I began by building a simple Node.js application. Its sole purpose was to simply listen for a form POST and save attached files to a time stamped directory. While not really important to the discussion, I wanted to share the code because this is the first time I&rsquo;ve done uploads in Node and <a href="https://github.com/felixge/node-formidable">Formidable</a> made it freaking easy as heck. Like, I went from thinking I&rsquo;d need 3-4 hours to figure it out to having the entire server done in about 30 minutes. Anyway, here&rsquo;s the code:</p>
+
+<pre><code class="language-javascript">var express = require(&#x27;express&#x27;);
+var app = express();
+
+var fs = require(&#x27;fs&#x27;);
+
+app.use(require(&#x27;body-parser&#x27;)());
+app.set(&#x27;port&#x27;, process.env.PORT || 3000);
+
+var formidable = require(&#x27;formidable&#x27;);
+
+app.post(&#x27;&#x2F;process&#x27;, function(req, res) {
+
+    console.log(&#x27;Attempting process.&#x27;);
+    
+    &#x2F;&#x2F;data directory
+    var time = new Date();
+
+    var dir = __dirname + &#x27;&#x2F;output_&#x27;+time.getFullYear()+&quot;_&quot;+(time.getMonth()+1)+&quot;_&quot;+time.getDate() + &quot;_&quot;+time.getHours() + &quot;_&quot; + time.getMinutes()+&quot;_&quot;+time.getSeconds();
+    fs.existsSync(dir) || fs.mkdirSync(dir);
+    console.log(&quot;Dir to save is &quot;+dir);
+    
+    var updir = __dirname + &#x27;&#x2F;uploads&#x27;;
+    fs.existsSync(updir) || fs.mkdirSync(updir);
+
+    var form = new formidable.IncomingForm();
+    form.uploadDir = updir;
+
+    form.parse(req, function(err, fields, files) {
+        if(err) {
+            console.log(&quot;error&quot;,err);
+            res.send(&quot;i shit my pants&quot;);
+        }
+        console.log(&quot;fields&quot;, fields);
+        console.log(&quot;files&quot;, files);
+        for(var file in files) {
+            if(files[file].name.length) {
+                var source = files[file].path;
+                var dest = dir + &#x27;&#x2F;&#x27; + files[file].name;
+                console.log(source, fs.existsSync(source));
+                console.log(dest);
+                fs.renameSync(source,dest);
+                &#x2F;&#x2F;fs.createReadStream(source).pipe(fs.createWriteStream(dest));
+                console.log(&#x27;copied &#x27;+files[file].name);
+            }
+        }
+        res.send(&#x27;thanks&#x27;);
+
+    });
+});
+
+app.listen(app.get(&#x27;port&#x27;), function() {
+    console.log(&#x27;App started on port &#x27;+app.get(&#x27;port&#x27;));
+});</code></pre>
+
+<p>Again - don&rsquo;t spend too much time looking this over. It really isn&rsquo;t the important part. Now let&rsquo;s discuss the app. I created a quick Ionic app with one button. The idea would be that you would click the button, and the Camera API will take over. Each iteration of clicking would change to a new quality setting. I decided 20%, 40%, 60%, 80%, and 100% would be good testing points. I <i>also</i> decided to do the same tests for pictures selected from the device. My gut told me that the quality setting would have no impact there, but I wasn&rsquo;t sure. When I tested, I confirmed that quality does <strong>not</strong> impact existing pictures, so in the code below you will see some parts that are no longer applicable. (And I should stress, this code is an absolute mess. I was going for quick and dirty here, nothing more.)</p>
+
+<p>Another interesting aspect of the code is that I decided to use XHR2 instead of Cordova&rsquo;s <a href="http://plugins.cordova.io/#/package/org.apache.cordova.file-transfer">File-Transfer</a> plugin. Why? Because the plugin doesn&rsquo;t support multiple uploads at once. With XHR2, I could create a FormData structure with all my file data and send them in one request.</p>
+
+<p>So - the code - and again - this is a <strong>mess</strong> so don&rsquo;t consider this suitable production code. I&rsquo;m only including the JavaScript as the HTML is a header and a button.</p>
+
+<p><pre><code class="language-javascript">angular.module(&#x27;starter&#x27;, [&#x27;ionic&#x27;])</p>
+
+<p>.controller(&quot;mainController&quot;, function($scope) {
+    var images = [];
+    var idx = 0;
+    $scope.currentLabel = {value:&quot;&quot;};
+    $scope.doingUpload = {value:false};</p>
+
+<pre><code>var doLabel = function() {
+    var label = &amp;quot;&amp;quot;;
+    switch(idx) {
+            case 0: label=&amp;quot;Camera 20%&amp;quot;; break;
+            case 1: label=&amp;quot;Camera 40%&amp;quot;; break;
+            case 2: label=&amp;quot;Camera 60%&amp;quot;; break;
+            case 3: label=&amp;quot;Camera 80%&amp;quot;; break;
+            case 4: label=&amp;quot;Camera 100%&amp;quot;; break;
+    &amp;#x2F;*
+            case 5: label=&amp;quot;Gallery 20%&amp;quot;; break;
+            case 6: label=&amp;quot;Gallery 40%&amp;quot;; break;
+            case 7: label=&amp;quot;Gallery 60%&amp;quot;; break;
+            case 8: label=&amp;quot;Gallery 80%&amp;quot;; break;
+            case 9: label=&amp;quot;Gallery 100%&amp;quot;; break;
+            case 10: label=&amp;quot;Upload&amp;quot;; break;
+    *&amp;#x2F;
+    case 5: label=&amp;quot;Upload&amp;quot;; break;
+    }
+    $scope.currentLabel.value = label;
+    if(!$scope.$$phase) {
+        $scope.$apply();
+    }
+};
+
+&amp;#x2F;&amp;#x2F;Technically I do pics *and* uploads
+$scope.doPic = function() {
+    if(idx &amp;lt;= 4) {
+        var options = {destinationType:Camera.DestinationType.NATIVE_URI};
+        options.sourceType = (idx&amp;lt;=4)?Camera.PictureSourceType.CAMERA:Camera.PictureSourceType.PHOTOLIBRARY;
+
+        if(idx === 0 || idx === 5) options.quality = 20;
+        if(idx === 1 || idx === 6) options.quality = 40;
+        if(idx === 2 || idx === 7) options.quality = 60;
+        if(idx === 3 || idx === 8) options.quality = 80;
+        if(idx === 4 || idx === 9) options.quality = 100;
+
+        navigator.camera.getPicture(function(u) {
+            var result = {index:idx, uri:u};
+            images.push(result);
+            idx++;
+            doLabel();
+        }, function(e) {
+            &amp;#x2F;&amp;#x2F;if we get an error, might as well die now
+            alert(e);
+        }, options);
+    } else {
+        $scope.doingUpload.value = true;
+        if(!$scope.$$phase) {
+            $scope.$apply();
+        }
+        console.log(&amp;#x27;ok, do upload&amp;#x27;);
+  var complete = 0;
+        var formData = new FormData();
+        images.forEach(function(i) {
+            console.log(&amp;quot;processing image &amp;quot;+JSON.stringify(i));
+            &amp;#x2F;&amp;#x2F;console.log(&amp;quot;test &amp;quot;+decodeURI(i.uri));
+            window.resolveLocalFileSystemURL(i.uri, function(fileEntry) {
+                fileEntry.file(function(file) {
+                    var reader = new FileReader();
+                    reader.onloadend = function(frResult) {
+                        var data = new Uint8Array(frResult.target.result);
+          &amp;#x2F;&amp;#x2F;using a hard coded name since gallery pics were &amp;#x27;content&amp;#x27;
+          var fileName = i.index + &amp;quot;.jpg&amp;quot;;
+                        formData.append(&amp;quot;index&amp;quot;+i.index, new Blob([data], {type:file.type}), fileName);   
+          complete++;
+          if(complete === images.length) doUpload(formData);
+                    };
+                    reader.readAsArrayBuffer(file);
+               },function(e) {
+                    console.log(&amp;quot;failed to get a file ob&amp;quot;);
+                    console.log(JSON.stringify(e));
+                });
+            }, function(e) {
+                console.log(&amp;quot;something went wrong w&amp;#x2F; resolveLocalFileSystemURL&amp;quot;);    
+                console.log(JSON.stringify(e));
+            });
+        });
+
+    }
+};
+</code></pre>
+
+<p>var doUpload = function(data) {
+    console.log(&#x27;doUpload&#x27;, data);
+    var xhr = new XMLHttpRequest();
+    xhr.open(&#x27;POST&#x27;, &#x27;http:&#x2F;&#x2F;192.168.1.13:3000&#x2F;process&#x27;, true);
+    xhr.onload = function(e) {
+      $scope.doingUpload.value = true;
+      if(!$scope.$$phase) {
+        $scope.$apply();
+      }</p>
+
+<pre><code>}
+xhr.onerror = function(e) {
+  console.log(&amp;#x27;onerror fire&amp;#x27;);
+  console.dir(e);
+}
+
+xhr.send(data);
+</code></pre>
+
+<p>}</p>
+
+<pre><code>doLabel();
+</code></pre>
+
+<p>})
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    &#x2F;&#x2F; Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    &#x2F;&#x2F; for form inputs)
+    if(window.cordova &amp;&amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})</pre></code></p>
+
+<p>Ok - so what were the results like? In the following screen shot, 0.jpg represents the first image, which is at 20%, whereas 4.jpg represents the last one, at 100%. Note the file size differences:</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/04/shot14.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/04/shot14.png" alt="shot1" width="864" height="258" class="alignnone size-full wp-image-6065" /></a></p>
+
+<p>How about the quality? I&rsquo;ll include all the images as an attachment to this blog post, but let&rsquo;s focus on the 20% and 100%. I&rsquo;m resizing these too of course. First, the 20%:</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/04/0.jpg"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/04/0.jpg" alt="0" width="850" height="481" class="alignnone size-full wp-image-6066" /></a></p>
+
+<p>And now the 100%:</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/04/4.jpg"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/04/4.jpg" alt="4" width="850" height="481" class="alignnone size-full wp-image-6067" /></a></p>
+
+<p>There seems to be a huge difference in the details of the wallpaper and the colors in the flowers.</p>
+
+<p>Interestingly enough - the 80% is over one meg smaller despite being just 20% less quality. Obviously theres a lot of loss going on - but I think if you look at the 80% - it looks really good:</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/04/3.jpg"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/04/3.jpg" alt="3" width="850" height="481" class="alignnone size-full wp-image-6068" /></a></p>
+
+<p>Certainly this isn&rsquo;t an incredibly scientific test. I left my default camera settings on and each click was a new picture. Many things could have impacted the result - how I held the camera - small changes in light - ghosts, etc. For folks curious, I tested this with an HTC M8. If folks want, I can give the iPhone a try as well.</p>
+
+<p>I&rsquo;ve uploaded the zip of images here: <a href="https://dl.dropboxusercontent.com/u/88185/output_2015_4_27_12_26_22.zip">https://dl.dropboxusercontent.com/u/88185/output_2015_4_27_12_26_22.zip</a>.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/04\/27\/testing-camera-quality-settings-and-phonegapcordova'; 
+this.page.identifier = '/?p=6064'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/04/27/testing-camera-quality-settings-and-phonegapcordova" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Testing Camera Quality Settings and PhoneGap/Cordova" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/04/27/testing-camera-quality-settings-and-phonegapcordova" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/04/27/testing-camera-quality-settings-and-phonegapcordova" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Testing Camera Quality Settings and PhoneGap/Cordova" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/04/27/testing-camera-quality-settings-and-phonegapcordova" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/04/27/testing-camera-quality-settings-and-phonegapcordova" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

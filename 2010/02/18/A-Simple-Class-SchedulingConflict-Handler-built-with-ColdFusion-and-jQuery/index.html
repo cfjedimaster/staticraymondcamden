@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>A Simple Class Scheduling/Conflict Handler built with ColdFusion and jQuery &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="A Simple Class Scheduling/Conflict Handler built with ColdFusion and jQuery" />
+<meta property="og:description" content="Reader X emailed me earlier this week with an interesting problem. He was looking into building a class scheduling system but wanted a way to hande time conflicts on the client. He was currently making use of Flash Forms (which I strongly urge everyone to avoid) but wanted to switch to a pure HTML/JavaScript solution instead. I built up the following demo as one possible way to solve the problem. As always, comments and suggestions are welcome, but remember that this is mainly a proof of concept.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/02/18/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery" />
+
+
+<meta property="og:updated_time" content="2010-02-18T07:02:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="A Simple Class Scheduling/Conflict Handler built with ColdFusion and jQuery">
+<meta itemprop="description" content="Reader X emailed me earlier this week with an interesting problem. He was looking into building a class scheduling system but wanted a way to hande time conflicts on the client. He was currently making use of Flash Forms (which I strongly urge everyone to avoid) but wanted to switch to a pure HTML/JavaScript solution instead. I built up the following demo as one possible way to solve the problem. As always, comments and suggestions are welcome, but remember that this is mainly a proof of concept.
+">
+
+
+<meta itemprop="dateModified" content="2010-02-18T07:02:00&#43;06:00" />
+<meta itemprop="wordCount" content="1389">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="A Simple Class Scheduling/Conflict Handler built with ColdFusion and jQuery"/>
+<meta name="twitter:description" content="Reader X emailed me earlier this week with an interesting problem. He was looking into building a class scheduling system but wanted a way to hande time conflicts on the client. He was currently making use of Flash Forms (which I strongly urge everyone to avoid) but wanted to switch to a pure HTML/JavaScript solution instead. I built up the following demo as one possible way to solve the problem. As always, comments and suggestions are welcome, but remember that this is mainly a proof of concept.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/02/18/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery">
+    <h1 class="article-title" itemprop="name">
+        A Simple Class Scheduling/Conflict Handler built with ColdFusion and jQuery
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-02-18 07:02:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-02-18</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Reader X emailed me earlier this week with an interesting problem. He was looking into building a class scheduling system but wanted a way to hande time conflicts on the client. He was currently making use of Flash Forms (which I strongly urge everyone to avoid) but wanted to switch to a pure HTML/JavaScript solution instead. I built up the following demo as one possible way to solve the problem. As always, comments and suggestions are welcome, but remember that this is mainly a proof of concept.</p>
+
+<p><p/>
+To begin, I&rsquo;m going to create an Application.cfc file that will create a static list of classes. I&rsquo;ve intentionally creates a set of classes that are one hour long as well as another list of two hour classes. This will create two simulateneous set of classes and force a situation where we need to check for conflicts.
+<p/>
+<code>
+component {</p>
+
+<pre><code>    this.name = &quot;classes test&quot;;
+    this.sessionManagement = true;
+
+    public boolean function onApplicationStart(){
+            //hard coded static data
+            var data = [];
+            data[1] = { id=1, name=&quot;Class A&quot;, start=&quot;2/14/2009 8:00 AM&quot;, end=&quot;2/14/2009 9:00 AM&quot; };
+            data[2] = { id=2, name=&quot;Class B&quot;, start=&quot;2/14/2009 9:15 AM&quot;, end=&quot;2/14/2009 10:15 AM&quot; };
+            data[3] = { id=3, name=&quot;Class C&quot;, start=&quot;2/14/2009 10:30 AM&quot;, end=&quot;2/14/2009 11:30 AM&quot; };
+            data[4] = { id=4, name=&quot;Class D&quot;, start=&quot;2/14/2009 11:45 AM&quot;, end=&quot;2/14/2009 12:45 PM&quot; };
+            data[5] = { id=5, name=&quot;Class E&quot;, start=&quot;2/14/2009 1:00 PM&quot;, end=&quot;2/14/2009 2:00 PM&quot; };
+            data[6] = { id=6, name=&quot;Class F&quot;, start=&quot;2/14/2009 2:15 PM&quot;, end=&quot;2/14/2009 3:15 PM&quot; };
+            data[7] = { id=7, name=&quot;Class G&quot;, start=&quot;2/14/2009 3:30 PM&quot;, end=&quot;2/14/2009 4:30 PM&quot; };
+
+            data[8] = { id=8, name=&quot;Class AA&quot;, start=&quot;2/14/2009 8:00 AM&quot;, end=&quot;2/14/2009 10:00 AM&quot; };
+            data[9] = { id=9, name=&quot;Class BB&quot;, start=&quot;2/14/2009 10:15 AM&quot;, end=&quot;2/14/2009 12:15 PM&quot; };
+            data[10] = { id=10, name=&quot;Class CC&quot;, start=&quot;2/14/2009 12:30 PM&quot;, end=&quot;2/14/2009 2:30 PM&quot; };
+            data[11] = { id=11, name=&quot;Class DD&quot;, start=&quot;2/14/2009 2:45 PM&quot;, end=&quot;2/14/2009 4:45 PM&quot; };
+
+            application.classes = data;
+            return true;
+    }
+
+    public boolean function onRequestStart(string req) {
+            if(structKeyExists(url, &quot;init&quot;)) { onApplicationStart(); onSessionStart(); }
+            return true;
+    }
+
+    public boolean function onSessionStart() {
+            session.classes = [];
+            return true;
+    }
+</code></pre>
+
+<p>}
+</code>
+<p/>
+Notice that I&rsquo;ve also used the onSessionStart method to initialize an array for the user&rsquo;s selected classes. Now let&rsquo;s move to the front end. I began with a simple design that contained a drop down of classes a user could add, a list of currently selected users, and a third block that was used for debugging purposes.
+<p/>
+<code>
+&lt;h2&gt;Add Class&lt;/h2&gt;
+&lt;form id=&ldquo;addclass&rdquo;&gt;
+&lt;select id=&ldquo;classlistSelector&rdquo;&gt;
+&lt;cfloop index=&ldquo;c&rdquo; array=&ldquo;#application.classes#&rdquo;&gt;
+        &lt;cfoutput&gt;&lt;option value=&ldquo;#c.id#&rdquo;&gt;#c.name# (#c.start# - #c.end#)&lt;/option&gt;&lt;/cfoutput&gt;
+&lt;/cfloop&gt;
+&lt;/select&gt; &lt;input type=&ldquo;button&rdquo; id=&ldquo;addButton&rdquo; value=&ldquo;Add Class&rdquo;&gt;
+&lt;/form&gt;</p>
+
+<p>&lt;h2&gt;Your Classes&lt;/h2&gt;
+&lt;div id=&ldquo;classlist&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;p&gt;
+&lt;a href=&ldquo;index.cfm?init=true&rdquo;&gt;Restart&lt;/a&gt;
+&lt;/p&gt;
+&lt;cfdump var=&ldquo;#application#&rdquo; label=&ldquo;Application&rdquo; expand=&ldquo;false&rdquo;&gt;
+&lt;cfdump var=&ldquo;#session#&rdquo; label=&ldquo;Session&rdquo; expand=&ldquo;false&rdquo;&gt;
+</code>
+ <p/>
+For the most part this should be pretty vanilla. You see me making use of the class list on top. I&rsquo;ve got a blank div for my class list. We&rsquo;re going to take care of that next. All the bits are here - so now it&rsquo;s time to look at some jQuery that will handle making this work.
+ <p/>
+<code>
+&lt;script&gt;
+function displayMyClasses() {
+        var myclasses = $.getJSON(&ldquo;classes.cfc?method=getmyclasses&amp;returnformat=json&rdquo;, {}, function(data) {
+                var s = &ldquo;&rdquo;
+                for(var i=0; i &lt; data.length; i++) {$
+                        s += &ldquo;&lt;p&gt;&lt;b&gt;&rdquo; + data[i].NAME + &ldquo;&lt;/b&gt;&lt;br/&gt;&ldquo;
+                        s += data[i].START + &ldquo; to &rdquo; + data[i].END
+                        s += &ldquo;&lt;/p&gt;&ldquo;
+                }
+                $(&ldquo;#classlist&rdquo;).html(s)
+        })
+}</p>
+
+<p>$(document).ready(function() {</p>
+
+<pre><code>    displayMyClasses()
+
+    $(&quot;#addButton&quot;).click(function() {
+            //get the value of the class
+            var classid = $(&quot;#classlistSelector option:selected&quot;).val()
+            //now try to add it
+            $.getJSON(&quot;classes.cfc?method=addclass&amp;returnformat=json&quot;, {classid:classid}, function(data) {
+                    if(data == true) displayMyClasses()
+                    else alert(&quot;Sorry, there is a time conflict with that class!&quot;)
+            })
+    })
+</code></pre>
+
+<p>})
+&lt;/script&gt;
+</code>
+<p/>
+There are two main functions here. First, my document.ready block (I tend to assume my readers all use jQuery, which isn&rsquo;t fair, so just consider that block as a &lsquo;When I&rsquo;m done, do this&rsquo; block) and a displayMyClasses function. Let&rsquo;s focus on the document.ready area first. It begins by calling displayMyClasses. We will discuss that next. It then adds a listener for the button we had in our form. This will handle getting the selected item from the select tag and passing it to a CFC. This CFC will return true or false depending on if we were able to add the class. On a successful add, we just redraw the selected classes. On a failure we use an alert. (Let me just add - I freaking hate alerts. But for now it is a quick and dirty way to handle it.)
+ <p/>
+Going up a bit to displayMyClasses, you can see it calling the CFC again (which we will show next). It asks for the user&rsquo;s classes and simply displays it in HTML.
+ <p/>
+So far so good. For the final bit, let&rsquo;s open the CFC. This CFC is <b>one big mess of bad</b> - specifically I&rsquo;ve got Application and Session variables in there. In a &ldquo;properly architected application&rdquo; this wouldn&rsquo;t be there, but I&rsquo;d still be writing. Since the focus of this entry was on the front end, I felt it was good decision to make. That being said - here is the component:
+ <p/>
+<code>
+component {</p>
+
+<pre><code>    remote boolean function addClass(numeric classid) {
+            //only add if I don't have it - return true just means ignore the re-add
+            if(hasClass(arguments.classid)) return true;
+
+            if(!hasConflict(arguments.classid)) {
+                    arrayAppend(session.classes, arguments.classid);
+                    return true;
+            } else {
+                    return false;
+            }
+
+    }
+
+    public struct function getTheClass(numeric id) {
+            var classes = getClasses();
+            for(var i=1; i &amp;lt;= arrayLen(classes); i++) {
+                    if(classes[i].id == arguments.id) return classes[i];
+            }
+    }
+
+    public array function getClasses() {
+            return application.classes;
+    }
+
+    remote array function getMyClasses() {
+            var result = [];
+            for(var i=1; i &amp;lt;= arrayLen(application.classes); i++) {
+                    if(hasClass(application.classes[i].id)) arrayAppend(result, application.classes[i]);
+            }
+            return result;
+    }
+
+    public boolean function hasClass(numeric id) {
+            for(var i=1; i &amp;lt;= arrayLen(session.classes); i++) {
+                    if(session.classes[i] == arguments.id) return true;
+            }
+            return false;
+    }
+
+    public boolean function hasConflict(numeric id) {
+            var theclass = getTheClass(arguments.id);
+
+            var myclasses = getMyClasses();
+            for(var i=1; i &amp;lt;= arrayLen(myclasses); i++) {
+                    //same start time?
+                    if(dateCompare(myclasses[i].start, theclass.start) == 0) return true;
+                    //is the start time before my start and end after my start?
+                    if(dateCompare(myclasses[i].start, theclass.start) == -1 &amp;&amp; dateCompare(myclasses[i].end, theclass.start) == 1) return true;
+                    //does my new class end after the start of my class and also begin before the end?
+                    if(dateCompare(myclasses[i].start, theclass.start) == 1 &amp;&amp; dateCompare(myclasses[i].start, theclass.end) == -1) return true;                                    
+            }
+            return false;
+    }
+</code></pre>
+
+<p>}
+</code>
+ <p/>
+There&rsquo;s a bunch of functions here - but most are pretty trivial, like getClasses and getTheClass. Both of these would use SQL/ORM instead of what I have here, but again, it&rsquo;s just a demo. The critical function is addClass. The logic is relatively simply - if we have the class already, silently fail. If we don&rsquo;t have a conflict, add it. I migrated the &lsquo;conflict&rsquo; logic to it&rsquo;s own method in order to keep the logic simple.
+ <p/>
+hasConflict() uses 3 rules to determine if there is a conflict:
+ <p/>
+1) Do I have a class that starts at the same time as the one I want to add?
+ <p/>
+2) Do I have a class that starts before the one I want to add and ends after it begins?
+ <p/>
+3) Do I have a class that starts after the new one begins and ends before the new one ends?
+ <p/>
+There is a chance I may be missing something there. The good thing though is that if I do find a logic mistake, I can correct it here and keep addClass relatively simple.
+<p/>
+You can play with a demo of this here: <a href="http://www.raymondcamden.com/demos/feb172010/">http://www.coldfusionjedi.com/demos/feb172010/</a>
+ <p/>
+So all in all - it works (until someone finds a bug :) but it&rsquo;s missing a few things that would make it nicer. First - the drop down should remove classes after you&rsquo;ve added them. Sure the application just ignores a re-add, but it would be nice to make the list smaller. It would also be nice to default the list to classes you haven&rsquo;t added. If I reload the page then the drop down should only contain classes I haven&rsquo;t added. We can even go further - why not display a list of classes we <i>can&rsquo;t</i> add anymore because of conflicts? I&rsquo;ll explore these options and more in the next version.
+<p/>
+p.s. I wrote this entry in Evernote, and when I pasted it in, my code blocks got a bit fubared. First I lost all my line breaks. I fixed that by emailing myself the note. However, when I pasted in from the email I seemed to have lost my tabbing. Please forgive the format of the samples above.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/02\/18\/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery'; 
+this.page.identifier = '/?p=3723'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/18/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="A Simple Class Scheduling/Conflict Handler built with ColdFusion and jQuery" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/18/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/18/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="A Simple Class Scheduling/Conflict Handler built with ColdFusion and jQuery" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/18/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/18/A-Simple-Class-SchedulingConflict-Handler-built-with-ColdFusion-and-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

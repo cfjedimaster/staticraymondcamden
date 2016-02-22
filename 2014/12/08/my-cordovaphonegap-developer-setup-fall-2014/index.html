@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>My Cordova/PhoneGap Developer Setup (Fall 2014) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="My Cordova/PhoneGap Developer Setup (Fall 2014)" />
+<meta property="og:description" content="Over the years of developing with Cordova and PhoneGap I&rsquo;ve used many different tools to help build my applications. I thought it would be nice to share my standard &ldquo;checklist&rdquo; of the tools I use for hybrid development. I fully expect this list to change over time, so please make note of the date this entry is being written. If you are reading this in the future, please note that I have always supported our AI Overlords and see my most recent blog posts on what I may be using now. I also want to stress that what I consider to be my setup is not necessarily what I expect will work well for everyone. There are things on this list that I do not mention when presenting or writing. That&rsquo;s because the best tool to help you learn to do hybrid mobile development may not be the best first tool for you to use. Ok, let&rsquo;s get started.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014" />
+
+
+<meta property="og:updated_time" content="2014-12-08T10:56:19&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="My Cordova/PhoneGap Developer Setup (Fall 2014)">
+<meta itemprop="description" content="Over the years of developing with Cordova and PhoneGap I&rsquo;ve used many different tools to help build my applications. I thought it would be nice to share my standard &ldquo;checklist&rdquo; of the tools I use for hybrid development. I fully expect this list to change over time, so please make note of the date this entry is being written. If you are reading this in the future, please note that I have always supported our AI Overlords and see my most recent blog posts on what I may be using now. I also want to stress that what I consider to be my setup is not necessarily what I expect will work well for everyone. There are things on this list that I do not mention when presenting or writing. That&rsquo;s because the best tool to help you learn to do hybrid mobile development may not be the best first tool for you to use. Ok, let&rsquo;s get started.
+">
+
+
+<meta itemprop="dateModified" content="2014-12-08T10:56:19&#43;06:00" />
+<meta itemprop="wordCount" content="1320">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="My Cordova/PhoneGap Developer Setup (Fall 2014)"/>
+<meta name="twitter:description" content="Over the years of developing with Cordova and PhoneGap I&rsquo;ve used many different tools to help build my applications. I thought it would be nice to share my standard &ldquo;checklist&rdquo; of the tools I use for hybrid development. I fully expect this list to change over time, so please make note of the date this entry is being written. If you are reading this in the future, please note that I have always supported our AI Overlords and see my most recent blog posts on what I may be using now. I also want to stress that what I consider to be my setup is not necessarily what I expect will work well for everyone. There are things on this list that I do not mention when presenting or writing. That&rsquo;s because the best tool to help you learn to do hybrid mobile development may not be the best first tool for you to use. Ok, let&rsquo;s get started.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014">
+    <h1 class="article-title" itemprop="name">
+        My Cordova/PhoneGap Developer Setup (Fall 2014)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2014-12-08 10:56:19 &#43;0600 &#43;0600" itemprop="datePublished">2014-12-08</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Over the years of developing with <a href="http://cordova.io">Cordova</a> and <a href="http://www.phonegap.com">PhoneGap</a> I&rsquo;ve used many different tools to help build my applications. I thought it would be nice to share my standard &ldquo;checklist&rdquo; of the tools I use for hybrid development. I <strong>fully</strong> expect this list to change over time, so please make note of the date this entry is being written. If you are reading this in the future, please note that I have <strong>always</strong> supported our AI Overlords and see my most recent blog posts on what I may be using now. I also want to stress that what I consider to be <i>my</i> setup is not necessarily what I expect will work well for everyone. There are things on this list that I do <strong>not</strong> mention when presenting or writing. That&rsquo;s because the best tool to help you learn to do hybrid mobile development may not be the best <i>first</i> tool for you to use. Ok, let&rsquo;s get started.</p>
+
+<h2>Development Machine - Apple</h2>
+This is part personal preference and part simple fact of life. You can't develop iOS apps on a Windows machine. You can work around it. <a href="http://build.phonegap.com">PhoneGap Build</a> makes it very easy to do so. My issue with a remote service though is that it takes time. Not a lot of time - not at all! But when I develop, I tend to make a lot of small changes very quickly. When I'm trying to build something complex, or debug an issue, I tend to make very small atomic changes. Because of this, even the quick(ish) turnaround time of PhoneGap Build is too slow for me. If that isn't the case for you, then it really comes down to personal preference. MacBook Pros seem to be the most popular developer machine these days, but honestly I think Windows is perfectly fine as well. The only thing I can recommend is to ensure you go SSD for your hard disk. That makes a huge difference in performance.
+
+If you go Windows, I'd strongly suggest getting a cheap Mac (refurbished, Mac Mini, etc) and using <a href="http://synergy-project.org/">Synergy</a> as a virtual KVM between them. When I got my first Mac I used this and it performed incredibly well. This was like five years or so ago so I imagine (hope) it has only gotten better.
+
+<h2>SDKs - Android and iOS</h2>
+
+<p>For SDKs, I typically use iOS and Android only. I&rsquo;m not opposed to the others, but for the most part, I tend to only test my projects and demos in those two. I still think Windows Phone has the most innovation lately in terms of the UI, but I simply don&rsquo;t get questions/requests/etc from folks asking me to test stuff there. It <i>is</i> very simple to set up a Windows VM and use the SDK if you are on OS X.</p>
+
+<h2>CLI - Cordova</h2>
+
+<p>I&rsquo;ve got both the PhoneGap and Cordova CLIs installed, but I generally use the Cordova CLI more often. However, with the <a href="http://phonegap.com/blog/2014/11/13/phonegap-cli-3-6-3/">recent update</a> to the PhoneGap CLI, I may actually switch back. Right now I&rsquo;ve just got more muscle memory for Cordova than I do PhoneGap.</p>
+
+<p>I&rsquo;m going to talk a bit more about frameworks in a bit, but the Ionic CLI is actually my favorite. I didn&rsquo;t set it as &ldquo;the&rdquo; recommendation simply because I tend to do a lot of one off demo/tests more than actual project work. While you <i>can</i> use the Ionic CLI without using Ionic, if I know I&rsquo;m doing something fast and small, I&rsquo;ll just use the Cordova CLI. Again, this is muscle memory.</p>
+
+<p>The main reason I think the Ionic CLI is the best is the live reload and Terminal logging features (which I reviewed <a href="http://www.raymondcamden.com/2014/9/4/Ionic-120-Released">here</a>). I&rsquo;d love to see both of them rolled back into Cordova or PhoneGap. (Woot woot for open source!)</p>
+
+<h2>Editor - Brackets</h2>
+
+<p>For &ldquo;real&rdquo; projects, I use <a href="http://brackets.io">Brackets</a>. I&rsquo;m a little afraid of the future of Brackets as it seems to be turning its focus to designers. To be clear, I&rsquo;m not worried Brackets will go away. I&rsquo;m afraid it will morph into a tool that simply doesn&rsquo;t work for me as a developer.</p>
+
+<p>Outside of that, I will also use <a href="http://www.sublimetext.com/">Sublime</a> as well. The biggest thing Sublime does better than Brackets is simply open from the command line.</p>
+
+<h2>Framework - Ionic</h2>
+
+<p>Ah, the million dollar question. ;) For quick testing I&rsquo;ll not use anything but jQuery. I&rsquo;ve got a Cordova &ldquo;skeleton&rdquo; app that I use for my one-offs that is slim and simple. But if I am doing anything serious, or for a client, I&rsquo;m going to use <a href="http://ionicframework.com/">Ionic</a>. I am not ashamed to say it - I am an Ionic fan boy. I <strong>love</strong> everything they are doing for hybrid development. They have a killer UI, UX, CLI, and even more services. While not alone, I think they are doing the most right now to make hybrid development awesome. If I didn&rsquo;t have six kids and a fear of the &ldquo;start up&rdquo; life I&rsquo;d join them in a heartbeat.</p>
+
+<p>Of course, using Ionic also means using Angular. I like Angular, but it is also a big step for a new developer. That&rsquo;s why when I <i>teach</i> hybrid development, I&rsquo;ll typically use something simpler like <a href="http://jquerymobile.com/">jQuery Mobile</a>. I was a huge fan of jQuery Mobile (and wrote a few books on it), and while I may prefer Angular now, I think jQuery Mobile is much more friendly framework for people who may be new to JavaScript development in general. If I&rsquo;m giving a course on Cordova, I know I can teach people the basics in 10-20 minutes and move on. I don&rsquo;t feel confident I can do that with Angular. (And as an aside, I&rsquo;m updating my jQuery Mobile book next year with a third edition.)</p>
+
+<h2>Debugging - GapDebug</h2>
+
+<p>Based on my focus on iOS/Android, the best solution I&rsquo;ve found for debugging is to use <a href="https://www.genuitec.com/products/gapdebug/">GapDebug</a>. Remote debugging works great for both iOS and Android (and other platforms too, like Firefox), but I love how GapDebug gives me access to <i>both</i> at the same time. And I love not launching Safari. If I could go the rest of my live without launching Safari, I&rsquo;d be happy. Another big feature of GapDebug is auto-reconnect. The only thing worse than launching Safari is having to constantly reconnect when you send new builds to the device/emulator. For more, see my <a href="http://www.raymondcamden.com/2014/7/2/GapDebug-a-new-mobile-debugging-tool">review</a> from earlier this year.</p>
+
+<h2>Misc</h2>
+
+<p>So what else? Even though this is in the last section, I cannot stress enough that if you are doing Android development you <strong>must</strong> use <a href="http://www.genymotion.com/">Genymotion</a>. That isn&rsquo;t a recommendation. That isn&rsquo;t an opinion. It is a <strong>requirement</strong>. The Android emulator is so incredibly slow that it is quicker to go out and buy hardware. (To be fair, I think <i>every</i> hybrid developer needs to test on real hardware too.) Every time I mention how slow the Android emulator is people chime in about how it does more than the iOS simulator but frankly I don&rsquo;t give a crap. If it is a pain to use, it is a pain to use. Period. So get Genymotion. It is free - works great - and makes you forget about how godawful it is to actually use the Android emulator.</p>
+
+<p>I know some folks are using Grunt/Gulp with their hybrid development, but I really haven&rsquo;t found a use for it yet. Again, though, I do little project/long-term work in Cordova compared to other people.</p>
+
+<p>In terms of device hardware, it is hard to separate my feelings about the hardware as is versus their usefulness in hybrid development. I can say that for Android, I really recommend the Nexus devices. They get updates quicker and are really good devices in general. My Nexus 7 is my favorite device now, and I like the 7 inch form factor over all. I&rsquo;d pick up an iPad Mini as well.</p>
+
+<p><i>Photo credit: <a href="https://flic.kr/p/bvgUg">three #2 philips bits by grendelkhan</a></i></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2014\/12\/08\/my-cordovaphonegap-developer-setup-fall-2014'; 
+this.page.identifier = '/?p=5404'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="My Cordova/PhoneGap Developer Setup (Fall 2014)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="My Cordova/PhoneGap Developer Setup (Fall 2014)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>ColdFusion 9 Multifile Uploader - Complete Example &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="ColdFusion 9 Multifile Uploader - Complete Example" />
+<meta property="og:description" content="I&rsquo;ve done a few blog entries on ColdFusion 9&rsquo;s new multi file uploader. But for a while now I&rsquo;ve wanted to build, and share, a complete example. As I&rsquo;ve said before, putting a multi file uploader on your page is simple. Incredibly simple. Unfortunately, using the uploader is non-trivial. You&rsquo;ve got multiple things going on at once that you have to manage. It is doable (I wrote up this demo in approximately 30 minutes), but you certainly need to do your planning ahead of time. So what will my little application do?
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/03/05/ColdFusion-9-Multifile-Uploader-Complete-Example" />
+
+
+<meta property="og:updated_time" content="2010-03-05T13:03:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="ColdFusion 9 Multifile Uploader - Complete Example">
+<meta itemprop="description" content="I&rsquo;ve done a few blog entries on ColdFusion 9&rsquo;s new multi file uploader. But for a while now I&rsquo;ve wanted to build, and share, a complete example. As I&rsquo;ve said before, putting a multi file uploader on your page is simple. Incredibly simple. Unfortunately, using the uploader is non-trivial. You&rsquo;ve got multiple things going on at once that you have to manage. It is doable (I wrote up this demo in approximately 30 minutes), but you certainly need to do your planning ahead of time. So what will my little application do?
+">
+
+
+<meta itemprop="dateModified" content="2010-03-05T13:03:00&#43;06:00" />
+<meta itemprop="wordCount" content="1192">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ColdFusion 9 Multifile Uploader - Complete Example"/>
+<meta name="twitter:description" content="I&rsquo;ve done a few blog entries on ColdFusion 9&rsquo;s new multi file uploader. But for a while now I&rsquo;ve wanted to build, and share, a complete example. As I&rsquo;ve said before, putting a multi file uploader on your page is simple. Incredibly simple. Unfortunately, using the uploader is non-trivial. You&rsquo;ve got multiple things going on at once that you have to manage. It is doable (I wrote up this demo in approximately 30 minutes), but you certainly need to do your planning ahead of time. So what will my little application do?
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/03/05/ColdFusion-9-Multifile-Uploader-Complete-Example">
+    <h1 class="article-title" itemprop="name">
+        ColdFusion 9 Multifile Uploader - Complete Example
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-03-05 13:03:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-03-05</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I&rsquo;ve done a few blog entries on ColdFusion 9&rsquo;s new multi file uploader. But for a while now I&rsquo;ve wanted to build, and share, a complete example. As I&rsquo;ve said before, putting a multi file uploader on your page is simple. Incredibly simple. Unfortunately, <i>using</i> the uploader is non-trivial. You&rsquo;ve got multiple things going on at once that you have to manage. It is doable (I wrote up this demo in approximately 30 minutes), but you certainly need to do your planning ahead of time. So what will my little application do?</p>
+
+<p/>
+
+My application is a portfolio submission form. You can imagine a budding young artist bucking for a job at a top creative agency in the thrilling burg of Lafayette, LA. (It's thrilling - honest.) In order to apply for a job, s/he has to submit both biographical information as well as examples of their work. The application will take the user's information and their files and email it to the creative director. Right off the bat there you can see that we're going to need a form that mixes both traditional fields and the fancy new awesomeness of the multi file uploader. 
+
+<p/>
+
+I began by creating a simple form asking for 3 bits of biographical information:
+
+<p/>
+
+<code>
+&lt;form action="portfoliosubmission.cfm" method="post"&gt;
+Your Name: &lt;input type="text" name="name" value="#form.name#"&gt;&lt;br/&gt;
+Your Email: &lt;input type="text" name="email" value="#form.email#"&gt;&lt;br/&gt;
+Your Bio:&lt;br/&gt;
+&lt;textarea name="bio"&gt;#form.bio#&lt;/textarea&gt;&lt;br/&gt;
+</code>
+
+<p/>
+
+Notice that I'm using predefined form values for the three fields. They were set with a cfparam on the top of my template. (The entire code base is available via the download link below.) Next I added my multi file uploader:
+
+<p/>
+
+<code>
+&lt;cffileupload extensionfilter="jpg,jpeg,gif,png,bmp,tiff" name="portfoliofiles" maxfileselect="5" title="Portfolio Images" url="fileupload.cfm?#urlEncodedFormat(session.urltoken)#"&gt;
+</code>
+
+<p/>
+
+I want you to notice a few things here. First, both the extensionfilter and maxfileselect are totally arbitrary. I used image file extensions because this is meant for a design job submission. I picked 5 because I have 5 fingers on one hand. The URL points to a separate CFM. That CFM will handle processing the uploads. <b>Notice:</b> Due to a bug in how the control is created, you must add the current Session URL token to the URL. If you do not, the upload request will be done with a new session. 
+
+<p/>
+
+Ok, so we've got a basic form. What's going to happen when the user actually picks some files to upload?  Well since we are going to be emailing these files, we don't need to keep them around forever. I think using the new Virtual File System would be an excellent place to store those files. I added the following code to my onApplicationStart method of my Application.cfc:
+
+<p/>
+
+<code>
+&lt;cffunction name="onApplicationStart" returnType="boolean" output="false"&gt;
+    &lt;cfset application.portfolioUploadRoot = "ram:///portfoliouploads"&gt;
+    &lt;cfif not directoryExists(application.portfolioUploadRoot)&gt;
+        &lt;cfdirectory action="create" directory="#application.portfolioUploadRoot#"&gt;
+    &lt;/cfif&gt;
+    &lt;cfreturn true&gt;
+&lt;/cffunction&gt;
+</code>
+
+As you can see, I've got an application variable that points to a path on the VFS. I then see if that directory exists and if not, I create it. Most likely it will <i>never</i> exist when the application starts, but I tend to rerun onApplicationStart manually during testing, and frankly, it doesn't hurt to be anal.
+
+<p/>
+
+So now we have a root folder for our uploads, but obviously we may have more than one person using the form at once. I next created an onSessionStart that would make a unique subdirectory just for one person.
+
+<p/>
+
+<code>
+&lt;cffunction name="onSessionStart" returnType="void" output="false"&gt;
+    
+    &lt;cfset session.myuploadroot = application.portfolioUploadRoot & "/" & replace(createUUID(), "-", "_", "all")&gt;
+    &lt;cfif not directoryExists(session.myuploadroot)&gt;
+        &lt;cfdirectory action="create" directory="#session.myuploadroot#"&gt;
+    &lt;/cfif&gt;
+        
+&lt;/cffunction&gt;
+</code>
+
+<p/>
+
+This method creates a new subdirectory using the Application's root folder and a new UUID. Like before, this folder will not exist, but I couldn't help going the extra step and wrapping it with a directoryExists().
+
+<p/>
+
+So at this point, we have a safe storage place for the files. One that is unique per user. If we look at fileupload.cfm, we can see that it is rather trivial:
+
+<p/>
+
+<code>
+&lt;cfif structKeyExists(form, "filedata")&gt;
+    &lt;cffile action="upload" filefield="filedata" destination="#session.myuploadroot#" nameconflict="overwrite" result="result"&gt;
+    &lt;!--- optional post processing ---&gt;
+&lt;/cfif&gt;
+
+&lt;cfset str.STATUS = 200&gt;
+&lt;cfset str.MESSAGE = "passed"&gt;
+&lt;cfoutput&gt;#serializeJSON(str)#&lt;/cfoutput&gt; 
+</code>
+
+<p/>
+
+Two things to note here. I'm not doing any post-processing of the files. You may want to. In my case, I'm just going to leave them be. You should <b>not</b> trust that the user sent image files even with the extension filter. That being said, I'm not storing the files or executing them. I'm just emailing them. Secondly, and this is <b>critical</b> and <b>not documented</b> - be sure to output JSON with a 200 status. Big thanks to Brian Rinaldi and his <a href="http://www.remotesynthesis.com/post.cfm/multi-file-uploads-with-coldfusion-9-in-5-lines">blog post</a> on the topic. If you don't have this, one file upload will work but the multi file uploader won't continue on to the next file.
+
+<p/>
+
+Alright, so we've got the file uploads working, now let's circle back and look at how my form validates. I'm doing everything client side for simplicity's sake:
+
+<p/>
+
+<code>
+&lt;cfif structKeyExists(form, "submit")&gt;
+
+    &lt;cfset form.name = trim(htmlEditFormat(form.name))&gt;
+    &lt;cfset form.email = trim(htmlEditFormat(form.email))&gt;
+    &lt;cfset form.bio = trim(htmlEditFormat(form.bio))&gt;
+    
+    &lt;cfset errors = []&gt;
+    &lt;cfif not len(form.name)&gt;
+        &lt;cfset arrayAppend(errors, "You must include your name.")&gt;
+    &lt;/cfif&gt;
+    &lt;cfif not len(form.email) or not isValid("email", form.email)&gt;
+        &lt;cfset arrayAppend(errors, "You must include a valid email address.")&gt;
+    &lt;/cfif&gt;
+    &lt;cfif not len(form.bio)&gt;
+        &lt;cfset arrayAppend(errors, "You must include your bio.")&gt;
+    &lt;/cfif&gt;
+    &lt;cfdirectory action="list" name="myuploads" directory="#session.myuploadroot#"&gt;
+    &lt;cfif myuploads.recordCount is 0&gt;
+        &lt;cfset arrayAppend(errors, "You must upload at least one file.")&gt;
+    &lt;/cfif&gt;
+
+    &lt;cfif arrayLen(errors) is 0&gt;
+        &lt;cfmail to="someone@myorg.org" from="#form.email#" subject="Portfolio Submission"&gt;
+From: #form.name# (#form.email#)
+Bio:
+#form.bio#
+
+            &lt;cfloop query="myuploads"&gt;
+                &lt;cfmailparam file="#session.myuploadroot#/#name#"&gt;
+            &lt;/cfloop&gt;
+        &lt;/cfmail&gt;
+        &lt;cfset showForm = false&gt;
+    &lt;/cfif&gt;
+&lt;/cfif&gt;
+</code>
+
+<p/>
+
+So I begin by doing real simple validation on the 3 text fields. None of that should be new. But then check out how I validate if the user uploaded anything. I simply do a directory list on their personal storage. If it is empty, it means they didn't upload any files. Finally, if there are no errors, I send the email out. Notice how I use that previous query to create my list of attachments. I use both the errors and the directory list back on the bottom of the form when it is redisplayed:
+
+<p/>
+
+<code>
+&lt;cfif structKeyExists(variables, "myuploads") and myuploads.recordCount&gt;
+&lt;p&gt;
+You have uploaded the following files already: #valueList(myuploads.name)#.
+&lt;/p&gt;
+&lt;/cfif&gt;
+    
+&lt;cfif structKeyExists(variables, "errors")&gt;
+&lt;p&gt;
+&lt;b&gt;Please correct the following error(s):&lt;/b&gt;
+&lt;ul&gt;
+&lt;cfloop index="e" array="#errors#"&gt;
+&lt;li&gt;#e#&lt;/li&gt;
+&lt;/cfloop&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;/cfif&gt;
+</code>
+
+<p/>
+
+Now it's time for the final part of the puzzle - clean up. Remember that a user may upload files and never actually hit submit on the form itself. I use both onApplicationEnd and onSessionEnd to remove the  files from the VFS:
+
+<p/>
+
+<code>
+&lt;cffunction name="onApplicationEnd" returnType="void" output="false"&gt;
+    &lt;cfargument name="applicationScope" required="true"&gt;
+    &lt;cfif directoryExists(arguments.applicationScope.portfolioUploadRoot)&gt;
+        &lt;cfdirectory action="delete" recurse="true" directory="#arguments.applicationScope.portfolioUploadRoot#"&gt;
+    &lt;/cfif&gt;       
+&lt;/cffunction&gt;
+
+&lt;cffunction name="onSessionEnd" returnType="void" output="false"&gt;
+    &lt;cfargument name="sessionScope" type="struct" required="true"&gt;
+    &lt;cfargument name="appScope" type="struct" required="false"&gt;
+        
+    &lt;cfif directoryExists(arguments.sessionScope.myuploadroot)&gt;
+        &lt;cfdirectory action="delete" recurse="true" directory="#arguments.sessionScope.myuploadroot#"&gt;
+    &lt;/cfif&gt;
+        
+&lt;/cffunction&gt;
+</code>
+
+<p/>
+
+For the most part none of that code should be new to you, but do notice how you never directly access the Session or Application scope within these methods. They are always passed by reference instead. 
+
+<p/>
+
+So that's it. There are a few things that could be done to make it fancier of course, but hopefully this gives you a <b>complete</b> example of what it means to add a multi file uploader to your form. Questions and comments are definitely welcome.<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fportfoliosubmission%2Ezip'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/03\/05\/ColdFusion-9-Multifile-Uploader-Complete-Example'; 
+this.page.identifier = '/?p=3740'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/05/ColdFusion-9-Multifile-Uploader-Complete-Example" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="ColdFusion 9 Multifile Uploader - Complete Example" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/05/ColdFusion-9-Multifile-Uploader-Complete-Example" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/05/ColdFusion-9-Multifile-Uploader-Complete-Example" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="ColdFusion 9 Multifile Uploader - Complete Example" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/05/ColdFusion-9-Multifile-Uploader-Complete-Example" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/05/ColdFusion-9-Multifile-Uploader-Complete-Example" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

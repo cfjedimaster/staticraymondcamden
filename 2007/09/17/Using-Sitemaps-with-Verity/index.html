@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using Sitemaps with Verity &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using Sitemaps with Verity" />
+<meta property="og:description" content="Not many people know that ColdFusion ships with a HTTP spider that integrates with Verity. Unfortunately, this spider will only work with localhost as a server. This means if you want to spider multiple sites, you can&rsquo;t. Well, not without playing with your host headers. (More information on the Verity Spider and ColdFusion may be found here.)
+
+What I worked on today was a way to work around this limitation. It turns out - if you have a sitemap, you already have a &ldquo;spider&rdquo; of your site. BlogCFC supports sitemaps out of the box, and I&rsquo;ve blogged in the past a simple UDF to generate sitemaps. Let&rsquo;s look at how we can convert a sitemap into Verity data.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2007/09/17/Using-Sitemaps-with-Verity" />
+
+
+<meta property="og:updated_time" content="2007-09-17T18:09:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using Sitemaps with Verity">
+<meta itemprop="description" content="Not many people know that ColdFusion ships with a HTTP spider that integrates with Verity. Unfortunately, this spider will only work with localhost as a server. This means if you want to spider multiple sites, you can&rsquo;t. Well, not without playing with your host headers. (More information on the Verity Spider and ColdFusion may be found here.)
+
+What I worked on today was a way to work around this limitation. It turns out - if you have a sitemap, you already have a &ldquo;spider&rdquo; of your site. BlogCFC supports sitemaps out of the box, and I&rsquo;ve blogged in the past a simple UDF to generate sitemaps. Let&rsquo;s look at how we can convert a sitemap into Verity data.
+">
+
+
+<meta itemprop="dateModified" content="2007-09-17T18:09:00&#43;06:00" />
+<meta itemprop="wordCount" content="1261">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using Sitemaps with Verity"/>
+<meta name="twitter:description" content="Not many people know that ColdFusion ships with a HTTP spider that integrates with Verity. Unfortunately, this spider will only work with localhost as a server. This means if you want to spider multiple sites, you can&rsquo;t. Well, not without playing with your host headers. (More information on the Verity Spider and ColdFusion may be found here.)
+
+What I worked on today was a way to work around this limitation. It turns out - if you have a sitemap, you already have a &ldquo;spider&rdquo; of your site. BlogCFC supports sitemaps out of the box, and I&rsquo;ve blogged in the past a simple UDF to generate sitemaps. Let&rsquo;s look at how we can convert a sitemap into Verity data.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2007/09/17/Using-Sitemaps-with-Verity">
+    <h1 class="article-title" itemprop="name">
+        Using Sitemaps with Verity
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2007-09-17 18:09:00 &#43;0600 &#43;0600" itemprop="datePublished">2007-09-17</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Not many people know that ColdFusion ships with a HTTP spider that integrates with Verity. Unfortunately, this spider will only work with localhost as a server. This means if you want to spider multiple sites, you can&rsquo;t. Well, not without playing with your host headers. (More information on the Verity Spider and ColdFusion may be found <a href="http://livedocs.adobe.com/coldfusion/8/htmldocs/help.html?content=vspider_01.html">here</a>.)</p>
+
+<p>What I worked on today was a way to work around this limitation. It turns out - if you have a sitemap, you already have a &ldquo;spider&rdquo; of your site. BlogCFC supports sitemaps out of the box, and I&rsquo;ve <a href="http://www.raymondcamden.com/index.cfm/2006/11/16/Sitemap-Generator">blogged</a> in the past a simple UDF to generate sitemaps. Let&rsquo;s look at how we can convert a sitemap into Verity data.</p>
+
+<p>To begin with - let&rsquo;s take a look at some very simple sitemap data.</p>
+
+<p><code>
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?&gt;
+&lt;urlset xmlns=&ldquo;<a href="http://www.sitemaps.org/schemas/sitemap/0.9&quot;&gt;">http://www.sitemaps.org/schemas/sitemap/0.9&quot;&gt;</a>
+&lt;url&gt;
+&lt;loc&gt;<a href="http://www.foo.com/index.cfm&lt;/loc&gt;">http://www.foo.com/index.cfm&lt;/loc&gt;</a>
+&lt;/url&gt;
+&lt;url&gt;
+&lt;loc&gt;<a href="http://www.foo.com/index2.cfm&lt;/loc&gt;">http://www.foo.com/index2.cfm&lt;/loc&gt;</a>
+&lt;/url&gt;
+&lt;url&gt;
+&lt;loc&gt;<a href="http://www.foo.com/index3.cfm&lt;/loc&gt;">http://www.foo.com/index3.cfm&lt;/loc&gt;</a>
+&lt;/url&gt;
+&lt;/urlset&gt;
+</code></p>
+
+<p>This sample is missing many of the features that you can include with a sitemap, but it gives you an idea of the structure. As you could guess - a sitemap contains a collection of URLs. So let&rsquo;s look at how we can parse this XML. (Note - I&rsquo;ll be using ColdFusion 8 code throughout this demonstration, but you can easily downgrade this to CF7, 6, or even 5.)</p>
+
+<p><code>
+&lt;!&mdash; read in xml &mdash;&gt;
+&lt;cfset myxml = fileRead(expandPath(&ldquo;./sitemap.xml&rdquo;))&gt;
+&lt;!&mdash; convert to xml &mdash;&gt;
+&lt;cfset myxml = xmlParse(myxml)&gt;
+</code></p>
+
+<p>The first thing I do is read in my sitemap and convert it to XML.</p>
+
+<p><code>
+&lt;!&mdash; place to store data &mdash;&gt;
+&lt;cfset request.data = structNew()&gt;
+</code></p>
+
+<p>I&rsquo;m going to be using threading, so I create a Request variable to store my information.</p>
+
+<p><code>
+&lt;!&mdash; now loop through&hellip;. &mdash;&gt;
+&lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#min(20,arrayLen(myxml.urlset.url))#&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfset tname = &quot;thread#x#&quot;&amp;gt;
+&amp;lt;cfthread name=&quot;#tname#&quot; url=&quot;#myxml.urlset.url[x].loc.xmltext#&quot;&amp;gt;
+    &amp;lt;cfhttp url=&quot;#attributes.url#&quot; result=&quot;result&quot;&amp;gt;
+    &amp;lt;cfset request.data[attributes.url] = structNew()&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].title = getHTMLTitle(result.filecontent)&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].body = getHTMLBody(result.filecontent)&amp;gt;
+    &amp;lt;!--- remove all html from body ---&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].body = rereplace(request.data[attributes.url].body, &quot;&amp;lt;.*?&amp;gt;&quot;, &quot;&quot;, &quot;all&quot;)&amp;gt;
+    &amp;lt;cfset headers = getMetaHeaders(result.filecontent)&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].keywords = &quot;&quot;&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].description = &quot;&quot;&amp;gt;
+
+    &amp;lt;cfset request.data[attributes.url].x = headers&amp;gt;
+
+    &amp;lt;!--- find description and keywords ---&amp;gt;
+    &amp;lt;cfloop index=&quot;x&quot; from=&quot;1&quot; to=&quot;#arrayLen(headers)#&quot;&amp;gt;
+        &amp;lt;cfif structKeyExists(headers[x], &quot;name&quot;)&amp;gt;
+            &amp;lt;cfif headers[x].name is &quot;description&quot;&amp;gt;
+                &amp;lt;cfset request.data[attributes.url].description = headers[x].content&amp;gt;
+            &amp;lt;cfelseif headers[x].name is &quot;keywords&quot;&amp;gt;
+                &amp;lt;cfset request.data[attributes.url].keywords = headers[x].content&amp;gt;
+            &amp;lt;/cfif&amp;gt;   
+        &amp;lt;/cfif&amp;gt;
+    &amp;lt;/cfloop&amp;gt;
+&amp;lt;/cfthread&amp;gt;
+</code></pre>
+
+<p>&lt;/cfloop&gt;
+</code></p>
+
+<p>Ok, I have a lot going on here, so let me take it bit by bit. First off - I&rsquo;m looping over the XML packet by treating the URL tag as an array. Note the use of &ldquo;min&rdquo;. I did this to simply make my testing run quicker. My current blog&rsquo;s site map is over 2k URLs. (The cool thing is that it only took ColdFusion about 9 minutes to process all 2000 when I tried it.) For each URL, I suck down the content with CFHTTP.</p>
+
+<p>Now for the interesting part. I could simply provide the HTML to Verity. While this &ldquo;works&rdquo;, it doesn&rsquo;t provide as much information to Verity as I would like. Also - Verity doesn&rsquo;t &ldquo;get&rdquo; that is indexing HTML data. It thinks it is just working with simple strings. So in order to make things a bit nicer, I do some cleaning.</p>
+
+<p>First off I use a few UDFs: getHTMLTitle, getHTMLBody, getMetaHeaders. The first and last are from CFLib and the middle one is a modified version of getHTMLTitle. These simply parse the HTML string for the title, body, and the meta tags. (I provide the full code at the end.)</p>
+
+<p>I remove all HTML from the body. I then look at the meta tags and specifically try to find a description and keywords meta tag. All of this gets stored into the Request scope Data structure I created.</p>
+
+<p>Now I need to tell ColdFusion to wait for the threads to end:</p>
+
+<p><code>
+&lt;!&mdash; join the threads &mdash;&gt;
+&lt;cfthread action=&ldquo;join&rdquo; name=&ldquo;#structKeyList(cfthread)#&rdquo; /&gt;
+</code></p>
+
+<p>I then convert my structure into a query:</p>
+
+<p><code>
+&lt;!&mdash; make a query for the data &mdash;&gt;
+&lt;cfset info = queryNew(&ldquo;url,body,title,keywords,description&rdquo;)&gt;
+&lt;cfloop item=&ldquo;c&rdquo; collection=&ldquo;#request.data#&rdquo;&gt;
+    &lt;cfset queryAddRow(info)&gt;
+    &lt;cfset querySetCell(info, &ldquo;url&rdquo;, c)&gt;
+    &lt;cfset querySetCell(info, &ldquo;body&rdquo;, request.data[c].body)&gt;
+    &lt;cfset querySetCell(info, &ldquo;title&rdquo;, request.data[c].title)&gt;
+    &lt;cfset querySetCell(info, &ldquo;keywords&rdquo;, request.data[c].keywords)&gt;
+    &lt;cfset querySetCell(info, &ldquo;description&rdquo;, request.data[c].description)&gt;
+&lt;/cfloop&gt;
+</code></p>
+
+<p>There isn&rsquo;t anything too fancy there - I&rsquo;m just copying from the structure into a new query.</p>
+
+<p>Next I insert into the Verity collection:</p>
+
+<p><code>
+&lt;!&mdash; insert data &mdash;&gt;
+&lt;cfindex collection=&ldquo;sitemaptest&rdquo; action=&ldquo;refresh&rdquo; query=&ldquo;info&rdquo; title=&ldquo;title&rdquo; key=&ldquo;url&rdquo; body=&ldquo;body&rdquo; urlpath=&ldquo;url&rdquo; custom1=&ldquo;keywords&rdquo; custom2=&ldquo;description&rdquo; status=&ldquo;status&rdquo;&gt;
+</code></p>
+
+<p>Note how I tell Verity what column means what. I stored the description and keywords into the custom columns.</p>
+
+<p>That&rsquo;s it! To make sure things worked, I dumped some information at the end:</p>
+
+<p><code>
+&lt;cfoutput&gt;
+&lt;p&gt;
+Done indexing. Did #info.recordCount# rows. Took #totaltime# ms.
+&lt;/p&gt;
+&lt;/cfoutput&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#status#&rdquo;&gt;
+</code></p>
+
+<p>All in all this worked ok - but it has a few problems/places for improvement:</p>
+
+<ul>
+<li>First off - you can really tell that Verity wasn't 100% sure what to do with my data. That's why I removed the HTML. I could have considered taking the data I sucked down, saving it to an HTML file, and then running a file based index. While this would be slower, it could have resulted in better indexing.
+<li>Second - my code, ignoring the Mind(), will suck down every URL and index it. As I mentioned, sitemaps can store more than just URLs. They can also store the last time they were modified. If I were reading my XML data once a day, then it would make sense to only suck down URLs that were modified today. This would <b>greatly</b> improve the speed of the indexing.
+</ul>
+
+<p>Here is the complete index file:</p>
+
+<p><code>
+&lt;cfsetting requesttimeout=&ldquo;600&rdquo;&gt;</p>
+
+<p>&lt;cfset thetime = getTickCount()&gt;</p>
+
+<p>&lt;cfscript&gt;
+/**
+ * Parses an HTML page and returns the title.
+ *
+ * @param str    The HTML string to check.
+ * @return Returns a string.
+ * @author Raymond Camden (ray@camdenfamily.com)
+ * @version 1, December 3, 2001
+ */
+function GetHTMLTitle(str) {
+    var matchStruct = reFindNoCase(&rdquo;&lt;[[:space:]]<em>title[[:space:]]</em>&gt;([^&lt;]<em>)&lt;[[:space:]]</em>/title[[:space:]]*&gt;&rdquo;,str,1,1);
+    if(arrayLen(matchStruct.len) lt 2) return &ldquo;&rdquo;;
+    return Mid(str,matchStruct.pos[2],matchStruct.len[2]);<br />
+}</p>
+
+<p>function GetHTMLBody(str) {
+    var matchStruct = reFindNoCase(&rdquo;&lt;.<em>?body.</em>?&gt;(.<em>?)&lt;[[:space:]]</em>/body[[:space:]]*&gt;&rdquo;,str,1,1);
+    if(arrayLen(matchStruct.len) lt 2) return &ldquo;&rdquo;;
+    return Mid(str,matchStruct.pos[2],matchStruct.len[2]);<br />
+}</p>
+
+<p>function GetMetaHeaders(str) {
+    var matchStruct = structNew();
+    var name = &ldquo;&rdquo;;
+    var content = &ldquo;&rdquo;;
+    var results = arrayNew(1);
+    var pos = 1;
+    var regex = &ldquo;&lt;meta[[:space:]]<em>(name|http-equiv)[[:space:]]</em>=[[:space:]]<em>(&ldquo;&rdquo;|&lsquo;)([^&ldquo;&rdquo;]</em>)(&ldquo;&rdquo;|&lsquo;)[[:space:]]<em>content=(&ldquo;&rdquo;|&lsquo;)([^&ldquo;&rdquo;]</em>)(&ldquo;&rdquo;|&lsquo;)[[:space:]]*/{0,1}&gt;&rdquo;;</p>
+
+<pre><code>matchStruct = REFindNoCase(regex,str,pos,1);
+while(matchStruct.pos[1]) {
+    results[arrayLen(results)+1] = structNew();
+    results[arrayLen(results)][ Mid(str,matchStruct.pos[2],matchStruct.len[2])] = Mid(str,matchStruct.pos[4],matchStruct.len[4]);
+    results[arrayLen(results)].content = Mid(str,matchStruct.pos[7],matchStruct.len[7]);
+    pos = matchStruct.pos[6] + matchStruct.len[6] + 1;
+    matchStruct = REFindNoCase(regex,str,pos,1);
+}
+return results;
+</code></pre>
+
+<p>}
+&lt;/cfscript&gt;</p>
+
+<p>&lt;!&mdash; create collection if needed &mdash;&gt;
+&lt;cfcollection action=&ldquo;list&rdquo; name=&ldquo;mycollections&rdquo;&gt;</p>
+
+<p>&lt;cfif not listFindNoCase(valueList(mycollections.name), &ldquo;sitemaptest&rdquo;)&gt;
+    &lt;cfoutput&gt;&lt;p&gt;Creating collection.&lt;p&gt;&lt;/cfoutput&gt;
+    &lt;cfcollection action=&ldquo;create&rdquo; collection=&ldquo;sitemaptest&rdquo; path=&ldquo;#server.coldfusion.rootdir#/collections&rdquo;&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;!&mdash; read in xml &mdash;&gt;
+&lt;cfset myxml = fileRead(expandPath(&ldquo;./sitemap.xml&rdquo;))&gt;
+&lt;!&mdash; convert to xml &mdash;&gt;
+&lt;cfset myxml = xmlParse(myxml)&gt;
+&lt;!&mdash; place to store data &mdash;&gt;
+&lt;cfset request.data = structNew()&gt;</p>
+
+<p>&lt;!&mdash; now loop through&hellip;. &mdash;&gt;
+&lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#min(20,arrayLen(myxml.urlset.url))#&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfset tname = &quot;thread#x#&quot;&amp;gt;
+&amp;lt;cfthread name=&quot;#tname#&quot; url=&quot;#myxml.urlset.url[x].loc.xmltext#&quot;&amp;gt;
+    &amp;lt;cfhttp url=&quot;#attributes.url#&quot; result=&quot;result&quot;&amp;gt;
+    &amp;lt;cfset request.data[attributes.url] = structNew()&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].title = getHTMLTitle(result.filecontent)&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].body = getHTMLBody(result.filecontent)&amp;gt;
+    &amp;lt;!--- remove all html from body ---&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].body = rereplace(request.data[attributes.url].body, &quot;&amp;lt;.*?&amp;gt;&quot;, &quot;&quot;, &quot;all&quot;)&amp;gt;
+    &amp;lt;cfset headers = getMetaHeaders(result.filecontent)&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].keywords = &quot;&quot;&amp;gt;
+    &amp;lt;cfset request.data[attributes.url].description = &quot;&quot;&amp;gt;
+
+    &amp;lt;cfset request.data[attributes.url].x = headers&amp;gt;
+
+    &amp;lt;!--- find description and keywords ---&amp;gt;
+    &amp;lt;cfloop index=&quot;x&quot; from=&quot;1&quot; to=&quot;#arrayLen(headers)#&quot;&amp;gt;
+        &amp;lt;cfif structKeyExists(headers[x], &quot;name&quot;)&amp;gt;
+            &amp;lt;cfif headers[x].name is &quot;description&quot;&amp;gt;
+                &amp;lt;cfset request.data[attributes.url].description = headers[x].content&amp;gt;
+            &amp;lt;cfelseif headers[x].name is &quot;keywords&quot;&amp;gt;
+                &amp;lt;cfset request.data[attributes.url].keywords = headers[x].content&amp;gt;
+            &amp;lt;/cfif&amp;gt;   
+        &amp;lt;/cfif&amp;gt;
+    &amp;lt;/cfloop&amp;gt;
+&amp;lt;/cfthread&amp;gt;
+</code></pre>
+
+<p>&lt;/cfloop&gt;</p>
+
+<p>&lt;!&mdash; join the threads &mdash;&gt;
+&lt;cfthread action=&ldquo;join&rdquo; name=&ldquo;#structKeyList(cfthread)#&rdquo; /&gt;</p>
+
+<p>&lt;!&mdash; make a query for the data &mdash;&gt;
+&lt;cfset info = queryNew(&ldquo;url,body,title,keywords,description&rdquo;)&gt;
+&lt;cfloop item=&ldquo;c&rdquo; collection=&ldquo;#request.data#&rdquo;&gt;
+    &lt;cfset queryAddRow(info)&gt;
+    &lt;cfset querySetCell(info, &ldquo;url&rdquo;, c)&gt;
+    &lt;cfset querySetCell(info, &ldquo;body&rdquo;, request.data[c].body)&gt;
+    &lt;cfset querySetCell(info, &ldquo;title&rdquo;, request.data[c].title)&gt;
+    &lt;cfset querySetCell(info, &ldquo;keywords&rdquo;, request.data[c].keywords)&gt;
+    &lt;cfset querySetCell(info, &ldquo;description&rdquo;, request.data[c].description)&gt;
+&lt;/cfloop&gt;</p>
+
+<p>&lt;!&mdash; insert data &mdash;&gt;
+&lt;cfindex collection=&ldquo;sitemaptest&rdquo; action=&ldquo;refresh&rdquo; query=&ldquo;info&rdquo; title=&ldquo;title&rdquo; key=&ldquo;url&rdquo; body=&ldquo;body&rdquo; urlpath=&ldquo;url&rdquo; custom1=&ldquo;keywords&rdquo; custom2=&ldquo;description&rdquo; status=&ldquo;status&rdquo;&gt;</p>
+
+<p>&lt;cfset totaltime = getTickCount() - thetime&gt;</p>
+
+<p>&lt;cfoutput&gt;
+&lt;p&gt;
+Done indexing. Did #info.recordCount# rows. Took #totaltime# ms.
+&lt;/p&gt;
+&lt;/cfoutput&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#status#&rdquo;&gt;
+</code></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2007\/09\/17\/Using-Sitemaps-with-Verity'; 
+this.page.identifier = '/?p=2352'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/09/17/Using-Sitemaps-with-Verity" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using Sitemaps with Verity" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/09/17/Using-Sitemaps-with-Verity" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/09/17/Using-Sitemaps-with-Verity" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using Sitemaps with Verity" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/09/17/Using-Sitemaps-with-Verity" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/09/17/Using-Sitemaps-with-Verity" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

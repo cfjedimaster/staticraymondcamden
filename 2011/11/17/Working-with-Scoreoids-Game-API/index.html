@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Working with Scoreoid&#39;s Game API &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Working with Scoreoid&#39;s Game API" />
+<meta property="og:description" content="Edited on February 26, 2012: Scoreoid has recently gone through an API update. The demo here will no longer work, but the changes are not huge. I got my own local copy running well. If anyone wants an updated ColdFusion wrapper, please let me know.
+
+
+
+This morning I checked out Jesse Freeman&rsquo;s daily &lsquo;Code Warmup&rsquo; and discovered a new service called Scoreoid. Scoreoid is a free service that provides basic game stat management, specifically it allows you to offload the chore of tracking scores, players, achievements, and game stats. You may ask why you would even need to bother with that. Those tasks wouldn&rsquo;t be too difficult with a server-side language like ColdFusion. But for folks developing mobile games, being able to skip the server completely is very compelling. And as much as I love to write server side code all day, offloading tasks to someone dedicated to it is almost always worth taking a look at. You can see a full list of features on the site itself. Did I mentioned it was free? Yep - I got my email confirmation two minutes after signing up. They will soon be offering a Pro version of the service which will cost money.  Oddly you have to sign up and administer your games at their dot com site. So you go to .net for your docs and .com for your console. Once I figured that out though it was smooth sailing. The API is very easy to use and supports both XML and JSON responses.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/11/17/Working-with-Scoreoids-Game-API" />
+
+
+<meta property="og:updated_time" content="2011-11-17T13:11:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Working with Scoreoid&#39;s Game API">
+<meta itemprop="description" content="Edited on February 26, 2012: Scoreoid has recently gone through an API update. The demo here will no longer work, but the changes are not huge. I got my own local copy running well. If anyone wants an updated ColdFusion wrapper, please let me know.
+
+
+
+This morning I checked out Jesse Freeman&rsquo;s daily &lsquo;Code Warmup&rsquo; and discovered a new service called Scoreoid. Scoreoid is a free service that provides basic game stat management, specifically it allows you to offload the chore of tracking scores, players, achievements, and game stats. You may ask why you would even need to bother with that. Those tasks wouldn&rsquo;t be too difficult with a server-side language like ColdFusion. But for folks developing mobile games, being able to skip the server completely is very compelling. And as much as I love to write server side code all day, offloading tasks to someone dedicated to it is almost always worth taking a look at. You can see a full list of features on the site itself. Did I mentioned it was free? Yep - I got my email confirmation two minutes after signing up. They will soon be offering a Pro version of the service which will cost money.  Oddly you have to sign up and administer your games at their dot com site. So you go to .net for your docs and .com for your console. Once I figured that out though it was smooth sailing. The API is very easy to use and supports both XML and JSON responses.
+">
+
+
+<meta itemprop="dateModified" content="2011-11-17T13:11:00&#43;06:00" />
+<meta itemprop="wordCount" content="1795">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Working with Scoreoid&#39;s Game API"/>
+<meta name="twitter:description" content="Edited on February 26, 2012: Scoreoid has recently gone through an API update. The demo here will no longer work, but the changes are not huge. I got my own local copy running well. If anyone wants an updated ColdFusion wrapper, please let me know.
+
+
+
+This morning I checked out Jesse Freeman&rsquo;s daily &lsquo;Code Warmup&rsquo; and discovered a new service called Scoreoid. Scoreoid is a free service that provides basic game stat management, specifically it allows you to offload the chore of tracking scores, players, achievements, and game stats. You may ask why you would even need to bother with that. Those tasks wouldn&rsquo;t be too difficult with a server-side language like ColdFusion. But for folks developing mobile games, being able to skip the server completely is very compelling. And as much as I love to write server side code all day, offloading tasks to someone dedicated to it is almost always worth taking a look at. You can see a full list of features on the site itself. Did I mentioned it was free? Yep - I got my email confirmation two minutes after signing up. They will soon be offering a Pro version of the service which will cost money.  Oddly you have to sign up and administer your games at their dot com site. So you go to .net for your docs and .com for your console. Once I figured that out though it was smooth sailing. The API is very easy to use and supports both XML and JSON responses.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/11/17/Working-with-Scoreoids-Game-API">
+    <h1 class="article-title" itemprop="name">
+        Working with Scoreoid&#39;s Game API
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-11-17 13:11:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-11-17</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p><b>Edited on February 26, 2012:</b> Scoreoid has recently gone through an API update. The demo here will no longer work, but the changes are not huge. I got my own local copy running well. If anyone wants an updated ColdFusion wrapper, please let me know.</p>
+
+<p><p></p>
+
+<p>This morning I checked out Jesse Freeman&rsquo;s <a href="http://codewarmup.jessefreeman.com/2011/11/17/create-a-leaderboard-with-scoreoid/">daily &lsquo;Code Warmup&rsquo;</a> and discovered a new service called <a href="http://www.scoreoid.net/">Scoreoid</a>. Scoreoid is a free service that provides basic game stat management, specifically it allows you to offload the chore of tracking scores, players, achievements, and game stats. You may ask why you would even need to bother with that. Those tasks wouldn&rsquo;t be too difficult with a server-side language like ColdFusion. But for folks developing mobile games, being able to skip the server completely is <i>very</i> compelling. And as much as I love to write server side code all day, offloading tasks to someone dedicated to it is almost always worth taking a look at. You can see a full list of <a href="http://www.scoreoid.net/features/">features</a> on the site itself. Did I mentioned it was free? Yep - I got my email confirmation two minutes after signing up. They will soon be offering a Pro version of the service which will cost money.  Oddly you have to sign up and administer your games at their <a href="http://www.scoreoid.com">dot com</a> site. So you go to .net for your docs and .com for your console. Once I figured that out though it was smooth sailing. The API is very easy to use and supports both XML and JSON responses.</p>
+
+<p><p/></p>
+
+<p>To test the service out, I decided to build a very simple game. I called it OCD RPG. The game would track one basic stat, a score, and based on that assign a score. It begins by simply prompting for a username:</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip227.png" /></p>
+
+<p><p/></p>
+
+<p>After entering your username, the game screen is presented.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.coldfusionjedi.com/images/ScreenClip228.png" /></p>
+
+<p><p/></p>
+
+<p>To play the game, you just click the button. That&rsquo;s it.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.coldfusionjedi.com/images/ScreenClip229.png" /></p>
+
+<p><p/></p>
+
+<p>Let&rsquo;s take a quick look a the code behind this. The code here really isn&rsquo;t terribly relevant, but I want to show the initial state so you can see how I mark it up later to make use of Scoreoid&rsquo;s API.</p>
+
+<p><p/></p>
+
+<p>First, the HTML:</p>
+
+<p><p/></p>
+
+<p><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<pre><code>&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;OCD RPG&amp;lt;/title&amp;gt;
+&amp;lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;game.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+var game = new gameOb();
+//used for animation duration so I can set it SUPER low during testing
+var animDur = 500;
+$(document).ready(function() {
+
+    function drawGameStats() {
+        $(&quot;#scoreSpan&quot;).text(game.score);
+        $(&quot;#levelSpan&quot;).text(game.level);
+    }
+
+    $(&quot;#mainGameButton&quot;).click(function() {
+        game.addScore();
+        drawGameStats();
+        $(&quot;#logContainer&quot;).prepend(game.randomLog()+&quot;&amp;lt;br/&amp;gt;&quot;);
+    });
+
+    $(&quot;#mainForm&quot;).submit(function(e) {
+        $(&quot;#introButton&quot;).trigger(&quot;click&quot;);
+        e.preventDefault();
+    });
+
+    $(&quot;#introButton&quot;).click(function() {
+        var username = $.trim($(&quot;#username&quot;).val());
+        if(username == '') {
+            $(&quot;#username&quot;).parent().addClass(&quot;error&quot;);              
+            return;
+        } else {
+            $(&quot;#username&quot;).parent().removeClass(&quot;error&quot;);
+            game.init(username);
+            console.log(&quot;Let's get this thing started - user is &quot;+username);    
+            $(&quot;#introDiv&quot;).fadeOut(animDur, function() {
+                $(&quot;#gameContainer&quot;).fadeIn(animDur,function() { drawGameStats(); });
+            });
+        }
+    });
+
+})
+&amp;lt;/script&amp;gt;
+&amp;lt;style&amp;gt;
+#mainGameButton {
+    padding: 20px;
+    width: 400px;   
+}
+
+#logContainer {
+    height: 200px;
+    overflow:auto;
+    border-style:solid;
+    border-width:thin;
+}
+&amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+
+    &amp;lt;div class=&quot;container&quot;&amp;gt;
+
+
+        &amp;lt;div id=&quot;introDiv&quot;&amp;gt;
+            &amp;lt;h1&amp;gt;Welcome to OCD RPG&amp;lt;/h1&amp;gt;
+            &amp;lt;p&amp;gt;
+                To begin, please enter your username. This will be used to uniquely identify you on our high score list.
+            &amp;lt;/p&amp;gt;
+            &amp;lt;form id=&quot;mainForm&quot;&amp;gt;
+                &amp;lt;fieldset&amp;gt;
+                &amp;lt;div class=&quot;clearfix &quot;&amp;gt;
+                    &amp;lt;input type=&quot;text&quot; id=&quot;username&quot; placeholder=&quot;Username&quot; class=&quot;xlarge&quot; size=&quot;30&quot;&amp;gt;
+                    &amp;lt;input type=&quot;button&quot; id=&quot;introButton&quot; value=&quot;Start Game&quot; class=&quot;btn primary&quot;&amp;gt;
+                &amp;lt;/div&amp;gt;
+                &amp;lt;/fieldset&amp;gt;
+
+            &amp;lt;/form&amp;gt;
+
+        &amp;lt;/div&amp;gt;
+
+        &amp;lt;div id=&quot;gameContainer&quot; style=&quot;display:none&quot;&amp;gt;
+            &amp;lt;h1&amp;gt;Game On!&amp;lt;/h1&amp;gt;
+            &amp;lt;p&amp;gt;
+            &amp;lt;b&amp;gt;Score:&amp;lt;/b&amp;gt; &amp;lt;span id=&quot;scoreSpan&quot;&amp;gt;&amp;lt;/span&amp;gt;
+            &amp;lt;/p&amp;gt;
+            &amp;lt;p&amp;gt;
+            &amp;lt;b&amp;gt;Level:&amp;lt;/b&amp;gt; &amp;lt;span id=&quot;levelSpan&quot;&amp;gt;&amp;lt;/span&amp;gt;
+            &amp;lt;/p&amp;gt;
+            &amp;lt;button id=&quot;mainGameButton&quot; class=&quot;btn&quot;&amp;gt;CLICK ME FOR HAPPY ADVENTURE TIME!&amp;lt;/button&amp;gt;
+            &amp;lt;h2&amp;gt;Log&amp;lt;/h2&amp;gt;
+            &amp;lt;div id=&quot;logContainer&quot;&amp;gt;&amp;lt;/div&amp;gt;
+        &amp;lt;/div&amp;gt;
+
+    &amp;lt;/div&amp;gt;
+
+
+&amp;lt;/body&amp;gt;
+</code></pre>
+
+<p>&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>You can see two basic blocks of layout. One handles the initial name prompt and the second the main game screen. The JavaScript file is included below..</p>
+
+<p><p></p>
+
+<p><code>
+var gameOb = function() {</p>
+
+<pre><code>var MESSAGES = [
+&quot;You looted gold pieces from the dragon's guest house.&quot;,
+[deleted for space]
+&quot;If you hold CTRL while clicking, you get extra points. Honest.&quot;
+];
+
+this.init = function(user) {
+    this.username = user;
+    this.score = 0;
+    this.level = 1;
+}
+
+this.addScore = function() {
+    //add 1-10 points
+    this.score += this.randRange(5,25)*(Math.ceil(this.level/2));
+    console.log(&quot;need &quot;+this.calculateExperiencePoints(this.level+1)+&quot; for next level&quot;);
+    if(this.score &amp;gt; this.calculateExperiencePoints(this.level+1)) {
+        this.level++;
+    }
+}
+
+//https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Math/random
+this.randRange = function(min,max) {
+    return Math.floor(Math.random() * (max - min) + min);   
+}
+
+
+//All experience level code credit Jesse Freeman - http://codewarmup.jessefreeman.com/2011/11/07/create-a-rpg-style-exp-progress-bar/#comments
+this.calculateExperiencePoints = function(level) {
+    return (level * (level + 1)) * 100;
+}
+
+this.randomLog = function() {
+    return MESSAGES[this.randRange(0,MESSAGES.length)];
+}
+</code></pre>
+
+<p>}
+</code></p>
+
+<p><p></p>
+
+<p>As the game is rather simple, the only really interesting part is the experience point/level calculator. I used code (well, converted code) Jess Freeman created for an earlier code warmup. I&rsquo;m treating score essentially like XP, but for naming purposes the game has a score and level property. You can demo this game here:</p>
+
+<p><p></p>
+
+<p><a href="http://coldfusionjedi.com/demos/2011/nov/17/">http://coldfusionjedi.com/demos/2011/nov/17/</a></p>
+
+<p><p></p>
+
+<p>Ok, so let&rsquo;s talk Scoreoid. First off, you want to take a look at their <a href="http://wiki.scoreoid.net/">wiki</a> to get an idea as to how their API works. You have methods to get basic game stats, score stats, and player stats. I realized rather quickly that my game doesn&rsquo;t really have a score per se. It&rsquo;s not like a game of pong where you play, hit a score, and the game ends. Like most RPGs, it just&hellip; goes. Therefore I decided <i>not</i> to make use of the Score API. Instead, I decided I&rsquo;d use the <a href="http://wiki.scoreoid.net/category/api/player/">Player API</a>. This API allows you to add/edit/delete players. Player objects are confined to basic game stats. You can&rsquo;t add ad hoc properties. But the fields supported should cover most gaming needs.</p>
+
+<p><p></p>
+
+<p>I decided I&rsquo;d make my game do two things:</p>
+
+<p><p></p>
+
+<ol>
+<li>First, it would register the user with Scoreoid. Basically take in the username and add it to their system. I'm not going to bother with passwords, so right now my system isn't secure in <b>any</b> way, but Scoreoid supports storing passwords and user ids and could handle ensuring you don't add the same player twice. Again, I wanted to keep things simple. So when you say your name is Happy Dan, we add you to Scoreoid.
+<li>Record your current level. I mentioned players have multiple fields. There's two related to level I care about - current_level and unlocked_levels. I'll explain why I care about unlocked_levels later.
+</ol>
+
+<p><p></p>
+
+<p>So with that being said, I began by creating a basic scoreoid CFC I could configure with my AP and game ID. I also wrote a function to handle adding the player. Scoreoid will return an error if the player exists, but since I don&rsquo;t care, I just ignore it.</p>
+
+<p><p></p>
+
+<p><code>
+component {</p>
+
+<pre><code>variables.rooturl = &quot;https://www.scoreoid.com/api/&quot;;
+
+public function init(required string api, required string game) {
+    variables.api = arguments.api;
+    variables.gameid = arguments.game;
+    return this;
+}
+
+public function addPlayer(required string username) {
+    var result = apiCall(&quot;createPlayer&quot;, {&quot;username&quot;=arguments.username});
+    //Note - we should throw an error if they do - but for now, meh
+}
+
+private function apiCall(required string method,struct args) {
+    var h = new com.adobe.coldfusion.http();        
+        h.setURL(variables.rooturl &amp; arguments.method);
+        h.setMethod(&quot;post&quot;);
+        h.addParam(type=&quot;formfield&quot;, name=&quot;api_key&quot;, value=variables.api);
+        h.addParam(type=&quot;formfield&quot;, name=&quot;game_id&quot;, value=variables.gameid);
+        h.addParam(type=&quot;formfield&quot;, name=&quot;response&quot;, value=&quot;json&quot;);
+        if(structKeyExists(arguments,&quot;args&quot;)) {
+        for(var key in arguments.args) {
+            h.addParam(type=&quot;formfield&quot;, name=key, value=arguments.args[key]);      
+        }       
+    }
+        var result = h.send().getPrefix();
+        if(!isJSON(result.fileContent)) throw(&quot;Invalid response: #result.fileContent#&quot;);
+        return deserializeJSON(result.fileContent);
+}
+</code></pre>
+
+<p>}
+</code></p>
+
+<p><p></p>
+
+<p>I created apiCall() to handle running methods against their API in an abstract fashion. You can see how simple this makes the addPlayer call. Since this CFC is going to be cached in the Application scope, I created a new CFC, game, to handle calls from my JavaScript code:</p>
+
+<p><p></p>
+
+<p><code>
+component {</p>
+
+<pre><code>remote function registerPlayer(required string username) {
+
+    //Ask scoreoid to make the player, we ignore any errors since we aren't doing 'real' auth               
+    application.scoreoid.addPlayer(arguments.username);
+
+}
+</code></pre>
+
+<p>}
+</code></p>
+
+<p><p></p>
+
+<p>That handles adding the user. To store my stats, I created a wrapper for updatePlayerField. Oddly Scoreoid doesn&rsquo;t let you update more than one field at a time, so you have to fire off changes to a player one at a time. Here&rsquo;s the wrapper:</p>
+
+<p><p></p>
+
+<p><code>
+public function updatePlayerField(required string username, required string field, required any value) {
+    apiCall(&ldquo;updatePlayerField&rdquo;, {&ldquo;username&rdquo;=arguments.username, &ldquo;field&rdquo;=arguments.field, &ldquo;value&rdquo;=arguments.value});<br />
+}
+</code></p>
+
+<p><p></p>
+
+<p>And game.cfc will get a method to handle this:</p>
+
+<p><p></p>
+
+<p><code>
+remote function storePlayer(required string username, required numeric score, required numeric level) {
+    application.scoreoid.updatePlayerField(arguments.username, &ldquo;current_level&rdquo;, arguments.level);<br />
+    application.scoreoid.updatePlayerField(arguments.username, &ldquo;unlocked_levels&rdquo;, arguments.level);
+}
+</code></p>
+
+<p><p></p>
+
+<p>Looking at this now - I should make my Scoreoid wrapper allow for N calls. Even though the API doesn&rsquo;t, my wrapper could handle it behind the scenes. So that&rsquo;s the back end changes - how about the front end? I now record the user after you hit the initial button:</p>
+
+<p><p/></p>
+
+<p><code>
+$.post(&ldquo;game.cfc?method=registerPlayer&rdquo;, {username:username}, function() {
+</code></p>
+
+<p><p></p>
+
+<p>And I also register a &lsquo;heart beat&rsquo; that pings the server every few seconds.</p>
+
+<p><p></p>
+
+<p><code>
+$.post(&ldquo;game.cfc?method=storePlayer&rdquo;, {username:game.username, score:game.score, level:game.level});
+</code></p>
+
+<p><p></p>
+
+<p>You can demo this version here: <a href="http://coldfusionjedi.com/demos/2011/nov/17/draft2/">http://coldfusionjedi.com/demos/2011/nov/17/draft2/</a>.</p>
+
+<p><p></p>
+
+<p>Right away, let me make sure it&rsquo;s clear to everyone that I know this system can be hacked. Easily. I&rsquo;m sure folks will. I ask that you don&rsquo;t. But I know folks will. -sigh- With the basics built, I played a bit and went backto the Scoreoid site. Their dashboard includes some very nice reporting tools.</p>
+
+<p><p></p>
+
+<p>Here&rsquo;s an example of their basic stats:</p>
+
+<p><p></p>
+
+<p><img src="http://www.coldfusionjedi.com/images/ScreenClip230.png" /></p>
+
+<p><p></p>
+
+<p>You can also dig deeper into game stats and see player info as well. Remember earlier when I mentioned I needed to record &ldquo;unlocked_levels&rdquo;? When it comes to getting game stats, they only track a subset of player properties. One of them is unlocked_levels. So by tracking that too, I was always to get that data. I wrote wrappers to get top, average, and lowest game stats for a particular game field:</p>
+
+<p><p></p>
+
+<p><code>
+public any function getGameAverage(required string field) {
+    return apiCall(&ldquo;getGameAverage&rdquo;,{&ldquo;field&rdquo;=arguments.field}).number;<br />
+}</p>
+
+<p>public any function getGameLowest(required string field) {
+    return apiCall(&ldquo;getGameLowest&rdquo;,{&ldquo;field&rdquo;=arguments.field}).number;<br />
+}</p>
+
+<p>public any function getGameTop(required string field) {
+    return apiCall(&ldquo;getGameTop&rdquo;,{&ldquo;field&rdquo;=arguments.field}).number;<br />
+}
+</code></p>
+
+<p><p></p>
+
+<p>And in ColdFusion I could now do:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset toplevel = application.scoreoid.getGameTop(&ldquo;unlocked_levels&rdquo;)&gt;
+&lt;cfset lowlevel = application.scoreoid.getGameLowest(&ldquo;unlocked_levels&rdquo;)&gt;
+&lt;cfset avglevel = application.scoreoid.getGameAverage(&ldquo;unlocked_levels&rdquo;)&gt;
+</code></p>
+
+<p><p></p>
+
+<p>I also made a call to get players. You can&rsquo;t sort by unlocked_levels, so I made use of <a href="http://www.cflib.org/udf/quicksort">QuickSort</a> from CFLib. This allowed the creation of a basic stats page: <a href="http://coldfusionjedi.com/demos/2011/nov/17/draft2/stats.cfm">http://coldfusionjedi.com/demos/2011/nov/17/draft2/stats.cfm</a>.</p>
+
+<p><p></p>
+
+<p>That&rsquo;s it. Here&rsquo;s my current Scoreoid CFC if anyone wants to run with it.</p>
+
+<p><p></p>
+
+<p><code>
+component {</p>
+
+<pre><code>variables.rooturl = &quot;https://www.scoreoid.com/api/&quot;;
+
+public function init(required string api, required string game) {
+    variables.api = arguments.api;
+    variables.gameid = arguments.game;
+    return this;
+}
+
+public function addPlayer(required string username) {
+    var result = apiCall(&quot;createPlayer&quot;, {&quot;username&quot;=arguments.username});
+    //Note - we should throw an error if they do - but for now, meh
+}
+
+public any function getGame() {
+    return apiCall(&quot;getGame&quot;)[1].game;  
+}
+
+public any function getGameAverage(required string field) {
+    return apiCall(&quot;getGameAverage&quot;,{&quot;field&quot;=arguments.field}).number;  
+}
+
+public any function getGameLowest(required string field) {
+    return apiCall(&quot;getGameLowest&quot;,{&quot;field&quot;=arguments.field}).number;   
+}
+
+public any function getGameTop(required string field) {
+    return apiCall(&quot;getGameTop&quot;,{&quot;field&quot;=arguments.field}).number;  
+}
+
+public array function getPlayers() {
+    var res = apiCall(&quot;getPlayers&quot;);
+    var result = [];
+    for(var i=1; i&amp;lt;=arrayLen(res); i++) {
+        arrayAppend(result, res[i].Player); 
+    }
+    return result;
+}
+
+public function updatePlayerField(required string username, required string field, required any value) {
+    apiCall(&quot;updatePlayerField&quot;, {&quot;username&quot;=arguments.username, &quot;field&quot;=arguments.field, &quot;value&quot;=arguments.value});    
+}
+
+private function apiCall(required string method,struct args) {
+    writelog(file=&quot;application&quot;, text=&quot;#serializejson(arguments)#&quot;);
+    var h = new com.adobe.coldfusion.http();        
+    h.setURL(variables.rooturl &amp; arguments.method);
+    h.setMethod(&quot;post&quot;);
+    h.addParam(type=&quot;formfield&quot;, name=&quot;api_key&quot;, value=variables.api);
+    h.addParam(type=&quot;formfield&quot;, name=&quot;game_id&quot;, value=variables.gameid);
+    h.addParam(type=&quot;formfield&quot;, name=&quot;response&quot;, value=&quot;json&quot;);
+    if(structKeyExists(arguments,&quot;args&quot;)) {
+        for(var key in arguments.args) {
+            h.addParam(type=&quot;formfield&quot;, name=key, value=arguments.args[key]);      
+        }       
+    }
+    var result = h.send().getPrefix();
+    if(!isJSON(result.fileContent)) throw(&quot;Invalid response: #result.fileContent#&quot;);
+    return deserializeJSON(result.fileContent);
+}
+</code></pre>
+
+<p>}
+</code></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/11\/17\/Working-with-Scoreoids-Game-API'; 
+this.page.identifier = '/?p=4437'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/11/17/Working-with-Scoreoids-Game-API" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Working with Scoreoid&#39;s Game API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/11/17/Working-with-Scoreoids-Game-API" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/11/17/Working-with-Scoreoids-Game-API" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Working with Scoreoid&#39;s Game API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/11/17/Working-with-Scoreoids-Game-API" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/11/17/Working-with-Scoreoids-Game-API" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

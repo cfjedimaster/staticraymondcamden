@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Adding Parse.com User support to your PhoneGap application &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Adding Parse.com User support to your PhoneGap application" />
+<meta property="og:description" content="A few days ago I wrapped up my series on integrating Parse.com support with PhoneGap. Now that I&rsquo;ve got a good handle on the basics, I thought I&rsquo;d begin exploring some of the other features. Today I&rsquo;m going to share an example of adding User support.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2012/10/31/Adding-Parsecom-User-support-to-your-PhoneGap-application" />
+
+
+<meta property="og:updated_time" content="2012-10-31T12:10:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Adding Parse.com User support to your PhoneGap application">
+<meta itemprop="description" content="A few days ago I wrapped up my series on integrating Parse.com support with PhoneGap. Now that I&rsquo;ve got a good handle on the basics, I thought I&rsquo;d begin exploring some of the other features. Today I&rsquo;m going to share an example of adding User support.
+">
+
+
+<meta itemprop="dateModified" content="2012-10-31T12:10:00&#43;06:00" />
+<meta itemprop="wordCount" content="1566">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Adding Parse.com User support to your PhoneGap application"/>
+<meta name="twitter:description" content="A few days ago I wrapped up my series on integrating Parse.com support with PhoneGap. Now that I&rsquo;ve got a good handle on the basics, I thought I&rsquo;d begin exploring some of the other features. Today I&rsquo;m going to share an example of adding User support.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2012/10/31/Adding-Parsecom-User-support-to-your-PhoneGap-application">
+    <h1 class="article-title" itemprop="name">
+        Adding Parse.com User support to your PhoneGap application
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2012-10-31 12:10:00 &#43;0600 &#43;0600" itemprop="datePublished">2012-10-31</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>A few days ago I wrapped up my <a href="http://www.raymondcamden.com/index.cfm/2012/10/24/Building-a-Parsecom-Enabled-PhoneGap-App--Part-5">series</a> on integrating <a href="http://www.parse.com">Parse.com</a> support with <a href="http://www.phonegap.com">PhoneGap</a>. Now that I&rsquo;ve got a good handle on the basics, I thought I&rsquo;d begin exploring some of the other features. Today I&rsquo;m going to share an example of adding User support.</p>
+
+<p>Before we get into the code, let&rsquo;s talk a bit high level about what Parse does for User management. Even if Parse did absolutely nothing, you could still easily create &ldquo;User&rdquo; types and do your own authentication. But Parse actually provides support for pretty much every User-related need you can think of.</p>
+
+<ul>
+<li>First off, Parse supports "User" as a special type of object data. Using this object type will give you a few built-in properties and other features as well.
+<li>Parse has special methods for registering and logging in.
+<li>Parse supports automatically encrypting passwords for you. 
+<li>Parse handles email information as well, and will block users who attempt to register with an email address already used. To be clear, email addresses are <i>not</i> required for working with users, but if you do choose to use them, Parse ensures they are unique.
+<li>Speaking of emails, you can also enable email verification for your users. Parse handles sending the email. Parse handles responding to the verification on the web site. Finally, Parse's API supports recognizing when a user needs verification and doesn't have it yet. 
+<li>If you do use emails with your users, Parse supports a password reset workflow. They don't document what this looks like, but I took screen shots and will share them below.
+<li>Lastly, Parse can also automatically cache user credentials on the client. This is done in LocalStorage and is encrypted in case someone gets access to the machine.
+</ul>
+
+<p>That&rsquo;s the high level overview, so let&rsquo;s get into the code. For my demo, I decided to build an application that supported registering new users, logging in existing users, and storing simple &ldquo;Note&rdquo; objects. These Note objects should be tied to a user so that I can&rsquo;t read someone else&rsquo;s notes. I began by creating a simple home screen.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip151.png" /></p>
+
+<p>Clicking on the Register button takes you to a simple form.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip152.png" /></p>
+
+<p>As I mentioned above, Parse has a special User type. At minimum, it requires a username and password. Email is supported too, and has special consequences. You can also add anything else you want as well, including birthday, gender, and so on. For my demo I just went with the basics. Let&rsquo;s look at the code that handles the submission of this form.</p>
+
+<script src="https://gist.github.com/3987793.js?file=gistfile1.js"></script>
+
+<p>The beginning of this function is pretty boilerplate. Get the values, do some basic validation, etc. Note though the creation of the Parse.User() object. This differs from regular Parse object creation. The API to set values though is the same.</p>
+
+<p>The signUp method is what handles user creation. The first argument you can ignore (as I did in the code). Look at the result handlers though. For a successful creation, I store a copy in the global scope (that currentUser object was defined earlier) and then simply load the main application page. (You can ignore the &ldquo;cylon&rdquo; call there - I&rsquo;ll explain that in a note at the end.)</p>
+
+<p>The error function will get called for all possible cases you can imagine. User already exists? You get an error. Email address already exists? You get an error. You get both an error code and a message. Oddly the message is all lowercase. In production applications I&rsquo;d probably use the code and handle the messages yourself, but to keep things simple I used it as is. Here is an example.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip153.png" /></p>
+
+<p>Let&rsquo;s switch now to the login form. Here&rsquo;s a screen cap.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip154.png" /></p>
+
+<p>As you can see, I&rsquo;ve got both a login form here as well as a reset password form. Note that while Parse requires a username, the email address is optional. You can also skip asking a user for a username and just ask for their email address. You still <b>store</b> it as a username, but if you want to make the email address the username, that is very much supported as well. Let&rsquo;s tackle login first.</p>
+
+<script src="https://gist.github.com/3987855.js?file=gistfile1.js"></script>
+
+<p>As before, we&rsquo;ve got a bit of simple form field grabbing and checking in the first half of the function. The logIn function is where the fun is. You pass in the authentication values and then handle the success or failure. For the most part we handle this the exact same way as registration. If we&rsquo;re good, store a copy of the user and then load the notes page. Otherwise, report the error. In case you&rsquo;re curious, the messages here are lowercase as well.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip155.png" /></p>
+
+<p>So what about password reset? The code for that is equally as simple.</p>
+
+<script src="https://gist.github.com/3987875.js?file=gistfile1.js"></script>
+
+<p>As before, almost half of the code is simple DOM manipulation. The Parse API has a simple method to call and our work is done. In case you&rsquo;re curious, this is the email you get:</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip156.png" /></p>
+
+<p>&ldquo;notebook&rdquo; is the name I gave the application. Normally you would have something much more descriptive.</p>
+
+<p>Once clicked, you end up on a pretty simple page on Parse.com.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip157.png" /></p>
+
+<p>And finally, you get this when done:</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip158.png" /></p>
+
+<p>So just to be clear, at no point did you need to actually email your user. You didn&rsquo;t need to set up an email account. Nor did you need to set up a web server. I do think Parse.com should perhaps offer a bit of customization here, perhaps for paying customers. I&rsquo;d imagine it would be nice to be able to include an application logo of some sort, and perhaps add a bit of verbiage to the screens.</p>
+
+<p><b>Oops!</b> I just checked, and yes, Parse.com gives you access to modify the email templates as well as the web page templates. Kick. Ass. This is paid-level access only (specifically Pro/Enterprise), but the options definitely exist. They even have a way to host the files on your own server (well, host an iframe) so users never see a Parse.com URL.</p>
+
+<p>That&rsquo;s login, registration, and password reset. I hope you agree - it&rsquo;s damn simple. I mentioned earlier that Parse can cache authentication information on the client. You can write code to check for this easily enough:</p>
+
+<script src="https://gist.github.com/3987894.js?file=gistfile1.js"></script>
+
+<p>This is an optional feature though and you do not have to make use of it. As I said, it makes use of LocalStorage. I had a key named this:</p>
+
+<p>Parse/av8jY0rm4qrXl3dBGLf9odznxbhuqHhiiH6s8Gxn/currentUser</p>
+
+<p>with a value of:</p>
+
+<p>{&ldquo;username&rdquo;:&ldquo;ray1&rdquo;,&ldquo;email&rdquo;:&ldquo;raymondcamden@gmail.com&rdquo;,&rdquo;_id&rdquo;:&ldquo;fwjEd2UStM&rdquo;,&rdquo;_sessionToken&rdquo;:&ldquo;kkfwkr3va2hvd16t58vjl4ypq&rdquo;}</p>
+
+<p>Ok - we&rsquo;ve covered registration and authentication. What about data? You&rsquo;ve got a few options here.</p>
+
+<p>First off - Parse has a rich access control feature. You can provide various access levels (ACLs) on every piece of data in the system. Parse also supports Groups as well, but I&rsquo;m not covering that in this entry. At a basic level, if you want to create an object that only the current user can read, it takes one line of code:</p>
+
+<p>someObject.setACL(new Parse.ACL(currentUser));</p>
+
+<p>While this works, you also have another option, which is to simply add a &ldquo;owner&rdquo; type property. So for example:</p>
+
+<p>someObject.set(&ldquo;creator&rdquo;, currentUser);</p>
+
+<p>Personally, I think it makes sense to use both. You&rsquo;re explicitly saying &ldquo;Ray made this&rdquo; as well as &ldquo;Only Ray can read this&rdquo;. Together it makes getting your data to a specific user that much safer.</p>
+
+<p>To test this, I added a simple form that allowed you to write some text, the note this application was built to support.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip159.png" /></p>
+
+<p>And here is the code that handles creating the object. As I said, I made use of both methods of linking the data to the user.</p>
+
+<script src="https://gist.github.com/3987955.js?file=gistfile1.js"></script>
+
+<p>Conversely, getting  my notes requires simply adding the current user as a filter. Because of the ACL, if a hacker (or script kiddie, like me), modifies the user values somehow or just does a query without the filter, the ACLs will kick in and ensure I can&rsquo;t read someone else&rsquo;s content.</p>
+
+<script src="https://gist.github.com/3987961.js?file=gistfile1.js"></script>
+
+<p>And&hellip; that&rsquo;s it. Before I leave you though, let me share a few tips. First, you want to read the official <a href="https://parse.com/docs/js_guide#users">docs</a> yourself. I didn&rsquo;t cover everything so take a look yourself.</p>
+
+<p>Secondly, Users are called out in your dashboard. You can even manually change passwords there, which was helpful during testing.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip160.png" /></p>
+
+<p>Thirdly, don&rsquo;t forget what I said in my last series. You have options to block anonymous users from doing <i>anything</i> with your application at all.</p>
+
+<p>Lastly - Parse.com also supports Facebook and Twitter integration. That&rsquo;s what I&rsquo;ll be covering in my next entry.</p>
+
+<p>Full code of my ugly, but usable, demo application is below.</p>
+
+<p><blockquote>
+Ok, a quick side note. You can stop reading now if you want and won&rsquo;t miss a thing. When I built this application, I wanted a simple way to handle having a &lsquo;single page&rsquo; frame for my application. By that I mean, when you clicked the Login button for example I wanted to do an Ajax-call for the content and load it in. In other words, once you hit index.html, you never actually leave that. <a href="http://www.jquerymobile.com">jQuery Mobile</a> is perfect for that. But&hellip; I kinda wanted to try something different. I wanted JQM-like navigation with <b>zero</b> UI changes. I whipped up something I called Cylon. Dumb name, I know. But it was kinda fun to build. I doubt if I&rsquo;ll open source it (well, technically, you can grab the source in the zip and use it if you want) but I wouldn&rsquo;t mind any feedback on the code if you want to give it a shot.
+</blockquote><p><a href='enclosures/C%3A%5Chosts%5C2012%2Eraymondcamden%2Ecom%5Cenclosures%2Fwww%20%2D%20Copy%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2012\/10\/31\/Adding-Parsecom-User-support-to-your-PhoneGap-application'; 
+this.page.identifier = '/?p=4771'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/10/31/Adding-Parsecom-User-support-to-your-PhoneGap-application" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Adding Parse.com User support to your PhoneGap application" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/10/31/Adding-Parsecom-User-support-to-your-PhoneGap-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/10/31/Adding-Parsecom-User-support-to-your-PhoneGap-application" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Adding Parse.com User support to your PhoneGap application" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/10/31/Adding-Parsecom-User-support-to-your-PhoneGap-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/10/31/Adding-Parsecom-User-support-to-your-PhoneGap-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

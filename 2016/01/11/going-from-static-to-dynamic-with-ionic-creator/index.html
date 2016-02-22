@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Going from static to dynamic with Ionic Creator &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Going from static to dynamic with Ionic Creator" />
+<meta property="og:description" content="As I&rsquo;ve mentioned more than once now, I&rsquo;m really happy with how much Ionic Creator has improved recently. For this blog post, I thought it might be useful to demonstrate how you could go from a &ldquo;static&rdquo; Ionic Creator proof of concept to a dynamic one that made use of a real API. For hard core developers, this is probably not going to be very helpful. But I imagine Creator will attract folks who may not have a lot of experience working with JavaScript and APIs so I thought a concrete example would be helpful. As always, if anything doesn&rsquo;t make sense, leave me a comment and I&rsquo;ll try my best to help out.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator" />
+
+
+<meta property="og:updated_time" content="2016-01-11T14:28:32&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Going from static to dynamic with Ionic Creator">
+<meta itemprop="description" content="As I&rsquo;ve mentioned more than once now, I&rsquo;m really happy with how much Ionic Creator has improved recently. For this blog post, I thought it might be useful to demonstrate how you could go from a &ldquo;static&rdquo; Ionic Creator proof of concept to a dynamic one that made use of a real API. For hard core developers, this is probably not going to be very helpful. But I imagine Creator will attract folks who may not have a lot of experience working with JavaScript and APIs so I thought a concrete example would be helpful. As always, if anything doesn&rsquo;t make sense, leave me a comment and I&rsquo;ll try my best to help out.
+">
+
+
+<meta itemprop="dateModified" content="2016-01-11T14:28:32&#43;06:00" />
+<meta itemprop="wordCount" content="2279">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Going from static to dynamic with Ionic Creator"/>
+<meta name="twitter:description" content="As I&rsquo;ve mentioned more than once now, I&rsquo;m really happy with how much Ionic Creator has improved recently. For this blog post, I thought it might be useful to demonstrate how you could go from a &ldquo;static&rdquo; Ionic Creator proof of concept to a dynamic one that made use of a real API. For hard core developers, this is probably not going to be very helpful. But I imagine Creator will attract folks who may not have a lot of experience working with JavaScript and APIs so I thought a concrete example would be helpful. As always, if anything doesn&rsquo;t make sense, leave me a comment and I&rsquo;ll try my best to help out.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator">
+    <h1 class="article-title" itemprop="name">
+        Going from static to dynamic with Ionic Creator
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2016-01-11 14:28:32 &#43;0600 &#43;0600" itemprop="datePublished">2016-01-11</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/ionic">ionic</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>As I&rsquo;ve mentioned more than once now, I&rsquo;m <i>really</i> happy with how much <a href="http://creator.ionic.io">Ionic Creator</a> has improved recently. For this blog post, I thought it might be useful to demonstrate how you could go from a &ldquo;static&rdquo; Ionic Creator proof of concept to a dynamic one that made use of a real API. For hard core developers, this is probably not going to be very helpful. But I imagine Creator will attract folks who may not have a lot of experience working with JavaScript and APIs so I thought a concrete example would be helpful. As always, if anything doesn&rsquo;t make sense, leave me a comment and I&rsquo;ll try my best to help out.</p>
+
+<p>Let&rsquo;s begin by discussing the type of application we&rsquo;re going to build. It will be a simple &ldquo;Master/Detail&rdquo; example where the initial page is a list of items and the detail provides - well - detail. As a completely random &ldquo;not related to anything recent&rdquo; idea, let&rsquo;s use Star Wars films for our data.</p>
+
+<p>It just so happens that an API exists, <a href="https://swapi.co/">SWAPI</a>, that provides information about Star Wars films. In fact, I&rsquo;ve already released a helper library for this API: <a href="https://github.com/cfjedimaster/SWAPI-Wrapper">SWAPI-Wrapper</a>. We won&rsquo;t be using that helper in this blog post, but just remember it if you decide to actually use this data in a real application.</p>
+
+<h2>Creating the Static Proof of Concept</h2>
+
+<p>We&rsquo;ll start off by creating a new application in Ionic Creator. Remember that this is 100% free to try. You only need to pay if you want additional projects. (You can find more detail on their <a href="http://ionic.io/products/creator/pricing">Pricing Page</a>).</p>
+
+<p>Begin by creating a new project, the name doesn&rsquo;t matter, and use the Blank template:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot1-3.png" alt="shot1" width="750" height="602" class="aligncenter size-full wp-image-7287" /></p>
+
+<p>This will drop you into the editing interface with a blank page. On this page we&rsquo;ll do two things. First, we&rsquo;ll edit the title to give it something that makes sense for the app.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot2-4.png" alt="shot2" width="750" height="604" class="aligncenter size-full wp-image-7288 imgborder" /></p>
+
+<p>Then we&rsquo;ll drag a List component onto the page:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot3-2.png" alt="shot3" width="750" height="604" class="aligncenter size-full wp-image-7289 imgborder" /></p>
+
+<p>Notice how it adds 3 list items automatically. If you want, you can remove some, or add some, but for now, three is just fine. If you click each one, you can give them a unique text value. While not necessary, I&rsquo;d go ahead and do that just so you mentally keep in mind what we&rsquo;re actually building.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot4-2.png" alt="shot4" width="750" height="603" class="aligncenter size-full wp-image-7290 imgborder" /></p>
+
+<p>Notice that the list items have a &ldquo;Link&rdquo; attribute. We can use that to add basic interaction to our demo, but for now, we don&rsquo;t have a page to actually target for that link. Let&rsquo;s fix that by adding a new page. Be sure to use the Blank template again. I gave it a simple title too:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot5-1.png" alt="shot5" width="750" height="604" class="aligncenter size-full wp-image-7291 imgborder" /></p>
+
+<p>This page represents the detail view of the film. Right now we don&rsquo;t necessarily know what we&rsquo;re going to show, so let&rsquo;s keep it simple and imagine we&rsquo;ll just show the opening crawl. On the off chance that my readers have never seen a Star Wars film (for shame), this is an example of what I mean:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/crawl.png" alt="crawl" width="750" height="319" class="aligncenter size-full wp-image-7292" /></p>
+
+<p>For now, let&rsquo;s just use a bit of static text. Drag the Paragraph component onto the page and then edit the content to be something that describes the purpose of the text block.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot6.png" alt="shot6" width="750" height="604" class="aligncenter size-full wp-image-7294 imgborder" /></p>
+
+<p>Now let&rsquo;s hook up the list from the first page to the detail. Now, in the real application, each list item would link to a page showing different text based on the selection. However, the dynamic aspect will be handled by code we add later on. If you were to demonstrate this dummy app to a client, you may need to make 3 distinct pages so they don&rsquo;t get confused. If you do, don&rsquo;t forget that you can select the page in the left hand nav and click the &ldquo;Duplicate&rdquo; icon.</p>
+
+<p>For now, click back to the first page, and select the first list item. Note that you can now select a link that points to the new page.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot7.png" alt="shot7" width="750" height="605" class="aligncenter size-full wp-image-7295 imgborder" /></p>
+
+<p>Go ahead and do that for all three list items (and again, you don&rsquo;t <i>really</i> need to) and then click the Preview icon on top to test out your beautiful, if fake, application.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot8.png" alt="shot8" width="750" height="604" class="aligncenter size-full wp-image-7296" /></p>
+
+<p>Woot! We&rsquo;re done with the prototype!</p>
+
+<h2>Creating the Application - Part 1</h2>
+
+<p>Ok, so at this point, we&rsquo;ve got a working prototype. The first thing we need to do is get a copy of the code. You can use the Export menu option to open a window showing you four different ways of working with the code. I recommend using the Zip File. While we can create a new application from the code of the prototype directly with the CLI, I think it would be nice to have a copy of the prototype locally to compare and contrast while working on the new version.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot9.png" alt="shot9" width="750" height="603" class="aligncenter size-full wp-image-7297" /></p>
+
+<p>I recommend creating a new folder for this project, and then extracting the zip into a folder. (All of my code for this blog entry is in GitHub, and that&rsquo;s the way I laid out stuff there as well.) Assuming you&rsquo;ve done this in a folder called <code>creator_version</code>, we can use the Ionic CLI to create a new application based on the contents. That command is:</p>
+
+<p><code>ionic start v1 ./creator_version</code></p>
+
+<p>The &ldquo;v1&rdquo; part there is the name of the subdirectory. As you can guess, we&rsquo;re going to iterate a bit from the original Creator version to our final version. Why?</p>
+
+<p>We currently have a static version of the application. It doesn&rsquo;t use any &ldquo;real&rdquo; data. Our first iteration is going to make the application dynamic, but it is going to use fake, static data.</p>
+
+<p>Ok, that probably sounds confusing. Let me explain again.</p>
+
+<p>Right now, our list of films is a hard coded list of 3 films.</p>
+
+<p>We&rsquo;re going to create a &ldquo;Service&rdquo; in our application responsible for returning the list of films. Our plan is to use SWAPI remote service, but to keep it simple for now we&rsquo;ll build a service that returns 3 &lsquo;fake&rsquo; films. We&rsquo;ll then edit the first page to render those films as if they had come from some remote service. Essentially we will go from static to &ldquo;Dynamic with Fake Data&rdquo;. After we have this running well, we&rsquo;ll then use the &ldquo;real&rdquo; service. (This part of the process is very important. So if it doesn&rsquo;t make sense, let me know in the comments.)</p>
+
+<p>Ok, so go into the v1 folder and open it with your favorite editor. We need to modify three things to make the initial page dynamic. Let&rsquo;s start with the template. Right now it is hard coded for three films:</p>
+
+<pre><code class="language-markup">
+&lt;ion-view title=&quot;Star Wars Films&quot;&gt;
+    &lt;ion-content overflow-scroll=&quot;true&quot; padding=&quot;true&quot; class=&quot;has-header&quot;&gt;
+        &lt;ion-list&gt;
+            &lt;ion-item href=&quot;#/page4&quot;&gt;A New Hope&lt;/ion-item&gt;
+            &lt;ion-item href=&quot;#/page4&quot;&gt;The Empire Strikes Back&lt;/ion-item&gt;
+            &lt;ion-item href=&quot;#/page4&quot;&gt;Return of the Jedi&lt;/ion-item&gt;
+        &lt;/ion-list&gt;
+    &lt;/ion-content&gt;
+&lt;/ion-view&gt;
+</code></pre>
+
+<p>We&rsquo;ll begin by removing two of the ion-items and making the third dynamic.</p>
+
+<pre><code class="language-markup">
+&lt;ion-view title=&quot;Star Wars Films&quot;&gt;
+    &lt;ion-content overflow-scroll=&quot;true&quot; padding=&quot;true&quot; class=&quot;has-header&quot;&gt;
+        &lt;ion-list&gt;
+            &lt;ion-item ng-repeat=&quot;film in films&quot; ui-sref=&quot;filmTitle({id:film.id})&quot;&gt;{{film.title}}&lt;/ion-item&gt;
+        &lt;/ion-list&gt;
+    &lt;/ion-content&gt;
+&lt;/ion-view&gt;
+</code></pre>
+
+<p>There&rsquo;s two important things here. First, we are repeating &ldquo;film&rdquo; over &ldquo;films&rdquo;. We don&rsquo;t have that data yet, but I know when I build it I&rsquo;ll have it return an array of films. I also guess that I&rsquo;ll have a title value and an ID that uniquely identifies it. (This is actually going to be a mistake, but that&rsquo;s ok, it&rsquo;s a good mistake!)</p>
+
+<p>Now let&rsquo;s look at the controller. By default Creator made a blank one for us called starWarsFilmCtrl. We need to edit this to work with data.</p>
+
+<pre><code class="language-javascript">
+.controller('starWarsFilmsCtrl', function($scope,FilmService) {
+    $scope.films = [];
+    
+    FilmService.getFilms().then(function(res) {
+        $scope.films = res;     
+    });
+    
+})
+</code></pre>
+
+<p>Ok, so what in the heck is FilmService? We haven&rsquo;t written it yet! Basically we&rsquo;re setting up the controller to work with a service we&rsquo;ll write later that&rsquo;s going to return our array of data. Note we use $scope.films to set the initial, empty array. We can then call the service and set the result.</p>
+
+<p>Let&rsquo;s go ahead and update the other view first. The detail page begins like so:</p>
+
+<pre><code class="language-markup">
+&lt;ion-view title=&quot;Film Title&quot;&gt;
+    &lt;ion-content overflow-scroll=&quot;true&quot; padding=&quot;true&quot; class=&quot;has-header&quot;&gt;
+        &lt;div&gt;
+            &lt;p&gt;The opening crawl would go here.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/ion-content&gt;
+&lt;/ion-view&gt;
+</code></pre>
+
+<p>We need to make the title and text dynamic. Here is the updated version:</p>
+
+<pre><code class="language-markup">
+&lt;ion-view&gt;
+    &lt;ion-nav-title&gt;{{film.title}}&lt;/ion-nav-title&gt;
+    &lt;ion-content overflow-scroll=&quot;true&quot; padding=&quot;true&quot; class=&quot;has-header&quot;&gt;
+        &lt;div&gt;
+            &lt;p&gt;{{film.crawl}}&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/ion-content&gt;
+&lt;/ion-view&gt;
+</code></pre>
+
+<p>Why did we switch to ion-nav-title? See <a href="http://www.raymondcamden.com/2015/12/18/is-your-ionic-view-title-not-updating">this blog post</a> for an explanation. Basically we need to use that directive to handle dynamic titles.</p>
+
+<p>Ok, so now let&rsquo;s go and update the controller.</p>
+
+<pre><code class="language-javascript">
+.controller('filmTitleCtrl', function($scope,$stateParams,FilmService) {
+    $scope.film = {};
+    
+    FilmService.getFilm($stateParams.id).then(function(res) {
+        $scope.film = res;  
+    });
+    
+})
+</code></pre>
+
+<p>As before, we&rsquo;re using a FilmService that doesn&rsquo;t exist yet. I&rsquo;m calling the service in a way that makes sense to me (first GetFilms then GetFilm). The $stateParams part relates back to how we handle navigation. In the first view, make note of the ui-sref part. This handles changing to a new state and passing a unique id. In order to make that work, we need to do a small change to the routes.js file. Right now it has this hard coded route:</p>
+
+<pre><code class="language-javascript">
+    .state('filmTitle', {
+      url: '/page4',
+      templateUrl: 'templates/filmTitle.html',
+      controller: 'filmTitleCtrl'
+    })
+</code></pre>
+
+<p>In order to handle recognizing an ID, we modify it to this:</p>
+
+<pre><code class="language-javascript">
+    .state('filmTitle', {
+      url: '/page4/:id',
+      templateUrl: 'templates/filmTitle.html',
+      controller: 'filmTitleCtrl'
+    })
+</code></pre>
+
+<p>Alright - so now for the final part, we build the service. We&rsquo;re going to write it to &ldquo;agree with&rdquo; what the controller was expecting. Here&rsquo;s the complete code:</p>
+
+<pre><code class="language-javascript">
+angular.module('app.services', [])
+
+.factory('FilmService', ['$q',function($q){
+
+    return {
+        getFilms:function() {
+            var deferred = $q.defer();
+            
+            //temp 
+            var films = [
+                {
+                    id:1,
+                    title:"A New Hope",
+                    crawl:"ANH crawl"
+                },
+                {
+                    id:2,
+                    title:"The Empire Strikes Back",
+                    crawl:"ESB crawl"
+                },
+                {
+                    id:3,
+                    title:"Return of the Jedi",
+                    crawl:"ROTJ crawl"
+                }
+            ];
+                
+            deferred.resolve(films);
+            return deferred.promise;
+        },
+        getFilm:function(id) {
+            var deferred = $q.defer();
+            
+            //temp
+            var film = {
+                id:id,
+                title:"Film "+id,
+                crawl:"Crawl for "+id
+            };
+
+            deferred.resolve(film);
+            return deferred.promise;
+            
+            
+            
+        }   
+    };
+
+}]);
+</code></pre>
+
+<p>So let&rsquo;s quickly review what we did here. We updated the completely static application to be <i>partially</i> dynamic. Both the initial page (the list) and the detail are now dynamic. The controller speaks to the service to ask for data, returns it and makes it available to the templates. The data itself may be static, but every other aspect of the application is now dynamic! Woot.</p>
+
+<p>At this point, I recommend taking the app for test drive just to ensure it is working correctly. Here is it running with <code>ionic serve -l</code>:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot10.png" alt="shot10" width="750" height="606" class="aligncenter size-full wp-image-7298 imgborder" /></p>
+
+<p>If you want, edit the services file to add a new film. When you reload, you&rsquo;ll see the new item show up.</p>
+
+<h2>Creating the Application - Part 2</h2>
+
+<p>Alright - so in theory now the only thing we need to is update the services file to use SWAPI. In theory. As I kind of alluded to before, we&rsquo;re going to run into a small issue but that&rsquo;s ok - we&rsquo;re professionals and we can handle it. Using SWAPI is pretty easy (and you can read the <a href="https://swapi.co/documentation">docs</a> for a full explanation), so let&rsquo;s begin by making the call to get films use real data.</p>
+
+<p>Here is the updated version:</p>
+
+<pre><code class="language-javascript">
+getFilms:function() {
+    var deferred = $q.defer();
+            
+    $http.get("http://swapi.co/api/films").then(function(res) {
+        //console.dir(res.data.results);
+        deferred.resolve(res.data.results);
+    });
+    return deferred.promise;
+},
+</code></pre>
+
+<p>Yeah, that&rsquo;s it. Literally just a call to a URL. As a quick note, we modified the services injected into the file:</p>
+
+<pre><code class="language-javascript">
+.factory('FilmService', ['$http','$q',function($http,$q){
+</code></pre>
+
+<p>So in theory, as soon as you test this, it works. You should see a complete list of films:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot11-1.png" alt="shot11" width="696" height="493" class="aligncenter size-full wp-image-7300 imgborder" /></p>
+
+<p>However, clicking to the detail won&rsquo;t work. Why? The SWAPI doesn&rsquo;t actually return an &ldquo;id&rdquo; value. Notice the console.dir on the results in the code snippet above? It&rsquo;s currently commented out, but if you remove the comments, you can see the data yourself. This is also fully documented as well.</p>
+
+<p>So what do we do? We need a &ldquo;unique&rdquo; way to identify the film so we can fetch the details. Turns out there is a <code>url</code> property on the film. That points to the film&rsquo;s detail on the API. We have two options here. We can actually modify the data in the service file so that id <i>does</i> exist and uses the URL. Or we can simply modify the template to use the new property. I prefer to keep the template as is and modify the service. Basically my code gets to pretend that SWAPI returned the data as I expected:</p>
+
+<pre><code class="language-javascript">
+$http.get("http://swapi.co/api/films").then(function(res) {
+    //console.dir(res.data.results);
+    var results = res.data.results.map(function(result) {
+        result.id = result.url;
+        return result;
+    });
+    deferred.resolve(results);
+});
+</code></pre>
+
+<p>The last modification is to get film details. We&rsquo;re passing in the URL value so the code here is rather simple:</p>
+
+<pre><code class="language-javascript">
+getFilm:function(url) {
+    var deferred = $q.defer();
+            
+    $http.get(url).then(function(res) {
+        //console.dir(res.data);
+        deferred.resolve(res.data);
+    });
+
+    return deferred.promise;
+            
+}   
+</code></pre>
+
+<p>And the result:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/12/shot12-1.png" alt="shot12" width="696" height="624" class="aligncenter size-full wp-image-7301 imgborder" /></p>
+
+<h2>Wrap Up</h2>
+
+<p>Obviously every application will be different and our API was especially simple, but I hope this demonstration was useful. If you want to look at the code, you can find it here: <a href="https://github.com/cfjedimaster/Cordova-Examples/tree/master/statictodynamic">https://github.com/cfjedimaster/Cordova-Examples/tree/master/statictodynamic</a>. As I said, please let me know if anything didn&rsquo;t make sense.</p>
+
+<p>You&rsquo;ve read the post, now watch the video!</p>
+
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/R9UwlFu56Wo" frameborder="0" allowfullscreen></iframe>
+Ok, while not necessarily required reading, here are a few quick notes:</p>
+
+<ul>
+<li>Sharp readers may notice that the initial getFilms call actually returns <strong>all</strong> the data. We could make the application better if we stored that data in the service. Calls to getFilm would just return the appropriate portion of the stored data. What's cool is we can make this modification in the service and nothing else needs to change. This is basic MVC architecture stuff, but again, for folks who may be new to development, this is <i>exactly</i> the reason we use setups like this. It allows for optimizations later that are confined to one file and don't break other parts.
+<li>Since our application is performing HTTP requests, we really should provide feedback to the user. I'd suggest the Ionic Loading widget. I talked about that here: <a href="http://www.raymondcamden.com/2015/12/17/a-quick-example-of-the-ionic-loading-widget">A quick example of the Ionic Loading Widget</a>
+</ul>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2016\/01\/11\/going-from-static-to-dynamic-with-ionic-creator'; 
+this.page.identifier = '/?p=7286'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Going from static to dynamic with Ionic Creator" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Going from static to dynamic with Ionic Creator" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

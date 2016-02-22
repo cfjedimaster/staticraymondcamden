@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>ColdFusion 8: RSS Aggregator UDF &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="ColdFusion 8: RSS Aggregator UDF" />
+<meta property="og:description" content="As you know (or hopefully know), ColdFusion 8 supports both RSS parsing and creating. I was curious how difficult it would be to create an RSS aggregator in ColdFusion. Turns out it was rather easy - and with the use of CFTHREAD it actually performs quite here. I&rsquo;ll show the code then talk about the parts of it.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2007/06/05/ColdFusion-8-RSS-Aggregator-UDF" />
+
+
+<meta property="og:updated_time" content="2007-06-05T18:06:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="ColdFusion 8: RSS Aggregator UDF">
+<meta itemprop="description" content="As you know (or hopefully know), ColdFusion 8 supports both RSS parsing and creating. I was curious how difficult it would be to create an RSS aggregator in ColdFusion. Turns out it was rather easy - and with the use of CFTHREAD it actually performs quite here. I&rsquo;ll show the code then talk about the parts of it.
+">
+
+
+<meta itemprop="dateModified" content="2007-06-05T18:06:00&#43;06:00" />
+<meta itemprop="wordCount" content="747">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ColdFusion 8: RSS Aggregator UDF"/>
+<meta name="twitter:description" content="As you know (or hopefully know), ColdFusion 8 supports both RSS parsing and creating. I was curious how difficult it would be to create an RSS aggregator in ColdFusion. Turns out it was rather easy - and with the use of CFTHREAD it actually performs quite here. I&rsquo;ll show the code then talk about the parts of it.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2007/06/05/ColdFusion-8-RSS-Aggregator-UDF">
+    <h1 class="article-title" itemprop="name">
+        ColdFusion 8: RSS Aggregator UDF
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2007-06-05 18:06:00 &#43;0600 &#43;0600" itemprop="datePublished">2007-06-05</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>As you know (or hopefully know), ColdFusion 8 supports both RSS parsing and creating. I was curious how difficult it would be to create an RSS aggregator in ColdFusion. Turns out it was rather easy - and with the use of CFTHREAD it actually performs quite here. I&rsquo;ll show the code then talk about the parts of it.</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;aggregate&rdquo; returnType=&ldquo;query&rdquo; output=&ldquo;false&rdquo;&gt;
+    &lt;cfargument name=&ldquo;feeds&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo; hint=&ldquo;List of RSS urls.&rdquo;&gt;
+    &lt;cfset var results = structNew()&gt;
+    &lt;cfset var result = &ldquo;&rdquo;&gt;
+    &lt;cfset var entries = &ldquo;&rdquo;&gt;
+    &lt;cfset var x = &ldquo;&rdquo;&gt;
+    &lt;cfset var totalentries = &ldquo;&rdquo;&gt;
+    &lt;!&mdash; Use this column list since not all feeds return the same cols. &mdash;&gt;
+    &lt;cfset var collist = &ldquo;authoremail ,authorname ,authoruri ,categorylabel ,categoryscheme ,categoryterm ,comments ,content ,contentmode ,contentsrc ,contenttype ,contributoremail ,contributorname ,contributoruri ,createddate ,expirationdate ,id ,idpermalink ,linkhref ,linkhreflang ,linklength ,linkrel ,linktitle ,publisheddate ,rights ,rsslink ,source ,sourceurl ,summary ,summarymode ,summarysrc ,summarytype ,title ,updateddate ,uri ,xmlbase&rdquo;&gt;
+    &lt;cfset var tlist = &ldquo;&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfloop index=&quot;x&quot; from=&quot;1&quot; to=&quot;#listLen(arguments.feeds)#&quot;&amp;gt;
+    &amp;lt;cfthread action=&quot;run&quot; name=&quot;thread_#x#&quot; url=&quot;#listGetAt(arguments.feeds,x)#&quot;&amp;gt;
+        &amp;lt;cffeed source=&quot;#attributes.url#&quot; query=&quot;thread.entries&quot;&amp;gt;
+    &amp;lt;/cfthread&amp;gt;
+    &amp;lt;cfset tlist = listAppend(tlist, &quot;thread_#x#&quot;)&amp;gt;
+&amp;lt;/cfloop&amp;gt;
+
+&amp;lt;cfthread action=&quot;join&quot; name=&quot;#tlist#&quot; /&amp;gt;
+
+&amp;lt;!--- copy out just for ease of use ---&amp;gt;
+&amp;lt;cfloop index=&quot;x&quot; list=&quot;#tlist#&quot;&amp;gt;
+    &amp;lt;cfset results[&quot;result_#replaceNoCase(x,'thread_','')#&quot;] = evaluate(&quot;#x#&quot;).entries&amp;gt;
+&amp;lt;/cfloop&amp;gt;
+
+&amp;lt;cfquery name=&quot;totalentries&quot; dbtype=&quot;query&quot;&amp;gt;
+    &amp;lt;cfloop index=&quot;x&quot; from=&quot;1&quot; to=&quot;#listLen(arguments.feeds)#&quot;&amp;gt;
+    select
+            #collist#
+    from results.result_#x#
+    &amp;lt;cfif x is not listLen(arguments.feeds)&amp;gt;
+    union
+    &amp;lt;/cfif&amp;gt;
+    &amp;lt;/cfloop&amp;gt;
+&amp;lt;/cfquery&amp;gt;
+
+&amp;lt;!--- sort ---&amp;gt;
+&amp;lt;cfquery name=&quot;totalentries&quot; dbtype=&quot;query&quot;&amp;gt;
+select          #collist#
+from            totalentries
+order by        publisheddate desc
+&amp;lt;/cfquery&amp;gt;
+
+&amp;lt;cfreturn totalentries&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>So first off - the point of the aggregator is to take a list of RSS feeds and return one simple query. The UDF takes one argument - feeds.</p>
+
+<p>I loop through each of the feeds and while inside of a thread, I download and create a query for the feed:</p>
+
+<p><code>
+&lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#listLen(arguments.feeds)#&rdquo;&gt;
+    &lt;cfthread action=&ldquo;run&rdquo; name=&ldquo;thread<em>#x#&rdquo; url=&ldquo;#listGetAt(arguments.feeds,x)#&rdquo;&gt;
+        &lt;cffeed source=&ldquo;#attributes.url#&rdquo; query=&ldquo;thread.entries&rdquo;&gt;
+    &lt;/cfthread&gt;
+    &lt;cfset tlist = listAppend(tlist, &ldquo;thread</em>#x#&ldquo;)&gt;
+&lt;/cfloop&gt;
+</code></p>
+
+<p>Next I join the threads together. This makes my function wait till all the threads are done:</p>
+
+<p><code>
+&lt;cfthread action=&ldquo;join&rdquo; name=&ldquo;#tlist#&rdquo; /&gt;
+</code></p>
+
+<p>Now for the fun part. I need to get the data out of the threads. I named each thread &ldquo;thread_#x#&rdquo; where x was a number. I stored the list of thread names in a variable called tlist. So I can loop over each of them and use evaluate to fetch the thread. I stored the data in a variable named entries, so this is the code I ended up with:</p>
+
+<p><code>
+&lt;!&mdash; copy out just for ease of use &mdash;&gt;
+&lt;cfloop index=&ldquo;x&rdquo; list=&ldquo;#tlist#&rdquo;&gt;
+    &lt;cfset results[&ldquo;result<em>#replaceNoCase(x,&lsquo;thread</em>&rsquo;,&ldquo;)#&rdquo;] = evaluate(&ldquo;#x#&rdquo;).entries&gt;
+&lt;/cfloop&gt;
+</code></p>
+
+<p>In case you are wondering about the var scope - let me just say this. Adobe has done&hellip; well&hellip; &ldquo;magic&rdquo;, to ensure that we do not have to var scope threaded data like I&rsquo;ve used above. Don&rsquo;t ask me why - but I&rsquo;ve been assured the code above is safe even in a multiple request format.</p>
+
+<p>So now I have a results structure that contains a bunch of queries. I can then use query of query to join them all together.</p>
+
+<p>You may wonder - why the select #collist# instead of select *? Some feeds may contain more columns then other feeds, specifically feeds containing Dublin Core or ITunes extensions. So I created a &ldquo;core&rdquo; list of columns I can depend on.</p>
+
+<p>Lastly - I sort the joined query by the published date value. This will give me one final query that contains a sorted list of blog entries. Now for a quick demo:</p>
+
+<p><code>
+&lt;cfset feeds = &ldquo;<a href="http://feeds.dzone.com/dzone/frontpage?abc76aaAw7kar7IKy69lr">http://feeds.dzone.com/dzone/frontpage?abc76aaAw7kar7IKy69lr</a>, <a href="http://www.riaforge.org/index.cfm?event=page.rss">http://www.riaforge.org/index.cfm?event=page.rss</a>, <a href="http://feeds.feedburner.com/RaymondCamdensColdfusionBlog&quot;&gt;">http://feeds.feedburner.com/RaymondCamdensColdfusionBlog&quot;&gt;</a>
+&lt;cfset aggregation = aggregate(feeds)&gt;</p>
+
+<p>&lt;cfoutput query=&ldquo;aggregation&rdquo;&gt;
+&lt;cftooltip tooltip=&ldquo;#content#&rdquo;&gt;
+&lt;a href=&ldquo;#rsslink#&rdquo;&gt;#title#&lt;/a&gt;&lt;cfif
+len(publisheddate)&gt;(#dateFormat(publisheddate)#)&lt;/cfif&gt;&lt;br /&gt;
+&lt;/cftooltip&gt;
+&lt;/cfoutput&gt;
+</code></p>
+
+<p>I used three feeds - DZone, RIAForge, and my own blog. I then  loop over the results and use a bit of AJAX-UI candy (cftooltip) to display the results. And guess what?? I finally have a live <a href="http://www.raymondcamden.com/demos/rssagg/test.cfm">demo</a> for you!</p>
+
+<p>Tomorrow I&rsquo;ll show an alternative to this that lets you search RSS feeds. (And yes, I do plan on resurrecting RSSWatcher.com with CF8 code. I promise.)</p>
+
+<p>p.s. Ok, not that I want to start a flame war - but I&rsquo;d love to see the same code written in PHP. No external libraries allowed - it must be all &ldquo;baked in&rdquo; code.</p>
+
+<p><b>EDIT: Folks, due to IE being a sucky browser and all, there was a huge rendering issue in the code. I added spaces to all of the columns in the &ldquo;collist&rdquo; variable. If you cut and paste the code, you will need to trim the values. Also note I have a new version which fixes some bugs. This will be posted around lunch time.</b></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2007\/06\/05\/ColdFusion-8-RSS-Aggregator-UDF'; 
+this.page.identifier = '/?p=2093'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/06/05/ColdFusion-8-RSS-Aggregator-UDF" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="ColdFusion 8: RSS Aggregator UDF" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/06/05/ColdFusion-8-RSS-Aggregator-UDF" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/06/05/ColdFusion-8-RSS-Aggregator-UDF" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="ColdFusion 8: RSS Aggregator UDF" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/06/05/ColdFusion-8-RSS-Aggregator-UDF" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/06/05/ColdFusion-8-RSS-Aggregator-UDF" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

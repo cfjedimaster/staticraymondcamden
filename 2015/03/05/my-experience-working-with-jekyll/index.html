@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>My experience working with Jekyll &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="My experience working with Jekyll" />
+<meta property="og:description" content="Yesterday I blogged about the new static-site hosting service, Surge. In order to test it, I decided to rebuild JavaScript Cookbook as a static site. (Which, to be honest, was a silly decision. Surge takes about five minutes to use. My rewrite took about five hours. ;) I decided to give Jekyll a try and I thought I&rsquo;d share my thoughts about the platform. Obviously I&rsquo;ve just built one site with it so take what I say with a grain of salt, but if you&rsquo;re considering setting up a static site, maybe this post will be helpful.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/03/05/my-experience-working-with-jekyll" />
+
+
+<meta property="og:updated_time" content="2015-03-05T09:56:11&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="My experience working with Jekyll">
+<meta itemprop="description" content="Yesterday I blogged about the new static-site hosting service, Surge. In order to test it, I decided to rebuild JavaScript Cookbook as a static site. (Which, to be honest, was a silly decision. Surge takes about five minutes to use. My rewrite took about five hours. ;) I decided to give Jekyll a try and I thought I&rsquo;d share my thoughts about the platform. Obviously I&rsquo;ve just built one site with it so take what I say with a grain of salt, but if you&rsquo;re considering setting up a static site, maybe this post will be helpful.
+">
+
+
+<meta itemprop="dateModified" content="2015-03-05T09:56:11&#43;06:00" />
+<meta itemprop="wordCount" content="1840">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="My experience working with Jekyll"/>
+<meta name="twitter:description" content="Yesterday I blogged about the new static-site hosting service, Surge. In order to test it, I decided to rebuild JavaScript Cookbook as a static site. (Which, to be honest, was a silly decision. Surge takes about five minutes to use. My rewrite took about five hours. ;) I decided to give Jekyll a try and I thought I&rsquo;d share my thoughts about the platform. Obviously I&rsquo;ve just built one site with it so take what I say with a grain of salt, but if you&rsquo;re considering setting up a static site, maybe this post will be helpful.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/03/05/my-experience-working-with-jekyll">
+    <h1 class="article-title" itemprop="name">
+        My experience working with Jekyll
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-03-05 09:56:11 &#43;0600 &#43;0600" itemprop="datePublished">2015-03-05</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Yesterday I <a href="http://www.raymondcamden.com/2015/03/04/hosting-static-sites-with-surge">blogged</a> about the new static-site hosting service, <a href="http://surge.sh">Surge</a>. In order to test it, I decided to rebuild <a href="http://www.javascriptcookbook.com">JavaScript Cookbook</a> as a static site. (Which, to be honest, was a silly decision. Surge takes about five minutes to use. My rewrite took about five hours. ;) I decided to give <a href="http://jekyllrb.com/">Jekyll</a> a try and I thought I&rsquo;d share my thoughts about the platform. Obviously I&rsquo;ve just built one site with it so take what I say with a grain of salt, but if you&rsquo;re considering setting up a static site, maybe this post will be helpful.</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/03/jekyll.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/03/jekyll.png" alt="jekyll" width="375" height="166" class="alignnone size-full wp-image-5781" /></a></p>
+
+<p>Jekyll, like <a href="http://harpjs.com">HarpJS</a>, is run via a command line tool. Unlike Harp, Jekyll is a Ruby-based tool but you don&rsquo;t need to know Ruby in order to use it. I had kind of a crash course in Ruby while I worked with it, but that&rsquo;s only because of some of the requirements I had while building out my site. The full <a href="http://jekyllrb.com/docs/installation/">requirements</a> are documented with the big red flag being that there is no Windows support. There&rsquo;s <a href="http://jekyllrb.com/docs/windows/#installation">unofficial support</a>, but I&rsquo;d be wary of committing to Jekyll if you need to support developers on the Windows platform.</p>
+
+<p>Once installed, you can fire up the Jekyll server from the command line and begin working. Jekyll will automatically refresh while you work so it is quick to get up and running. Speaking of testing, the command line includes an option to create a default site, simply do <code>jekyll new directoryname</code>.</p>
+
+<p>At this point you can start typing away and testing the results in the browser. I&rsquo;m assuming most of my readers are already familiar with why tools like this are cool, but in case you aren&rsquo;t, the point of a static site generator is to let you build sites in a <i>similar</i> fashion to dynamic server-side apps but with a flat, static file as the output. So as a practical matter that means I can build a template and simply use a token, like {{body}}, that will be replaced with a page&rsquo;s content. I can write a page and just include the relevant data for that page and when viewed in the browser it will automatically be wrapped in the template. This isn&rsquo;t necessarily that special - it&rsquo;s 101-level PHP/ColdFusion/Node stuff - but the generator tool will spit out flat HTML files that can then be hosted on things like S3, Google Cloud, or, of course, Surge.</p>
+
+<p>For its templates, Jekyll allows for Markdown and <a href="https://github.com/Shopify/liquid/wiki">Liquid</a>. It does not support Jade, because Jade is evil and smelly and shouldn&rsquo;t be supported anywhere. I found Liquid to be very nice. You&rsquo;ve got your basics (variable outputting, looping, conditionals) as well as some powerful filters too. For example, this will title case a string: {{ title | capitalize}}. This will do truncation: {{ content | truncate: 200, &lsquo;&hellip;&rsquo; }}. You can do this with EJS templates in HarpJS as well (but I didn&rsquo;t know that till today!).</p>
+
+<p>The other big change in Jekyll is how it handles data for content. In Harp, this is separated into a file unique to a folder. In Jekyll, this is done via &ldquo;front matter&rdquo;, basically formatted content on top of a page. Initially I preferred Harp&rsquo;s way, but the more I played with Jekyll the more it seemed natural to include it with the content itself.</p>
+
+<p>You can, if you want, also include random data files, which is cool. If you need something that isn&rsquo;t related to content you could abstract it out into a JSON or YAML file and make use of it in your site. Hell, you can even use CSV.</p>
+
+<p>As a trivial example of a Liquid file, here&rsquo;s a super simple page I use for thanking people after they submit content. It doesn&rsquo;t have anything dynamic in it at all, but the content on top tells Jekyll what template to use and passes on a title value.</p>
+
+<pre><code class="language-markup">---
+layout: default
+title: Thank You!
+---
+
+&lt;p&gt;
+Thanks for sending your content submission. I&#x27;ll try to respond as soon as possible. If
+for some reason I don&#x27;t get back to you, please feel free to drop me a line via email (raymondcamden at gmail dot com).
+&lt;&#x2F;p&gt;</code></pre>
+
+<p>Here is a slightly more complex example, the default layout for the site. Note the use of variables and conditions for determining which tab to highlight.</p>
+
+<pre><code class="language-markup">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;title&gt;{{page.title}}&lt;&#x2F;title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;&#x2F;css&#x2F;bootstrap.min.css&quot; type=&quot;text&#x2F;css&quot; &#x2F;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;&#x2F;css&#x2F;app.css&quot; type=&quot;text&#x2F;css&quot; &#x2F;&gt;
+    &lt;script src=&quot;&#x2F;js&#x2F;jquery-2.0.2.min.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;script src=&quot;&#x2F;js&#x2F;bootstrap.min.js&quot;&gt;&lt;&#x2F;script&gt;
+
+    &lt;script src=&quot;&#x2F;js&#x2F;prism.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;&#x2F;css&#x2F;prism.css&quot; &#x2F;&gt;
+    &lt;link rel=&quot;alternate&quot; type=&quot;application&#x2F;rss+xml&quot; title=&quot;RSS&quot; href=&quot;http:&#x2F;&#x2F;www.javascriptcookbook.com&#x2F;rss&quot; &#x2F;&gt;
+    &lt;&#x2F;head&gt;
+    
+    &lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+      
+      &lt;div class=&quot;navbar navbar-inverse&quot;&gt;
+        &lt;div class=&quot;navbar-inner&quot;&gt;
+          &lt;div class=&quot;container&quot; style=&quot;width: auto;&quot;&gt;
+          &lt;a class=&quot;btn btn-navbar&quot; data-toggle=&quot;collapse&quot; data-target=&quot;.nav-collapse&quot;&gt;
+            &lt;span class=&quot;icon-bar&quot;&gt;&lt;&#x2F;span&gt;
+            &lt;span class=&quot;icon-bar&quot;&gt;&lt;&#x2F;span&gt;
+            &lt;span class=&quot;icon-bar&quot;&gt;&lt;&#x2F;span&gt;
+          &lt;&#x2F;a&gt;
+          &lt;a class=&quot;brand&quot; href=&quot;&#x2F;&quot;&gt;JavaScript Cookbook&lt;&#x2F;a&gt;
+          &lt;div class=&quot;nav-collapse&quot;&gt;
+            &lt;ul class=&quot;nav&quot;&gt;
+            &lt;li {% if page.url == &#x27;&#x2F;index.html&#x27; %}class=&quot;active&quot;{% endif %}&gt;&lt;a href=&quot;&#x2F;&quot;&gt;Home&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+            &lt;li {% if page.url == &#x27;&#x2F;submit.html&#x27; %}class=&quot;active&quot;{% endif %}}&gt;&lt;a href=&quot;&#x2F;submit.html&quot;&gt;Submit&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+            &lt;li {% if page.url == &#x27;&#x2F;about.html&#x27; %}class=&quot;active&quot;{% endif %}&gt;&lt;a href=&quot;&#x2F;about.html&quot;&gt;About&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+            
+            &lt;&#x2F;ul&gt;
+            &lt;form class=&quot;navbar-search pull-right&quot; action=&quot;&#x2F;search.html&quot; method=&quot;get&quot;&gt;
+            &lt;input type=&quot;search&quot; class=&quot;search-query span2&quot; placeholder=&quot;Search&quot; name=&quot;search&quot;&gt;
+            &lt;&#x2F;form&gt;
+          &lt;&#x2F;div&gt;&lt;!-- &#x2F;.nav-collapse --&gt;
+          &lt;&#x2F;div&gt;
+        &lt;&#x2F;div&gt;&lt;!-- &#x2F;navbar-inner --&gt;
+        &lt;&#x2F;div&gt;&lt;!-- &#x2F;navbar --&gt;
+
+        {{content}} 
+    
+    &lt;&#x2F;div&gt;
+
+&lt;script&gt;
+  (function(i,s,o,g,r,a,m){i[&#x27;GoogleAnalyticsObject&#x27;]=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,&#x27;script&#x27;,&#x27;&#x2F;&#x2F;www.google-analytics.com&#x2F;analytics.js&#x27;,&#x27;ga&#x27;);
+
+  ga(&#x27;create&#x27;, &#x27;UA-70863-21&#x27;, &#x27;javascriptcookbook.com&#x27;);
+  ga(&#x27;send&#x27;, &#x27;pageview&#x27;);
+
+&lt;&#x2F;script&gt;
+    
+    &lt;&#x2F;body&gt;
+&lt;&#x2F;html&gt;</code></pre>
+
+<p>One of the cooler aspects of Liquid is the <code>assign</code> operator. Given that you have access to data about your site, a list of articles for example, you can quickly slice and dice it within your template. While Jekyll makes it easy to work with blog posts, my content was a bit different. I needed a quick way to get all my article content and sort it by the last date published. Here&rsquo;s how the &ldquo;Latest Articles&rdquo; gets generated.</p>
+
+<pre><code class="language-markup">&lt;h3&gt;Latest Articles&lt;&#x2F;h3&gt;
+
+{% assign sorted = (site.pages | where:&quot;layout&quot;,&quot;article&quot; | sort: &#x27;published&#x27; | reverse) %}
+
+{% for page in sorted limit:5 %}
+    &lt;p&gt;
+    &lt;a href=&quot;{{page.dir}}&quot;&gt;{{page.title}}&lt;&#x2F;a&gt; - {{page.published | date: &quot;%-m&#x2F;%-d&#x2F;%y at %I:%M&quot; }}
+    &lt;&#x2F;p&gt;
+{% endfor %}</code></pre>
+
+<p>Like I said, that <code>assign</code> command just makes me happy all over.</p>
+
+<p>So this is all well and good - but there is one killer feature of Jekyll that makes me think this may be the best tool for the job I&rsquo;ve seen yet - plugins. Jekyll lets you create multiple additions to the server to do things like:</p>
+
+<ul>
+<li>Create generators - code that will create new files for you
+<li>Add tags to the Liquid template system
+<li>Add filters that can be used in assign calls
+</ul>
+
+<p>These plugins must be written in Ruby, but even with my absolute lack of knowledge in the language I was able to create two plugins to complete my site. Let me be clear - without these plugins I would not have been able to complete the conversion. (Well, I would have had to do a lot more work.) Let me give you a concrete example of where this helps.</p>
+
+<p>One of the issues you run into with static-site generators is that they require one file per URL. What I mean is - for every page of my site, from the home page, to the &ldquo;About&rdquo; page, to each piece of blog content, you will have one physical file. That&rsquo;s certainly OK. I just add a file, write my content, and I know I get the benefits of automatic layout, variable substitution, etc. But there are some cases where this requirement is a hinderance.</p>
+
+<p>Imagine you have N articles. Each article has a set of assigned tags. In Harp this would be defined in your data file, in Jekyll this would just be front matter. Here&rsquo;s a sample from one of the JSCookbook articles:</p>
+
+<pre>
+---
+layout: article
+title: Check if a value is an array
+published: 2014-10-23T21:18:46.858Z
+author: Maciek
+sourceurl: 
+tags: [array]
+id: 544970b682f286f555000001
+sesURL: Check-if-a-value-is-an-array
+moreinfo: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
+---
+</pre>
+
+<p>Now imagine I want to make one page for each tag. Normally I&rsquo;d have to:</p>
+
+<ul>
+<li>Figure out all my tags. That's not necessarily a bad thing - you may only have 5-10 static tags.
+<li>Make a file each for tag, called sometag.html.
+<li>Write the code that slurps content and displays items that match that tag.
+<li>Include that code in every page. Both Harp and Jekyll support template languages that make this easy.
+</ul>
+
+<p>At the end I have N pages, one for each tag. If I remove a tag, or add one, I have to remember to create a new flat file. Not the end of the world, but something you could forget.</p>
+
+<p>With Jekyll, I can use a plugin to create a generator. This will run on server startup and when things change, and can add new pages to the system dynamically. Here is a plugin I wrote to handle my tag issue. Keep in my mind I&rsquo;m probably better at ballet dancing then Ruby.</p>
+
+<p><code><pre class="language-markup">module Jekyll</p>
+
+<p>class TagPage &lt; Page
+    def initialize(site, base, dir, tag, pages)
+      @site = site
+      @base = base
+      @dir = dir
+      @name = &#x27;index.html&#x27;</p>
+
+<pre><code>  #print &amp;quot;Running Tag page for &amp;quot;+tag+&amp;quot; &amp;quot;+pages.length.to_s+&amp;quot;\n&amp;quot;
+
+  self.process(@name)
+  self.read_yaml(File.join(base, &amp;#x27;_layouts&amp;#x27;), &amp;quot;tag.html&amp;quot;)
+  self.data[&amp;#x27;tag&amp;#x27;] = tag
+  self.data[&amp;#x27;title&amp;#x27;] = tag
+  self.data[&amp;#x27;pages&amp;#x27;] = pages
+end
+</code></pre>
+
+<p>end</p>
+
+<p>class TagPageGenerator &lt; Generator
+    safe true</p>
+
+<pre><code>def generate(site)
+
+  dir = &amp;quot;tag&amp;#x2F;&amp;quot;
+
+  #create unique array of tags
+  unique_tags = {}
+  site.pages.each do |page|
+    if page.data.key? &amp;#x27;layout&amp;#x27; and page.data[&amp;quot;layout&amp;quot;] == &amp;#x27;article&amp;#x27; 
+      #print page.data
+      #print &amp;quot;\n&amp;quot;
+      page.data[&amp;quot;tags&amp;quot;].each do |tag|
+        if !unique_tags.include?(tag)
+          unique_tags[tag] = []
+        end
+        unique_tags[tag].push(page)
+      end
+    end
+
+  end
+
+  #print &amp;quot;unique tags: &amp;quot;+unique_tags.keys.join(&amp;quot;,&amp;quot;) + &amp;quot;\n&amp;quot;
+
+  #create page for each
+  unique_tags.keys.each do |tag|
+    site.pages &amp;lt;&amp;lt; TagPage.new(site, site.source, File.join(dir, tag), tag, unique_tags[tag])
+  end
+
+end
+</code></pre>
+
+<p>end</p>
+
+<p>end</code></pre></p>
+
+<p>And that&rsquo;s it! (A big thank you to Ryan Morrissey for his <a href="http://ryancmorrissey.com/blog/2014/01/20/auto-create-jekyll-category-and-tag-pages/">blog post</a> about this - I ripped my initial code from it.)</p>
+
+<p>Another example of plugin support is adding your own tags. I needed a way to generate a unique list of tags for the home page. I wrote this plugin, which adds <code>taglist</code> to Liquid for my site.</p>
+
+<pre><code class="language-markup">module Jekyll
+  class TagListTag &lt; Liquid::Tag
+    def initialize(tag_name, text, tokens)
+      super
+    end
+
+    def render(context)
+      tags = []
+      context.registers[:site].pages.each do |page| 
+        if page.data.key?&#x27;layout&#x27; and page.data[&quot;layout&quot;] == &#x27;article&#x27;
+          if page.data.key?&#x27;tags&#x27;
+            page.data[&quot;tags&quot;].each do |tag|
+              if !tags.include?tag
+                tags.push(tag)
+              end
+            end
+          end
+        end
+      end
+      tags = tags.sort
+      #now output list
+      s = &quot;&quot;
+      tags.each do |tag|
+        s += &quot;&lt;li&gt;&lt;a href=&#x27;&#x2F;tag&#x2F;&quot; + tag + &quot;&#x27;&gt;&quot; + tag + &quot;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;&quot;
+      end
+      return s
+    end
+
+  end
+end
+
+Liquid::Template.register_tag(&#x27;taglist&#x27;, Jekyll::TagListTag)</code></pre>
+
+<p>Again - I&rsquo;m probably writing pretty crappy Ruby - but I <strong>love</strong> that I was able to extend Jekyll this way. If Harp could add this in - and let me use JavaScript - that would be killer.</p>
+
+<p>And that was really it. I converted my form to use <a href="http://formkeep.com">FormKeep</a> and converted the search to use a Google Custom Search Engine. You can see the final result here: <a href="http://aloof-zephyr.surge.sh/">http://aloof-zephyr.surge.sh/</a>.</p>
+
+<p>As JavaScript Cookbook has not had the traffic I&rsquo;d like (hint hint - I&rsquo;m still looking for content!), I&rsquo;ll be pointing the domain to the static version so I can have a bit less Node out there. Once I add in Grunt support and add in Surge, I can write a post and push live in 30 seconds. I can&rsquo;t wait.</p>
+
+<p>p.s. I didn&rsquo;t include a zip of the Jekyll version, but if anyone would like it, just ask.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/03\/05\/my-experience-working-with-jekyll'; 
+this.page.identifier = '/?p=5780'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/05/my-experience-working-with-jekyll" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="My experience working with Jekyll" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/05/my-experience-working-with-jekyll" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/05/my-experience-working-with-jekyll" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="My experience working with Jekyll" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/05/my-experience-working-with-jekyll" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/05/my-experience-working-with-jekyll" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

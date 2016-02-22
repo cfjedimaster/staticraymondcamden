@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using jQuery and ColdFusion to create an auto-link for definition application &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using jQuery and ColdFusion to create an auto-link for definition application" />
+<meta property="og:description" content="Sean asks:
+
+
+
+I have an existing application.  Its for doctors and technologists who are applying for accreditation.  There are a lot of terms that are used and the client wants the terms linked to a pop up that has a definition.  Now, I can set up a CFC to grab the term&#39;s definition and return it to an ajax call from CF and link the term to it, that&#39;s no problem.  The problem is, I don&#39;t want to go through each page, and then again when the content is changed and manually link any recognized words to the JS function that executes the remote call to the CFC.  Do you know of a way, perhaps with jQuery or the built-in CF stuff, to, after each page loads, scan the text for any recognized words (this list can be retreived from another CFC call for all the words we &#34;know of&#34;) and then link to it using the pop-up bubble?
+
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/01/31/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application" />
+
+
+<meta property="og:updated_time" content="2009-01-31T13:01:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using jQuery and ColdFusion to create an auto-link for definition application">
+<meta itemprop="description" content="Sean asks:
+
+
+
+I have an existing application.  Its for doctors and technologists who are applying for accreditation.  There are a lot of terms that are used and the client wants the terms linked to a pop up that has a definition.  Now, I can set up a CFC to grab the term&#39;s definition and return it to an ajax call from CF and link the term to it, that&#39;s no problem.  The problem is, I don&#39;t want to go through each page, and then again when the content is changed and manually link any recognized words to the JS function that executes the remote call to the CFC.  Do you know of a way, perhaps with jQuery or the built-in CF stuff, to, after each page loads, scan the text for any recognized words (this list can be retreived from another CFC call for all the words we &#34;know of&#34;) and then link to it using the pop-up bubble?
+
+
+">
+
+
+<meta itemprop="dateModified" content="2009-01-31T13:01:00&#43;06:00" />
+<meta itemprop="wordCount" content="1590">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using jQuery and ColdFusion to create an auto-link for definition application"/>
+<meta name="twitter:description" content="Sean asks:
+
+
+
+I have an existing application.  Its for doctors and technologists who are applying for accreditation.  There are a lot of terms that are used and the client wants the terms linked to a pop up that has a definition.  Now, I can set up a CFC to grab the term&#39;s definition and return it to an ajax call from CF and link the term to it, that&#39;s no problem.  The problem is, I don&#39;t want to go through each page, and then again when the content is changed and manually link any recognized words to the JS function that executes the remote call to the CFC.  Do you know of a way, perhaps with jQuery or the built-in CF stuff, to, after each page loads, scan the text for any recognized words (this list can be retreived from another CFC call for all the words we &#34;know of&#34;) and then link to it using the pop-up bubble?
+
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/01/31/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application">
+    <h1 class="article-title" itemprop="name">
+        Using jQuery and ColdFusion to create an auto-link for definition application
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-01-31 13:01:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-01-31</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Sean asks:</p>
+
+<blockquote>
+<p>
+I have an existing application.  Its for doctors and technologists who are applying for accreditation.  There are a lot of terms that are used and the client wants the terms linked to a pop up that has a definition.  Now, I can set up a CFC to grab the term's definition and return it to an ajax call from CF and link the term to it, that's no problem.  The problem is, I don't want to go through each page, and then again when the content is changed and manually link any recognized words to the JS function that executes the remote call to the CFC.  Do you know of a way, perhaps with jQuery or the built-in CF stuff, to, after each page loads, scan the text for any recognized words (this list can be retreived from another CFC call for all the words we "know of") and then link to it using the pop-up bubble?
+</p>
+</blockquote>
+
+<p>This is a pretty interesting idea. I was pretty mad at Sean for mailing this to me on Wednesday right when I had to fly! (In case folks are wondering why I was so silent recently, I flew up to CA on Wednesday and back home on Friday so I&rsquo;ve been a bit remote.) As always, there are many ways we could attack this, but this is the route I chose.</p>
+
+<ul>
+<li>On load, use JavaScript to get all the text from one div. While Sean said he wanted to scan the 'page', I assume he really means the main page content, and not stuff like the header of footer.
+<li>Convert that text into a unique list of words.
+<li>Send that list to the server and figure out which words are 'hot', ie, terms that we have definitions for.
+<li>When we get the list of terms back, update the content to create links to something that will display the definition.
+</ul>
+
+<p>Make sense? Ok, let&rsquo;s start. I began with a super simple HTML page:</p>
+
+<p><code>
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body&gt;</p>
+
+<p>&lt;div id=&ldquo;content&rdquo;&gt;
+&lt;p&gt;
+This is some &lt;b&gt;fun&lt;/b&gt; text.
+&lt;/p&gt;
+&lt;p&gt;
+This is some &lt;b&gt;boring&lt;/b&gt; text.
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;
+For score and seven years ago&hellip;
+&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p>Notice I have one main div with the ID of content. You could imagine a system by where you use ColdFusion custom tags to wrap your content (see this <a href="http://www.raymondcamden.com/index.cfm/2007/9/3/ColdFusion-custom-tag-for-layout-example">blog entry</a> for an example) and always count on the important page content being within one specific ID.</p>
+
+<p>Our first task is to get the text from the div. Notice I said text and not html. Let&rsquo;s use jQuery:</p>
+
+<p><code>
+var content = $(&ldquo;#content&rdquo;).text()
+</code></p>
+
+<p>Now we need to split the content into words. I&rsquo;ll use a bit of regex for that:</p>
+
+<p><code>
+var words = content.split(/\b/)
+</code></p>
+
+<p>And now I&rsquo;ll store each word into a simple object. I&rsquo;m using this as a trick to convert a list of words into a set of unique words. There is probably a nicer way to do this.</p>
+
+<p><code>
+var uWords = new Object()
+for(var i=0; i&lt;words.length;i++) {
+    var word = words[i]
+    word = word.replace(/[\s\n]/g,&ldquo;)
+    if(word != &ldquo; &amp;&amp; uWords[word] == null) uWords[word] = &ldquo;<br />
+}
+</code></p>
+
+<p>I then convert this generic object into an array:</p>
+
+<p><code>
+var aWords = new Array()
+for(var w in uWords) aWords.push(w)
+</code></p>
+
+<p>And lastly, let&rsquo;s send this to ColdFusion:</p>
+
+<p><code>
+if(aWords.length) $.post(&lsquo;term.cfc?method=filteredTermList&amp;returnFormat=json&rsquo;,{termList:aWords.toString()},highlightWords,&ldquo;json&rdquo;)
+</code></p>
+
+<p>This code says: If I had any words, do a POST operation to the CFC named term.cfc, run the method filteredTermList, and pass an argument named termList. The aWords.toString() is a shortcut to convert the array into a list. Next I tell jQuery to run a method, highlightWords, when done. The last argument lets jQuery know the result will be in json. This let&rsquo;s jQuery automatically convert it to native JavaScript data.</p>
+
+<p>All of of the above code was wrapped in a $(document).ready(function() package so as to run as soon as the page loads. (Don&rsquo;t worry, I&rsquo;ll post the complete code at the end.)</p>
+
+<p>Ok, now let&rsquo;s go to the CFC side. It&rsquo;s a rather simple CFC so I&rsquo;ll post the entire file first:</p>
+
+<p><code>
+&lt;cfcomponent&gt;</p>
+
+<p>&lt;!&mdash; Hard coded list of terms we know. &mdash;&gt;
+&lt;cfset variables.termList = [&ldquo;boring&rdquo;,&ldquo;cool&rdquo;,&ldquo;hot&rdquo;,&ldquo;cold&rdquo;,&ldquo;nice&rdquo;,&ldquo;watch&rdquo;,&ldquo;score&rdquo;]&gt;</p>
+
+<p>&lt;cffunction name=&ldquo;filteredTermList&rdquo; access=&ldquo;remote&rdquo; returnType=&ldquo;array&rdquo; output=&ldquo;false&rdquo;&gt;
+    &lt;cfargument name=&ldquo;termList&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo; hint=&ldquo;List of words to search. Assumed to be unique.&rdquo;&gt;
+    &lt;cfset var term = &ldquo;&rdquo;&gt;
+    &lt;cfset var result = []&gt;</p>
+
+<pre><code>&amp;lt;cfloop index=&quot;term&quot; list=&quot;#arguments.termList#&quot;&amp;gt;
+    &amp;lt;cfif arrayFind(variables.termList,term)&amp;gt;
+        &amp;lt;cfset arrayAppend(result, term)&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+&amp;lt;/cfloop&amp;gt;
+
+&amp;lt;cfreturn result&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;</p>
+
+<p>&lt;cffunction name=&ldquo;arrayFind&rdquo; access=&ldquo;private&rdquo; returnType=&ldquo;numeric&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;Returns the position of an item in an array, or 0&rdquo;&gt;
+    &lt;cfargument name=&ldquo;arr&rdquo; type=&ldquo;array&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfargument name=&ldquo;s&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfset var x = &ldquo;&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfloop index=&quot;x&quot; from=&quot;1&quot; to=&quot;#arrayLen(arguments.arr)#&quot;&amp;gt;
+    &amp;lt;cfif arguments.arr[x] is arguments.s&amp;gt;
+        &amp;lt;cfreturn x&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+&amp;lt;/cfloop&amp;gt;
+
+&amp;lt;cfreturn 0&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;</p>
+
+<p>&lt;/cfcomponent&gt;
+</code></p>
+
+<p>The CFC begins with a hard coded list of known terms. This would normally be dynamic. The important method, filteredTermList, is what I&rsquo;ll focus on. It accepts a list of words. For each word, it will check and see if it exists in our known list (notice the use of arrayFind), and if there is a match, the word gets appended to a result array. This result is returned at the end of the method.</p>
+
+<p>Ok, so back to the front end. Remember we had told jQuery to run a function called highlightWords when done. Here is how I defined that method:</p>
+
+<p><code>
+function highlightWords(data,textStatus) {<br />
+    var currentContent = $(&ldquo;#content&rdquo;).html()</p>
+
+<pre><code>for(var x=0; x&amp;lt;data.length;x++) {
+    word = data[x]
+    //replace word with &amp;lt;a href=&quot;&quot; click=&quot;return showTerm('term')&quot;&amp;gt;term&amp;lt;/a&amp;gt;
+    var newstr = '&amp;lt;a href=&quot;&quot; onclick=&quot;return showTerm(\''+word+'\')&quot;&amp;gt;'+word+'&amp;lt;/a&amp;gt;'
+    //get current html
+    //replace word with the new html
+    var reg = new RegExp(word, &quot;gi&quot;)
+    currentContent = currentContent.replace(reg,newstr)
+}
+//update it 
+$(&quot;#content&quot;).html(currentContent);
+</code></pre>
+
+<p>}
+</code></p>
+
+<p>We begin by grabbing the HTML of our content div. We need the HTML this time as we are actually going to be modifying the markup a bit. I then loop over the data result. This is what was returned from the CFC so it will be an array of words. For each word, I do a replace where each word is exchanged with HTML that will run a function, showTerm.</p>
+
+<p>Now lets look at showTerm. This is what will show the definition for our word.</p>
+
+<p><code>
+function showTerm(term){
+    ColdFusion.Window.create(&lsquo;term&rsquo;,&lsquo;Definition of &lsquo;+term,&lsquo;term.cfc?method=definition&amp;term=&lsquo;+escape(term)+&rsquo;&amp;returnformat=plain&rsquo;, {center:true,modal:true})
+    ColdFusion.Window.onHide(&lsquo;term&rsquo;,winClosed);
+    return false
+}
+function winClosed() {
+    ColdFusion.Window.destroy(&lsquo;term&rsquo;,true)
+}
+</code></p>
+
+<p>For showTerm I made use of cfwindow. (See the PS for why I did and my rant about jQuery UI.) Notice that I make sure of the CFC again, but set the returnFormat to plain. This lets me run a CFC method that will return a string and not have to worry about JSON or WDDX encoding. The onHide/winClosed stuff just helps me handle creating new window objects. The method I added to the CFC is pretty simple:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;definition&rdquo; access=&ldquo;remote&rdquo; returnType=&ldquo;string&rdquo; output=&ldquo;false&rdquo;&gt;
+    &lt;cfargument name=&ldquo;term&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo; hint=&ldquo;Word to look up.&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfreturn &quot;The definition of &quot; &amp; arguments.term &amp; &quot; is, um, something.&quot;&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>As you can guess, this would normally be a database lookup. But that&rsquo;s it! We now add terms to our CFC and know that the front end will automatically pick up on the terms and automatically hot link them. I&rsquo;ve included the code as a zip to the entry so feel free to download and play. (Although you will have to download <a href="http://jquery.com">jQuery</a> yourself.)</p>
+
+<p>Before I get into my little rant about jQueryUI, here are some things to consider:</p>
+
+<ul>
+<li>Why not simply load the known words on startup? I could have done that, especially with my short list of known words. But I figured that in a real production system your list of known words could be huge. That isn't something you probably want to add to each page load. I figured scanning for unique words and sending that to the server to get the known list back would mean less traffic. I don't <b>know</b> that of course, and this ties back to something I said at the NYCFUG earlier this month. Don't consider AJAX a magic bullet. Sending data back and forth with JavaScript isn't going to magically be 'better' just because it's JSON or XML or whatever. 
+<li>It would be cool to add tracing to which terms get looked up. If you notice that some words are almost always looked up, it may represent an opportunity for something you can educate yours users about. So for example, if you see a lot of traffic for terms related to throat diseases, maybe you could write additional content on that area of study. On the flip side, if no one ever looks up the definition of Foo, then you can probably remove Foo from the list of content to hot link. 
+</ul>
+
+<p>Any other things people would mention? Anyone using a system like this in production?</p>
+
+<p>I&rsquo;ve uploaded my demo here: <a href="http://www.coldfusionjedi.com/demos/termdemo/test.cfm">http://www.coldfusionjedi.com/demos/termdemo/test.cfm</a></p>
+
+<p>p.s. Ok, my rant. For my term popup I wanted to use jQueryUI. I was happy to find that there was a simple <a href="http://docs.jquery.com/UI/Dialog">Dialog</a> control, but I found skinning it to be very difficult. The docs talk about themes and mention the <a href="http://docs.jquery.com/UI/Theming/Themeroller">ThemeRoller</a> application, all of which look really cool. But I wasn&rsquo;t able to find a simple example of using the theme for the dialog. The theme I downloaded had one HTML file, but it was cluttered with every possible example control you could imagine. Maybe I was being lazy, but I just found it difficult and overwhelming as a new user. To be fair, I thought jQuery&rsquo;s main code was a bit overwhelming at first, so I probably just need to give it another try, but I was pretty ticked at first. That&rsquo;s why I &lsquo;punted&rsquo; and switched to cfwindow. It just plain worked.<p><a href='enclosures/D%3A%5Chosts%5Cwww%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fterm%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/01\/31\/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application'; 
+this.page.identifier = '/?p=3215'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/01/31/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using jQuery and ColdFusion to create an auto-link for definition application" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/01/31/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/01/31/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using jQuery and ColdFusion to create an auto-link for definition application" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/01/31/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/01/31/Using-jQuery-and-ColdFusion-to-create-an-autolink-for-definition-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Front End Interview Questions on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/tags/front-end-interview-questions/</link>
+    <description>Recent content in Front End Interview Questions on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 Feb 2015 06:46:11 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/tags/front-end-interview-questions/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Front-End Interview Questions – Part 4</title>
+      <link>http://www.raymondcamden.com/2015/02/03/front-end-interview-questions-part-4</link>
+      <pubDate>Tue, 03 Feb 2015 06:46:11 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/03/front-end-interview-questions-part-4</guid>
+      <description>&lt;p&gt;This post is part of a series I’m writing where I attempt to answer, to the best of my ability, a set of &lt;a href=&#34;https://github.com/h5bp/Front-end-Developer-Interview-Questions&#34;&gt;Front-End developer questions&lt;/a&gt;. I expect/hope my readers will disagree, augment, and generally hash out my answers in the comments below.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Can you describe the difference between progressive enhancement and graceful degradation?&lt;/strong&gt;
+Progressive enhancement refers to a feature of your web site that enhances the experience for browsers that support it, but has no impact if your browser does not. As an example - consider IndexedDB. It lets you store data in a client-side database. If my web site made use of Ajax to load a large amount of data, I could use IndexedDB to cache data. If your browser doesn&amp;rsquo;t support IndexedDB, then we just do Ajax to load that data. Modern browsers get a benefit, older browsers don&amp;rsquo;t get screwed.&lt;/p&gt;
+
+&lt;p&gt;On the flip side, graceful degradation takes that modern feature and acts as if it is the default, but will not completely break the older browser. So in this case, the use of IndexedDB would be considered &amp;ldquo;normal&amp;rdquo;, not the additional benefit for the modern browser.&lt;/p&gt;
+
+&lt;p&gt;In my opinion, it comes down to one side where you build for a certain base and provide additional, not-required features for better browsers (progressive enhancement) versus building for the more modern browser that assumes certain features, but assuring they &amp;ldquo;break&amp;rdquo; well.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;How would you optimize a website&amp;rsquo;s assets/resources?&lt;/strong&gt;
+I can think of a few things here.&lt;/p&gt;
+
+&lt;p&gt;First - I&amp;rsquo;d optimize my images. In the past, I&amp;rsquo;ve used a Grunt script for this which makes it brain dead easy. You can point to a set of images, specify an optimization level, run it, and check the output to ensure it still looks good.&lt;/p&gt;
+
+&lt;p&gt;Another option for images is to use CSS sprites for related icons and the such. That reduces the network requests.&lt;/p&gt;
+
+&lt;p&gt;You can use a CDN that supports knowing and responding to a user&amp;rsquo;s location to better serve up the assets.&lt;/p&gt;
+
+&lt;p&gt;For text files, you can minify, both CSS and JavaScript. For CSS, you can remove unused CSS (&lt;a href=&#34;https://github.com/addyosmani/grunt-uncss&#34;&gt;https://github.com/addyosmani/grunt-uncss&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m sure I missed a few more options here.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;How many resources will a browser download from a given domain at a time?&lt;/strong&gt;
+I&amp;rsquo;m going to answer this &lt;i&gt;before&lt;/i&gt; I check Google to confirm: 8.&lt;/p&gt;
+
+&lt;p&gt;Looks like I was wrong - kinda. I figured there was some variation per browser, but check this StackOverflow answer: &lt;a href=&#34;http://stackoverflow.com/a/14768266/52160&#34;&gt;http://stackoverflow.com/a/14768266/52160&lt;/a&gt;. For Chrome it is 6, Firefox 6, IE11 is 8 though. I&amp;rsquo;d assume 6 then as a good average. Here is another good table on this stat: &lt;a href=&#34;http://www.browserscope.org/?category=network&amp;v=1&#34;&gt;http://www.browserscope.org/?category=network&amp;v=1&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What are the exceptions?&lt;/strong&gt;
+So the limits are per domain, so in theory, you could use a wildcard DNS where *.foo.com points to the same IP address. Seems like something I&amp;rsquo;d use with caution though. I think if you are at this point (of trying to get around the limit) then maybe you are doing a bit too much.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Front-End Interview Questions – Part 3</title>
+      <link>http://www.raymondcamden.com/2015/01/28/front-end-interview-questions-part-3</link>
+      <pubDate>Wed, 28 Jan 2015 17:01:02 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/28/front-end-interview-questions-part-3</guid>
+      <description>&lt;p&gt;This post is part of a series I’m writing where I attempt to answer, to the best of my ability, a set of &lt;a href=&#34;https://github.com/h5bp/Front-end-Developer-Interview-Questions&#34;&gt;Front-End developer questions&lt;/a&gt;. I expect/hope my readers will disagree, augment, and generally hash out my answers in the comments below.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Talk about your preferred development environment. (OS, Editor or IDE, Browsers, Tools, etc.)&lt;/strong&gt;
+I covered this pretty deeply in a blog post from late last year (&lt;a href=&#34;http://www.raymondcamden.com/2014/12/08/my-cordovaphonegap-developer-setup-fall-2014&#34;&gt;My Cordova/PhoneGap Developer Setup (Fall 2014)&lt;/a&gt;). While that post was focused on Cordova development, it pretty much covers my development setup in general. I don’t think I have anything to add to that list so I’ll carry on.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Which version control systems are you familiar with?&lt;/strong&gt;
+Git, although I suck at branches and merging. I’ve made a note in Evernote that lists different types of Git commands based on what I’m trying to achieve. I’d like to be a bit better at Git, but my current level of skill hasn&amp;rsquo;t really hurt me so far. When I have some free time, I plan on taking the &lt;a href=&#34;https://www.codeschool.com/paths/git&#34;&gt;Code School Git course&lt;/a&gt; as I absolutely love Code School.&lt;/p&gt;
+
+&lt;p&gt;I can use SVN as well, but since I use it so rarely I keep a note around to help me remember the basics.&lt;/p&gt;
+
+&lt;p&gt;I have some experience with Perforce. I’ll use it if you put a gun to my head.&lt;/p&gt;
+
+&lt;p&gt;And yes - you will all laugh at me - but I used to love Visual SourceSafe. It was simple, easy to use, and I never had data corruption with it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Can you describe your workflow when you create a web page?&lt;/strong&gt;
+That’s a bit open-ended. In my editor, I use snippets so I can quickly lay out a simple HTML page, quickly add jQuery if I need it, etc. Most of my demos are JavaScript-based so I’ll normally:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Make a new folder for my test.
+&lt;li&gt;Make an index.html file and drop in the snippet.
+&lt;li&gt;Make an app.js and start coding.
+&lt;/ul&gt;
+
+&lt;p&gt;That’s it. I don’t use Yeoman as I find it super heavy for quick one-offs. Ditto for Bower. My issue with these tools is that they tend to add a huge amount of files. If I were building a proper &amp;ldquo;project&amp;rdquo;, i.e. something I’d be working on for a month, it may make sense, but for my blog posts, presentations, etc, they are &lt;i&gt;way&lt;/i&gt; overkill. I actually built my own tool for Brackets to quickly download JavaScript frameworks with a simple right click. It only downloads the core files needed to use them because - that’s all I want to do - use them. (Maybe I’m crazy that way. ;)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;If you have 5 different stylesheets, how would you best integrate them into the site?&lt;/strong&gt;
+Oh, this is a good one. Keeping in mind I try to avoid CSS and just use a library (like Bootstrap), it seems to me I’d do the following:&lt;/p&gt;
+
+&lt;p&gt;If the 5 style sheets were all application specific, I&amp;rsquo;d combine them into one file. If they were a combination of application specific style sheets and libraries (like Bootstrap), I&amp;rsquo;d only combine the application specific ones. I’d want Bootstrap (or whatever) separate to ensure it is easy to update in the future.&lt;/p&gt;
+
+&lt;p&gt;I never really thought much about &amp;ldquo;organization&amp;rdquo; of my CSS because I rarely write much of it. I’d run CSSLint against it, but I don’t think CSSLint deals with &amp;ldquo;organization&amp;rdquo; of a large sheet. I’d also run a tool to find unused css, like &lt;a href=&#34;http://davidwalsh.name/uncss&#34;&gt;uncss&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Front-End Interview Questions - Part 2</title>
+      <link>http://www.raymondcamden.com/2015/01/27/front-end-interview-questions-part-2</link>
+      <pubDate>Tue, 27 Jan 2015 08:55:31 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/27/front-end-interview-questions-part-2</guid>
+      <description>&lt;blockquote&gt;This post is part of a series I&#39;m writing where I attempt to answer, to the best of my ability, a set of &lt;a href=&#34;https://github.com/h5bp/Front-end-Developer-Interview-Questions&#34;&gt;Front-End developer questions&lt;/a&gt;. I expect/hope my readers will disagree, augment, and generally hash out my answers in the comments below.&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;What did you learn yesterday/this week?&lt;/strong&gt;
+Not that it is terribly important per se, but I learned that in some browsers, you can drag and drop a file onto an input/file field. I thought that was cool. It also got me thinking about what other browser features I may be missing out on. I tend to focus on what the browser supports in terms of HTML/JS/CSS, but in regards to UX like this (that’s how I’d classify it), I wonder how much stuff I’m missing (and how much “casual” users are aware of).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What excites or interests you about coding?&lt;/strong&gt;
+Mainly figuring things out - although a lot of times it is simply seeing my input converted into actions on the computer. That sounds lame, or, well, what all programming does, but it is honest as well. I remember my first experience with coding and the joy I felt when I actually got the computer (Apple 2e FTW!) to do what I wanted. That joy was like a drug I’ve not been able to shake off since then.&lt;/p&gt;
+
+&lt;p&gt;I’d say I get more excitement though from sharing with others. That’s why I write on this blog and do presentations.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is a recent technical challenge you experienced and how did you solve it?&lt;/strong&gt;
+I wish it were more exciting, but, I’m dealing with moving a large Mongo database from my local machine to a remote server. I had to learn how to make backups and how to restore. I also had to deal with timeout issues. How did I solve it? I Googled. But in order to be sure I could get to the answers easier next time, I stored the command line calls in Evernote. I tend to have pretty crappy memory, especially with CLIs, so I use Evernote as a reference for things like this.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What UI, Security, Performance, SEO, Maintainability or Technology considerations do you make while building a web application or site?&lt;/strong&gt;
+Ah, a big one. :) Let me try to break this down a bit.&lt;/p&gt;
+
+&lt;p&gt;In terms of UI, as I’m mostly doing small POCs (proof of concepts), I try to keep things as simple as possible. If I need things to look nice quickly, I’ll use Bootstrap. If I’m building something in Cordova and it will be a medium to large demo, I’ll use &lt;a href=“http://www.ionicframework.com”&gt;Ionic&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In terms of security, it really depends. Almost all of my work is client-side now, and I know that you can’t trust &lt;i&gt;anything&lt;/i&gt; from the client when speaking to a server. So I know, for example, that if I’ve built a mobile app that stores data on the server, I have to employ authentication/authorization rules on the client and on the server, and I damn well better get it right on the server. One of the things I do when playing with a cool front end web app is open up the dev tools and look at the network requests being made. I’ll then - sometimes - open up those requests in other tabs and see how well things are locked down. I&amp;rsquo;ll combine this with curl in the terminal if I really feel like testing out an API.&lt;/p&gt;
+
+&lt;p&gt;In terms of performance, guess what - it depends. :) I’ll be honest and say that performance of client-side code is not something I’ve explored deeply yet. I’m certainly &lt;i&gt;aware&lt;/i&gt; of the tools browser vendors provide in this area and I know where to begin if I&amp;rsquo;m seeing &amp;ldquo;jank&amp;rdquo; in my front-end code. Maybe I’m biased, but this is exactly the kind of answer I’d hope from someone about this. I.e., &amp;ldquo;I don&amp;rsquo;t know, but I know the tools exist, where to find it, and how to start Googling to dig deeper.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;SEO - nope - I don’t care. :) Ok, I guess I do care, but, it isn’t something I think about. (Maybe I need to more. There is a SEO plugin for WordPress that a friend recommended to me.)&lt;/p&gt;
+
+&lt;p&gt;Maintainability - I suppose this falls into basic things I’ve been aware of since I started my career. Proper documentation, clean code, source control to help keep track of what’s changed, using a bug tracker to help manage requests versus email, etc. I’m not sure how well this is taught now. I don’t remember it being taught back when I was in comp sci, but that was decades ago. I think I just found something to blog deeper about later on.&lt;/p&gt;
+
+&lt;p&gt;Technology - This part of the question is a bit open ended. At the end of the day, whether I use ColdFusion or Node or - heck - Perl CGI - I want to ensure my technology stack performs well, can be secured, and is generally stable. I’d think most of the common stacks out there match those criteria so it comes down to what is best for the team developing the project. On the client-side, the biggest thing that comes to mind here is progressive enhancement. Given technology X that may only be supported on 10% of browsers, you can add it to your project in such a way that the other 90% are not impacted by the lack of said technology.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

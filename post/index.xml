@@ -1,0 +1,1119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/post/</link>
+    <description>Recent content in Posts on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 22 Feb 2016 10:42:00 -0700</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Building a Twitter bot to display random comic book covers</title>
+      <link>http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers</link>
+      <pubDate>Mon, 22 Feb 2016 10:42:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers</guid>
+      <description>
+
+&lt;p&gt;A bit over two years ago I played around with the (then) recently released &lt;a href=&#34;http://developer.marvel.com/&#34;&gt;Marvel API&lt;/a&gt; to build some &lt;a href=&#34;http://www.raymondcamden.com/2014/02/02/Examples-of-the-Marvel-API/&#34;&gt;cool demos&lt;/a&gt;. The end result of that experiment was a simple web app that randomly displayed a Marvel comic book cover every minute:
+&lt;a href=&#34;http://marvel.raymondcamden.com/&#34;&gt;http://marvel.raymondcamden.com/&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This weekend I was thinking about a few Twitter accounts I follow that just post random pictures. (I&amp;rsquo;ll share a list of them at the end.) I like these accounts because they&amp;rsquo;re easy to ignore, provide something simple and cool to my feed, and are just a random piece of coolness during the day. I thought it might be kind of fun to build a similar mechanism for comic books (well, Marvel comics, I need to see if DC has an API).&lt;/p&gt;
+
+&lt;p&gt;In theory - all I needed to do was:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create a way to select a random cover (which was already done - by me)&lt;/li&gt;
+&lt;li&gt;Create a way to Tweet (there&amp;rsquo;s probably a npm library for that - yep - there is)&lt;/li&gt;
+&lt;li&gt;Create a schedule (there&amp;rsquo;s probably a npm library for that too - yep - there is)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It ended up being &lt;em&gt;very&lt;/em&gt; quick to develop - maybe two hours total. Here is the complete source of the main script file. (Note, the entire thing is up on GitHub - the link will be at the bottom.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+&amp;#x2F;*eslint-env node*&amp;#x2F;
+
+var request = require(&amp;#x27;request&amp;#x27;);
+
+var express = require(&amp;#x27;express&amp;#x27;);
+
+var credentials = require(&amp;#x27;.&amp;#x2F;credentials.json&amp;#x27;);
+
+var Twitter = require(&amp;#x27;twitter&amp;#x27;);
+var client = new Twitter(credentials.twitter);
+
+var marvel = require(&amp;#x27;.&amp;#x2F;marvel&amp;#x27;);
+marvel.setCredentials(credentials.marvel.private_key, credentials.marvel.api_key);
+
+&amp;#x2F;&amp;#x2F; cfenv provides access to your Cloud Foundry environment
+&amp;#x2F;&amp;#x2F; for more info, see: https:&amp;#x2F;&amp;#x2F;www.npmjs.com&amp;#x2F;package&amp;#x2F;cfenv
+var cfenv = require(&amp;#x27;cfenv&amp;#x27;);
+
+var app = express();
+
+app.use(express.static(__dirname + &amp;#x27;&amp;#x2F;public&amp;#x27;));
+
+&amp;#x2F;&amp;#x2F; get the app environment from Cloud Foundry
+var appEnv = cfenv.getAppEnv();
+
+&amp;#x2F;&amp;#x2F; start server on the specified port and binding host
+app.listen(appEnv.port, &amp;#x27;0.0.0.0&amp;#x27;, function() {
+
+    &amp;#x2F;&amp;#x2F; print a message when the server starts listening
+    console.log(&amp;quot;server starting on &amp;quot; + appEnv.url);
+});
+
+var MONTHS = [&amp;#x27;January&amp;#x27;, &amp;#x27;February&amp;#x27;, &amp;#x27;March&amp;#x27;, &amp;#x27;April&amp;#x27;, &amp;#x27;May&amp;#x27;, &amp;#x27;June&amp;#x27;, &amp;#x27;July&amp;#x27;, &amp;#x27;August&amp;#x27;, &amp;#x27;September&amp;#x27;, &amp;#x27;October&amp;#x27;, &amp;#x27;November&amp;#x27;, &amp;#x27;December&amp;#x27;];
+
+function tweetRandomCover() {
+    console.log(&amp;#x27;First, we get a random cover.&amp;#x27;);
+
+    marvel.getCover(function(res) {
+        console.log(&amp;#x27;back from mavel&amp;#x27;);
+        console.dir(res);
+        var tweet = res.title + &amp;#x27; published &amp;#x27;+(MONTHS[res.date.getMonth()])+&amp;#x27; &amp;#x27;+res.date.getFullYear() +&amp;#x27;\n&amp;#x27;+res.link;
+        
+        console.log(&amp;#x27;Now going to fetch the image link.&amp;#x27;);
+
+        request.get({url:res.url,encoding:null}, function(err, response, body) {
+            if(!err &amp;amp;&amp;amp; response.statusCode === 200) {
+                console.log(&amp;#x27;Image copied to RAM&amp;#x27;);
+
+                client.post(&amp;#x27;media&amp;#x2F;upload&amp;#x27;, {media: body}, function(error, media, response) {
+
+                    if(error) {
+                        console.error(&amp;#x27;Error from media&amp;#x2F;upload: &amp;#x27;+error);
+                        return; 
+                    }
+                    
+                    &amp;#x2F;&amp;#x2F; If successful, a media object will be returned.
+                    console.log(&amp;#x27;Image uploaded to Twitter&amp;#x27;);
+
+                    var status = {
+                        status: tweet,
+                        media_ids: media.media_id_string 
+                    }
+
+                    client.post(&amp;#x27;statuses&amp;#x2F;update&amp;#x27;, status, function(error, tweet, response){
+                        if (!error) {
+                            console.log(&amp;#x27;Tweeted ok&amp;#x27;);
+                        }
+                    });
+
+                });
+                        
+            }
+        });
+    }); 
+}
+
+app.get(&amp;#x27;&amp;#x2F;forceTweet&amp;#x27;, function(req, res) {
+    tweetRandomCover();
+    res.end(&amp;#x27;Done (not really)&amp;#x27;);
+});
+
+var cron = require(&amp;#x27;cron&amp;#x27;);
+var cronJob = cron.job(&amp;#x27;0 6,12,18 * * *&amp;#x27;, function() {
+    console.log(&amp;#x27;do the cover&amp;#x27;);
+    tweetRandomCover(); 
+    console.log(&amp;#x27;cron job complete&amp;#x27;);
+});
+cronJob.start();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s break it down bit by bit, focusing on the important parts. To handle the Twitter API, I used the &lt;a href=&#34;https://www.npmjs.com/package/twitter&#34;&gt;twitter&lt;/a&gt; Node library. As you will see a bit later in the code, it is &lt;em&gt;incredibly&lt;/em&gt; trivial to use, even when creating Tweets with media attached.&lt;/p&gt;
+
+&lt;p&gt;The Marvel API is just a copy of the code I used before, although I&amp;rsquo;ve modified it a bit so I can pass in my credentials.&lt;/p&gt;
+
+&lt;p&gt;The real meat of the code is in &lt;code&gt;tweetRandomCover&lt;/code&gt;. We begin by asking the Marvel API for a random cover. If you read my &lt;a href=&#34;http://www.raymondcamden.com/2014/02/02/Examples-of-the-Marvel-API/&#34;&gt;post from two years ago&lt;/a&gt; you&amp;rsquo;ll note that I have to fake that a bit. I essentially select a random month+year and grab everything I can from there - then select an item.&lt;/p&gt;
+
+&lt;p&gt;Once I have the random issue, I use the &lt;a href=&#34;https://github.com/request/request&#34;&gt;request&lt;/a&gt; library to suck down the binary of the image into a variable. I&amp;rsquo;ve heard of this library quite a bit, but I&amp;rsquo;ve never actually used it. Big mistake on my part.&lt;/p&gt;
+
+&lt;p&gt;Finally - I have to create the tweet. Twitter requires you to upload the media first so it is a two step process. First the image is posted and then the actual Tweet is created. I&amp;rsquo;ve got a bit of &amp;ldquo;Callback Hell&amp;rdquo; going on here and if this app did &lt;em&gt;anything&lt;/em&gt; else I&amp;rsquo;d abstract this logic out of the main script, but since this isn&amp;rsquo;t a web app people will hit, I&amp;rsquo;m not going to worry about it.&lt;/p&gt;
+
+&lt;p&gt;The final aspect is scheduling - which you can see is done via &lt;a href=&#34;https://github.com/ncb000gt/node-cron&#34;&gt;node-cron&lt;/a&gt;. Easy to use - it took me longer to figure out the right cron syntax than it did to implement the code. As you can see, I&amp;rsquo;ve selected a schedule that should post tweets three times a day which &amp;ldquo;feels&amp;rdquo; right for this kind of account. I may tweak that later.&lt;/p&gt;
+
+&lt;p&gt;You can find the complete code (although there&amp;rsquo;s not much else) up on GitHub: &lt;a href=&#34;https://github.com/cfjedimaster/randomcomicbook&#34;&gt;https://github.com/cfjedimaster/randomcomicbook&lt;/a&gt;. I&amp;rsquo;m hosting the app up on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And of course, you can (and should!) follow the Twitter acount: &lt;a href=&#34;https://twitter.com/randomcomicbook&#34;&gt;https://twitter.com/randomcomicbook&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Incredible Hulk (1962) #146 published December 1971&lt;a href=&#34;https://t.co/3VyfTGup9r&#34;&gt;https://t.co/3VyfTGup9r&lt;/a&gt; &lt;a href=&#34;https://t.co/5jJFJHj58h&#34;&gt;pic.twitter.com/5jJFJHj58h&lt;/a&gt;&lt;/p&gt;&amp;mdash; Random Comic Book (@randomcomicbook) &lt;a href=&#34;https://twitter.com/randomcomicbook/status/701813244017528833&#34;&gt;February 22, 2016&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;ps:f1de4146a89fdcf87154d4e15552a286&#34;&gt;PS&amp;hellip;&lt;/h2&gt;
+
+&lt;p&gt;So yeah - about those random Twitter accounts I follow for pictures? Here they are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/EmrgencyKittens&#34;&gt;https://twitter.com/EmrgencyKittens&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/iLove_Aviation&#34;&gt;https://twitter.com/iLove_Aviation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/Aviation4_Life&#34;&gt;https://twitter.com/Aviation4_Life&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/ClassicStarWars&#34;&gt;https://twitter.com/ClassicStarWars&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I used to follow some related to historical pictures, but they either turned to spam or shared pictures unrelated to history, which to me is a cardinal sin of these types of accounts. (Another example - news organizations that will RT their sports or entertainment accounts. I freaking hate that.)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Creating an unread count for a static site</title>
+      <link>http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site</link>
+      <pubDate>Thu, 18 Feb 2016 14:23:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site</guid>
+      <description>
+
+&lt;p&gt;Lately I&amp;rsquo;ve noticed some sites will include a little &amp;ldquo;unread&amp;rdquo; icon for their blog, showing you how many new articles they have since your last visit. As an example, here is how the &lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt; displays it in their header:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogoneunread.png&#34; alt=&#34;Unread blog entries&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve seen this on a few other sites (like &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;) and I assume it is a simple plugin, but I thought it would be kind of fun to build a prototype of this myself. What follows is a simple example of the feature that can be used for static sites. There&amp;rsquo;s probably many different ways to add this feature (and I&amp;rsquo;ll discuss some options at the end) and I&amp;rsquo;d love to hear from my readers how they&amp;rsquo;ve accomplished this if they have it on their site. As a reminder, everything I share here is free for you to make use of on your own site. All I ask is that you show your appreciation with a quick visit to my &lt;a href=&#34;http://www.amazon.com/gp/registry/wishlist/2TCL1D08EZEYE/ref=cm_wl_rlist_go_v?&#34;&gt;Amazon Wishlist&lt;/a&gt; if you can.&lt;/p&gt;
+
+&lt;p&gt;Ok - so before we get into the code, let&amp;rsquo;s discuss how we can handle this. When comes to the site, we can see if they&amp;rsquo;ve been to the site before. There are a variety of ways to persist data on the client, but the simplest is localStorage.&lt;/p&gt;
+
+&lt;p&gt;Given that a user first hit the site on February 1, 2016, we can then ask the blog for a list of articles. Luckily there&amp;rsquo;s a simple way to do that - RSS. By parsing the blog&amp;rsquo;s RSS feed, we can iterate over every entry and see when it was published. If it was published after February 1, we can increment a counter of unread articles.&lt;/p&gt;
+
+&lt;p&gt;So far so good, but then we have a few questions. What if the user has never been to the site before? Should we show an unread count of 10? (10 being the &amp;ldquo;typical&amp;rdquo; number of items in an RSS feed.) In my opinion, no. It feels a bit pushy.&lt;/p&gt;
+
+&lt;p&gt;How and when do we update the value? In theory you could update the date value immediately. I may choose to go the blog or not, but since you&amp;rsquo;ve already told me that the site has X unread articles, there isn&amp;rsquo;t necessarily a need to &lt;em&gt;keep&lt;/em&gt; telling me that. Or - I could only update the date when you visit the blog (either the home page or any particular entry).&lt;/p&gt;
+
+&lt;p&gt;To keep things a bit simpler, we&amp;rsquo;ll say that when you visit the blog home page, we&amp;rsquo;ll automatically update the &amp;ldquo;last visited&amp;rdquo; value so you no longer see an unread count. Alright, let&amp;rsquo;s write some code!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$(document).ready(function() {
+    
+    if(!onBlog()) {
+        getUnReadCount();   
+    }
+    
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For our first iteration, we&amp;rsquo;ve got a bit of simple code that says - well - you can probably read that out loud and figure out exactly what we&amp;rsquo;re doing. If we aren&amp;rsquo;t on the blog, get the unread count. Now let&amp;rsquo;s flesh out those methods.&lt;/p&gt;
+
+&lt;p&gt;First - &lt;code&gt;onBlog&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function onBlog() {
+    return window.location.pathname.indexOf(&#34;blog&#34;) &amp;gt;= 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A bit lame, but all we do here is see if &amp;lsquo;blog&amp;rsquo; exists in the current path. Obviously your site could use &amp;lsquo;news&amp;rsquo; for the path so you may need to modify that logic to match your particular site.&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at &lt;code&gt;getUnReadCount&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function getUnReadCount(cb) { 
+
+    &amp;#x2F;&amp;#x2F;have we been here?
+    var lastvisit = localStorage[&amp;#x27;lastVisit&amp;#x27;];
+    if(!lastvisit) return cb(0);
+        
+    &amp;#x2F;&amp;#x2F;ok, get the RSS
+    var yql = &amp;quot;https:&amp;#x2F;&amp;#x2F;query.yahooapis.com&amp;#x2F;v1&amp;#x2F;public&amp;#x2F;yql?q=select%20*from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&amp;quot;;
+    
+    var unread = 0;
+    $.getJSON(yql, function(res) {
+        var items = res.query.results.item;
+        console.log(items); 
+        items.forEach(function(item) {
+            var articleDate = new Date(item.pubDate).getTime();
+            if(articleDate &amp;gt; lastvisit) unread++;
+        });
+        cb(unread);
+    }, &amp;quot;jsonp&amp;quot;);
+        
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So notice that we&amp;rsquo;re now expecting an argument to the function that will be a callback to fire when we&amp;rsquo;re done with our work. If the user has never been to the site, we shortcircuit out by returning 0.&lt;/p&gt;
+
+&lt;p&gt;We then hit the RSS feed for our site. I talked about &lt;a href=&#34;http://www.raymondcamden.com/2015/12/08/parsing-rss-feeds-in-javascript-options/&#34;&gt;parsing RSS&lt;/a&gt; on my blog a few months ago and at the time I mentioned YQL as an excellent replacement for the Google Feed API. In our case, we get the items from the RSS feed in a nice array we can loop over.&lt;/p&gt;
+
+&lt;p&gt;Note the array iterator. For each article get the time in milliseconds and compare it to our &lt;code&gt;lastvisit&lt;/code&gt; value. We increment every time the article is newer. Now is probably a good time to go back and show the complete code.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$(document).ready(function() {
+    
+    if(!onBlog()) {
+        getUnReadCount(function(count) {
+            console.log(&amp;#x27;result is &amp;#x27;+count);
+            if(count &amp;gt; 0) {
+                $(&amp;#x27;.badge&amp;#x27;).text(count);
+            }
+        }); 
+    } else {
+        localStorage[&amp;#x27;lastVisit&amp;#x27;] = new Date().getTime(); 
+    }   
+});
+
+function onBlog() {
+    return window.location.pathname.indexOf(&amp;quot;blog&amp;quot;) &amp;gt;= 0;
+}
+
+function getUnReadCount(cb) { 
+
+    &amp;#x2F;&amp;#x2F;have we been here?
+    var lastvisit = localStorage[&amp;#x27;lastVisit&amp;#x27;];
+    if(!lastvisit) return cb(0);
+        
+    &amp;#x2F;&amp;#x2F;ok, get the RSS
+    var yql = &amp;quot;https:&amp;#x2F;&amp;#x2F;query.yahooapis.com&amp;#x2F;v1&amp;#x2F;public&amp;#x2F;yql?q=select%20*from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&amp;quot;;
+    
+    var unread = 0;
+    $.getJSON(yql, function(res) {
+        var items = res.query.results.item;
+        items.forEach(function(item) {
+            var articleDate = new Date(item.pubDate).getTime();
+            if(articleDate &amp;gt; lastvisit) unread++;
+        });
+        cb(unread);
+    }, &amp;quot;jsonp&amp;quot;);
+        
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see now that we&amp;rsquo;re handling the display update as well as storing your last visit when you are on the blog. The DOM selector is just running against a super simple Bootstrap template I whipped up just for this example.&lt;/p&gt;
+
+&lt;p&gt;Here is a screen shot of in action:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogup1.png&#34; alt=&#34;Blog updated&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I went ahead and put up the demo here: &lt;a href=&#34;http://static.raymondcamden.com/demos/2016/02/18/test.html&#34;&gt;http://static.raymondcamden.com/demos/2016/02/18/test.html&lt;/a&gt; But obviously it will be a bit weird since the RSS is on my site, not the demo and, but, you can get the complete HTML templates from there if you want.&lt;/p&gt;
+
+&lt;h2 id=&#34;alternatives:369e0168548cb617eaff8ff65dfd827e&#34;&gt;Alternatives&lt;/h2&gt;
+
+&lt;p&gt;Right off the bat, I can think of one quick way to simplify this a bit. Don&amp;rsquo;t forget that most static
+site generators let you have dynamic files of all sorts - not just HTML. Imagine if my JavaScript code was dynamic as well. I could dynamically generate an array of the last ten date values. Then my code could skip going to YQL. Heck, it wouldn&amp;rsquo;t even need to be async anymore. It would add a tiny bit of weight to the download of the file, but the network speed optimization should make up for that I think.&lt;/p&gt;
+
+&lt;p&gt;You could replace the use of localStorage with a cookie and - in general - get slightly more support - but that seems like overkill to me. (However, I &lt;em&gt;would&lt;/em&gt; consider adding a simple localStorage check in my code before doing any of the checks.)&lt;/p&gt;
+
+&lt;p&gt;What do you think?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My PhoneGap Day 2016 Presentation</title>
+      <link>http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation</link>
+      <pubDate>Wed, 17 Feb 2016 08:41:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation</guid>
+      <description>&lt;p&gt;I was honored to be chosen to speak at this year&amp;rsquo;s &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap Day&lt;/a&gt;, but honestly, even if I wasn&amp;rsquo;t chosen to speak, I would have tried like heck to get there. I missed last year, but every PhoneGap Day I&amp;rsquo;ve been too has been &lt;em&gt;incredible&lt;/em&gt;. If you missed it, all of the presentations will be available online via the &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap blog&lt;/a&gt;. You can also read their
+excellent &lt;a href=&#34;http://phonegap.com/blog/2016/02/09/recapping-phonegap-day-us-2016/&#34;&gt;recap&lt;/a&gt; of the event too.&lt;/p&gt;
+
+&lt;p&gt;My session is available now, and you can watch it below.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/rmvJzHMQk6U&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In my session, I talked a bit about one of the things PhoneGap/Cordova developers need to keep in mind - internationalization. My focus was specifically on number and date formatting (hey, I only had twenty minutes!) and I demonstrated how you can use the &lt;a href=&#34;https://www.npmjs.com/package/cordova-plugin-globalization&#34;&gt;Globalization&lt;/a&gt; plugin to achieve this.&lt;/p&gt;
+
+&lt;p&gt;If you have any questions about what I demonstrated, just leave me a comment below!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adobe ColdFusion 2016 Released</title>
+      <link>http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released</link>
+      <pubDate>Tue, 16 Feb 2016 05:35:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/cflogo.jpg&#34; style=&#34;float:left;margin-right:10px;margin-bottom:10px&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;This morning Adobe released the latest version of ColdFusion, &lt;a href=&#34;https://www.adobe.com/products/coldfusion-family.html&#34;&gt;Adobe ColdFusion 2016&lt;/a&gt;. Yep, they switched from a simple version number to a year, which frankly I prefer so I think this is a good change. This also applies to ColdFusion Builder as well. So what&amp;rsquo;s new and should you upgrade?&lt;/p&gt;
+
+&lt;h2 id=&#34;the-good-ish:bde72512bcc5cf1a24c7af91c38b3ca8&#34;&gt;The Good(ish)&lt;/h2&gt;
+
+&lt;p&gt;You can start off by looking at a broad overview of &lt;a href=&#34;https://helpx.adobe.com/coldfusion/whats-new.html#main-pars_imageandtext&#34;&gt;what&amp;rsquo;s new&lt;/a&gt; in ColdFusion 2016. I won&amp;rsquo;t repeat what&amp;rsquo;s there as you can read it yourself just fine, but will point out that the specific section
+on &lt;a href=&#34;https://helpx.adobe.com/coldfusion/2016/language-enhancements.html#main-pars_minitoc&#34;&gt;language enhancements&lt;/a&gt; may be of interest to developers. The &amp;ldquo;Safe Navigation&amp;rdquo; feature can let you simplify your code a bit, but note that the docs for this in the previous link are poorly done. You can now do both ordered and sorted structs, which I know some folks really want. I always thought of structs as inherently unordered, but I understand that adding order/sorts to them are useful in some situations. Unfortunately, the docs don&amp;rsquo;t demonstrate how to use these features in short notation. I haven&amp;rsquo;t typed &lt;code&gt;structNew&lt;/code&gt; since &lt;code&gt;{}&lt;/code&gt; was added. I&amp;rsquo;m also happy to see that you can now disable scope search by adding &lt;code&gt;searchImplicitScopes=false&lt;/code&gt; to your Application.cfc file. Unfortunately this feature isn&amp;rsquo;t mentioned in the docs and as we can&amp;rsquo;t edit/comment on the docs anymore, hopefully it gets corrected soon.&lt;/p&gt;
+
+&lt;p&gt;In fact, from what I can tell, none of the docs are updated yet. A new function, &lt;code&gt;valueArray&lt;/code&gt;, is &lt;a href=&#34;https://helpx.adobe.com/coldfusion/cfml-reference/coldfusion-functions/functions-t-z/valuearray.html#main-pars_header&#34;&gt;documented&lt;/a&gt; but not discoverable in the search. I&amp;rsquo;m assuming this is just a temporary issue. You can&amp;rsquo;t even find the PDFs for the CF2016 docs. &lt;em&gt;Update&lt;/em&gt; - I see the new docs now - somewhat. The missing item in App.cfc is still missing. I also heard from an Adobian that this should be cleared up by the end of the day. Let&amp;rsquo;s be blunt though. It is 2016. If you can&amp;rsquo;t schedule a product release with documentation then you are failing at doing your job. This may be totally out of the ColdFusion&amp;rsquo;s team hands - but customers don&amp;rsquo;t care whose fault it is. It is ridiculous, unprofessional, and something that should have been addressed years ago.&lt;/p&gt;
+
+&lt;p&gt;For a better list of language enhancements, check out the &lt;a href=&#34;https://helpx.adobe.com/coldfusion/2016/other-enhancements.html#main-pars_text&#34;&gt;New and Changed Functions/Tags&lt;/a&gt; page. &lt;code&gt;querySort&lt;/code&gt; and &lt;code&gt;queryEach&lt;/code&gt; are especially nice additions.&lt;/p&gt;
+
+&lt;p&gt;The other big update is the addition of a &lt;a href=&#34;https://helpx.adobe.com/coldfusion/2016/command-line-interface.html#main-pars_minitoc&#34;&gt;CLI&lt;/a&gt;, which is nice too. I can&amp;rsquo;t say how it compares to &lt;a href=&#34;https://www.ortussolutions.com/products/commandbox&#34;&gt;CommandBox&lt;/a&gt; though which has been available for a while now. At minimum, CommandBox is free and available to people using ColdFusion 11 so there&amp;rsquo;s that.&lt;/p&gt;
+
+&lt;p&gt;Another big update is the &lt;a href=&#34;https://helpx.adobe.com/coldfusion/api-manager/features-summary.html#main-pars_text&#34;&gt;API manager&lt;/a&gt;. This is something I didn&amp;rsquo;t get a chance to test (more on that later), but it is a pretty impressive feature, much more than &lt;code&gt;CFCLIENT&lt;/code&gt; was in my opinion. It provides a large set of features around documenting, handling, analyzing, your APIs. As this is something I&amp;rsquo;m digging deep into on the Node side, I&amp;rsquo;m impressed to see ColdFusion support it. There&amp;rsquo;s some good videos on this feature (and others) available &lt;a href=&#34;https://www.adobe.com/products/coldfusion-enterprise/features.html&#34;&gt;here&lt;/a&gt;. Just try to ignore the robo-voice and you&amp;rsquo;ll see what I mean.&lt;/p&gt;
+
+&lt;p&gt;Finally (and to be clear, I&amp;rsquo;m just calling out some items I think are interesting), ColdFusion Builder 2016 includes a cool little feature called the Security Analyzer. Right from your editor you can get a scan of your code for common security issues. To be clear, this does &lt;em&gt;not&lt;/em&gt; replace a real, very deep, security analysis of your code. However, I think it could be really useful for getting some of the simpler stuff out of the way before the real/deeper scan is done later.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/cfb2016.gif&#34; alt=&#34;CFB2016&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, this feature is tied to your ColdFusion server and only works with ColdFusion Enterprise. I cannot stress enough how much of a mistake I think this is. Yes, you do get 3 copies of CFB 2016 with your purchase, but I can&amp;rsquo;t imagine a ColdFusion team using Enterprise with only three people. I think CFB is worth the price, don&amp;rsquo;t get me wrong, and I say that even though I pretty much despise Eclipse, but I think this upgrade is &lt;em&gt;not&lt;/em&gt; worth charging for. It should be a free upgrade to CFB. To be clear, &lt;em&gt;nothing&lt;/em&gt; else changed outside of the syntax library.&lt;/p&gt;
+
+&lt;p&gt;And by the way, if you are not planning on upgrading to CFB2016, you can download the trial and then copy the library definitions to your CFB3 install following the instructions &lt;a href=&#34;https://www.monkehworks.com/coldfusion-builder-custom-dictionaries/&#34;&gt;here&lt;/a&gt;. I did a quick test and can confirm it worked for my copy of CFB3.&lt;/p&gt;
+
+&lt;p&gt;But it just seems insane to me to make a security feature, one that can help ColdFusion as a product in general, is Enterprise only. It was just two months ago that ColdFusion turned up on a &lt;a href=&#34;http://motherboard.vice.com/read/new-analysis-the-most-hackable-programming-language-is-php-by-a-mile&#34;&gt;list&lt;/a&gt; of insecure languages. &lt;em&gt;This is not how you fight that perception.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-bad:bde72512bcc5cf1a24c7af91c38b3ca8&#34;&gt;The Bad&lt;/h2&gt;
+
+&lt;p&gt;I was a member of the Pre Release for ColdFusion 2016. Obviously the details of the PR are under NDA. I do not believe what I&amp;rsquo;m about to say will break the rules of that NDA.&lt;/p&gt;
+
+&lt;p&gt;I love the ColdFusion community. I even did a &lt;a href=&#34;http://www.raymondcamden.com/2014/12/15/a-quick-message-for-the-coldfusion-community/&#34;&gt;sappy video&lt;/a&gt; about my love for this community back in 2014.&lt;/p&gt;
+
+&lt;p&gt;In regards to the Adobe ColdFusion team, I know almost everyone on that team and have met them multiple times. I like them. But I cannot describe how deeply disappointed I am in how they behaved on the PR. It got to a point that I had to actively ignore the PR for a month or so because I was so upset, so frustrated, that I felt like I couldn&amp;rsquo;t offer anything positive anymore.&lt;/p&gt;
+
+&lt;p&gt;Why?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Multiple times builds would be posted with little to no notice to the group, or even release notes. Multiple times members of the PR had to ask for this. That&amp;rsquo;s insane. Release notes aren&amp;rsquo;t &amp;ldquo;special&amp;rdquo;. That&amp;rsquo;s a basic given for testing a product.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The bug tracker (specifically, the one used for the PR) would not send notices to the people who filed the bugs. So unless you monitored your own bug, or unless Adobe pinged you back for a comment, you were never notified of an update. This is unacceptable. The bug tracker is a ColdFusion app. It could have been fixed by Adobe in an hour. (Ok, I&amp;rsquo;ve not seen the code myself so I&amp;rsquo;m taking a guess here. But based on my own work on my own bug tracker and having built a similar feature, I&amp;rsquo;ve got an idea of how complex it is.) If there wasn&amp;rsquo;t enough time to fix this, then my God, how small is the team and how little concern is there for such basic functionality to &lt;em&gt;help&lt;/em&gt; the people testing your product - for free. Speaking of bugs, multiple times now, and both on the PR and publicly, I&amp;rsquo;ve asked Adobe to share their test suite. When they fix a bug, we assume they write a test for it, and seeing the test we (again, the folks doing this for free) could find issues with how they confirmed the fix. This is something I&amp;rsquo;ve never gotten a response on.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;It was the &lt;em&gt;norm&lt;/em&gt;, not the exception, for forum posts to be ignored. This is what truly sent me over the edge. Just yesterday I saw a thread created &lt;em&gt;four&lt;/em&gt; months ago that specifically requested Adobe input and had been ignored. To be fair, not every thread needed Adobe input. And yes - sometimes if Adobe were asked multiple times to chime in they would. But damnit, you shouldn&amp;rsquo;t have to freaking beg to get a response. And again, this isn&amp;rsquo;t &amp;ldquo;special&amp;rdquo; - the ColdFusion PR testers aren&amp;rsquo;t &amp;ldquo;needy&amp;rdquo;, that&amp;rsquo;s basic freaking community management.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I&amp;rsquo;ll tell you a secret. I&amp;rsquo;m probably borderline autistic, like a lot of programmers. While I love being on stage, one on one conversations with people, even my friends, is stressful. It&amp;rsquo;s not that I dislike people. I love people. But I stress over holding up my part of the conversation, saying the wrong thing, and, well, every single aspect of the relationship/communication. It&amp;rsquo;s difficult for me and I recognize that. So I&amp;rsquo;ve trained myself to try to combat that. If you ask me about my job, I want to answer you and then I want to be quiet. I don&amp;rsquo;t do that. I ask about your job back. I have to force myself to do it, but I know it is the right thing to do.&lt;/p&gt;
+
+&lt;p&gt;If the members of the ColdFusion team suck at community management, and frankly, they all do but Anit, then recognize it and work on it. Force yourself to look at the threads and respond to every single one whether you want to or not.&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s sad is that I know others will bring this up. I know members of the CF team will promise to improve communication. But we&amp;rsquo;ve had this same discussion time and time again. They either need to promote Anit and clone him or hire someone to help because I do not see it improving. Nor will I participate in the next pre release unless things are 100% better.&lt;/p&gt;
+
+&lt;h2 id=&#34;wrap-up:bde72512bcc5cf1a24c7af91c38b3ca8&#34;&gt;Wrap Up&lt;/h2&gt;
+
+&lt;p&gt;So&amp;hellip; should you upgrade? Unless the API manager really sells you on it, I don&amp;rsquo;t think it makes sense to do so. I&amp;rsquo;m at a point now where I recommend Node for future development, but if you&amp;rsquo;re a ColdFusion shop, then by all means, continue with ColdFusion, but I don&amp;rsquo;t see the 2016 release as being worth the price. You certainly want to wait till a few hot fixes have been released. As for CFB, again, I like CFB, but I wouldn&amp;rsquo;t bother upgrading. If you don&amp;rsquo;t own it, go ahead and buy it, but if you have CFB3, I&amp;rsquo;d stick with it.&lt;/p&gt;
+
+&lt;p&gt;Finally, I&amp;rsquo;ll leave you with a link to Adam&amp;rsquo;s post, which has an epic title: &lt;a href=&#34;http://blog.adamcameron.me/2016/02/coldfusion-2016-adobe-finally-abandons.html&#34;&gt;ColdFusion 2016: Adobe finally abandons CFML&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Missing DevNexus</title>
+      <link>http://www.raymondcamden.com/2016/02/15/missing-devnexus</link>
+      <pubDate>Mon, 15 Feb 2016 14:44:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/15/missing-devnexus</guid>
+      <description>&lt;p&gt;So yeah, the title says it all. Due to a family issue, I had to cancel my speaking engagement at
+&lt;a href=&#34;http://www.devnexus.com&#34;&gt;DevNexus&lt;/a&gt; this year. The good news is that my session on Ionic Services
+is being covered by a member of the Ionic team, Mike Hartington. That&amp;rsquo;s about the best kind of replacement
+you can get.&lt;/p&gt;
+
+&lt;p&gt;For folks who want to learn more about Ionic services, I&amp;rsquo;d be happy to give a Google Hangout presentation online sometime next week. If I can get at least two people to comment and say they would attend, that&amp;rsquo;s enough for me to take an hour out of my day and stream a quick presentation.&lt;/p&gt;
+
+&lt;p&gt;As an aside, the &amp;lsquo;family issue&amp;rsquo; is a &lt;em&gt;good&lt;/em&gt; one and isn&amp;rsquo;t anything to be concerned about. (And no, it doesn&amp;rsquo;t involve me flying to China again.)&lt;/p&gt;
+
+&lt;p&gt;My next presentation will be at FluentConf where I&amp;rsquo;ll be &lt;a href=&#34;http://conferences.oreilly.com/fluent/javascript-html-us&#34;&gt;speaking&lt;/a&gt; on StrongLoop.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Displaying Google Street View images</title>
+      <link>http://www.raymondcamden.com/2016/02/13/displaying-google-street-view-images</link>
+      <pubDate>Sat, 13 Feb 2016 09:43:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/13/displaying-google-street-view-images</guid>
+      <description>&lt;p&gt;A few days ago a buddy of mine brought me an interesting problem. He was using JavaScript to dynamically
+display a Google Street View image of a property. Instead of making use of the Google Maps APIs, he simply
+crafted the URL dynamically based on an address. Here is a snippet of the code that did this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$.ajax({
+    type: &amp;quot;GET&amp;quot;,
+    url: &#39;data/getaddress.cfm&#39;,
+    data: &#39;parcelid=&#39;+getUrlVars()[&amp;quot;parcelid&amp;quot;]+&#39;&amp;amp;GEOID=&#39;+getUrlVars()[&amp;quot;GEOID&amp;quot;],
+    success: function (address) {
+        $(&#39;#map-canvas&#39;).html(&#39;&amp;lt;img src=&amp;quot;http://maps.googleapis.com/maps/api/streetview?size=500x500&#39;&amp;amp;sensor=false&amp;amp;location=&#39;+address+&#39;&amp;quot;&amp;gt;&#39;);
+        }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, the image tag passes parameters for height, width, and address, with the address portion being dynamic. This worked well, except that in some cases, a Street View image wasn&amp;rsquo;t available:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/streetviewbad.jpeg&#34; alt=&#34;Bad street view&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;He wanted to know - was it possible to handle that and do something special when an image wasn&amp;rsquo;t available? I did some quick research and ran across a Stack Overflow answer by @user1852570 (probably not a real name - just assuming):&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/13236312/how-to-detect-if-google-streetview-is-available-in-an-address-coordinates/13568401#13568401&#34;&gt;How to detect if Google StreetView is available in an address/coordinates&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;His answer describes using StreetViewService of the Google Maps API. If you follow the &lt;a href=&#34;https://google-developers.appspot.com/maps/documentation/javascript/examples/streetview-service&#34;&gt;link&lt;/a&gt; to the Google API example you&amp;rsquo;ll see that you can request a Street View result and check a result value to see if data was available. I took that initial example and integrated it into a dynamic example like he was using originally. Here is the updated code. As a note - this script expects URL parameters for a location that get translated into longitude and latitude by a back end service.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&amp;amp;]+([^=&amp;amp;]+)=([^&amp;amp;]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+
+//credit: http://stackoverflow.com/a/13568401/52160
+function initMap() {
+    console.log(&#39;initMap called&#39;);
+    var parts = getUrlVars();
+
+    $.get(&#39;data/getlatlng.cfm?parcelid=&#39;+parts[&#39;parcelid&#39;]+&#39;&amp;amp;geoid=&#39;+parts[&#39;GEOID&#39;], function(res) {
+
+        var sv = new google.maps.StreetViewService();
+        
+        panorama = new google.maps.StreetViewPanorama(document.getElementById(&#39;pano&#39;));
+        
+        sv.getPanorama({location: {lat:res.lat, lng:res.lng}, radius: 50}, processSVData)
+
+    },&#39;json&#39;);
+
+    
+}
+
+function processSVData(data, status) {
+  if (status === google.maps.StreetViewStatus.OK) {
+    console.log(&#39;ok&#39;);
+    $(&#39;#pano&#39;).show();
+    panorama.setPano(data.location.pano);
+    
+    panorama.setPov({
+        heading: 270,
+        pitch: 0
+    });
+    
+    panorama.setVisible(true);
+
+  } else {
+    console.error(&#39;Street View data not found for this location.&#39;);
+    $(&#39;#pano&#39;).hide();
+  }
+}
+&amp;lt;/script&amp;gt;
+
+&amp;lt;/head&amp;gt;
+    
+&amp;lt;body&amp;gt;
+
+&amp;lt;div id=&amp;quot;pano&amp;quot; style=&amp;quot;width: 550px; height: 350px;&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+
+&amp;lt;script async defer
+    src=&amp;quot;https://maps.googleapis.com/maps/api/js?key=somekey&amp;amp;callback=initMap&amp;quot;&amp;gt;
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Things kick off with the Google Maps script tag at the very bottom of the page. It is set to run &lt;code&gt;initMap&lt;/code&gt; when done. If you go up to that, we begin by firing off the call to the service to figure out the longitude and latitude of the particular thing we&amp;rsquo;re looking for. That service isn&amp;rsquo;t important - just note that it returns a longitude and latitude. As an FYI, the &amp;ldquo;image url&amp;rdquo; shortcut allows for generic addresses, like &amp;ldquo;So and So Elm Street&amp;rdquo;, but the API we&amp;rsquo;re using requires a longitude and latitude instead.&lt;/p&gt;
+
+&lt;p&gt;Next we create a Street View Panaroma object to display the image. After setting the address we can use the callback and the &lt;code&gt;google.maps.StreetViewStatus&lt;/code&gt; result to see if we had good data. For my friend, he simply wanted to hide the image if nothing was available. Obviously you could do something else instead.&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. Now to be fair - the end result is a bit different. Instead of just an image we actually have an &amp;ldquo;embedded&amp;rdquo; Street View that can be rotated and changed.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/streetviewgood.gif&#34; alt=&#34;Good street view&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I believe you could use the API to prevent that if you really wanted to, but I doubt that really matters. You could also skip setting the result at all and just use the initial image url version on a good result.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Time for Ionic 2</title>
+      <link>http://www.raymondcamden.com/2016/02/11/time-for-ionic-2</link>
+      <pubDate>Thu, 11 Feb 2016 15:53:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/11/time-for-ionic-2</guid>
+      <description>&lt;p&gt;A few weeks ago I wrote about my experience looking into Angular 2 (&lt;a href=&#34;http://www.raymondcamden.com/2016/01/18/time-for-angular-2/&#34;&gt;Time for Angular 2?&lt;/a&gt;). I haven&amp;rsquo;t had a chance to dig deeper into Angular 2 since then but it is still high on my list to get more familiar with over the year. About a week and a half ago I had pleasure of meeting &lt;a href=&#34;http://mhartington.io/&#34;&gt;Mike Hartington&lt;/a&gt; from the Ionic team at PhoneGap Day. I sat in his Ionic 2 workshop and came out convinced it was time to give it a try as well. And of course, just a few days later the Ionic folks released the &lt;a href=&#34;http://blog.ionic.io/announcing-ionic-framework-2-beta/&#34;&gt;beta version of 2.0&lt;/a&gt;. It is definitely beta, but I was able to build an &lt;em&gt;incredibly&lt;/em&gt; simple app with it (after some help from Mike and others) and I thought I&amp;rsquo;d share my experience.&lt;/p&gt;
+
+&lt;p&gt;One of the most important things to note is that you can install Ionic V2 &lt;em&gt;without&lt;/em&gt; screwing up your ability to do Ionic V1 apps or work with existing projects. It may sound silly, but as easy as &lt;code&gt;npm&lt;/code&gt; can be, I didn&amp;rsquo;t want to have to worry about switching back and forth to work with existing projects. Heck, the CLI even defaults to V1 anyway so in case you forget, are in a rush, or whatever, it will continue to work the way you expect it to.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll want to spend some time in the &lt;a href=&#34;http://ionicframework.com/docs/v2/&#34;&gt;docs&lt;/a&gt; of course, and specifically the &lt;a href=&#34;http://ionicframework.com/docs/v2/getting-started/&#34;&gt;Getting Started&lt;/a&gt; guide. Note that there are mistakes in the guide (hey, it &lt;em&gt;is&lt;/em&gt; a beta) that may trip you up. Specifically it seems like some of the code samples are a bit out of date. For the most part I think you can figure it out, but these issues have been reported and may be corrected by the time you get to it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-1.gif&#34; class=&#34;imgborder&#34; title=&#34;Ionic V2 Docs&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Working through the Getting Started guide gets you through a simple application and will give you a &lt;em&gt;super&lt;/em&gt;
+basic idea of what&amp;rsquo;s going on, but I&amp;rsquo;d strongly urge you to go through the &lt;a href=&#34;https://angular.io/docs/ts/latest/quickstart.html&#34;&gt;Angular 2 quickstart&lt;/a&gt; first just so things aren&amp;rsquo;t completely alien to you.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll also want to peruse the &lt;a href=&#34;http://ionicframework.com/docs/v2/components&#34;&gt;components&lt;/a&gt; docs. From my quick look through it, things look quite a bit simpler to use, but again, this is still in development. A notable missing component currently is the loading widget. Be sure to notice that the component examples
+give you a quick way to toggle between Android and iOS views, and specifically that Android now has a Material look that is &lt;em&gt;really&lt;/em&gt; freaking sweet. As an example, here are tabs in iOS:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-2.gif&#34; alt=&#34;iOS Tabs Ionic 2&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now compare it to the Android version:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-3.gif&#34; alt=&#34;Android Tabs Ionic 2&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s damn spiffy.&lt;/p&gt;
+
+&lt;p&gt;So what&amp;rsquo;s the code like? As I said before, Angular 2 is different. Not bad different, just&amp;hellip; &lt;em&gt;different.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/pikacat.jpg&#34; alt=&#34;Like this...&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While working on my first demo, I ran into things I immediately liked. For example, I love that my &amp;ldquo;page&amp;rdquo; template and controller are in a folder nicely packaged together. I could have easily done that in Ionic/Angular1 too I guess, but I like the organization.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m also really liking working with ES6. I&amp;rsquo;m barely scratching the surface of course, and probably doing it wrong, but even stuff I thought was overblown, like fat arrows, are &lt;em&gt;really&lt;/em&gt; growing on me.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, some things I ran into felt&amp;hellip; wrong. I got over it. I also know there were things like that in Angular1 as well. But sometimes I just bit my tongue and went with it. So without further ado, here is an Ionic 2 version of my RSS Reader app. I did not build it out completely like the version I have on the Ionic market (&lt;a href=&#34;https://market.ionic.io/starters/rssviewer&#34;&gt;RSS Reader&lt;/a&gt;), but I built in basic list/detail support. I&amp;rsquo;ll share the code, but I want to give big thanks to Mike Hartington (again), @adbella on the Ionic slack, and others.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Please do not treat this as good code!&lt;/strong&gt; Treat this code like a slightly drunk cat walked over your keyboard and then had a little &amp;ldquo;accident&amp;rdquo;. It works - and the part that @abdella helped me with is elegant, but I&amp;rsquo;m sure I could have done things better. With that out of the way, let&amp;rsquo;s first look at the home page. It simply lists items from the RSS feed. First I&amp;rsquo;ll show the view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-navbar *navbar&amp;gt;
+&amp;lt;ion-title&amp;gt;
+Home
+&amp;lt;&amp;#x2F;ion-title&amp;gt;
+&amp;lt;&amp;#x2F;ion-navbar&amp;gt;
+
+&amp;lt;ion-content&amp;gt;
+&amp;lt;ion-list inset&amp;gt;
+&amp;lt;ion-item *ngFor=&amp;quot;#entry of entries&amp;quot; (click)=&amp;quot;openPage(entry)&amp;quot;&amp;gt;{{entry.title}}&amp;lt;&amp;#x2F;ion-item&amp;gt;
+&amp;lt;&amp;#x2F;ion-list&amp;gt;
+&amp;lt;&amp;#x2F;ion-content&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing really weird here except the new way Angular 2 does attributes/code/etc. But I&amp;rsquo;m assuming you can figure out what is happening here. Now let&amp;rsquo;s look at the code for this page.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Page,NavController} from &#39;ionic/ionic&#39;;
+import {RssService} from &#39;../../providers/rss-service/rss-service&#39;;
+import {DetailPage} from &#39;../detail-page/detail-page&#39;;
+
+@Page({
+  templateUrl: &#39;build/pages/home/home.html&#39;,
+  providers:[RssService]
+})
+export class HomePage {
+  constructor(public rssService:RssService, nav:NavController) {
+      this.nav = nav;
+      
+      this.entries = [];
+
+      this.rssService.load().subscribe(
+          data =&amp;gt; {
+              this.entries = data;
+          }
+      );
+
+  }
+  
+  openPage(entry) {
+      console.log(&#39;open page called with &#39;+entry.title);
+      this.nav.push(DetailPage, {selectedEntry:entry});
+  }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So yeah - this is where things got a bit weird. One of the new things in the Angular 2 world is the idea of Observables. These replace (ok, not replace, but my understanding is that they are &lt;em&gt;preferred&lt;/em&gt;) Promises and are supposed to be quite a bit more powerful. You can&amp;rsquo;t really see the Observable, but see the subscribe() call? That&amp;rsquo;s using it. Part of what makes them powerful is that they would support live updates. That doesn&amp;rsquo;t really come into play with RSS parsing, but if it ever were added to my project, in theory it would just plain work. (Note to self - I&amp;rsquo;m going to try to make a demo of a live updating Ionic 2 app soon!)&lt;/p&gt;
+
+&lt;p&gt;Also note the navigation in openPage. I don&amp;rsquo;t have to build an app router now. I just load the page and pass data. I really, really appreciate that.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at the service now.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Injectable} from &#39;angular2/core&#39;;
+import {Http} from &#39;angular2/http&#39;;
+import {Observable} from &#39;rxjs/Observable&#39;;
+import &#39;rxjs/add/observable/from&#39;;
+import &#39;rxjs/add/operator/map&#39;;
+
+/*
+  Generated class for the RssService provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular 2 DI.
+*/
+
+//Credit for latest version is @abdella from the Ionic Slack
+@Injectable()
+export class RssService {
+
+    url = &#39;https://query.yahooapis.com/v1/public/yql?q=select%20title%2Clink%2Cdescription%20from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&#39;;
+    
+    constructor(http: Http) {
+        this.http = http;
+    }
+    
+    load() {
+ 
+        return this.http.get(this.url)
+            .map(res =&amp;gt; res.json())
+            .map(data =&amp;gt; data.query.results.item);
+          
+      /* v2
+      return Observable.create(s =&amp;gt; {
+
+        this.http.get(&#39;https://query.yahooapis.com/v1/public/yql?q=select%20title%2Clink%2Cdescription%20from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&#39;).subscribe(res =&amp;gt; {
+            console.log(&#39;in sub&#39;);
+            console.dir(s);
+            var result = res.json().query.results.item;
+            result.forEach(i=&amp;gt;s.next(i));
+            s.complete();
+            
+        });
+
+      });
+    */  
+
+    // Static version     
+    //    let data = [{title:&amp;quot;do one&amp;quot;},{title:&amp;quot;do two&amp;quot;},{title:&amp;quot;three&amp;quot;}];
+    //    return Observable.from(data);
+
+    
+  }
+}
+&lt;/pre&gt;&lt;/code&gt;
+
+I apologize for the large blocks of commented out code, but I wanted to keep a record of my previous versions for reference later. The slick http.get().map().map() syntax is an example of Oberservables in action and is thanks to @abdella. The basic idea here is we&#39;re fetching the remote data, converting it from a JSON string into an object, and then specifying a precise part of the result to work with (data.query.results.item).
+
+The imports on top are a bit weird. Specifically the fact that we have to import specific parts of Observable. It seems to me that if I want to use a library, I don&#39;t want to have to worry about parts of it being &#34;optional&#34;, and basic functionality like I used doesn&#39;t seem like it should be optional. This is one of those parts that bugged me and I just got over for now. 
+
+The detail page is pretty trivial as well. Here is the view:
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-navbar *navbar&amp;gt;
+  &amp;lt;ion-title&amp;gt;{{entry.title}}&amp;lt;/ion-title&amp;gt;
+&amp;lt;/ion-navbar&amp;gt;
+
+&amp;lt;ion-content padding class=&amp;quot;detail-page&amp;quot;&amp;gt;
+    &amp;lt;div [innerHTML]=&amp;quot;entry.description&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;/ion-content&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That last bit, &lt;code&gt;[innerHTML]=&lt;/code&gt;, is how you handle rendering HTML in Angular since it is &lt;em&gt;still&lt;/em&gt; a pain in the rear about it. (Yes, I know there are reasons, and yes, it still bugs me.) The code for the page just picks up the passed in data. Again - this is really super easy I think.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Page,NavController,NavParams} from &#39;ionic/ionic&#39;;
+
+@Page({
+  templateUrl: &#39;build/pages/detail-page/detail-page.html&#39;
+})
+export class DetailPage {
+    constructor(nav: NavController,navParams:NavParams) {
+        console.log(&#39;run&#39;);
+        this.nav = nav;
+        this.entry = navParams.get(&#39;selectedEntry&#39;);
+        console.log(&#39;my entry is &#39;+this.entry.title);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the home page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-4.png&#34; class=&#34;imgborder&#34; title=&#34;Home Page&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;And one detail page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-5.png&#34; class=&#34;imgborder&#34; title=&#34;Detail Page&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Not exactly rocket science, but you get the idea. So far, I&amp;rsquo;m digging it. I&amp;rsquo;ve got a lot of research to do, and I&amp;rsquo;m really looking forward to when things hit a firm release and stop changing, but I&amp;rsquo;d definitely take some time to look into it. As a reminder, you can, and should, join the &lt;a href=&#34;http://ionicworldwide.herokuapp.com/&#34;&gt;Ionic Slack&lt;/a&gt; channel. It is the best place to get support and help others.&lt;/p&gt;
+
+&lt;p&gt;If you want a copy of my app, you can find it on my GitHub repo here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_ionic_v2&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_ionic_v2&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>HTML Escaper Visual Studio Code Extension</title>
+      <link>http://www.raymondcamden.com/2016/02/10/html-escaper-visual-studio-code-extension</link>
+      <pubDate>Wed, 10 Feb 2016 09:21:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/10/html-escaper-visual-studio-code-extension</guid>
+      <description>&lt;p&gt;Just a quick note to say I&amp;rsquo;ve released a new extension for &lt;a href=&#34;http://code.visualstudio.com&#34;&gt;Visual Studio Code&lt;/a&gt;. This extension simply takes a document and outputs an escaped version of it appropriate for blog posts
+or other online forums. This is basically the same thing I built for Brackets, but it wasn&amp;rsquo;t possible for
+Visual Studio Code until the release this month. Here&amp;rsquo;s an example of how it looks.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/vsc_preview.gif&#34; alt=&#34;Example&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The code I used was based on a simple example made by Erich Gamma of Microsoft. Shoot, 90% of the code is his and I just modified the bare minimum to create my extension. You can find my code here (&lt;a href=&#34;https://github.com/cfjedimaster/htmlescape-vscode&#34;&gt;https://github.com/cfjedimaster/htmlescape-vscode&lt;/a&gt; and you can install it directly within Visual Studio Code itself. You can also download the packaged version
+from the &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=raymondcamden.htmlescape-vscode-extension&#34;&gt;gallery&lt;/a&gt; as well.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking at DevNexus 2016</title>
+      <link>http://www.raymondcamden.com/2016/02/05/speaking-at-devnexus-2016</link>
+      <pubDate>Fri, 05 Feb 2016 14:06:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/05/speaking-at-devnexus-2016</guid>
+      <description>&lt;p&gt;Just a quick note to let folks know I&amp;rsquo;ll be speaking at &lt;a href=&#34;https://devnexus.com/s/index&#34;&gt;DevNexus&lt;/a&gt; in ten days. I&amp;rsquo;m giving a presentation on &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; services and will also be covering my coworker &lt;a href=&#34;http://www.tricedesigns.com/&#34;&gt;Andy Trice&lt;/a&gt;&amp;rsquo;s presentation on cognitive computing and mobile applications.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately it looks like the conference is already sold out, but if you&amp;rsquo;re attending and read this blog, please come by and say hello. I&amp;rsquo;ll be bringing a copy of my last two books with me and will pretty much give them out to the first person who asks for them. Hope to see you there!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Playing with StrongLoop - Building a Blog - Part Three</title>
+      <link>http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three</link>
+      <pubDate>Wed, 03 Feb 2016 13:11:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three</guid>
+      <description>&lt;p&gt;Welcome to the third in my series of building a (somewhat) real-world application using &lt;a href=&#34;http://www.strongloop.com/&#34;&gt;StrongLoop&lt;/a&gt;. In the &lt;a href=&#34;http://www.raymondcamden.com/2016/01/05/playing-with-strongloop-building-a-blog-part-one&#34;&gt;first entry&lt;/a&gt; I built the beginnings of a simple blog engine. I defined two models (entry and category) and whipped up a quick front end for the blog. In the &lt;a href=&#34;http://www.raymondcamden.com/2016/01/07/playing-with-strongloop-building-a-blog-part-two/&#34;&gt;last entry&lt;/a&gt; I locked down the APIs so that unauthenticated visitors couldn&amp;rsquo;t create content. Today I&amp;rsquo;m going to demonstrate an administrator for my blog. My administrator will be a desktop tool built with &lt;a href=&#34;http://electron.atom.io/&#34;&gt;Electron&lt;/a&gt; and &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;. I first &lt;a href=&#34;http://www.raymondcamden.com/2015/07/23/some-initial-thoughts-on-building-desktop-apps-with-ionic-and-electron/&#34;&gt;blogged&lt;/a&gt; about mixing Ionic and Electron about six months ago. It is still rather easy and you can check out the results on the GitHub repo for this project when your done reading. (I&amp;rsquo;ll include the link at the end.)&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a quick tour through the app and then I&amp;rsquo;ll demonstrate it in action with a quick video. On startup, the application prompts you to login. Please do not blame Ionic for my poor color choices.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogeditor1.png&#34; class=&#34;imgborder&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;After login, you&amp;rsquo;re presented with a list of existing blog entries as well as a button to add a new one. For this quick demonstration, I did not add editing or deleting capabilities, but it wouldn&amp;rsquo;t be too difficult.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogeditor2.png&#34; class=&#34;imgborder&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking Add Entry brings you to a simple form:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogeditor3.png&#34; class=&#34;imgborder&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. As I said, proper edit/delete isn&amp;rsquo;t built in yet, but that&amp;rsquo;s all it would take to turn this into a real CRUD desktop app for the server.&lt;/p&gt;
+
+&lt;p&gt;To be clear, I&amp;rsquo;m really barely scratching the surface of what Electron can do. I&amp;rsquo;ve basically used it as a simple wrapper for a web view and nothing more. Off the top of my head - here are some more interesting features I could add to it:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Drag and drop images. I could capture the drop event - upload the file to the server, and automatically inject the HTML for the image into the source. This is how WordPress does it and it would certainly be possible with Electron.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Of course, I could customize the icon like a &amp;ldquo;proper&amp;rdquo; desktop application.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;And probably more that I&amp;rsquo;m not thinking about.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So how about the code? First and foremost I want to point out that StrongLoop has an &lt;a href=&#34;https://docs.strongloop.com/display/public/LB/AngularJS+JavaScript+SDK&#34;&gt;AngularJS library&lt;/a&gt; and I that I &lt;em&gt;should&lt;/em&gt; have made use of it. I did not. I want to - eventually - but I thought it might be a good opportunity to work more with AngularJS&amp;rsquo;s &lt;a href=&#34;https://docs.angularjs.org/api/ngResource/service/$resource&#34;&gt;$resource&lt;/a&gt; feature. To be honest, I had a few problems with it and I should have taken that as a clue to just switch to StrongLoop&amp;rsquo;s stuff, but I was stubborn.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how I designed my Services:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+angular.module(&#39;starter.services&#39;, [])
+.factory(&#39;userService&#39;, function($q,$resource) {
+
+    return $resource(&#39;http://localhost:3000/api/appusers/:id&#39;,{},
+    {
+        &#39;login&#39;:{
+            &#39;method&#39;:&#39;POST&#39;,
+            &#39;url&#39;:&#39;http://localhost:3000/api/appusers/login&#39;
+        }
+    });
+
+})
+.factory(&#39;entryService&#39;, function($q,$resource) {
+
+    return $resource(&#39;http://localhost:3000/api/entries/:id&#39;);
+
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see - I simply $resource-wrapped my two main APIs - one for users and one for entries. (I&amp;rsquo;m still not &lt;em&gt;really&lt;/em&gt; supporting categories yet.) For users I had to add the custom login method that ships out of the box. On the calling side, here is the controller code for doing login.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.controller(&#39;loginCtrl&#39;, [&#39;$scope&#39;, &#39;$rootScope&#39;, &#39;userService&#39;, &#39;$state&#39;, &#39;$http&#39;,
+    function($scope, $rootScope, userService, $state, $http) {
+    
+    $scope.user = {username:&#39;raymondcamden@gmail.com&#39;,password:&#39;password&#39;};
+
+    $scope.doLogin = function() {
+        if($scope.user.username === &#39;&#39; || $scope.user.password === &#39;&#39;) {
+            return;
+        }
+        userService.login({email:$scope.user.username,password:$scope.user.password},function(res) {
+            $rootScope.authToken = res.id; // don&#39;t really need to keep it
+            $http.defaults.headers.common[&#39;Authorization&#39;] = $rootScope.authToken;
+            $state.go(&#39;root.Home&#39;); 
+        },function(e) {
+            //for right now - generic error
+            alert(&#39;Login Failed&#39;);
+        });
+    };
+
+}])
+&lt;/code&gt;&lt;/pre&gt; 
+
+&lt;p&gt;First off - I&amp;rsquo;m hard coding the username and password in there just to save me on typing. That&amp;rsquo;s a pro-tip there. The login call is pretty simple, but I need to remember the auth token returned by the Loopback API. I both store it in rootScope (that&amp;rsquo;s bad, right? I&amp;rsquo;m ok with bad) and add it to my $http headers. I did that because I had trouble getting custom headers to work with $resource. That&amp;rsquo;s most likely my fault, but this worked for now. You can read more about authenticating requests and StrongLoop at the docs: &lt;a href=&#34;https://docs.strongloop.com/display/public/LB/Making+authenticated+requests&#34;&gt;Making authenticated requests&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Listing entries is simple - I had to include the ordering argument in the controller code which &lt;em&gt;also&lt;/em&gt; feels like a mistake (it should be in the service I think), but it worked well enough:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+entryService.query({&#34;filter[order]&#34;:&#34;published desc&#34;},function(res) {
+    $scope.entries = res;
+}, function(e) {
+    console.log(&#39;bad &#39;+JSON.stringify(e));          
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally - here&amp;rsquo;s how I save a new entry. Note I automate the slug and published values.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$scope.doSave = function() {
+    var postedDate = new Date();
+
+    var newEntry = new entryService();
+    newEntry.title = $scope.entry.title;
+    newEntry.body = $scope.entry.body;
+    newEntry.released = true;
+    newEntry.published = new Date();
+    //not perfect...
+    newEntry.slug = newEntry.title.replace(/ /g,&#39;-&#39;);
+    newEntry.$save();
+    $state.go(&#39;root.Home&#39;); 
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can find the source code for my app here: &lt;a href=&#34;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2/client/electron-quick-start&#34;&gt;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2/client/electron-quick-start&lt;/a&gt;. I also built a quick video showing the app in action. Enjoy!&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/TsLKg7notnA&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Article on Improving Your JavaScript Skills</title>
+      <link>http://www.raymondcamden.com/2016/02/01/article-on-improving-your-javascript-skills</link>
+      <pubDate>Mon, 01 Feb 2016 12:12:24 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/01/article-on-improving-your-javascript-skills</guid>
+      <description>&lt;p&gt;Nothing much to say here really except that I&amp;rsquo;ve released another article for the
+&lt;a href=&#34;http://developer.telerik.com/&#34;&gt;Telerik Developer Network&lt;/a&gt; - &lt;a href=&#34;http://developer.telerik.com/featured/leveling-up-your-javascript/&#34;&gt;&amp;ldquo;Leveling Up Your JavaScript&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As you can probably guess, the article discusses how to improve your JavaScript skills. This is not meant to replace any of the good books out there. Rather, this is a high level view at what helped &lt;em&gt;me&lt;/em&gt; improve my own skills. It is focused on a few specific strategies that I found useful for becoming a better developer.&lt;/p&gt;
+
+&lt;p&gt;And to be clear - I&amp;rsquo;m talking about a &amp;ldquo;better developer&amp;rdquo;, not a &amp;ldquo;great&amp;rdquo; developer or heck, even &amp;ldquo;good&amp;rdquo; - just better. Becoming better at JavaScript (and web development in general) has been a fun, and sometimes painful, process. So I&amp;rsquo;ve tried to provide some guidance as to what worked well for me. Obviously these tips may not work for you, but I hope they provide some useful suggestions for you.&lt;/p&gt;
+
+&lt;p&gt;Please let me know what you think in the comments on the article!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Visual Studio Code extension for Cordova</title>
+      <link>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</link>
+      <pubDate>Thu, 28 Jan 2016 17:27:24 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</guid>
+      <description>&lt;p&gt;Earlier today Microsoft released a set of updates for &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt;. TACO stands
+for &amp;ldquo;Tools for Apache Cordova&amp;rdquo; and has been around for a little while yet, but I&amp;rsquo;ve not had a chance to give it proper review on the blog. I still plan on doing so, but I wanted to specifically call out part of what was released today - &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=vsmobile.cordova-tools&#34;&gt;tooling support&lt;/a&gt; for Visual Studio Code.&lt;/p&gt;
+
+&lt;p&gt;Obviously this only helps you if you are a Visual Studio Code user, and if you are not, I highly suggest you take a look at the rest of the &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt; site to look at the other parts of the suite. As I said - there is some impressive stuff here. If you do use Visual Studio Code though you&amp;rsquo;ll want to grab this extension right away.&lt;/p&gt;
+
+&lt;p&gt;The extension provides three main features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, you get a debugger for iOS and Android. You can debug applications running on both the simulator and a real device.&lt;/li&gt;
+&lt;li&gt;Second, you get Cordova commands in the command palette. Right now this is just Build and Run, but it&amp;rsquo;s something.&lt;/li&gt;
+&lt;li&gt;Third, and my favorite, you get intellisense for the plugin APIs. This provides code completion for Cordova plugins. Even cooler - the extension is smart enough to know what plugins you have installed in the current project. So if you don&amp;rsquo;t have the Camera plugin installed, you won&amp;rsquo;t get code completion. How does it look? Here is a quick example:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/cordovaext1.png&#34; alt=&#34;Visual Studio Code completion&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To give you an idea of how the debugger looks, I did a quick video. I&amp;rsquo;m coming down with a bit of a cold, so forgive the somewhat scratchy voice.&lt;/p&gt;
+
+&lt;iframe width=&#34;480&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/9o-U0vH-5DI&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Survey Results for Rebecca Murphey&#39;s Learning JavaScript Survey</title>
+      <link>http://www.raymondcamden.com/2016/01/25/survey-results-learning-javascript</link>
+      <pubDate>Tue, 26 Jan 2016 15:40:46 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/25/survey-results-learning-javascript</guid>
+      <description>
+
+&lt;p&gt;A few weeks back, &lt;a href=&#34;http://t.co/w58cLHiW3H&#34;&gt;Rebecca Murphey&lt;/a&gt; tweeted out a link to a survey she was running involving how people learn JavaScript and how it has impacted their careers.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Have you worked on getting better at JS in the last year? I’d love your input &lt;a href=&#34;https://t.co/qEGaIWW6ha&#34;&gt;https://t.co/qEGaIWW6ha&lt;/a&gt; I’ll share what I’ve learned soon!&lt;/p&gt;&amp;mdash; Rebecca Murphey (@rmurphey) &lt;a href=&#34;https://twitter.com/rmurphey/status/686970717494104064&#34;&gt;January 12, 2016&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;More recently she shared the &lt;a href=&#34;https://gist.github.com/rmurphey/9d154a005f46f37d2b91&#34;&gt;raw results&lt;/a&gt; as a CSV dump and I thought it would be fun to parse the results. I was genuinely interested in the data and I thought it would give me a chance to play with a JavaScript charting engine. I&amp;rsquo;ve taken a stab at rendering the data and I thought I&amp;rsquo;d share the results. I&amp;rsquo;ll link to the demo at the end, and please note that any mistakes are entirely on my end, and not Rebecca&amp;rsquo;s fault.&lt;/p&gt;
+
+&lt;p&gt;I began by looking into CSV parsing with JavaScript. A quick search turned up &lt;a href=&#34;http://papaparse.com/&#34;&gt;PapaParse&lt;/a&gt; which has an incredibly simple API. Here&amp;rsquo;s what I had to do to parse the data.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+Papa.parse(&#34;./learning-js.csv&#34;, {
+    download:true,
+    header:true,
+    complete:function(results) {
+        allData = results.data;
+        doCharts();
+    }   
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s pretty darn simple. PapaParse has quite a few options so I definitely recommend checking it out.&lt;/p&gt;
+
+&lt;p&gt;I then looked into charting the results. I began with &lt;a href=&#34;http://www.chartjs.org/&#34;&gt;Chart.js&lt;/a&gt; which was pretty and easy to use, but I couldn&amp;rsquo;t figure out how to make the pie chart labels show up all the time and not just on mouse over. I found a workaround, but honestly, it just kind of bugged me that I couldn&amp;rsquo;t do it easier so I punted and went over to &lt;a href=&#34;http://gionkunz.github.io/chartist-js/index.html&#34;&gt;Chartist.js&lt;/a&gt;. Personally it was the mascot that sold me.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/chartist.png&#34; alt=&#34;Chartist&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The API was a bit weird in places, but I was able to get some basic charts written out. I thought the engine made some odd choices for colors. For example, a two-slice pie chart would use a red and then a near-red color. You could distinguish the slices, but they were pretty close. You can tweak the colors of course, but the &lt;em&gt;defaults&lt;/em&gt; for the pie chart seemed odd in my opinion.&lt;/p&gt;
+
+&lt;p&gt;Anyway, here are the questions and results, taken out of my ugly demo app and positioned a bit nicer.&lt;/p&gt;
+
+&lt;h2 id=&#34;have-you-focused-specifically-on-improving-your-js-skills-at-any-time-in-the-last-year:bcbb765956ceab02096d602f6dd88456&#34;&gt;Have you focused specifically on improving your JS skills at any time in the last year?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey1.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Absolutely no surprise here.&lt;/p&gt;
+
+&lt;h2 id=&#34;which-resources-did-you-use-to-help-you-learn:bcbb765956ceab02096d602f6dd88456&#34;&gt;Which resources did you use to help you learn?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey2a.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Kinda surprised how high blogs rank here, especially since blogs seem to be better for one offs, like, &amp;ldquo;How do I do cowbell in X&amp;rdquo;, versus more broad training. Then again, maybe people need more concrete examples versus learning JavaScript at a broad level.&lt;/p&gt;
+
+&lt;h2 id=&#34;during-your-learning-which-areas-have-been-particularly-challenging:bcbb765956ceab02096d602f6dd88456&#34;&gt;During your learning, which areas have been particularly challenging?&lt;/h2&gt;
+
+&lt;p&gt;Just an FYI, I skipped a few question. Anyway, the chart. And I apologize, this is a big one.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey3a.png&#34; target=&#34;_new&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The labels are pretty much unreadable there. You can find a larger version &lt;a href=&#34;http://www.raymondcamden.com/images/2016/01/survey3_big.png&#34;&gt;here&lt;/a&gt;. Again, just click for the &amp;ldquo;full&amp;rdquo; view. Top three issues were:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Build tools&lt;/li&gt;
+&lt;li&gt;Understanding how to apply things to the real world&lt;/li&gt;
+&lt;li&gt;Lack of mentoring/guidance&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Number two in that list is a particular pet peeve of mine. I&amp;rsquo;ve seen far too many examples that are so far removed from reality that they are near useless. (And to be fair, I&amp;rsquo;ve done it myself.)&lt;/p&gt;
+
+&lt;h2 id=&#34;which-technologies-do-you-use-in-your-current-role:bcbb765956ceab02096d602f6dd88456&#34;&gt;Which technologies do you use in your current role?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey4.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Again, no real surprises here, although I would have thought Node would have been higher. I apologize for the clunkiness of some of the labels.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-long-have-you-been-working-professionally-in-web-development:bcbb765956ceab02096d602f6dd88456&#34;&gt;How long have you been working professionally in web development?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey5.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Woot - I&amp;rsquo;m not the only old person in tech! I&amp;rsquo;m squarely in the 10+ years bar there. I began working with the web around 1994 or so.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-would-you-rate-the-improvement-of-your-js-skills-in-the-last-year:bcbb765956ceab02096d602f6dd88456&#34;&gt;How would you rate the improvement of your JS skills in the last year?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey6.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a good chart. Well, not my design - I don&amp;rsquo;t like the lack of space. What I mean is - it looks like most people are improving, and improving at least a little bit. Hey, you don&amp;rsquo;t have to go from noob to demigod in one year. Baby steps is just fine.&lt;/p&gt;
+
+&lt;h2 id=&#34;have-you-gotten-a-new-job-a-promotion-or-new-responsibilities-since-improving-your-js-skills:bcbb765956ceab02096d602f6dd88456&#34;&gt;Have you gotten a new job, a promotion, or new responsibilities since improving your JS skills?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey7.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d say that&amp;rsquo;s a damn good chart too.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-full-report:bcbb765956ceab02096d602f6dd88456&#34;&gt;The full report&lt;/h2&gt;
+
+&lt;p&gt;Ok, I should clarify - this isn&amp;rsquo;t a full report - I didn&amp;rsquo;t chart the questions focused on the &lt;em&gt;one&lt;/em&gt; resource that was best/worst. But you can view everything here: &lt;a href=&#34;http://static.raymondcamden.com/rmurphey/&#34;&gt;http://static.raymondcamden.com/rmurphey/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Please - for the love of God - do not view source. Seriously. I&amp;rsquo;m not being humble. This is absolute crap code. Thanks again to Rebecca Murphey for creating this survey. I&amp;rsquo;d strongly recommend checking out her &lt;a href=&#34;https://github.com/rmurphey/js-assessment&#34;&gt;js-assessment&lt;/a&gt; project as well.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Apache Cordova SplashScreen Change</title>
+      <link>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</link>
+      <pubDate>Mon, 25 Jan 2016 16:16:10 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</guid>
+      <description>&lt;p&gt;A few days ago I began to notice something odd with my Apache Cordova tests. When the application would launch, the splash screen would fade away as opposed to just disappearing. I thought this seemed familiar so I double checked the Apache Cordova blog and re-read the last &lt;a href=&#34;http://cordova.apache.org/news/2016/01/19/plugins-release.html&#34;&gt;plugins release&lt;/a&gt; post. I had read it when it was published, but not terribly closely. In it, it mentions that the SplashScreen plugin was updated to 3.1.0. In the notes, you can see &amp;ldquo;Implementing FadeSplashScreen feature for Android&amp;rdquo; and something similar for iOS.&lt;/p&gt;
+
+&lt;p&gt;If you head over to the &lt;a href=&#34;https://github.com/apache/cordova-plugin-splashscreen&#34;&gt;SplashScreen plugin&lt;/a&gt; doc though, this update isn&amp;rsquo;t mentioned in the main Preferences section. Rather, you have to scroll down to &amp;ldquo;Android and iOS Quirks&amp;rdquo; to see that both a FadeSplashScreen and FadeSplashScreenDuration preference were added. (I&amp;rsquo;ve logged a bug about documenting this up in the top preferences section.)&lt;/p&gt;
+
+&lt;p&gt;As the docs say - the default is true, so if for some reason you don&amp;rsquo;t like this new behavior, you&amp;rsquo;ll need to add this to your config.xml:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;preference name=&#34;FadeSplashScreen&#34; value=&#34;false&#34; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Want to see what this new feature looks like in action? Check out the video I created.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/F1yrrvgbyJc&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Dynamic Subjects with Formspree</title>
+      <link>http://www.raymondcamden.com/2016/01/22/dynamic-subjects-with-formspree</link>
+      <pubDate>Fri, 22 Jan 2016 08:29:46 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/22/dynamic-subjects-with-formspree</guid>
+      <description>
+
+&lt;p&gt;Whenever I present on static site generators, I spend some time discussing how to get &amp;ldquo;dynamic&amp;rdquo; features back into the site. One of the most important things people lose when switching to flat files is the ability to process forms. Luckily, there are a variety of different ways to get that feature back (I&amp;rsquo;ll share some alternatives at the end). For my blog, I&amp;rsquo;ve gone with &lt;a href=&#34;http://formspree.io/&#34;&gt;Formspree&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Formspree is a simple to use service where you simply point your form at their servers and they handle the rest. They have a free tier that supports up to 1000 emails a month which is more than enough for me. Here is a simple example of how you can make use of the service.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;form action=&amp;quot;//formspree.io/raymondcamden@gmail.com&amp;quot; method=&amp;quot;POST&amp;quot;&amp;gt;
+    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_next&amp;quot; value=&amp;quot;http://www.raymondcamden.com/thankyou&amp;quot;&amp;gt;
+    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_subject&amp;quot; id=&amp;quot;_subject&amp;quot; value=&amp;quot;Blog Contact Form&amp;quot;&amp;gt;
+    &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;_gotcha&amp;quot; style=&amp;quot;display:none&amp;quot; /&amp;gt;
+    
+    &amp;lt;label for=&amp;quot;contact_name&amp;quot;&amp;gt;Name: &amp;lt;/label&amp;gt;
+    &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;name&amp;quot; id=&amp;quot;contact_name&amp;quot; required&amp;gt;&amp;lt;br/&amp;gt;
+    
+    &amp;lt;label for=&amp;quot;email&amp;quot;&amp;gt;Email: &amp;lt;/label&amp;gt;
+    &amp;lt;input type=&amp;quot;email&amp;quot; name=&amp;quot;_replyto&amp;quot; id=&amp;quot;email&amp;quot; required&amp;gt;&amp;lt;br/&amp;gt;
+    
+    &amp;lt;label for=&amp;quot;contact_comments&amp;quot;&amp;gt;Comments: &amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+    &amp;lt;textarea name=&amp;quot;comments&amp;quot; id=&amp;quot;contact_comments&amp;quot; required&amp;gt;&amp;lt;/textarea&amp;gt;&amp;lt;br/&amp;gt;
+    &amp;lt;p&amp;gt;
+    &amp;lt;input type=&amp;quot;submit&amp;quot; value=&amp;quot;Send&amp;quot;&amp;gt;
+    &amp;lt;/p&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To have Formspree send you an email when a form is filled out, you simply set the action of the form to include your email address. The first time someone uses the form, Formspree will ask you to confirm it, but once you do, the emails will be sent to you automatically.&lt;/p&gt;
+
+&lt;p&gt;Formspree also supports a few special field names that change how the form behaves. Notice the _subject field. This will set the subject of the email you get. Notice _reply to on the email field. This will let you hit reply in your email program to respond to the person who filled out the form. You can find out more if you read the docs on their site, but in general, it is an &lt;em&gt;incredibly&lt;/em&gt; simple service to use and you can have it up and running in minutes.&lt;/p&gt;
+
+&lt;p&gt;One issue bugged me though. Notice how my subject is, &amp;ldquo;Blog Contact Form.&amp;rdquo; When I would get multiple emails from my blog, GMail would thread them all into one thread. This is expected I suppose, but it made it a bit more difficult for me to respond to form submissions. It occurred to me that I could easily use JavaScript to modify the form while it was being filled out. I decided to include the email address in the subject itself. Here is a sample of how you could do that.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+$(document).ready(function() {
+    var $sub = $(&amp;quot;#_subject&amp;quot;);
+    $(&amp;quot;#email&amp;quot;).on(&amp;quot;input&amp;quot;, function() {
+        $sub.val(&amp;quot;Blog Contact Form (&amp;quot; + $(this).val() + &amp;quot;)&amp;quot;);
+    });
+});
+&amp;lt;/script&amp;gt;
+&amp;lt;style&amp;gt;
+#contactform label {
+    display: inline-block;
+    width: 80px;
+    height:25px;
+}
+
+#contactform textarea {
+    width: 100%;
+    height: 150px;
+}           
+&amp;lt;/style&amp;gt;
+    
+&amp;lt;form action=&amp;quot;//formspree.io/raymondcamden@gmail.com&amp;quot; method=&amp;quot;POST&amp;quot; id=&amp;quot;contactform&amp;quot;&amp;gt;
+    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_next&amp;quot; value=&amp;quot;http://www.raymondcamden.com//thankyou&amp;quot;&amp;gt;
+    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_subject&amp;quot; id=&amp;quot;_subject&amp;quot; value=&amp;quot;Blog Contact Form&amp;quot;&amp;gt;
+    &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;_gotcha&amp;quot; style=&amp;quot;display:none&amp;quot; /&amp;gt;
+    
+    &amp;lt;label for=&amp;quot;contact_name&amp;quot;&amp;gt;Name: &amp;lt;/label&amp;gt;
+    &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;name&amp;quot; id=&amp;quot;contact_name&amp;quot; required&amp;gt;&amp;lt;br/&amp;gt;
+    
+    &amp;lt;label for=&amp;quot;email&amp;quot;&amp;gt;Email: &amp;lt;/label&amp;gt;
+    &amp;lt;input type=&amp;quot;email&amp;quot; name=&amp;quot;_replyto&amp;quot; id=&amp;quot;email&amp;quot; required&amp;gt;&amp;lt;br/&amp;gt;
+    
+    &amp;lt;label for=&amp;quot;contact_comments&amp;quot;&amp;gt;Comments: &amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+    &amp;lt;textarea name=&amp;quot;comments&amp;quot; id=&amp;quot;contact_comments&amp;quot; required&amp;gt;&amp;lt;/textarea&amp;gt;&amp;lt;br/&amp;gt;
+    &amp;lt;p&amp;gt;
+    &amp;lt;input type=&amp;quot;submit&amp;quot; value=&amp;quot;Send&amp;quot;&amp;gt;
+    &amp;lt;/p&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pretty vanilla jQuery code here and it could probably be done nicer, but it works just fine:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/formspree1.png&#34; alt=&#34;Screenshot&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As an FYI, I emailed Formspree asking for a feature like this before I figured it out it would be easy in JavaScript. The folks at Formspree replied really quick, and while I didn&amp;rsquo;t end up needing their help, it was great to see how quickly they responded to a support request. (Also note that they said they kinda liked the idea of a dynamic subject like I described and it may end up becoming a feature in the future!)&lt;/p&gt;
+
+&lt;h2 id=&#34;alternatives:9f720a728b6519da2b99de9500e42155&#34;&gt;Alternatives&lt;/h2&gt;
+
+&lt;p&gt;So while I&amp;rsquo;m perfectly happy with Formspree, here are a few other alternatives you may consider:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.wufoo.com/&#34;&gt;Wufoo&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://formkeep.com/&#34;&gt;FormKeep&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Google Docs (you can embed a form)&lt;/li&gt;
+&lt;li&gt;And hell, a mailto: link works too!&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

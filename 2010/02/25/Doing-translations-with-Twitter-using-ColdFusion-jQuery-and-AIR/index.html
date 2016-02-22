@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Doing translations with Twitter (using ColdFusion, jQuery, and AIR) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Doing translations with Twitter (using ColdFusion, jQuery, and AIR)" />
+<meta property="og:description" content="Earlier today I saw Adobe blogger John Dowdell retweet a request from a user looking for a way to do translations of tweets. Now - I know that some of my readers are strongly against machine translation. I get why. But - when I saw this the first thing I thought of was Google&rsquo;s excellent API for doing translations. I&rsquo;ve blogged about this before. It is fairly simple to take some text, tell Google to translate it, and then work with the result.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/02/25/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR" />
+
+
+<meta property="og:updated_time" content="2010-02-25T21:02:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Doing translations with Twitter (using ColdFusion, jQuery, and AIR)">
+<meta itemprop="description" content="Earlier today I saw Adobe blogger John Dowdell retweet a request from a user looking for a way to do translations of tweets. Now - I know that some of my readers are strongly against machine translation. I get why. But - when I saw this the first thing I thought of was Google&rsquo;s excellent API for doing translations. I&rsquo;ve blogged about this before. It is fairly simple to take some text, tell Google to translate it, and then work with the result.
+
+">
+
+
+<meta itemprop="dateModified" content="2010-02-25T21:02:00&#43;06:00" />
+<meta itemprop="wordCount" content="920">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Doing translations with Twitter (using ColdFusion, jQuery, and AIR)"/>
+<meta name="twitter:description" content="Earlier today I saw Adobe blogger John Dowdell retweet a request from a user looking for a way to do translations of tweets. Now - I know that some of my readers are strongly against machine translation. I get why. But - when I saw this the first thing I thought of was Google&rsquo;s excellent API for doing translations. I&rsquo;ve blogged about this before. It is fairly simple to take some text, tell Google to translate it, and then work with the result.
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/02/25/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR">
+    <h1 class="article-title" itemprop="name">
+        Doing translations with Twitter (using ColdFusion, jQuery, and AIR)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-02-25 21:02:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-02-25</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Earlier today I saw Adobe blogger <a href="http://blogs.adobe.com/jd/">John Dowdell</a> retweet a request from a user looking for a way to do translations of tweets. Now - I know that some of my readers are <b>strongly</b> against machine translation. I get why. But - when I saw this the first thing I thought of was Google&rsquo;s excellent API for doing translations. I&rsquo;ve <a href="http://www.raymondcamden.com/index.cfm/2009/10/26/Quick-ColdFusionjQuery-Google-Ajax-Language-Example">blogged</a> about this before. It is fairly simple to take some text, tell Google to translate it, and then work with the result.
+<p/></p>
+
+<p>I began my exploration by simply setting up a quick search using the Twitter API. I searched for &ldquo;vous OR camden&rdquo;, thinking &ldquo;vous&rdquo; would find French results and robot would find English results. Here is my initial CFML:
+<p/>
+<code>
+&lt;cfset search = &ldquo;vous OR robot&rdquo;&gt;
+&lt;cfset results = []&gt;</p>
+
+<p>&lt;cfhttp url=&ldquo;<a href="http://search.twitter.com/search.json?&amp;rpp=20&amp;q=#search#&quot;">http://search.twitter.com/search.json?&amp;rpp=20&amp;q=#search#&quot;</a> result=&ldquo;result&rdquo;&gt;</p>
+
+<p>&lt;cfif result.responseheader.status_code is &ldquo;200&rdquo;&gt;
+    &lt;cfset content = result.fileContent.toString()&gt;
+    &lt;cfset data = deserializeJSON(content)&gt;</p>
+
+<pre><code>&amp;lt;cfloop index=&quot;item&quot; array=&quot;#data.results#&quot;&amp;gt;
+    &amp;lt;cfset arrayAppend(results, item)&amp;gt;
+&amp;lt;/cfloop&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;
+    &lt;cfdump var=&ldquo;#result#&rdquo;&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfloop index=&ldquo;r&rdquo; array=&ldquo;#results#&rdquo;&gt;
+    &lt;cfdump var=&ldquo;#r#&rdquo;&gt;
+&lt;/cfloop&gt;
+</code>
+<p/>
+I won&rsquo;t go into details about the Twitter API here (you can find more at the <a href="http://apiwiki.twitter.com/">docs</a>) but you can see that I&rsquo;m hitting the API with my query and working with a JSON response. I noticed something right away in each Tweet - something I had not noticed before. There is a key called iso_language_code which describes the language of the Tweet itself. I&rsquo;m guessing Twitter isn&rsquo;t actually parsing the text but is rather simply trusting the client itself. Either way - if it is right most of the time, it&rsquo;s good enough for me.
+<p/>
+I began my modifications by adding code to do some basic output and detect non-English results:
+<p/>
+<code>
+&lt;cfloop index=&ldquo;r&rdquo; array=&ldquo;#results#&rdquo;&gt;
+    &lt;cfoutput&gt;
+    &lt;p class=&ldquo;twitter_result&rdquo;&gt;
+    From: #r.from_user#&lt;br/&gt;
+    Created: #r.created_at#&lt;br/&gt;
+    &lt;span class=&ldquo;text&rdquo;&gt;#r.text#&lt;/span&gt;
+    &lt;cfif r.iso_language<em>code neq &ldquo;en&rdquo;&gt;
+        &lt;br/&gt;
+        &lt;span class=&ldquo;texttranslation lang</em>#r.iso_language_code#&rdquo;&gt;&lt;/span&gt;
+    &lt;/cfif&gt;
+    &lt;/p&gt;
+    &lt;/cfoutput&gt;
+&lt;/cfloop&gt;
+</code>
+<p/>
+Notice that I&rsquo;m adding a span after the output when the result isn&rsquo;t English. I use 2 classes within that span. One is used to &ldquo;mark&rdquo; it for later (texttranslation) and another is used to record the language. Now I set up some jQuery:
+<p/>
+<code>
+&lt;script src=&ldquo;<a href="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;">http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;</a>
+&lt;script src=&ldquo;<a href="http://www.google.com/jsapi&quot;">http://www.google.com/jsapi&quot;</a> type=&ldquo;text/javascript&rdquo; &gt;&lt;/script&gt;</p>
+
+<p>&lt;script&gt;
+google.load(&ldquo;language&rdquo;, &ldquo;1&rdquo;);
+google.setOnLoadCallback(initialize);</p>
+
+<p>function initialize() {</p>
+
+<pre><code>$(&quot;.texttranslation&quot;).each(function() {
+    var translationarea = $(this)
+
+    var classes = translationarea.attr(&quot;class&quot;)
+    //classes is a list of classes applied, we just want the last one
+    var langportion = classes.split(&quot; &quot;)[1]
+    //now get the final code
+    var langcode = langportion.split(&quot;_&quot;)[1]
+
+    //now get my sibling text
+    var textSpan = $(this).siblings(&quot;.text&quot;)
+    var theText = $(textSpan).text()
+    google.language.translate(theText, langcode, &quot;en&quot;, function(result) {
+        if (!result.error) {
+            translationarea.hide().html(&quot;Translation via Google: &quot; + result.translation).fadeIn(&quot;slow&quot;);
+        }
+    })
+})
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+</code>
+<p/>
+I begin with my imports necessary for translation.  I then ask jQuery to find all my texttranslation spans. For each one I examine the class attribute and use it as a simple text string. I can grab the language code from the second class which is always in the form of: lang_XX. Once I have the language, it is a simple matter then to fire off the translation request. I take the result, nicely attribute it to Google, and then place it under the Tweet. I added a fade in so I could look all sexy and web 2.0ish.
+<p/>
+You can see a demo of this here: <a href="http://www.coldfusionjedi.com/demos/feb2520102/test.cfm">http://www.coldfusionjedi.com/demos/feb2520102/test.cfm</a> Since I made the search string hard coded, you may or may not see a result with translations. I just confirmed it shows some now, but your results may vary. Here is the entire template - take a look at that before we move on to the <i>real</i> cool stuff:
+<p/>
+<code>
+&lt;script src=&ldquo;<a href="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;">http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;</a>
+&lt;script src=&ldquo;<a href="http://www.google.com/jsapi&quot;">http://www.google.com/jsapi&quot;</a> type=&ldquo;text/javascript&rdquo; &gt;&lt;/script&gt;</p>
+
+<p>&lt;script&gt;
+google.load(&ldquo;language&rdquo;, &ldquo;1&rdquo;);
+google.setOnLoadCallback(initialize);</p>
+
+<p>function initialize() {</p>
+
+<pre><code>$(&quot;.texttranslation&quot;).each(function() {
+    var translationarea = $(this)
+
+    var classes = translationarea.attr(&quot;class&quot;)
+    //classes is a list of classes applied, we just want the last one
+    var langportion = classes.split(&quot; &quot;)[1]
+    //now get the final code
+    var langcode = langportion.split(&quot;_&quot;)[1]
+
+    //now get my sibling text
+    var textSpan = $(this).siblings(&quot;.text&quot;)
+    var theText = $(textSpan).text()
+    google.language.translate(theText, langcode, &quot;en&quot;, function(result) {
+        if (!result.error) {
+            translationarea.hide().html(&quot;Translation via Google: &quot; + result.translation).fadeIn(&quot;slow&quot;);
+        }
+    })
+})
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+&lt;style&gt;
+.texttranslation {
+    font-style: italic;
+}
+&lt;/style&gt;</p>
+
+<p>&lt;cfset search = &ldquo;vous OR robot&rdquo;&gt;
+&lt;cfset results = []&gt;</p>
+
+<p>&lt;cfhttp url=&ldquo;<a href="http://search.twitter.com/search.json?&amp;rpp=20&amp;q=#search#&quot;">http://search.twitter.com/search.json?&amp;rpp=20&amp;q=#search#&quot;</a> result=&ldquo;result&rdquo;&gt;</p>
+
+<p>&lt;cfif result.responseheader.status_code is &ldquo;200&rdquo;&gt;
+    &lt;cfset content = result.fileContent.toString()&gt;
+    &lt;cfset data = deserializeJSON(content)&gt;</p>
+
+<pre><code>&amp;lt;cfloop index=&quot;item&quot; array=&quot;#data.results#&quot;&amp;gt;
+    &amp;lt;cfset arrayAppend(results, item)&amp;gt;
+&amp;lt;/cfloop&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;
+    &lt;cfdump var=&ldquo;#result#&rdquo;&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfloop index=&ldquo;r&rdquo; array=&ldquo;#results#&rdquo;&gt;
+    &lt;cfoutput&gt;
+    &lt;p class=&ldquo;twitter_result&rdquo;&gt;
+    From: #r.from_user#&lt;br/&gt;
+    Created: #r.created_at#&lt;br/&gt;
+    &lt;span class=&ldquo;text&rdquo;&gt;#r.text#&lt;/span&gt;
+    &lt;cfif r.iso_language<em>code neq &ldquo;en&rdquo;&gt;
+        &lt;br/&gt;
+        &lt;span class=&ldquo;texttranslation lang</em>#r.iso_language_code#&rdquo;&gt;&lt;/span&gt;
+    &lt;/cfif&gt;
+    &lt;/p&gt;
+    &lt;/cfoutput&gt;
+&lt;/cfloop&gt;
+</code>
+<p/>
+Ok, so that worked well, but I thought, I bet I could do this even cooler. I remembered that I had done a jQuery-based AIR application that performed simple searches. You can read about this here: <a href="http://www.insideria.com/2009/09/using-aptana-studio-to-build-j-2.html">Using Aptana Studio to build jQuery/AIR Applications (3)</a> The blog entry describes how to use Aptana to build HTML based AIR applications. My final example was a simple search form that hits the Twitter search API. How hard would it be to modify it to do translations?
+<p/>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="608" width="800"><param name="movie" value="http://www.coldfusionjedi.com/demos/feb2520102/jquerytrans2.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#FFFFFF" /><param name="flashVars" value="width=800&height=608" /><param name="allowFullScreen" value="true" /><param name="scale" value="showall" /><param name="allowScriptAccess" value="always" /><embed allowFullScreen="true" allowScriptAccess="always" bgcolor="#FFFFFF" flashVars="width=800&height=608" height="608" quality="high" scale="showall" src="http://www.coldfusionjedi.com/demos/feb2520102/jquerytrans2.swf" type="application/x-shockwave-flash" width="800" /></object>
+Not hard at all. The only real issue I ran into was the HTML/AIR security stuff. <b>That always bugs me.</b> Sim Bateman helped me a bit - but then I discovered something cool. Apparently Google supports <a href="http://code.google.com/apis/ajaxlanguage/documentation/#fonje">REST</a> based calls for translations. (One day I need to read <i>all</i> the Google API docs.) This worked perfectly within my little AIR application. You can download the AIR file below.
+<p/>
+As a final FYI, did you know that ColdFusion Builder includes parts of Aptana? Did you know it includes all the bits you need to build your own HTML based AIR applications? Check it out today!<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2FjqTwitterAir%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/02\/25\/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR'; 
+this.page.identifier = '/?p=3734'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/25/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Doing translations with Twitter (using ColdFusion, jQuery, and AIR)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/25/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/25/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Doing translations with Twitter (using ColdFusion, jQuery, and AIR)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/25/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/02/25/Doing-translations-with-Twitter-using-ColdFusion-jQuery-and-AIR" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

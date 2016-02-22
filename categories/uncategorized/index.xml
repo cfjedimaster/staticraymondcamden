@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Uncategorized on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/uncategorized/</link>
+    <description>Recent content in Uncategorized on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 02 Jan 2016 11:09:14 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/uncategorized/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Doing some testing...</title>
+      <link>http://www.raymondcamden.com/2016/01/02/doing-some-testing</link>
+      <pubDate>Sat, 02 Jan 2016 11:09:14 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/02/doing-some-testing</guid>
+      <description>&lt;p&gt;Sorry for the noise folks, but I&amp;rsquo;m doing a bit of testing.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Happy Thanksgiving!</title>
+      <link>http://www.raymondcamden.com/2015/11/26/happy-thanksgiving-3</link>
+      <pubDate>Thu, 26 Nov 2015 07:59:29 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/26/happy-thanksgiving-3</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m spending my day with my family and am incredibly thankful for them. I wanted to quickly thank everyone who reads this blog, comments, and helps make me a better developer. Thank you to the Apache Cordova team, the Ionic folks, and everyone else who helps make the tools that let me get stuff done.&lt;/p&gt;
+
+&lt;p&gt;The photo above is by &lt;a href=&#34;http://www.stephenhayford.com/&#34;&gt;Stephen Hayford&lt;/a&gt; and is part of an incredibly cool collection of Star Wars miniature art.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking Down Under Next Week</title>
+      <link>http://www.raymondcamden.com/2015/08/20/speaking-down-under-next-week</link>
+      <pubDate>Thu, 20 Aug 2015 08:31:26 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/20/speaking-down-under-next-week</guid>
+      <description>&lt;p&gt;Tomorrow I hop on a plane and head down under. I&amp;rsquo;ll be going to both Australia and New Zealand. In Australia, I&amp;rsquo;ll be speaking at two multi hour events. I&amp;rsquo;ll be covering &lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt;, &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;, and &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;MobileFirst&lt;/a&gt;. Both sessions are a three hour block with an hour focused on each topic.  I&amp;rsquo;ll be bringing some Ionic schwag with me as well as the spirit of America, so please attend if you can!&lt;/p&gt;
+
+&lt;p&gt;The first event is in Melbourne on August 24th: &lt;a href=&#34;http://www.meetup.com/Melbourne-IBM-Open-Cloud-Meetup/events/224710657/&#34;&gt;Cordova/Ionic/MobileFirst&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The second event is in Sydney on August 26th: &lt;a href=&#34;http://www.meetup.com/Sydney-IBM-Open-Cloud-Meetup/events/224710686/&#34;&gt;Cordova/Ionic/MobileFirst&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Both events are completely free, so please show up!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Review: REST Web APIs: The Book</title>
+      <link>http://www.raymondcamden.com/2015/08/02/review-rest-web-apis-the-book</link>
+      <pubDate>Sun, 02 Aug 2015 09:34:35 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/02/review-rest-web-apis-the-book</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/Screen-Shot-2015-08-02-at-7.13.47-AM3.png&#34; alt=&#34;Screen Shot 2015-08-02 at 7.13.47 AM&#34; width=&#34;275&#34; height=&#34;308&#34; class=&#34;alignleft size-full wp-image-6582&#34; /&gt; Before I begin, a quick disclaimer. I&amp;rsquo;ve known Adam for a long time, so my review may be a bit colored by the fact that I&amp;rsquo;m friends with him. Of course, the flip side to that is that on more than one occasion I&amp;rsquo;ve fought with him over something or another on IRC so this could be my chance for revenge. ;) That&amp;rsquo;s my official disclaimer out of the way.&lt;/p&gt;
+
+&lt;p&gt;Adam&amp;rsquo;s REST book is a good example of a trend I&amp;rsquo;m seeing lately in smaller, more concise technical books. I&amp;rsquo;ve read, or pretended to have read, huge tomes on programming languages before, heck I&amp;rsquo;ve even contributed to a few, but frankly, I&amp;rsquo;m finding that the shorter, more direct books are a heck of a lot more effective. His book is right over a hundred pages and as it is all on the theory of REST, you can read it in one or two sittings.&lt;/p&gt;
+
+&lt;p&gt;I say &amp;ldquo;theory&amp;rdquo;, but to be clear, this is an incredibly &lt;i&gt;practical&lt;/i&gt; book. Adam doesn&amp;rsquo;t just explain REST, but goes into details and gives you real nuggets to chew on when thinking about why REST does things a certain way. He is also not shy about calling out what &lt;i&gt;isn&amp;rsquo;t&lt;/i&gt; practical and being clear about why and when he breaks the rules.&lt;/p&gt;
+
+&lt;p&gt;This comes through especially well in his best practices chapter. Obviously this is an opinionated section, but it is also something you don&amp;rsquo;t see often in books of this type. Frankly, I want to see more of this. You may not agree with the author, but it is helpful to have someone with real world experience tell you their opinion on what works best with them.&lt;/p&gt;
+
+&lt;p&gt;I really enjoyed the book and definitely recommend it. To be honest, REST has always felt like a &amp;ldquo;nice&amp;rdquo; idea, but not necessarily worth the effort. After reading Adam&amp;rsquo;s book, I&amp;rsquo;m more convinced now that it is worth my time and part of what should be considered a requirement for building a decent API.&lt;/p&gt;
+
+&lt;p&gt;You can pick the book up for 19 American dollars at the official book page here: &lt;a href=&#34;https://gumroad.com/l/rest-the-book&#34;&gt;REST Web APIs: The Book&lt;/a&gt;. You get a PDF, Mobi, and ePub version. You can also grab a &lt;a href=&#34;http://gum.co/rest-sample-chapter&#34;&gt;sample chapter&lt;/a&gt; to see if it looks worth your time.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Recording from Static Sites Presentation</title>
+      <link>http://www.raymondcamden.com/2015/07/06/recording-from-static-sites-presentation</link>
+      <pubDate>Mon, 06 Jul 2015 07:36:11 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/06/recording-from-static-sites-presentation</guid>
+      <description>&lt;p&gt;If you missed my presentation on static site generators last week, you can now watch the recording here:&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/HbVoDsnY8Ww?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;You can view a copy of the slides here:&lt;/p&gt;
+
+&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/2HZGBaGGa8WzoK&#34; width=&#34;425&#34; height=&#34;355&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/raymondcamden/static-sites-wave-of-the-future&#34; title=&#34;Static Sites - Bringing Web 1.0 Back&#34; target=&#34;_blank&#34;&gt;Static Sites - Bringing Web 1.0 Back&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&#34;//www.slideshare.net/raymondcamden&#34; target=&#34;_blank&#34;&gt;Raymond Camden&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;And finally, you can find the source code for the slide deck and demos here: &lt;a href=&#34;https://github.com/cfjedimaster/Static-Sites&#34;&gt;https://github.com/cfjedimaster/Static-Sites&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My first video course for O&#39;Reilly - JavaScript Templating</title>
+      <link>http://www.raymondcamden.com/2015/06/05/my-first-video-course-for-oreilly-javascript-templating</link>
+      <pubDate>Fri, 05 Jun 2015 07:30:18 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/06/05/my-first-video-course-for-oreilly-javascript-templating</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://shop.oreilly.com/product/0636920034971.do&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/lrg.jpg&#34; alt=&#34;lrg&#34; width=&#34;200&#34; height=&#34;308&#34; class=&#34;alignleft size-full wp-image-6255&#34; /&gt;&lt;/a&gt; I&amp;rsquo;m proud to say my first (but not my last) video course for O&amp;rsquo;Reilly was just released: &lt;a href=&#34;http://shop.oreilly.com/product/0636920034971.do&#34;&gt;JavaScript Templating&lt;/a&gt;. This course covers how to use JavaScript templating (duh) and goes deep into four different products: EJS, Handlebars, Dust, and Nunjucks. I also talk a bit about ES6 template strings. What makes this course great (imo) is that at the end of each section, I use a common sample application and show how to use that particular product. This gives you a great way to compare each of these products against each other. Anyway, I think this is a great course (again, duh) and I hope you do too!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Working with hybrid applications and IBM MobileFirst</title>
+      <link>http://www.raymondcamden.com/2015/02/16/working-with-hybrid-applications-and-ibm-mobilefirst</link>
+      <pubDate>Mon, 16 Feb 2015 08:13:56 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/16/working-with-hybrid-applications-and-ibm-mobilefirst</guid>
+      <description>&lt;p&gt;As with my last post, I&amp;rsquo;ll warn folks that I&amp;rsquo;m still learning about &lt;a href=&#34;http://www.ibm.com/mobilefirst/us/en/&#34;&gt;MobileFirst&lt;/a&gt; and to please forgive any mistakes I make. I also want to give a shout out to my coworker &lt;a href=&#34;https://twitter.com/csantanapr&#34;&gt;Carlos Santana&lt;/a&gt; who has been incredibly helpful in getting me up to speed. As this is my first post on MobileFirst, let me begin with a bit of background.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/MobileFirst-Logo.jpg&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/MobileFirst-Logo.jpg&#34; alt=&#34;MobileFirst-Logo&#34; width=&#34;500&#34; height=&#34;260&#34; class=&#34;alignnone size-full wp-image-5672&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;MobileFirst is a collection of products that offer features and support for mobile developers. This support covers the full range of mobile development, from native to hybrid (my main area of concern). These features/support include:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Logging: You can using MobileFirst to enable/disable logging profiles for devices in the wild in real time. So for example, if users on Android begin complaining about a problem, you can quickly enable logging for that platform to try to determine what&amp;rsquo;s going wrong.&lt;/li&gt;
+&lt;li&gt;Application version management: Control what versions of an application are allowed to be used and even send out notices to users to let them know about updates, service interruptions, etc.&lt;/li&gt;
+&lt;li&gt;API management: You can proxy requests to remote APIs via MobileFirst giving you more control over API usage in your apps.&lt;/li&gt;
+&lt;li&gt;Push notifications for all supported platforms.&lt;/li&gt;
+&lt;li&gt;Deep analytics about app usage (device, version, etc).&lt;/li&gt;
+&lt;li&gt;A QA and Security scanning service.&lt;/li&gt;
+&lt;li&gt;Full web-based portal for all of the above to make it easy to use.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And more, of course. If you know me, you know I try to get to the nitty gritty of products as opposed to talking about them at a high level. In order to get up to speed I&amp;rsquo;ve been working with MobileFirst specifically in terms of hybrid application.&lt;/p&gt;
+
+&lt;p&gt;MobileFirst uses Cordova itself under the hood for hybrid apps. But you can&amp;rsquo;t (for now) simply take an existing Cordova application and drop it into your MobileFirst project. Nor can you use Cordova tooling. While this may improve in the future, it isn&amp;rsquo;t that difficult to take an existing application and bring it into MobileFirst. In this post I&amp;rsquo;m going to talk a bit about how to create hybrid apps, how to test them, and take a look at how you would take an existing Cordova application and bring it into MobileFirst.&lt;/p&gt;
+
+&lt;h2&gt;Create the MobileFirst Server/Application&lt;/h2&gt;
+
+&lt;p&gt;A full look at installation, usage, etc. for MobileFirst is outside the scope of this document. You can see the &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/documentation/getting-started/&#34;&gt;Getting Started&lt;/a&gt; documentation for a start and peruse the &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/documentation/getting-started-hybrid-development-6-3/&#34;&gt;hybrid-specific&lt;/a&gt; portions. The docs mainly focus on &lt;strong&gt;MobileFirst Platform Studio&lt;/a&gt;, an Eclipse plugin for managing MobileFirst projects via the IDE, but I much prefer using the CLI. You can find that download and installation instructions &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/install/#clui&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Given you&amp;rsquo;ve got stuff downloaded and installed, you can fire up a new server and hybrid application quickly:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mfp1.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mfp1.png&#34; alt=&#34;mfp1&#34; width=&#34;800&#34; height=&#34;191&#34; class=&#34;alignnone size-full wp-image-5690&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In the above screen shot, I create a new MobileFirst server, added a hybrid application, and then enabled support for iPhone and Android. Now let&amp;rsquo;s take a look at the directory structure.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf2.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf2.png&#34; alt=&#34;mf2&#34; width=&#34;600&#34; height=&#34;535&#34; class=&#34;alignnone size-full wp-image-5675&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The folder we care about is the common folder. This is where your HTML, CSS, and JavaScript exists and represents what you&amp;rsquo;ll spend most of your time editing. Right now we&amp;rsquo;ve got a basic application, essentially the MobileFirst version of the Cordova skeleton.&lt;/p&gt;
+
+&lt;h2&gt;Editing and Testing&lt;/h2&gt;
+
+&lt;p&gt;So given that you now have a folder of web assets, how do we actually &lt;i&gt;test&lt;/i&gt; this thing so we can see it in action. Also, what is the process like to edit and update the application?&lt;/p&gt;
+
+&lt;p&gt;One of the first things you want to do is start the server you created and then open up the console. That&amp;rsquo;s done with &lt;code&gt;mfp start&lt;/code&gt; and &lt;code&gt;mfp console&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf3.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf3.png&#34; alt=&#34;mf3&#34; width=&#34;800&#34; height=&#34;556&#34; class=&#34;alignnone size-full wp-image-5676&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The console gives you a variety of options, but the one we care most about is the preview. Clicking the eye icon next to a platform opens up a preview tab.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf4.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf4.png&#34; alt=&#34;mf4&#34; width=&#34;800&#34; height=&#34;412&#34; class=&#34;alignnone size-full wp-image-5677&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;What you&amp;rsquo;ve got here is essentially a web browser view of the mobile app with tools to simulate various different events and plugins. Yep, this is much like the Ripple tool. I&amp;rsquo;m going to talk about this a bit deeper in another post, but for now, let&amp;rsquo;s focus on the editing process. Whenever I edit my common resources, I need to tell MobileFirst about it. This is typically done with two commands: &lt;code&gt;mfp build&lt;/code&gt; and &lt;code&gt;mfp deploy&lt;/code&gt;, but you can combine these into one nice call: &lt;code&gt;mfp bd&lt;/code&gt;. As you can imagine, you could further automate this with a Grunt file watcher to make it automatic.&lt;/p&gt;
+
+&lt;p&gt;What about working with the native device, or simulator? Within the app folder, and next to the common folder, is one folder for each native platform you added via &lt;code&gt;mfp add environment&lt;/code&gt;. For now, let&amp;rsquo;s consider the iPhone folder:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf5.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf5.png&#34; alt=&#34;mf5&#34; width=&#34;600&#34; height=&#34;599&#34; class=&#34;alignnone size-full wp-image-5678&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Within it is an XCode project. If you double click to open it, you can then send the project to the simulator (or a device).&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf6.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/mf6.png&#34; alt=&#34;mf6&#34; width=&#34;800&#34; height=&#34;574&#34; class=&#34;alignnone size-full wp-image-5679&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So in my testing, my process so far has been: Edit in Brackets, do &lt;code&gt;mfp bd&lt;/code&gt;, then simply click the Build/Run button in XCode. You don&amp;rsquo;t have to reopen or refresh the project at all, the command line takes care of that.&lt;/p&gt;
+
+&lt;p&gt;Now - what about using an existing Cordova project? Perhaps an Ionic one? Let&amp;rsquo;s start with a simple one - my &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/cordovaskeleton&#34;&gt;Cordova skeleton&lt;/a&gt; folder from my Cordova Examples GitHub repo. This project is pretty minimal. It contains one HTML, one JavaScript, and one CSS file. Here is the HTML:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge,chrome=1&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+        &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text&amp;#x2F;css&amp;quot; href=&amp;quot;css&amp;#x2F;app.css&amp;quot; &amp;#x2F;&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+    &amp;lt;script src=&amp;quot;cordova.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;   
+    &amp;lt;script src=&amp;quot;js&amp;#x2F;app.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here is the JavaScript (I&amp;rsquo;ll skip the CSS as it is empty):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;document.addEventListener(&amp;quot;deviceready&amp;quot;, init, false);
+function init() {
+    
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As I said - it is pretty simple - which is kind of the point. So how would I integrate this into a MobileFirst project?&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The first step is to copy out the contents from the common folder. I moved them into a temp folder. 
+&lt;li&gt;I then copied my existing project into the common folder.
+&lt;li&gt;Next, remove the script tag that includes cordova.js: &lt;code&gt;&amp;lt;script src=&amp;quot;cordova.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;&lt;/code&gt;. This may seem unnatural to you as it is part of the basic requirements for a Cordova project, but MobileFirst handles this for you.
+&lt;li&gt;Next, copy &lt;strong&gt;back&lt;/strong&gt; the file initOptions.js. As you can probably guess, this file handles setting up default options for MobileFirst. It will also automatically call a function named &lt;code&gt;wlCommonInit&lt;/code&gt;. This will &lt;strong&gt;replace&lt;/strong&gt; your deviceready call from your existing application. Right now you can&#39;t tell the platform to run another function so you &lt;strong&gt;must&lt;/strong&gt; use a function with that name. My code listened for deviceready to fire init, so I removed my event listener and renamed init to wlCommonInit. (I&#39;ll share the modified code at the end.) You can also simply copy in the code from initOptions.js into your JavaScript file. Right now I kind of think it makes sense to keep them separate. I reserve the right to change my mind on that before I finish writing this blog entry.
+&lt;li&gt;At this point, you have your code set up to listen for MobileFirst&#39;s platform to be ready along with the default Cordova deviceready. You can use both device features and MobileFirst APIs. I&#39;ve zipped up my common folder as an attachment to this blog entry.
+&lt;/ol&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the updated index.html file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge,chrome=1&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+        &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text&amp;#x2F;css&amp;quot; href=&amp;quot;css&amp;#x2F;app.css&amp;quot; &amp;#x2F;&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+    &amp;lt;script src=&amp;quot;js&amp;#x2F;initOptions.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;script src=&amp;quot;js&amp;#x2F;app.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;My initOptions.js is the same as the default, but here is my new app.js:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function wlCommonInit() {
+    //I&#39;m ready to do MFP stuff and Cordova stuff.
+    console.log(&#34;BRING THE EPIC&#34;);  
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So what about plugins? By default, MobileFirst includes &lt;strong&gt;all&lt;/strong&gt; the core plugins. You don&amp;rsquo;t have to implicitly add camera, device, etc. The full MobileFirst API is documented &lt;a href=&#34;http://www-01.ibm.com/support/knowledgecenter/SSHS8R_6.3.0/com.ibm.worklight.apiref.doc/apiref/r_ibm_worklight_client_side_api_.html&#34;&gt;here&lt;/a&gt; and I&amp;rsquo;ll show some examples of this in my later posts. Custom plugins require manual installation. I&amp;rsquo;ll demonstrate this later as well.&lt;/p&gt;
+
+&lt;p&gt;I hope this wets your appetite a bit and let me know if anything isn&amp;rsquo;t clear. As I said, I&amp;rsquo;ve got multiple other blog entries to write on this to help flesh out the process.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Oops, RSS issue</title>
+      <link>http://www.raymondcamden.com/2014/12/10/oops-rss-issue</link>
+      <pubDate>Wed, 10 Dec 2014 06:32:19 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/12/10/oops-rss-issue</guid>
+      <description>&lt;p&gt;So while I (believe) I&amp;rsquo;ve tackled the uptime issues here, looks like I screwed up my RSS feed a bit. I just fixed it, so &lt;a href=&#34;http://www.coldfusionbloggers.org&#34;&gt;ColdFusion Bloggers&lt;/a&gt; will pick it up and anyone who subscribed to the feed will also get the last set of entries.&lt;/p&gt;
+
+&lt;p&gt;As a reminder, the feed is here: &lt;a href=&#34;http://feeds.feedburner.com/raymondcamdensblog&#34;&gt;http://feeds.feedburner.com/raymondcamdensblog&lt;/a&gt;. If you want to subscribe to the feed to get email notifications simply use the form on the right hand side of the blog.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Update on migration and Disqus Thread Migration tool</title>
+      <link>http://www.raymondcamden.com/2014/12/04/update-on-migration-and-disqus-thread-migration-tool</link>
+      <pubDate>Thu, 04 Dec 2014 08:43:43 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/12/04/update-on-migration-and-disqus-thread-migration-tool</guid>
+      <description>&lt;p&gt;Just a quick note on the migration process. I&amp;rsquo;m still planning on talking about the migration in detail, but I want to wait till I feel confident that most of the bugs are gone and the server is stable. Yesterday my blog crashed pretty quickly after launch with a database connection error. I added the &lt;a href=&#34;https://wordpress.org/plugins/wp-super-cache/&#34;&gt;SuperCache&lt;/a&gt; plugin (which multiple people had recommended) and it seemed to work well, but sometime around 3AM this morning it went down again. Right now I&amp;rsquo;m thinking that maybe a micro instance (0.6 gig ram) is a bit too small and I should maybe jump up to the next higher level. I&amp;rsquo;m researching that now.&lt;/p&gt;
+
+&lt;p&gt;Also - I made a small tweak to the script I wrote (and blogged about &lt;a href=&#34;http://www.raymondcamden.com/2014/11/23/Status-of-Disqus-updates-and-a-tool-for-URL-migration&#34;&gt;here&lt;/a&gt;) that helps with Disqus migration issues. My previous script would return one row for every row in the input CSV. Now the code only writes to the new CSV when an actual change has happened. This makes the new CSV quite a bit smaller. I&amp;rsquo;ve pasted the code below, but don&amp;rsquo;t forget the map UDF needs to be customized for your needs. Enjoy.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;cfscript&amp;gt;
+//change to the file disqus gave you
+input = &amp;quot;dec4.csv&amp;quot;;
+//change to the name you want to use for the new file
+output = &amp;quot;new4.csv&amp;quot;;
+
+//Will be passed the URL. Mod it as you see fit.
+function map(s) {
+    //fix 2015.raymondcamden etc
+    s = replace(s, &amp;quot;2015.raymondcamden.com&amp;quot;, &amp;quot;www.raymondcamden.com&amp;quot;);
+    s = replace(s, &amp;quot;dev2013.raymondcamden.com&amp;quot;, &amp;quot;www.raymondcamden.com&amp;quot;);
+    s = replace(s, &amp;quot;ray.camdenfamily.com&amp;quot;, &amp;quot;www.raymondcamden.com&amp;quot;);
+    //change mode=entry
+    //this requires a db call
+    if(findNoCase(&amp;quot;mode=entry&amp;quot;, s)) {
+        var id = listLast(s, &amp;quot;=&amp;quot;);
+        var q = queryExecute(&amp;quot;select posted from tblblogentries where id = :id&amp;quot;, {id:id}, {datasource:&amp;quot;myblog&amp;quot;});
+        //technically this doesn&#39;t take into account date offset, but screw it
+        var newurl = &amp;quot;http://www.raymondcamden.com/#year(q.posted)#/#month(q.posted)#/#day(q.posted)#/#id#&amp;quot;;
+        return newurl;
+    }
+    //wordpress adds / at the very end
+    if(right(s,1) == &amp;quot;/&amp;quot;) s = mid(s, 1, len(s)-1);
+    //change -- to -
+    s = replace(s, &amp;quot;--&amp;quot;, &amp;quot;-&amp;quot;, &amp;quot;all&amp;quot;);
+    return s;
+}
+
+myData = fileOpen(expandPath(&amp;quot;./#input#&amp;quot;),&amp;quot;read&amp;quot;);
+myOutput = fileOpen(expandPath(&amp;quot;./#output#&amp;quot;),&amp;quot;write&amp;quot;);
+
+while(not fileisEOF(myData)) {
+    line = fileReadLine(myData);
+    newURL = map(line);
+    if(newURL != line) {
+        newLine = line &amp;amp; &amp;quot;,&amp;quot; &amp;amp; newURL;    
+        fileWriteLine(myOutput, newLine);
+    }
+}
+fileClose(myData);
+fileClose(myOutput);
+writeoutput(&amp;quot;Done processing.&amp;quot;);
+&amp;lt;/cfscript&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Welcome to the 2015 RaymondCamden.com</title>
+      <link>http://www.raymondcamden.com/2014/12/03/welcome-to-the-2015-raymondcamden-com</link>
+      <pubDate>Wed, 03 Dec 2014 06:40:35 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/12/03/welcome-to-the-2015-raymondcamden-com</guid>
+      <description>&lt;p&gt;Ok, so it technically isn&amp;rsquo;t 2015 yet, but welcome to the new blog. Regular readers know I&amp;rsquo;ve been planning this for a few weeks now and this morning I decided to go forward with the update. I am &lt;strong&gt;100%&lt;/strong&gt; sure some things will break, and I ask for your patience while I work out a few kinks. I plan another post talking about the migration and what I did, but for now, welcome.&lt;/p&gt;
+
+&lt;p&gt;At the end of the day, I figure my readers care about what I say, not how I say it, so hopefully this will change won&amp;rsquo;t impact that.&lt;/p&gt;
+
+&lt;p&gt;Hopefully I&amp;rsquo;ll have some other big changes to announce soon as well. ;)&lt;/p&gt;
+
+&lt;p&gt;Oh - as an FYI, the RSS feed has been updated. Please change to the new URL.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Test with Extract</title>
+      <link>http://www.raymondcamden.com/2014/11/13/test-with-extract</link>
+      <pubDate>Thu, 13 Nov 2014 16:05:56 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/11/13/test-with-extract</guid>
+      <description>&lt;p&gt;This is just a test of my stuff.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m hitting enter now.&lt;/p&gt;
+
+&lt;p&gt;How do I do an extract?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Hello world!</title>
+      <link>http://www.raymondcamden.com/2014/11/13/hello-world</link>
+      <pubDate>Thu, 13 Nov 2014 13:39:01 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/11/13/hello-world</guid>
+      <description>&lt;p&gt;Hi, this is just a test.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Coping with LWS (Lost Withdrawel Syndrome)</title>
+      <link>http://www.raymondcamden.com/2006/04/19/coping-with-lws-lost-withdrawel-syndrome</link>
+      <pubDate>Wed, 19 Apr 2006 17:04:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2006/04/19/coping-with-lws-lost-withdrawel-syndrome</guid>
+      <description>&lt;p&gt;So I won&amp;rsquo;t be making my weekly Lost review post tonight since, well, there isn&amp;rsquo;t a new episode of Lost. Being the addicted person I am though I thought I&amp;rsquo;d at least share a few Lost-related URLs since, well, I can&amp;rsquo;t stop thinking about it even though it isn&amp;rsquo;t on tonight.&lt;/p&gt;
+
+&lt;p&gt;First - a &lt;a href=&#34;http://news.yahoo.com/s/eo/20060419/en_tv_eo/18835&#34;&gt;spoiler  link&lt;/a&gt; - don&amp;rsquo;t follow the link unless you want to know about  a character leaving the show. Personally I was a bit sad to see this character go.&lt;/p&gt;
+
+&lt;p&gt;Secondly - there are a few Lost sites out there, but my favorite is &lt;a href=&#34;http://lost.cubit.net/&#34;&gt;Sledgeweb&amp;rsquo;s Lost&lt;/a&gt;. I mainly like it for the &lt;a href=&#34;http://lost.cubit.net/investigations.php&#34;&gt;Investigations&lt;/a&gt; page, which has a nice listing of the &amp;ldquo;cool&amp;rdquo; bits of each show, and stuff you may have missed. For example, I had not seen the logo on Henry Gale&amp;rsquo;s balloon.&lt;/p&gt;
+
+&lt;p&gt;&lt;iframe src=&#34;http://rcm-na.amazon-adsystem.com/e/cm?t=raymondcamden-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=B000EHSVDM&amp;fc1=000000&amp;IS2=1&amp;lt1=_top&amp;lc1=0000ff&amp;bc1=000000&amp;bg1=ffffff&amp;npa=1&amp;f=ifr&#34; style=&#34;width:120px;height:240px;margin-right: 10px;&#34; scrolling=&#34;no&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; frameborder=&#34;0&#34; align=&#34;left&#34;&gt;&lt;/iframe&gt; You can also buy the soundtrack now, which may sound silly, but I listened to it today and it was actually pretty good.
+&lt;br clear=&#34;left&#34;&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>ColdFusion Newbie Contest - Entry 1 &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="ColdFusion Newbie Contest - Entry 1" />
+<meta property="og:description" content=" Welcome to the first entry in the ColdFusion Newbie Contest! Before I get started on these reviews, let me lay down the ground rules here. The whole point of this contest is for us to learn. I&rsquo;m a huge believer in looking at, and talking about, other people&rsquo;s code. I&rsquo;ve learned a lot of what I know today from others so I think this contest can really serve as a platform to share and learn. Even those these entries are from newbies, I highly encourage those of you who are more experienced to take a look. You never know when you may learn something. With that being said, I&rsquo;m going to point out what I like and what I don&rsquo;t like about these applications. I am not a ColdFusion God. You should not take my opinion here for the absolute final word. These are my opinions, nothing more. I encourage others to also chime in with their opinions as well. The number one rule though is to be polite. We were all beginners at once point and time. So feel free to point out mistakes I didn&rsquo;t find - but be nice!
+
+Enough namby-pamby crap. Let&rsquo;s go! Our first entry is Goth Boy by John Ramon. You can download his code below and you can see it running here. I feel like I should warn folks that this entry is probably a bit PG-13. We are all adults here, but this entry does have a few things that may offend folks. (Or maybe I&rsquo;m just getting too sensitive in my old age.) Play with it a bit and then read what I have to say. It&rsquo;s ok, I&rsquo;ll wait.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2007/05/17/ColdFusion-Newbie-Contest-Entry-1" />
+
+
+<meta property="og:updated_time" content="2007-05-17T17:05:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="ColdFusion Newbie Contest - Entry 1">
+<meta itemprop="description" content=" Welcome to the first entry in the ColdFusion Newbie Contest! Before I get started on these reviews, let me lay down the ground rules here. The whole point of this contest is for us to learn. I&rsquo;m a huge believer in looking at, and talking about, other people&rsquo;s code. I&rsquo;ve learned a lot of what I know today from others so I think this contest can really serve as a platform to share and learn. Even those these entries are from newbies, I highly encourage those of you who are more experienced to take a look. You never know when you may learn something. With that being said, I&rsquo;m going to point out what I like and what I don&rsquo;t like about these applications. I am not a ColdFusion God. You should not take my opinion here for the absolute final word. These are my opinions, nothing more. I encourage others to also chime in with their opinions as well. The number one rule though is to be polite. We were all beginners at once point and time. So feel free to point out mistakes I didn&rsquo;t find - but be nice!
+
+Enough namby-pamby crap. Let&rsquo;s go! Our first entry is Goth Boy by John Ramon. You can download his code below and you can see it running here. I feel like I should warn folks that this entry is probably a bit PG-13. We are all adults here, but this entry does have a few things that may offend folks. (Or maybe I&rsquo;m just getting too sensitive in my old age.) Play with it a bit and then read what I have to say. It&rsquo;s ok, I&rsquo;ll wait.
+">
+
+
+<meta itemprop="dateModified" content="2007-05-17T17:05:00&#43;06:00" />
+<meta itemprop="wordCount" content="1167">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ColdFusion Newbie Contest - Entry 1"/>
+<meta name="twitter:description" content=" Welcome to the first entry in the ColdFusion Newbie Contest! Before I get started on these reviews, let me lay down the ground rules here. The whole point of this contest is for us to learn. I&rsquo;m a huge believer in looking at, and talking about, other people&rsquo;s code. I&rsquo;ve learned a lot of what I know today from others so I think this contest can really serve as a platform to share and learn. Even those these entries are from newbies, I highly encourage those of you who are more experienced to take a look. You never know when you may learn something. With that being said, I&rsquo;m going to point out what I like and what I don&rsquo;t like about these applications. I am not a ColdFusion God. You should not take my opinion here for the absolute final word. These are my opinions, nothing more. I encourage others to also chime in with their opinions as well. The number one rule though is to be polite. We were all beginners at once point and time. So feel free to point out mistakes I didn&rsquo;t find - but be nice!
+
+Enough namby-pamby crap. Let&rsquo;s go! Our first entry is Goth Boy by John Ramon. You can download his code below and you can see it running here. I feel like I should warn folks that this entry is probably a bit PG-13. We are all adults here, but this entry does have a few things that may offend folks. (Or maybe I&rsquo;m just getting too sensitive in my old age.) Play with it a bit and then read what I have to say. It&rsquo;s ok, I&rsquo;ll wait.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2007/05/17/ColdFusion-Newbie-Contest-Entry-1">
+    <h1 class="article-title" itemprop="name">
+        ColdFusion Newbie Contest - Entry 1
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2007-05-17 17:05:00 &#43;0600 &#43;0600" itemprop="datePublished">2007-05-17</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p><img src="http://ray.camdenfamily.com/enclosures/gothboy%2Egif" align="left" hspace="10"> Welcome to the first entry in the <a href="http://ray.camdenfamily.com/index.cfm/2007/4/16/ColdFusion-Newbie-Contest-Announced--Monster-Maker">ColdFusion Newbie Contest</a>! Before I get started on these reviews, let me lay down the ground rules here. The whole point of this contest is for us to learn. I&rsquo;m a <b>huge</b> believer in looking at, and talking about, other people&rsquo;s code. I&rsquo;ve learned a lot of what I know today from others so I think this contest can really serve as a platform to share and learn. Even those these entries are from newbies, I highly encourage those of you who are more experienced to take a look. You never know when you may learn something. With that being said, I&rsquo;m going to point out what I like and what I don&rsquo;t like about these applications. I am not a ColdFusion God. You should not take my opinion here for the absolute final word. These are my opinions, nothing more. I encourage others to also chime in with their opinions as well. The number one rule though is to be polite. We were all <a href="http://ray.camdenfamily.com/index.cfm/2007/4/19/Why-you-will-never-read-my-blog-again">beginners</a> at once point and time. So feel free to point out mistakes I didn&rsquo;t find - but be nice!</p>
+
+<p>Enough namby-pamby crap. Let&rsquo;s go! Our first entry is Goth Boy by John Ramon. You can download his code below and you can see it running <a href="http://ray.camdenfamily.com/demos/contest6/gothboy">here</a>. I feel like I should warn folks that this entry is probably a bit PG-13. We are all adults here, but this entry does have a few things that may offend folks. (Or maybe I&rsquo;m just getting too sensitive in my old age.) Play with it a bit and then read what I have to say. It&rsquo;s ok, I&rsquo;ll wait.</p>
+
+<p>First and foremost - the design of this is amazing. I&rsquo;m not going to pick a winner based on design since, well, my design skills stink, but I really love the look and feel of this. He did a great job I think and I&rsquo;m sure most of my readers will agree. The gameplay is pretty cool too. Instead of making Goth Boy happy (or sad as I would have guessed), your goal is to keep him from being <i>too</i> happy or sad. I guess Goth Boy believes in moderation. Now let&rsquo;s jump into the code.</p>
+
+<p>He doesn&rsquo;t get points off for it - but I&rsquo;ll point out that he uses Application.cfm. I know this is the simpler way to do application management, but all developers need to look into Application.cfc and start moving to that way of doing things. While it isn&rsquo;t quite as simple, it is still the best way to set up your application. For more information, see the <a href="http://livedocs.adobe.com/coldfusion/7/htmldocs/00001112.htm">livedocs page</a> on the topic.. If you look at this code that defines the session values, I think it would be a lot cleaner in an onSessionStart method.</p>
+
+<p>In the same file, I like the fact that he defines timeouts for his application and session variables. I will admit to <b>not</b> doing this myself, but I tend to think that it is helpful at times to specify things like this just so it is obvious. Sure we all know what the defaults are (do we all know this?) but having it right there is a good reminder.</p>
+
+<p>Moving on down, from a game perspective, I really liked how he made the dynamics random:</p>
+
+<p><code>
+&lt;!&mdash; Set the high low of the happiness before death &mdash;&gt;
+&lt;cfparam name=&ldquo;session.toLittleHappiness&rdquo; default=#RandRange(1, 10)#&gt;
+&lt;cfparam name=&ldquo;session.toMuchHappiness&rdquo; default=#RandRange(90, 100)#&gt;
+</code></p>
+
+<p>This code snippet controls the &lsquo;happiness&rsquo; range. Because it has a bit of randomness to it, every game will be a little bit different. Nice!</p>
+
+<p>On the flip side though - he has a set of variables that use hard coded values, like the starting value of sadness. I&rsquo;d consider moving these out to an XML or INI configuration file so it is a bit easier to update. I try to make sure that any static, hard coded variables like that are stored outside of &lsquo;program&rsquo; code. For an example of this, see the <a href="http://blogcfc.riaforge.org/index.cfm?event=page.svnview&path=%2Forg%2Fcamden%2Fblog&file=blog%2Eini%2Ecfm">INI file</a> that BlogCFC uses for configuration.</p>
+
+<p>He used an image map for his intro/instructions page. I only point that out because it seems like years since I worked with image maps. Do people still use them often? The last time I had to build one (few months ago), I could only find a Windows 3.1 era editor. The Dreamweaver editor kept crashing on me.</p>
+
+<p>Now lets move into GothBoy.cfm the main &ldquo;engine&rdquo; of the game. The first thing that bugs me is the lack of URL scoping on variables. While this works just fine in ColdFusion, in general you should always properly scope your variables. This makes the application work a (tiny) bit quicker, and also makes it more clear where the data is coming from. For example, if I know that &ldquo;price&rdquo; is a URL variable, I&rsquo;ll do a heck of a lot more validation than if it was a query variable. To see how this is a problem - notice that the actions you do on GothBoy are passed in as a URL variable named obj. He doesn&rsquo;t do any validation on this so it is possible to put in a bad obj value. The application doesn&rsquo;t throw an error, but doesn&rsquo;t quite handle it well.</p>
+
+<p>Each obj (again, this is an &lsquo;action&rsquo; you do on the kid) has an effect. This is reflected in the GothBoy.cfm file, but I&rsquo;d recommend this be moved out into a configuration file. So if I decide that ice cream is not a bad thing anymore but a good thing, I shouldn&rsquo;t have to edit code in order to make this change. I also found his code a bit hard to follow with doMode1 and doMode2. These variables didn&rsquo;t really speak to what they were doing. doMode1 affected sadness and doMode2 affected happiness. I&rsquo;d consider making that a bit more obvious.</p>
+
+<p>Notice this in GothBoy.cfm:</p>
+
+<p><code>
+&lt;cfset doMode1 = #RandRange(1, 2)#&gt;
+</code></p>
+
+<p>This is a classic newbie mistake of overusing pound signs. You only need them when outputting a variable. This should be rewritten as:</p>
+
+<p><code>
+&lt;cfset doMode1 = RandRange(1, 2)&gt;
+</code></p>
+
+<p>This doesn&rsquo;t have any impact on your performance, it just makes things a bit easier to read.</p>
+
+<p>Now we come to him CFC usage. He created a CFC named getFeelings. This CFC simply wraps one function - smartAss. As I said above, this is a PG-13 blog post! The function is used to generate a random message based on the action you had taken on the boy. Again I&rsquo;d say this could be much better done in XML (the string portion I mean). Outside of that, the CFC usage is a good beginning, but I&rsquo;d like to see a lot more moved into the CFC later on. The main file, GothBoy.cfc, should really be just handling the input and output, and letting the CFC handle everything related to the state, reaction, etc. John has the right idea here with this method, but he just needs to push it a bit further.<p><a href='enclosures/D%3A%5Cwebsites%5Cdev%2Ecamdenfamily%2Ecom%5Cenclosures%2FGothBoy%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2007\/05\/17\/ColdFusion-Newbie-Contest-Entry-1'; 
+this.page.identifier = '/?p=2044'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/05/17/ColdFusion-Newbie-Contest-Entry-1" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="ColdFusion Newbie Contest - Entry 1" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/05/17/ColdFusion-Newbie-Contest-Entry-1" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/05/17/ColdFusion-Newbie-Contest-Entry-1" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="ColdFusion Newbie Contest - Entry 1" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/05/17/ColdFusion-Newbie-Contest-Entry-1" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/05/17/ColdFusion-Newbie-Contest-Entry-1" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

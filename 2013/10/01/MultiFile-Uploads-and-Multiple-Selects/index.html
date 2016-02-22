@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Multi-File Uploads and Multiple Selects &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Multi-File Uploads and Multiple Selects" />
+<meta property="og:description" content="
+Edit on 12/6/2013: I forgot to update this post based on a bug from my earlier post. I used a for loop when forEach should have been used. I corrected this in the final code sample.
+
+
+
+A few weeks back I wrote a blog post about adding image previews for multi-file upload controls. I didn&#39;t mention it at the time but I had an ulterior motive. A reader wrote to me a few weeks before with an interesting question.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2013/10/01/MultiFile-Uploads-and-Multiple-Selects" />
+
+
+<meta property="og:updated_time" content="2013-10-01T10:10:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Multi-File Uploads and Multiple Selects">
+<meta itemprop="description" content="
+Edit on 12/6/2013: I forgot to update this post based on a bug from my earlier post. I used a for loop when forEach should have been used. I corrected this in the final code sample.
+
+
+
+A few weeks back I wrote a blog post about adding image previews for multi-file upload controls. I didn&#39;t mention it at the time but I had an ulterior motive. A reader wrote to me a few weeks before with an interesting question.
+
+">
+
+
+<meta itemprop="dateModified" content="2013-10-01T10:10:00&#43;06:00" />
+<meta itemprop="wordCount" content="952">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Multi-File Uploads and Multiple Selects"/>
+<meta name="twitter:description" content="
+Edit on 12/6/2013: I forgot to update this post based on a bug from my earlier post. I used a for loop when forEach should have been used. I corrected this in the final code sample.
+
+
+
+A few weeks back I wrote a blog post about adding image previews for multi-file upload controls. I didn&#39;t mention it at the time but I had an ulterior motive. A reader wrote to me a few weeks before with an interesting question.
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2013/10/01/MultiFile-Uploads-and-Multiple-Selects">
+    <h1 class="article-title" itemprop="name">
+        Multi-File Uploads and Multiple Selects
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2013-10-01 10:10:00 &#43;0600 &#43;0600" itemprop="datePublished">2013-10-01</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>
+<b>Edit on 12/6/2013: I forgot to update this post based on a bug from my earlier post. I used a for loop when forEach should have been used. I corrected this in the final code sample.</b>
+</p>
+
+<p>
+A few weeks back I wrote a <a href="http://www.raymondcamden.com/index.cfm/2013/9/10/Adding-a-file-display-list-to-a-multifile-upload-HTML-control">blog post</a> about adding image previews for multi-file upload controls. I didn't mention it at the time but I had an ulterior motive. A reader wrote to me a few weeks before with an interesting question.
+</p>
+
+<blockquote>
+Is it possible to use a mult-file input control and let the user select multiple times?
+</blockquote>
+
+<p>
+To be clear, what we mean here is that the user selects some files and closes the file picker dialog. She then realizes she forgot a few files and clicks to select them next.
+</p>
+
+<p>
+What happens in this situation is pretty simple. Like the multiple select field, if you pick something else then the previous selection is removed. Your only option is similar to what you do for the drop down. Use ctrl/cmd to select multiple files in multiple folders all at once - <i>and don't screw it up!</i> Obviously most users won't be able to grok this and <strong>will</strong> screw it up, even if they know it is possible.
+</p>
+
+<p>
+But my experiment had given me an idea. Remember that we can use an event handler to detect changes to the input field and get access to the file data beneath. Here is a code snippet showing this:
+</p>
+
+<pre><code class="language-javascript">function handleFileSelect(e) {
+        
+    if(!e.target.files) return;
+        
+    selDiv.innerHTML = "";
+        
+    var files = e.target.files;
+
+    for(var i=0; i<files.length; i++) {
+        var f = files[i];
+            
+        selDiv.innerHTML += f.name + "<br/>";
+
+    }
+        
+}</code></pre>
+
+<p>
+Based on this, my <a href="http://www.raymondcamden.com/demos/2013/sep/10/test0.html">final demo</a> uses this code to create image thumbnails based on pictures you select. My demo has a bug though that meshes well with today's blog post. If you select images twice, the list of thumbnails grow, but the actual files associated with the control are only based on the <strong>last</strong> selection. But what if we could take those files and store them?
+</p>
+
+<p>
+Before I went down this route, I updated my demo code to use AJAX to post the form. Part of the benefits of XHR2 is the ability to send file data over the wire. Let's look at a simple example of this.
+</p>
+
+<pre><code class="language-markup">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Proper Title&lt;/title&gt;
+&lt;style&gt;
+    #selectedFiles img {
+        max-width: 200px;
+        max-height: 200px;
+        float: left;
+        margin-bottom:10px;
+    }
+&lt;/style&gt;
+&lt;/head&gt;
+    
+&lt;body&gt;
+    
+    &lt;form id=&quot;myForm&quot; method=&quot;post&quot;&gt;
+
+        Files: &lt;input type=&quot;file&quot; id=&quot;files&quot; name=&quot;files&quot; multiple&gt;&lt;br/&gt;
+
+        &lt;div id=&quot;selectedFiles&quot;&gt;&lt;/div&gt;
+
+        &lt;input type=&quot;submit&quot;&gt;
+    &lt;/form&gt;
+
+    &lt;script&gt;
+    var selDiv = &quot;&quot;;
+        
+    document.addEventListener(&quot;DOMContentLoaded&quot;, init, false);
+    
+    function init() {
+        document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+        selDiv = document.querySelector(&quot;#selectedFiles&quot;);
+        document.querySelector('#myForm').addEventListener('submit', handleForm, false);
+    }
+        
+    function handleFileSelect(e) {
+        var files = e.target.files;
+        for(var i=0; i&lt;files.length; i++) {
+            var f = files[i];
+            if(!f.type.match(&quot;image.*&quot;)) {
+                continue;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var html = &quot;&lt;img src=\&quot;&quot; + e.target.result + &quot;\&quot;&gt;&quot; + f.name + &quot;&lt;br clear=\&quot;left\&quot;/&gt;&quot;;
+                selDiv.innerHTML += html;
+                
+            }
+            reader.readAsDataURL(f); 
+        }
+        
+    }
+        
+    function handleForm(e) {
+        e.preventDefault();
+        console.log('handleForm');
+        var data = new FormData(document.querySelector('#myForm'));
+                
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'handler.cfm', true);
+        
+        xhr.onload = function(e) {
+            if(this.status == 200) {
+                console.log('onload called');
+                console.log(e.currentTarget.responseText);
+                
+            }
+        }
+        
+        xhr.send(data);
+    }
+    &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p>
+If we focus on the changes, the only real difference is that we have a submit handler for the form. We use a FormData object to package up our form and then post it to a server-side handler. The server-side code isn't terribly important. It doesn't see this as anything "special" or "Ajax-y" (my word), it is just a form post. But now the entire process runs through Ajax and not a traditional page reload. (And as a note, I'm not providing <strong>any</strong> user feedback here. In a real application I'd disable the submit button, tell the user something, etc etc.)
+</p>
+
+<p>
+That parts done, now let's try storing a copy of the files. Here is my updated version with this in action.
+</p>
+
+<pre><code class="language-markup">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Proper Title&lt;&#x2F;title&gt;
+&lt;style&gt;
+    #selectedFiles img {
+        max-width: 200px;
+        max-height: 200px;
+        float: left;
+        margin-bottom:10px;
+    }
+&lt;&#x2F;style&gt;
+&lt;&#x2F;head&gt;
+    
+&lt;body&gt;
+    
+    &lt;form id=&quot;myForm&quot; method=&quot;post&quot;&gt;
+
+        Files: &lt;input type=&quot;file&quot; id=&quot;files&quot; name=&quot;files&quot; multiple&gt;&lt;br&#x2F;&gt;
+
+        &lt;div id=&quot;selectedFiles&quot;&gt;&lt;&#x2F;div&gt;
+
+        &lt;input type=&quot;submit&quot;&gt;
+    &lt;&#x2F;form&gt;
+
+    &lt;script&gt;
+    var selDiv = &quot;&quot;;
+    var storedFiles = [];
+        
+    document.addEventListener(&quot;DOMContentLoaded&quot;, init, false);
+    
+    function init() {
+        document.querySelector(&#x27;#files&#x27;).addEventListener(&#x27;change&#x27;, handleFileSelect, false);
+        selDiv = document.querySelector(&quot;#selectedFiles&quot;);
+        document.querySelector(&#x27;#myForm&#x27;).addEventListener(&#x27;submit&#x27;, handleForm, false);
+    }
+        
+    function handleFileSelect(e) {
+        var files = e.target.files;
+        var filesArr = Array.prototype.slice.call(files);
+        filesArr.forEach(function(f) {          
+
+            if(!f.type.match(&quot;image.*&quot;)) {
+                return;
+            }
+            storedFiles.push(f);
+            
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var html = &quot;&lt;img src=\&quot;&quot; + e.target.result + &quot;\&quot;&gt;&quot; + f.name + &quot;&lt;br clear=\&quot;left\&quot;&#x2F;&gt;&quot;;
+                selDiv.innerHTML += html;
+                
+            }
+            reader.readAsDataURL(f); 
+        });
+        
+    }
+        
+    function handleForm(e) {
+        e.preventDefault();
+        var data = new FormData();
+        
+        for(var i=0, len=storedFiles.length; i&lt;len; i++) {
+            data.append(&#x27;files&#x27;, storedFiles[i]); 
+        }
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open(&#x27;POST&#x27;, &#x27;handler.cfm&#x27;, true);
+        
+        xhr.onload = function(e) {
+            if(this.status == 200) {
+                console.log(e.currentTarget.responseText);  
+                alert(e.currentTarget.responseText + &#x27; items uploaded.&#x27;);
+            }
+        }
+        
+        xhr.send(data);
+    }
+    &lt;&#x2F;script&gt;
+
+&lt;&#x2F;body&gt;
+&lt;&#x2F;html&gt;</code></pre>
+
+<p>
+The changes are pretty simple. I've got  a new global variable called storedFiles. When I detect a change on the input field, I now push them into this array. Finally, when the form is submitted, instead of pre-populating the FormData object we create it empty and then simply append our files. Note the append call uses the same name, files, so that when the server processes it the name is consistent. 
+</p>
+
+<p>
+And... believe it or not - this worked. This smells like it may be a slight security concern. I have to imagine that if browser vendors allow for this then it must be safe, but if I used this in production, I'd be <strong>real</strong> sure to let the end user know what is going on. As I said my previous demo actually <i>implied</i> it was doing this anyway. (I should have been clearing out my thumbnails when you selected files.) I think in that case the user would have expected it.
+</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2013\/10\/01\/MultiFile-Uploads-and-Multiple-Selects'; 
+this.page.identifier = '/?p=5051'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/10/01/MultiFile-Uploads-and-Multiple-Selects" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Multi-File Uploads and Multiple Selects" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/10/01/MultiFile-Uploads-and-Multiple-Selects" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/10/01/MultiFile-Uploads-and-Multiple-Selects" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Multi-File Uploads and Multiple Selects" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/10/01/MultiFile-Uploads-and-Multiple-Selects" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/10/01/MultiFile-Uploads-and-Multiple-Selects" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

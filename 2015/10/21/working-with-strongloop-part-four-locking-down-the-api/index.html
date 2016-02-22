@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Working with StrongLoop (Part Four) - Locking down the API &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Working with StrongLoop (Part Four) - Locking down the API" />
+<meta property="og:description" content="Welcome to the latest in my series of blog posts on the StrongLoop platform. The last few blog posts have been focused on the API composer (part of StrongLoop Arc) built on top of LoopBack. As I&rsquo;ve mentioned, there is a lot more to StrongLoop then just the API stuff and I plan on moving to those other topics soon. For today I&rsquo;m going to discuss how you can lock down your API. Out of the box, all your models (and APIs) are 100% open. That makes it incredibly easy to quickly prototype and test adding, editing, and deleting data. But in a real application, you&rsquo;ll obviously want to lock down how folks can use your API. As before, the StrongLoop folks do a good job documenting this area: Authentication, authorization, and permissions. The focus of this entry is to summarize those docs and discuss some of the things that confused me personally.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api" />
+
+
+<meta property="og:updated_time" content="2015-10-21T10:03:59&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Working with StrongLoop (Part Four) - Locking down the API">
+<meta itemprop="description" content="Welcome to the latest in my series of blog posts on the StrongLoop platform. The last few blog posts have been focused on the API composer (part of StrongLoop Arc) built on top of LoopBack. As I&rsquo;ve mentioned, there is a lot more to StrongLoop then just the API stuff and I plan on moving to those other topics soon. For today I&rsquo;m going to discuss how you can lock down your API. Out of the box, all your models (and APIs) are 100% open. That makes it incredibly easy to quickly prototype and test adding, editing, and deleting data. But in a real application, you&rsquo;ll obviously want to lock down how folks can use your API. As before, the StrongLoop folks do a good job documenting this area: Authentication, authorization, and permissions. The focus of this entry is to summarize those docs and discuss some of the things that confused me personally.
+">
+
+
+<meta itemprop="dateModified" content="2015-10-21T10:03:59&#43;06:00" />
+<meta itemprop="wordCount" content="1175">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Working with StrongLoop (Part Four) - Locking down the API"/>
+<meta name="twitter:description" content="Welcome to the latest in my series of blog posts on the StrongLoop platform. The last few blog posts have been focused on the API composer (part of StrongLoop Arc) built on top of LoopBack. As I&rsquo;ve mentioned, there is a lot more to StrongLoop then just the API stuff and I plan on moving to those other topics soon. For today I&rsquo;m going to discuss how you can lock down your API. Out of the box, all your models (and APIs) are 100% open. That makes it incredibly easy to quickly prototype and test adding, editing, and deleting data. But in a real application, you&rsquo;ll obviously want to lock down how folks can use your API. As before, the StrongLoop folks do a good job documenting this area: Authentication, authorization, and permissions. The focus of this entry is to summarize those docs and discuss some of the things that confused me personally.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api">
+    <h1 class="article-title" itemprop="name">
+        Working with StrongLoop (Part Four) - Locking down the API
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-10-21 10:03:59 &#43;0600 &#43;0600" itemprop="datePublished">2015-10-21</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/strongloop">strongloop</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Welcome to the latest in my series of blog posts on the <a href="https://strongloop.com/">StrongLoop</a> platform. The last few blog posts have been focused on the API composer (part of StrongLoop Arc) built on top of <a href="http://loopback.io/">LoopBack</a>. As I&rsquo;ve mentioned, there is a lot more to StrongLoop then just the API stuff and I plan on moving to those other topics soon. For today I&rsquo;m going to discuss how you can lock down your API. Out of the box, all your models (and APIs) are 100% open. That makes it incredibly easy to quickly prototype and test adding, editing, and deleting data. But in a real application, you&rsquo;ll obviously want to lock down how folks can use your API. As before, the StrongLoop folks do a good job documenting this area: <a href="https://docs.strongloop.com/display/public/LB/Authentication%2C+authorization%2C+and+permissions">Authentication, authorization, and permissions</a>. The focus of this entry is to summarize those docs and discuss some of the things that confused me personally.</p>
+
+<p>Ok, so let&rsquo;s begin by talking about the security model at a high level. Security rules are defined at the model level (although you can also apply security to <i>all</i> models). You can apply a rule to a model method or property that sets an access value for a particular user. In terms of users, you can specify a specific user, or more likely, a role instead. LoopBack has various roles built in, like $owner, $authenticated, $unauthenticated, and $everyone. These are referred to as ACLs (Access Control Lists) and you can see them within a model definition.</p>
+
+<p>The StrongLoop Arc Composer does <i>not</i> support visually defining ACLs so you have to either type them by hand, or use the command line. The actual definition is really simple so once you&rsquo;ve done it a few times you can probably skip the CLI, but the CLI isn&rsquo;t too hard to use.</p>
+
+<p>If you remember my previous blog posts, I defined a &ldquo;Cat&rdquo; and &ldquo;Dog&rdquo; model for my application. To test security I decided to lock down access to Dogs. My thinking was this:</p>
+
+<ul>
+<li>Anyone can get dogs, or an individual dog.</li>
+<li>Only logged in users can modify dogs.</li>
+</ul>
+
+<p>That&rsquo;s a fairly simple design and doesn&rsquo;t support the idea of different types of users. LoopBack definitely supports that but I wanted to keep it as simple as possible. I followed the guide (<a href="https://docs.strongloop.com/display/public/LB/Controlling+data+access">Controlling data access</a>) and began by locking down <strong>all</strong> access to the Dog API:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/10/shot17.png" alt="shot1" width="750" height="164" class="aligncenter size-full wp-image-6973" /></p>
+
+<p>Next, I wanted to add anonymous access to get dogs and an individual dog. Here is where things get weird. When using the CLI, the prompt will ask if you want to modify access to a property or method. In my case I wanted to enable the REST API to let me read dogs. However, when you look at the API explorer, this is what you see:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/10/shot27.png" alt="shot2" width="750" height="427" class="aligncenter size-full wp-image-6974" /></p>
+
+<p>Getting all dogs corresponds to <code>GET /dogs</code> and getting one dog corresponds to <code>GET /dogs/ID</code>. But that is <strong>not</strong> what LoopBack wants in the ACL. Instead it wants <code>find</code> and <code>findById</code>. Ok, that kinda makes sense, but I was not able to find a good table that maps the REST APIs to various internal LoopBack methods. You&rsquo;ll have to figure these out one by one I suppose (and remember it of course ;). So here I am adding support for running <code>find</code> for anonymous users:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/10/shot34.png" alt="shot3" width="750" height="163" class="aligncenter size-full wp-image-6975" /></p>
+
+<p>And I simply did this again for findById. Finally, I added support for making new dogs:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/10/shot44.png" alt="shot4" width="750" height="158" class="aligncenter size-full wp-image-6976" /></p>
+
+<p>The CLI is easy to use, but check out the Dog model. As you can see, these ACLs aren&rsquo;t too complex. I think after you&rsquo;ve used the CLI a few times you won&rsquo;t need to generate them via the CLI.</p>
+
+<pre><code class="language-javascript">{
+  "name": "dog",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "gender": {
+      "type": "string",
+      "required": true
+    },
+    "color": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "find"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "findById"
+    }
+  ],
+  "methods": {}
+}</code></pre>
+
+<p>Woot! Ok, so how do you test? Again, the docs do a good job of walking you through this. Start here, <a href="https://docs.strongloop.com/display/public/LB/Introduction+to+User+model+authentication">Introduction to User model authentication</a>, and just follow the directions to create a User via the REST API. Here is what confused me though.</p>
+
+<p>When you create your user, you&rsquo;ll specifically want to use the email property and password property. They document this (image stolen from their docs):</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/10/Explorer-credentials.png" alt="Explorer-credentials" width="750" height="415" class="aligncenter size-full wp-image-6977" /></p>
+
+<p>But I was confused since the password field as an argument does not map to a password property (that you can see on the right hand side). Also, I wondered they used email instead of username. In the end, I just used what they demonstrated and it worked.</p>
+
+<p>Once you&rsquo;ve made a user, you can login, get an application token, and then run your locked down methods in the API explorer. It just works&hellip; until you restart. By default, the User model is stored in the in-memory database. As a reminder, if you go to your server folder and open <code>model-config.json</code>, you can see this for yourself:</p>
+
+<pre><code class="language-javascript">{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "db"
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "cat": {
+    "dataSource": "mysqldb1",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "dog": {
+    "dataSource": "mysqldb1",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "quickmysqltest": {
+    "dataSource": "mysqldb1",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "appuser": {
+    "dataSource": "mysqldb1",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  }
+}</code></pre>
+
+<p>I first attempted to move User to the MySQL datasource I created. In the web-base Arc Composer, they hide the &ldquo;built in&rdquo; models so you can&rsquo;t just migrate User. I tried to just set it in the JSON file, but then ran into the issue where the appropriate tables weren&rsquo;t made. You can do migration via JavaScript code, and I was beginning to work on that, until I discovered this nugget in the docs:</p>
+
+<blockquote>The User model represents users of the application or API. Typically, you'll want to extend the built-in User model with your own model, for example, named "customer" or "client".</blockquote>
+
+<p>Oh, that&rsquo;s easy. So back in Arc Composer I made a new model called appuser, told it to extend User, and pointed to the MySQL datasource, and bam, that was it. I had my own user system with persistence. That was freaking cool as heck.</p>
+
+<p>So, that&rsquo;s it. Well, I mean that&rsquo;s it for my look at the API stuff. I&rsquo;m going to work on a blog post that summarizes all of this and brings in Ionic to demonstrate. Look for that later this week.</p>
+
+<h2>Previous Entries</h2>
+
+<ul>
+<li><a href="http://www.raymondcamden.com/2015/10/15/working-with-strongloop-part-three">Working with StrongLoop (Part Three)</a></li>
+<li><a href="http://www.raymondcamden.com/2015/10/13/working-with-strongloop-part-two">Working with StrongLoop (Part Two)</a></li>
+<li><a href="http://www.raymondcamden.com/2015/10/12/working-with-strongloop-part-one">Working with StrongLoop (Part One)</a></li>
+</ul>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/10\/21\/working-with-strongloop-part-four-locking-down-the-api'; 
+this.page.identifier = '/?p=6972'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Working with StrongLoop (Part Four) - Locking down the API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Working with StrongLoop (Part Four) - Locking down the API" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

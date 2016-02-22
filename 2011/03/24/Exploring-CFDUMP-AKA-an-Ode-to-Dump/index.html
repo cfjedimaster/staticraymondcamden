@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Exploring CFDUMP, AKA an Ode to Dump &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Exploring CFDUMP, AKA an Ode to Dump" />
+<meta property="og:description" content="It may be a bit silly to say that I have a favorite tag, but I&rsquo;ll happily admit to being somewhat infatuated with the cfdump tag. Since it&rsquo;s introduction (in ColdFusion 4.5 I believe, but it was available earlier in the Spectra CMS), it&rsquo;s probably been my number one debugging/testing/all around useful utility tag in the language for close to a decade. I thought it might be fun to talk a bit about some of the lesser known features of cfdump. In preparation for this blog entry I&rsquo;ve already discovered a few new things myself, so hopefully this guide will be of use to folks and really prove, once and forever, that the coolest tag ever created is cfdump.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/03/24/Exploring-CFDUMP-AKA-an-Ode-to-Dump" />
+
+
+<meta property="og:updated_time" content="2011-03-24T23:03:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Exploring CFDUMP, AKA an Ode to Dump">
+<meta itemprop="description" content="It may be a bit silly to say that I have a favorite tag, but I&rsquo;ll happily admit to being somewhat infatuated with the cfdump tag. Since it&rsquo;s introduction (in ColdFusion 4.5 I believe, but it was available earlier in the Spectra CMS), it&rsquo;s probably been my number one debugging/testing/all around useful utility tag in the language for close to a decade. I thought it might be fun to talk a bit about some of the lesser known features of cfdump. In preparation for this blog entry I&rsquo;ve already discovered a few new things myself, so hopefully this guide will be of use to folks and really prove, once and forever, that the coolest tag ever created is cfdump.
+">
+
+
+<meta itemprop="dateModified" content="2011-03-24T23:03:00&#43;06:00" />
+<meta itemprop="wordCount" content="2112">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Exploring CFDUMP, AKA an Ode to Dump"/>
+<meta name="twitter:description" content="It may be a bit silly to say that I have a favorite tag, but I&rsquo;ll happily admit to being somewhat infatuated with the cfdump tag. Since it&rsquo;s introduction (in ColdFusion 4.5 I believe, but it was available earlier in the Spectra CMS), it&rsquo;s probably been my number one debugging/testing/all around useful utility tag in the language for close to a decade. I thought it might be fun to talk a bit about some of the lesser known features of cfdump. In preparation for this blog entry I&rsquo;ve already discovered a few new things myself, so hopefully this guide will be of use to folks and really prove, once and forever, that the coolest tag ever created is cfdump.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/03/24/Exploring-CFDUMP-AKA-an-Ode-to-Dump">
+    <h1 class="article-title" itemprop="name">
+        Exploring CFDUMP, AKA an Ode to Dump
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-03-24 23:03:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-03-24</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>It may be a bit silly to say that I have a favorite tag, but I&rsquo;ll happily admit to being somewhat infatuated with the cfdump tag. Since it&rsquo;s introduction (in ColdFusion 4.5 I believe, but it was available earlier in the Spectra CMS), it&rsquo;s probably been my number one debugging/testing/all around useful utility tag in the language for close to a decade. I thought it might be fun to talk a bit about some of the lesser known features of cfdump. In preparation for this blog entry I&rsquo;ve already discovered a few new things myself, so hopefully this guide will be of use to folks and really prove, once and forever, that the coolest tag ever created is cfdump.</p>
+
+<p><p></p>
+
+<p>Let&rsquo;s begin by looking at the bar minimum required for cfdump, the var attribute. This must be a ColdFusion variable. Not the name of a variable. (Although Railo supports passing the name of a variable.)</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset x = [1,2,3]&gt;
+&lt;cfdump var=&ldquo;#x#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which returns:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip54.png" /></p>
+
+<p><p></p>
+
+<p>This is probably the way most people use the tag. You can also easily dump built in scopes as well:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#url#&rdquo;&gt;
+&lt;cfdump var=&ldquo;#form#&rdquo;&gt;
+&lt;cfdump var=&ldquo;#cgi#&rdquo;&gt;
+&lt;cfdump var=&ldquo;#server#&rdquo;&gt;
+&lt;cfdump var=&ldquo;#cookie#&rdquo;&gt;
+etc&hellip;
+</code></p>
+
+<p><p></p>
+
+<p>You can also dump the result of calling a method or UDF.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfscript&gt;
+function thatsHowIRoll(x) {
+    return x*2;
+}
+&lt;/cfscript&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#thatsHowIRoll(42)#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Notice I didn&rsquo;t have to create a temporary variable. I can call the method right there in the tag and see the result. I might find something like this useful then:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#thatsHowIRoll(41)#&rdquo;&gt;
+&lt;cfdump var=&ldquo;#thatsHowIRoll(42)#&rdquo;&gt;
+&lt;cfdump var=&ldquo;#thatsHowIRoll(43)#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Now let&rsquo;s start looking at some of the other attributes. The first is simple - label. The label attribute is used in the display of any non-simple variable. What does that mean? Whenever you dump anything that isn&rsquo;t a simple string, ColdFusion wraps it in some lovely tabular structures. Watch what happens when I apply a label to two variables - one complex, one simple.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset hawking = [1,2,{name=&ldquo;Ray&rdquo;,age=&ldquo;Almost my birthday&rdquo;},4]&gt;
+&lt;cfset paris = &ldquo;hilton&rdquo;&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#hawking#&rdquo; label=&ldquo;Complex&rdquo;&gt;
+&lt;cfdump var=&ldquo;#paris#&rdquo; label=&ldquo;Not so complex&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which returns:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip55.png" /></p>
+
+<p><p></p>
+
+<p>As you can see, the label is really useful, especially if you have more than one thing you are dumping, but it will be ignored if the value is simple. You could get around that a bit:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;Simple: #paris#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>This will simply prepend the paris value with a string that <i>kind</i> of acts like a label. Using cfdump for something you know is simple is overkill, but it&rsquo;s an option.</p>
+
+<p><p></p>
+
+<p>Another display related attribute is expand. This dictates if the dump should be expanded (fully visible) or compressed. The default is true and normally there isn&rsquo;t much use in setting the value to false, but I&rsquo;ve done that from time to time when I don&rsquo;t want the dump to &ldquo;explode&rdquo; over a page. Even if you don&rsquo;t use this value, you can click the header of a dump to compress or expand the display. The docs say this only works in Mozilla and Internet Explorer, but it works fine in Chrome and Safari as well. Here is an example of two dumps, one set to expand false.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset hawking = [1,2,{name=&ldquo;Ray&rdquo;,age=&ldquo;Almost my birthday&rdquo;},4]&gt;
+&lt;cfset beer = [&ldquo;good&rdquo;,&ldquo;really good&rdquo;, &ldquo;not worth drinking&rdquo;]&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#hawking#&rdquo; expand=&ldquo;false&rdquo; label=&ldquo;Foo&rdquo;&gt;
+&lt;cfdump var=&ldquo;#beer#&rdquo; label=&ldquo;Beer&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which returns:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip56.png" /></p>
+
+<p><p></p>
+
+<p>One place where I make use of this is in <a href="http://groups.adobe.com">Adobe Groups</a>. When an error occurs in the publishing system, and you are logged in as an admin, I dump the error with expand=&ldquo;false&rdquo; to keep the page layout somewhat like it should be. Like the label attribute, the expand attribute is ignored for simple values.</p>
+
+<p><p></p>
+
+<p>Now let&rsquo;s look at probably the most important attribute - top. The top attribute allows you to restrict the amount of data returned. In a query, this number represents the number of rows to show. In a structure, it represents how deep to go. Let&rsquo;s look at examples of both, starting with a query.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getart&rdquo; datasource=&ldquo;cfartgallery&rdquo;&gt;
+select  *
+from    art
+&lt;/cfquery&gt;
+&lt;cfdump var=&ldquo;#getart#&rdquo; label=&ldquo;Art&rdquo; top=3&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which returns:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip57.png" /></p>
+
+<p><p></p>
+
+<p>Notice the dump actually tells you it&rsquo;s filtered. Very handy in case you forget. While not documented, top works in arrays as well:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset a = [1,2,4,8,16,32]&gt;
+&lt;cfdump var=&ldquo;#a#&rdquo; top=4&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which oddly does <i>not</i> report the filter:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip58.png" /></p>
+
+<p><p></p>
+
+<p>And here is a structure example. As I mentioned above, this applies to how deep you will go into the structure. It will not limit the number of keys. So consider this structure with deeper members:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset s = {
+    name = &ldquo;Ray&rdquo;,
+    age = 37,
+    race = &ldquo;white&rdquo;,
+    religion = &ldquo;it&rsquo;s complicated&rdquo;,
+    music = &ldquo;!country&rdquo;,
+    genres = {
+        literature=[&ldquo;sci fi&rdquo;,&ldquo;fantasy&rdquo;],
+        music=[&ldquo;alt&rdquo;,&ldquo;indie&rdquo;,&ldquo;classical&rdquo;,&ldquo;jazz&rdquo;,&ldquo;cajun&rdquo;]
+    }
+}&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#s#&rdquo; top=1&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Notice the result doesn&rsquo;t show the contents of genres keys:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip59.png" /></p>
+
+<p><p></p>
+
+<p>The top attribute is probably most crucial with ORM entities. When you dump a CFC that is persistent, the tag will possibly generate an incredibly large amount of HTML. Consider a simple Group object. Groups have Members. So imagine one group has 50 members. Now imagine that Users have Groups. Each user has 1-5 groups. Groups have 50 or so members. Are you guessing what&rsquo;s going to happen? I&rsquo;ve brought down more ColdFusion servers than ever before by dumping an ORM entity. Unfortunately, using top in a persistent CFC can make it difficult to see whats in the object. So imagine that group with 50 members. Let&rsquo;s just add a top=1 to keep the dump from getting too big.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset g = entityLoadByPk(&ldquo;group&rdquo;, 113)&gt;
+&lt;cfdump var=&ldquo;#g#&rdquo; top=1&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Now check out the result:</p>
+
+<p><p>
+<img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip60.png" /></p>
+
+<p><p></p>
+
+<p>Notice that my members property, which should have a bunch of results, was limited to one. I can&rsquo;t easily tell the true size of the data there as the top attribute applies all the way down the dump. It would be nice (and I&rsquo;ve blogged this before), if cfdump was more ORM-aware, and perhaps had a way to nicely handle relationships like this. In case you&rsquo;re wondering, top also has no impact on simple values. Don&rsquo;t forget though you can limit the size of a string by using a function like left:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset name=&ldquo;Raymond Camden Smith&rdquo;&gt;
+&lt;cfdump var=&ldquo;#left(name,10)#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Since we&rsquo;re talking about limiting results, let&rsquo;s talk about two related attributes: show and hide. For a query, these attributes are a list of columns to either hide or show. For a structure, it&rsquo;s keys. In both cases, if you specify values that don&rsquo;t exist, ColdFusion won&rsquo;t mind.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getart&rdquo; datasource=&ldquo;cfartgallery&rdquo;&gt;
+select  *
+from    art
+&lt;/cfquery&gt;
+&lt;cfdump var=&ldquo;#getart#&rdquo; label=&ldquo;Art&rdquo; top=3 hide=&ldquo;artid&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Here is an example of something I&rsquo;ve done many times - hide the primary key. If I know there are columns I don&rsquo;t care about and really need to focus, I&rsquo;ll just hide them. Ditto for using show if I just care about one column. Like top, cfdump will tell you it filtered:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getart&rdquo; datasource=&ldquo;cfartgallery&rdquo;&gt;
+select  *
+from    art
+&lt;/cfquery&gt;
+&lt;cfdump var=&ldquo;#getart#&rdquo; label=&ldquo;Art&rdquo; top=&ldquo;3&rdquo; show=&ldquo;artid&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which returns:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip61.png" /></p>
+
+<p><p></p>
+
+<p>As I said, this works in structures as well, but apparently is buggy in subkeys. Consider:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset s = {
+    name = &ldquo;Ray&rdquo;,
+    age = 37,
+    race = &ldquo;white&rdquo;,
+    religion = &ldquo;it&rsquo;s complicated&rdquo;,
+    music = &ldquo;!country&rdquo;,
+    genres = {
+        literature=[&ldquo;sci fi&rdquo;,&ldquo;fantasy&rdquo;],
+        music=[&ldquo;alt&rdquo;,&ldquo;indie&rdquo;,&ldquo;classical&rdquo;,&ldquo;jazz&rdquo;,&ldquo;cajun&rdquo;]
+    }
+}&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#s#&rdquo; hide=&ldquo;music&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which returns:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip62.png" /></p>
+
+<p><p></p>
+
+<p>Notice that the top level music value was hidden, but not the subkey value. (I&rsquo;ll file a bug report for this in the morning.)</p>
+
+<p><p></p>
+
+<p>As long as we&rsquo;re still on filtering, let&rsquo;s cover an attribute I had completely no idea existed until tonight: keys. This works much like top, but whereas top for structures implies how deep, keys represents the number of keys to show. Consider this code:</p>
+
+<p><p></p>
+
+<p><code></p>
+
+<p>&lt;cfset s = {
+    name = &ldquo;Ray&rdquo;,
+    age = 37,
+    race = &ldquo;white&rdquo;,
+    religion = &ldquo;it&rsquo;s complicated&rdquo;,
+    music = &ldquo;!country&rdquo;,
+    genres = {
+        literature=[&ldquo;sci fi&rdquo;,&ldquo;fantasy&rdquo;],
+        music=[&ldquo;alt&rdquo;,&ldquo;indie&rdquo;,&ldquo;classical&rdquo;,&ldquo;jazz&rdquo;,&ldquo;cajun&rdquo;],
+        foo=&ldquo;goo&rdquo;,
+        zoo=[1,2]
+    }
+}&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#s#&rdquo; keys=&ldquo;3&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>The result of this is:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip63.png" /></p>
+
+<p><p></p>
+
+<p>As before - note that while the filter worked on &ldquo;top&rdquo;, it was forgotten in the substructure genres. I honestly don&rsquo;t know when I&rsquo;d use this - but it&rsquo;s an option.</p>
+
+<p><p></p>
+
+<p>Ok, moving along, another option we have is format. Format can be either html (the default), or text. Using our structure from before, I simply switched the format to text and remove the keys attribute:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#s#&rdquo; format=&ldquo;text&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>And consider the result:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip64.png" /></p>
+
+<p><p></p>
+
+<p>Notice that the result is <i>much</i> simpler, and it&rsquo;s automatically formatted with PRE tags. How does a query look? Here is a text dump of my query from earlier.</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip65.png" /></p>
+
+<p><p></p>
+
+<p>It&rsquo;s a bit vertical for my tastes (Ben Nadel must have been here ;), but I suppose it works. So where would this be useful? The cfdump result is quite heavy in terms of HTML sent out. This version is much smaller. It could be a lot better for email. You could also save the result to the file system. How would you do that? Let&rsquo;s now look at another argument - output.</p>
+
+<p><p></p>
+
+<p>The output attribute can be browser (the default), console (the server console, basically a log file if you run ColdFusion as a simple service), or a random file name. The file must be a complete path. Here is an example:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getart&rdquo; datasource=&ldquo;cfartgallery&rdquo;&gt;
+select  *
+from    art
+&lt;/cfquery&gt;
+&lt;cfdump var=&ldquo;#getart#&rdquo; label=&ldquo;Art&rdquo; format=&ldquo;text&rdquo; output=&ldquo;c:\ray.txt&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>When run, nothing from the dump is output to screen. Instead, the entire thing is sent to a file. ColdFusion will append results so if you have other dumps using output and the same file, they won&rsquo;t overwrite each other. Also note that cfdump is smart enough to know it doesn&rsquo;t need the pre tags when outputting to a file. Of course, you can also output to a file with html format;</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#getart#&rdquo; label=&ldquo;Art&rdquo; format=&ldquo;html&rdquo; output=&ldquo;c:\ray.html&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>I&rsquo;ve done this in the past for complex items I don&rsquo;t want to show up in the browser. I&rsquo;ll simply double click it and view it in my browser. A good example of this will be a dump within the model portion of a complex MVC application.</p>
+
+<p><p></p>
+
+<p>OK, still with me? Got a few more attributes to go before we&rsquo;re done. Now let&rsquo;s talk about metadata. Did you notice earlier on when I dumped the query we got some additional data? That included the cache status, SQL, and the execution time. If you don&rsquo;t like that, or just want to focus on the data, turn metadata off like so:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#getart#&rdquo; label=&ldquo;Art&rdquo; metainfo=&ldquo;false&rdquo; top=&ldquo;3&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Which returns&hellip;</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip66.png" /></p>
+
+<p><p></p>
+
+<p>Now the freaky version of this. Remember how I talked about persistent CFCs and how big they can get? Turns out the default value for metadata in persistent CFCs is false. Turning it on returns&hellip;. something odd.</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip67.png" /></p>
+
+<p><p></p>
+
+<p>What you are seeing is the result of this:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#g#&rdquo; top=&ldquo;3&rdquo; metainfo=&ldquo;true&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>The result is just plain odd. You still see much of the same data, but it considers the properties as an array of structs. It also seemingly mixes in the real database value along with the hard coded CFML. So look at the 3rd item in the array. The code behind this is:</p>
+
+<p><p></p>
+
+<p><code>
+property name=&ldquo;active&rdquo; ormtype=&ldquo;boolean&rdquo; dbdefault=&ldquo;false&rdquo;;
+</code></p>
+
+<p><p></p>
+
+<p>cfdump shows ormtype and dbdefault with their values, yet knew &ldquo;name&rdquo; was special and used the value as the key and the database value as the value. Make sense? Increasing top a bit results in some pretty complex coloring:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip68.png" /></p>
+
+<p><p></p>
+
+<p>Freaky-Tiki. Ok, another attribute is showUDFs. This applies to any <i>container</i> of data. If you cfdump a UDF itself - not the call, you will always get a result</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cffunction name=&ldquo;helloWorld&rdquo; access=&ldquo;public&rdquo; returnType=&ldquo;string&rdquo; output=&ldquo;false&rdquo;&gt;
+    &lt;cfargument name=&ldquo;name&rdquo; required=&ldquo;true&rdquo; hint=&ldquo;Your name&rdquo;&gt;
+    &lt;cfreturn &ldquo;Hello, #arguments.name#&rdquo;&gt;
+&lt;/cffunction&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#helloWorld#&rdquo; showUDFs=&ldquo;false&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Result:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/ScreenClip69.png" /></p>
+
+<p><p></p>
+
+<p>But if I switch to dumping variables, then this time the UDF will be hidden:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#variables#&rdquo; showUDFs=&ldquo;false&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Even if you turn showUDFs on (or leave it off the tag as on/true is the default), ColdFusion automatically compresses UDFs. I&rsquo;m guessing here is that the thinking is that you won&rsquo;t normally need to see a UDF. If you wrote it, you probably already know how it&rsquo;s defined anyway.</p>
+
+<p><p></p>
+
+<p>And now we come to our final attribute. If you made it this far, I congratulate you. The final attribute is perfect to end on - abort. For years, folks using cfdump for testing would do something like this.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#something#&rdquo;&gt;
+&lt;cfabort&gt;
+</code></p>
+
+<p><p></p>
+
+<p>If something was going wrong in their code, doing a quick dump and an abort allowed them to see the state of values and stop execution at that point. Apparently this done so much that Adobe actually made it part of the tag:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#something#&rdquo; abort&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Note that you do not need to actually state abort=&ldquo;true&rdquo;. Just the presence of the attribute by itself implies abort=&ldquo;true&rdquo;.</p>
+
+<p><p></p>
+
+<p>So - I hope this was helpful. I&rsquo;d love to hear about any interesting dump use cases or other tricks folks may have. Any questions are also - of course - welcome.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/03\/24\/Exploring-CFDUMP-AKA-an-Ode-to-Dump'; 
+this.page.identifier = '/?p=4170'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/03/24/Exploring-CFDUMP-AKA-an-Ode-to-Dump" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Exploring CFDUMP, AKA an Ode to Dump" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/03/24/Exploring-CFDUMP-AKA-an-Ode-to-Dump" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/03/24/Exploring-CFDUMP-AKA-an-Ode-to-Dump" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Exploring CFDUMP, AKA an Ode to Dump" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/03/24/Exploring-CFDUMP-AKA-an-Ode-to-Dump" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/03/24/Exploring-CFDUMP-AKA-an-Ode-to-Dump" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nodejs on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/tags/nodejs/</link>
+    <description>Recent content in Nodejs on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 07 Jan 2016 15:03:48 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Playing with StrongLoop - Building a Blog - Part Two</title>
+      <link>http://www.raymondcamden.com/2016/01/07/playing-with-strongloop-building-a-blog-part-two</link>
+      <pubDate>Thu, 07 Jan 2016 15:03:48 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/07/playing-with-strongloop-building-a-blog-part-two</guid>
+      <description>&lt;p&gt;Welcome to the next blog entry in my series describing building a real (kinda) application with &lt;a href=&#34;http://www.strongloop.com&#34;&gt;StrongLoop&lt;/a&gt;. In the &lt;a href=&#34;http://www.raymondcamden.com/2016/01/05/playing-with-strongloop-building-a-blog-part-one&#34;&gt;last entry&lt;/a&gt;, I talked about the application I was creating (a simple blog), built the model, and demonstrated how to work with the model on the server-side. I completely skipped over using the REST APIs to focus on a simple content-driven dynamic site.&lt;/p&gt;
+
+&lt;p&gt;In this post, I&amp;rsquo;m going to cover how I can lock down those APIs. This is in preparation for working on an admin for the blog in a later post. This post will be a bit short as this a topic I covered in depth a few months ago (&lt;a href=&#34;http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api&#34;&gt;Working with StrongLoop (Part Four) – Locking down the API&lt;/a&gt;), but I wanted to discuss the topic again to call out a few things I missed last time. I suggest reading that earlier post to give some additional context to what I&amp;rsquo;m describing below.&lt;/p&gt;
+
+&lt;p&gt;So first off - out of the box your models are completely CRUDable (create/read/update/delete) via the REST API. This is handy, but of course you want to lock down these APIs so folks don&amp;rsquo;t pepper your site with SEO spam.&lt;/p&gt;
+
+&lt;p&gt;As I discussed in my &lt;a href=&#34;http://www.raymondcamden.com/2015/10/21/working-with-strongloop-part-four-locking-down-the-api&#34;&gt;earlier post&lt;/a&gt;, locking down your API is as simple as using &lt;code&gt;slc loopback:acl&lt;/code&gt;. Here is an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot17.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;164&#34; class=&#34;aligncenter size-full wp-image-6973&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the end, the CLI simply updates the model&amp;rsquo;s JSON definition file. In general, the lock down process is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Block everything!&lt;/li&gt;
+&lt;li&gt;Allow anon folks to read&lt;/li&gt;
+&lt;li&gt;Allow auth users to write&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is how this looks in JSON:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+&#34;acls&#34;: [
+   {
+      &#34;accessType&#34;: &#34;*&#34;,
+      &#34;principalType&#34;: &#34;ROLE&#34;,
+      &#34;principalId&#34;: &#34;$everyone&#34;,
+      &#34;permission&#34;: &#34;DENY&#34;
+    },
+    {
+      &#34;accessType&#34;: &#34;READ&#34;,
+      &#34;principalType&#34;: &#34;ROLE&#34;,
+      &#34;principalId&#34;: &#34;$everyone&#34;,
+      &#34;permission&#34;: &#34;ALLOW&#34;
+    },
+    {
+      &#34;accessType&#34;: &#34;WRITE&#34;,
+      &#34;principalType&#34;: &#34;ROLE&#34;,
+      &#34;principalId&#34;: &#34;$authenticated&#34;,
+      &#34;permission&#34;: &#34;ALLOW&#34;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course, this assumes a security model where every logged in user is an admin. More complex apps will probably have different roles associated with users. So in a blog, you may have users who can write content, but only some who can &lt;i&gt;publish&lt;/i&gt; content so that the entry is publicly readable. For now I&amp;rsquo;m sticking with the simple system of allowing logged in users full power.&lt;/p&gt;
+
+&lt;p&gt;I did this for both entry and category. Remember, these are the primary model types for my blog.&lt;/p&gt;
+
+&lt;p&gt;I then created a new model called appuser. Again, I discussed this in the previous entry, but while Loopback has a core User object, it is strongly suggested you extend this type into your own for your application. One thing I didn&amp;rsquo;t demonstrate in the previous post was how this was done in the Composer app. It is a simple matter of making a new type and changing &lt;code&gt;Base model&lt;/code&gt; to User.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot1-2.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;332&#34; class=&#34;aligncenter size-full wp-image-7377&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Next I needed to test this. Again, I mentioned in the other post about how you can use the web-based Explorer to login, but it occurs to me that I didn&amp;rsquo;t actually show how that is done. Login is just another REST method! If you select your user type, you can scroll down to a login method. You then need to enter a JSON object containing your credentials.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/sl-login.png&#34; alt=&#34;sl login&#34; width=&#34;750&#34; height=&#34;421&#34; class=&#34;aligncenter size-full wp-image-7378&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After you login, make note of the response. The ID contains a token:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/Explorer-token.png&#34; alt=&#34;Explorer-token&#34; width=&#34;750&#34; height=&#34;279&#34; class=&#34;aligncenter size-full wp-image-7379&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(&lt;i&gt;Image taken from StrongLoop docs: &lt;a href=&#34;https://docs.strongloop.com/display/public/LB/Introduction+to+User+model+authentication&#34;&gt;Introduction to User model authentication&lt;/a&gt;&lt;/i&gt;)&lt;/p&gt;
+
+&lt;p&gt;You take that and then paste it into the token field on top of the explorer.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot2-1.png&#34; alt=&#34;shot2&#34; width=&#34;503&#34; height=&#34;129&#34; class=&#34;aligncenter size-full wp-image-7380&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This ensures your later calls via the explorer are authenticated. To be sure, I tested posting a new entry before being logged in:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot3-1.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;1107&#34; class=&#34;aligncenter size-full wp-image-7381&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then I confirmed I could create after logging in:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot4-1.png&#34; alt=&#34;shot4&#34; width=&#34;750&#34; height=&#34;632&#34; class=&#34;aligncenter size-full wp-image-7382&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I bet your curious about the server-side API. Is it impacted by ACLs? Nope. I guess that&amp;rsquo;s expected, but I was curious. Basically your Node.js code executes like a root user.&lt;/p&gt;
+
+&lt;p&gt;The updated version of the code can be found here: &lt;a href=&#34;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2&#34;&gt;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Seeding data for a StrongLoop app</title>
+      <link>http://www.raymondcamden.com/2016/01/06/seeding-data-for-a-strongloop-app</link>
+      <pubDate>Wed, 06 Jan 2016 15:21:03 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/06/seeding-data-for-a-strongloop-app</guid>
+      <description>&lt;div style=&#34;border-style:solid;border-width:thin;padding:5px&#34;&gt;&lt;strong&gt;Please Read! A few hours after posting this, a member of the StrongLoop team pointed out an alternative that did exactly what I wanted to accomplish in about one second of typing. I still think the &lt;i&gt;core&lt;/i&gt; of this blog entry makes sense as is so I&#39;m not editing it, but see the note at the bottom!&lt;/strong&gt;&lt;/div&gt;
+
+&lt;p&gt;This is just a quick post as a followup to something I mentioned in my &lt;a href=&#34;http://www.raymondcamden.com/2016/01/05/playing-with-strongloop-building-a-blog-part-one&#34;&gt;post yesterday&lt;/a&gt; on building a blog with &lt;a href=&#34;http://www.strongloop.com&#34;&gt;Strongloop&lt;/a&gt;. I mentioned that while working on my application, I kept losing my temporary data as I was using the &amp;ldquo;In Memory&amp;rdquo; datasource that is the default persistence method for data. That&amp;rsquo;s not a bug - in memory means exactly that - in memory - and as I restarted the app (using &lt;a href=&#34;http://nodemon.io/&#34;&gt;nodemon&lt;/a&gt;), I had to re-enter fake data to test.&lt;/p&gt;
+
+&lt;p&gt;While it takes all of three minutes to connect your app to Mongo, if you don&amp;rsquo;t have Mongo (or MySQL, or a db in general), it would be nice to be able to stick with the simple RAM based system while prototyping.&lt;/p&gt;
+
+&lt;p&gt;One of the things I realized is that Strongloop will run a set of scripts inside the boot directory on startup. In theory, that could be used to set some seed data. &lt;a href=&#34;https://jordankasper.com/&#34;&gt;Jordan Kasper&lt;/a&gt; (evangelist for StrongLoop, which sounds like a fun job, ahem) shared this script with me as an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/strongloop-training/coffee-time/blob/master/server/boot/create-sample-model-data.js&#34;&gt;https://github.com/strongloop-training/coffee-time/blob/master/server/boot/create-sample-model-data.js&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var async = require(&#39;async&#39;);
+var mysqlDatasourceName = &#39;mysql_dev&#39;;
+var mongoDatasourceName = &#39;mongodb_dev&#39;;
+
+module.exports = function(app) {
+  //data sources
+  var mongoDs = app.dataSources[mongoDatasourceName];
+  var mysqlDs = app.dataSources[mysqlDatasourceName];
+  //create all models
+  async.parallel({
+    reviewers: async.apply(createReviewers),
+    coffeeShops: async.apply(createCoffeeShops),
+  }, function(err, results) {
+    if (err) throw err;
+    createReviews(results.reviewers, results.coffeeShops, function(err) {
+      if (err) throw err;
+      console.log(&#39;&amp;gt; models created sucessfully&#39;);
+    });
+  });
+  //create reviewers
+  function createReviewers(cb) {
+    mongoDs.automigrate(&#39;Reviewer&#39;, function(err) {
+      if (err) return cb(err);
+      var Reviewer = app.models.Reviewer;
+      Reviewer.create([
+        {email: &#39;foo@bar.com&#39;, password: &#39;foobar&#39;},
+        {email: &#39;john@doe.com&#39;, password: &#39;johndoe&#39;},
+        {email: &#39;jane@doe.com&#39;, password: &#39;janedoe&#39;}
+      ], cb);
+    });
+  }
+  //create coffee shops
+  function createCoffeeShops(cb) {
+    mysqlDs.automigrate(&#39;CoffeeShop&#39;, function(err) {
+      if (err) return cb(err);
+      var CoffeeShop = app.models.CoffeeShop;
+      var shops = [
+        {name: &#39;Bel Cafe&#39;,openingHour:10, closingHour:18},
+        {name: &#39;Three Bees Coffee House&#39;,openingHour:6, closingHour:15},
+        {name: &#39;Caffe Artigiano&#39;,openingHour:17, closingHour:24},
+      ];
+      //add city if it&#39;s in the model
+      if(CoffeeShop.definition.properties.hasOwnProperty(&#39;city&#39;)){
+        var cities = [&#39;Vancouver&#39;, &#39;San Mateo&#39;];
+        shops.forEach(function(shop, idx){
+          shop.city = cities[idx%2];
+        });
+      }
+      CoffeeShop.create(shops, cb);
+    });
+  }
+  //create reviews
+  function createReviews(reviewers, coffeeShops, cb) {
+    mongoDs.automigrate(&#39;Review&#39;, function(err) {
+      if (err) return cb(err);
+      var Review = app.models.Review;
+      var DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
+      Review.create([
+        {
+          date: Date.now() - (DAY_IN_MILLISECONDS * 4),
+          rating: 5,
+          comments: &#39;A very good coffee shop.&#39;,
+          publisherId: reviewers[0].id,
+          coffeeShopId: coffeeShops[0].id,
+        },
+        {
+          date: Date.now() - (DAY_IN_MILLISECONDS * 3),
+          rating: 5,
+          comments: &#39;Quite pleasant.&#39;,
+          publisherId: reviewers[1].id,
+          coffeeShopId: coffeeShops[0].id,
+        },
+        {
+          date: Date.now() - (DAY_IN_MILLISECONDS * 2),
+          rating: 4,
+          comments: &#39;It was ok.&#39;,
+          publisherId: reviewers[1].id,
+          coffeeShopId: coffeeShops[1].id,
+        },
+        {
+          date: Date.now() - (DAY_IN_MILLISECONDS),
+          rating: 4,
+          comments: &#39;I go here everyday.&#39;,
+          publisherId: reviewers[2].id,
+          coffeeShopId: coffeeShops[2].id,
+        }
+      ], cb);
+    });
+  }
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;m still new to Strongloop and Loopback in general, but this makes sense. My needs were far simpler, so here is a script I came up with (and again, Jordan helped me make it better) that just writes to a model in the in-memory datasource.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var chalk = require(&#39;chalk&#39;);
+
+console.log(chalk.magenta(&#39;Lets seed this app!&#39;));
+
+/*
+This script is based on: 
+https://github.com/strongloop-training/coffee-time/blob/master/server/boot/create-sample-model-data.js
+*/
+
+module.exports = function(app) {
+
+    //sample data
+    var data = [
+        {
+            title:&#39;Content One&#39;, 
+            body:&#39;Body One&#39;,
+            posted:new Date()
+        },
+        {
+            title:&#39;Content Two&#39;, 
+            body:&#34;Body Two&#34;,
+            posted:new Date()
+        },
+        {
+            title:&#39;Content Three&#39;, 
+            body:&#39;Body Three&#39;,
+            posted:new Date()
+        }
+    ];
+    
+    app.models.TestContent.create(data, function(err, records) {
+        if (err) { return console.log(chalk.red(err.message)); }
+        console.log(chalk.magenta(&#39;Done seeding data, &#39;+records.length+&#39; records created.&#39;));
+    });
+    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pretty simple, and it works nicely.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot1-1.png&#34; alt=&#34;shot1&#34; width=&#34;550&#34; height=&#34;385&#34; class=&#34;aligncenter size-full wp-image-7367&#34; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;But Wait - There&#39;s More!&lt;/h2&gt;
+
+&lt;p&gt;So as I said up on top, a few hours after posting this, Rand Mckinney from StrongLoop shared this link with me: &lt;a href=&#34;https://docs.strongloop.com/display/public/LB/Memory+connector#Memoryconnector-Datapersistence&#34;&gt;Data persistence&lt;/a&gt;. In  this doc they mention that you can simply specify a JSON file for the datasource and the in memory data will persist to it. Like, seriously, &lt;i&gt;exactly&lt;/i&gt; what I had wanted. Here is an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+{                                                                                       
+  &#34;db&#34;: {
+    &#34;name&#34;: &#34;db&#34;,
+    &#34;connector&#34;: &#34;memory&#34;,
+    &#34;file&#34;: &#34;mydata.json&#34;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Still - probably - a bad idea in production - but as I said - this would be incredibly useful when prototyping!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Playing with StrongLoop - Building a Blog - Part One</title>
+      <link>http://www.raymondcamden.com/2016/01/05/playing-with-strongloop-building-a-blog-part-one</link>
+      <pubDate>Tue, 05 Jan 2016 16:16:50 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/05/playing-with-strongloop-building-a-blog-part-one</guid>
+      <description>&lt;p&gt;This year I&amp;rsquo;ve decided I&amp;rsquo;m going to write the hell out of some Node code. That&amp;rsquo;s both good and bad. It means I&amp;rsquo;ll be learning more and more about Node as a side effect but on the flip side, I&amp;rsquo;ll probably be producing a bunch of silly, not-terribly-practical examples as I go along. As always, I encourage people to remember that I am &lt;i&gt;not&lt;/i&gt; an expert at this. I&amp;rsquo;m learning. So please feel free to comment about what you would do differently. On the flip side - if I actually make something kinda cool, then let&amp;rsquo;s just pretend I&amp;rsquo;m brilliant, ok?&lt;/p&gt;
+
+&lt;p&gt;During the holiday break, I decided to work on a new demo application using &lt;a href=&#34;http://www.strongloop.com&#34;&gt;StrongLoop&lt;/a&gt;. I&amp;rsquo;ve blogged about StrongLoop before, specifically about using it to help build APIs powered by Node. There&amp;rsquo;s a lot more to StrongLoop and I hope to share that with you as the year goes on. But for now, I want to focus on the Loopback-powered aspects of StrongLoop, specifically using the ORM-like APIs to work with data.&lt;/p&gt;
+
+&lt;p&gt;With that in mind, I decided I&amp;rsquo;d begin by building a blog. To be absolutely clear, I&amp;rsquo;m not advocating that you go out and build a blog with StrongLoop. Just use WordPress. (Yes, even with my complaints about it, I&amp;rsquo;d just use it.) Or a static site generator. But when I&amp;rsquo;m practicing a new language, I like to build things where I can focus on the language and architecture instead of figuring out features. We all know what a blog is. That makes it easier to get started.&lt;/p&gt;
+
+&lt;p&gt;For the first version, I figured I&amp;rsquo;d support a home page that lists blog entries and a detail view of the blog post. That&amp;rsquo;s it. I&amp;rsquo;m going to save both administration, and security, for the next update.&lt;/p&gt;
+
+&lt;p&gt;I created a new StrongLoop app (as simple as &lt;code&gt;slc loopback&lt;/code&gt;) and then fired up StrongLoop Arc to work with the composer. I decided on two different models: entry and category. Entry, obviously, represents a blog entry. Here is how I designed it in the web app:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;414&#34; class=&#34;aligncenter size-full wp-image-7351&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I assume most of this makes sense as is, but you may be confused by the &lt;code&gt;slug&lt;/code&gt; property. The slug is what comes at the end of the URL and is typically the title minus any special characters. In a real world app the editor would default this for you and you would only modify it on rare occasions. We could also set it automatically via Loopback too. (And we&amp;rsquo;re going to do something kinda like that in a few minutes.)&lt;/p&gt;
+
+&lt;p&gt;I then defined a category type:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot2.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;356&#34; class=&#34;aligncenter size-full wp-image-7352&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I then went back to Entry to set up the relationship. This is where I hit my first issue. While you can define a property of another type, it is a singular property. So I could add a category field to Entry but I&amp;rsquo;d only be able to assign one category to an entry. Of course, Loopback supports all kinds of &amp;ldquo;multi&amp;rdquo; relations, but unfortunately, the web based admin doesn&amp;rsquo;t support setting it. Nor will it report it either. In the first screen shot, I&amp;rsquo;ve already got things working fine, but there&amp;rsquo;s no indication of it.&lt;/p&gt;
+
+&lt;p&gt;Luckily, it takes about 5 seconds to define the relationship via the CLI. You simply type &lt;code&gt;slc loopback:relation&lt;/code&gt; and you are prompted for the model to modify:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot3.png&#34; alt=&#34;shot3&#34; width=&#34;539&#34; height=&#34;193&#34; class=&#34;aligncenter size-full wp-image-7353&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then the type of relation:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot4.png&#34; alt=&#34;shot4&#34; width=&#34;590&#34; height=&#34;138&#34; class=&#34;aligncenter size-full wp-image-7354&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then what to connect to:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot6.png&#34; alt=&#34;shot6&#34; width=&#34;585&#34; height=&#34;226&#34; class=&#34;aligncenter size-full wp-image-7355&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And then finally - what to call the relationship:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot7.png&#34; alt=&#34;shot7&#34; width=&#34;603&#34; height=&#34;102&#34; class=&#34;aligncenter size-full wp-image-7356&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I have no idea how it figured out that the plural should be categories. You can define a plural name for your models but I never did for category. If it figured it out automagically - then cool.&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s a few more prompts you can just accept, and at the end, your modal JSON is modified:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+  &#34;relations&#34;: {
+    &#34;categories&#34;: {
+      &#34;type&#34;: &#34;hasMany&#34;,
+      &#34;model&#34;: &#34;category&#34;,
+      &#34;foreignKey&#34;: &#34;&#34;
+    }
+  },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Frankly, looking at that JSON, it is just as easy to type it as it is to use the CLI, so I&amp;rsquo;m not too bothered that I can&amp;rsquo;t do it in the web app. (Although I still wish it was at least recognized.)&lt;/p&gt;
+
+&lt;p&gt;Once I had that - I went ahead and opened up the StrongLoop API explorer and made a few blog entries:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot8.png&#34; alt=&#34;shot8&#34; width=&#34;750&#34; height=&#34;758&#34; class=&#34;aligncenter size-full wp-image-7357&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I don&amp;rsquo;t have a proper &amp;ldquo;admin&amp;rdquo; yet, but it takes mere seconds to use the explorer. That&amp;rsquo;s damn convenient.&lt;/p&gt;
+
+&lt;p&gt;Ok, so just to recap - at this point I&amp;rsquo;ve used Loopback/StrongLoop to define my content models. I even made a bit of content. I then turned my attention to actually building the application.&lt;/p&gt;
+
+&lt;p&gt;A Loopback application is a Node.js app using Express. That&amp;rsquo;s it. However, there&amp;rsquo;s a default structure to the app that you should familiarize yourself with. This structure is nicely documented (&lt;a href=&#34;https://docs.strongloop.com/display/public/LB/Standard+project+structure&#34;&gt;Standard project structure&lt;/a&gt;). A particular note is the default routes.js file. You&amp;rsquo;ll find this in the &lt;code&gt;boot&lt;/code&gt; directory which is automatically loaded by your application on - you guessed it - boot. I began by adding a route for my home page:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+app.get(&#39;/&#39;, function(req, res) {
+    console.log(&#39;getting blog entries&#39;);
+    app.models.entry.find({where:{released:true},order:&#39;published desc&#39;}).then(function(entries) {
+        res.render(&#39;index&#39;,{entries:entries});
+    });
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the most part this is boilerplate Express, but note how I can use Loopback&amp;rsquo;s APIs via the models object. The find method is a powerful query tool and in this case, we&amp;rsquo;re simply asking for items released and doing a sort. The result will be an array of objects that I can use as - err well - simple objects. For example, this is my view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;h2&amp;gt;Entries&amp;lt;/h2&amp;gt;
+
+{{#each entries}}
+    &amp;lt;p&amp;gt;
+    &amp;lt;a href=&amp;quot;{{url}}&amp;quot;&amp;gt;{{title}}&amp;lt;/a&amp;gt;&amp;lt;br/&amp;gt;
+    Published: {{moment published format=&amp;quot;MMMM D, YYYY h:mm A&amp;quot;}}
+    &amp;lt;/p&amp;gt;
+    
+{{/each}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing special about that, right? Do note though that I&amp;rsquo;m using a URL property. That didn&amp;rsquo;t exist in the model. How did I do that? I built an observer in my entry.js file to recognize load events:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+module.exports = function(Entry) {
+
+    Entry.observe(&#39;loaded&#39;, function(ctx, next) {
+        if(ctx &amp;&amp; ctx.instance &amp;&amp; ctx.instance.released) {
+            var date = ctx.instance.published;
+            ctx.instance.url = &#34;/&#34;+date.getFullYear()+&#34;/&#34;+(date.getMonth()+1)+&#34;/&#34;+date.getDate()+&#34;/&#34;+ctx.instance.slug;
+        }
+        next();
+    });
+    
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;m a bit unsure about why I need to check for ctx and ctx.instance, but without that check the server crashed when I added new data. And of course, as I see the code above, it makes much more sense to do this when the data is &lt;i&gt;persisted&lt;/i&gt;, not loaded. As I said, I&amp;rsquo;m learning. I&amp;rsquo;ll fix this before the next blog post.&lt;/p&gt;
+
+&lt;p&gt;For blog entries, the code is a bit more complex. My URLs look much like what you see here on this blog: 2015/1/2/Something-Something. The idea being a unique blog entry is the year+month+date+slug. When fetching content, it is easy enough to match on the slug, but the date portion threw me for a loop at first. (See what I did there?)&lt;/p&gt;
+
+&lt;p&gt;In most databases, you can do a where clause against a date part of a time stamp, so for example, where the year of some column that is a date field is equal to something. As far as I know you can&amp;rsquo;t do that in Loopback. But you can do a date comparison. This is what I ended up with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+app.get(&#39;/:year/:month/:day/:slug&#39;, function(req, res) {
+    console.log(&#39;do blog entry&#39;);
+    console.dir(req.params);
+    //create an upper and lower date range
+    var lowerDate = new Date(req.params.year, req.params.month-1, req.params.day);
+    var upperDate = new Date(lowerDate);
+    upperDate.setDate(upperDate.getDate()+1);
+    app.models.entry.findOne({where:{
+        released:true,
+        slug:req.params.slug,
+        published:{between:[lowerDate,upperDate]}
+    },limit:1}).then(function(entry) {
+        //first - did we get any?           
+        if(!entry) {
+            res.redirect(&#39;/&#39;);  
+        }
+        res.render(&#39;entry&#39;, {entry:entry});
+    });
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see where I define an upper and lower range for the published property. And that&amp;rsquo;s really it. Here are a few additional notes not necessarily related to the core point of this entry.&lt;/p&gt;
+
+&lt;h2&gt;Design&lt;/h2&gt;
+
+&lt;p&gt;For design, I tried &lt;a href=&#34;http://www.getmdl.io/&#34;&gt;Material Design Lite&lt;/a&gt;, which ended up being much more complex than Bootstrap. Maybe it&amp;rsquo;s just that I&amp;rsquo;m so used to Bootstrap, but I found working with MDL to be a bit overwhelming. Not so much on a component scale (which I didn&amp;rsquo;t actually get around to using), but as a layout template it was confusing as heck. I got it working, but honestly, it felt like a lot of work.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;750&#34; height=&#34;445&#34; class=&#34;aligncenter size-full wp-image-7358 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Persistence&lt;/h2&gt;
+
+&lt;p&gt;One of the coolest things about Loopback is that it uses a memory storage system out of the box. That means you don&amp;rsquo;t have to set &lt;i&gt;anything&lt;/i&gt; up while setting stuff up. Unfortunately, as soon as I got into the server-side code (I mean outside of the Model stuff) and my server was reloading with every edit, that stopped working for me.&lt;/p&gt;
+
+&lt;p&gt;Maybe I&amp;rsquo;m crazy, but I wish the memory persistance data store would support persisting to the file system. Yes, I know that&amp;rsquo;s a horrible idea in production, but in testing, if I could just have it persist data a bit longer, it would have been really helpful. I have to wonder if maybe there is some way I could use the boot feature to simply add some hard coded data to my system on startup. (Yeah, I like that idea!)&lt;/p&gt;
+
+&lt;h2&gt;Da Code&lt;/h2&gt;
+
+&lt;p&gt;If you want to see, and criticize, the code as it stands now, check it out here: &lt;a href=&#34;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog1&#34;&gt;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Ok, so what do you think? In the next entry, I&amp;rsquo;m going to lock down and secure those remote methods. Then I can start working on an admin.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

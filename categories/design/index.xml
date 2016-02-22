@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Design on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/design/</link>
+    <description>Recent content in Design on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Nov 2015 08:41:46 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/design/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Article: Advanced Image Editing in the Browser</title>
+      <link>http://www.raymondcamden.com/2015/11/11/article-advanced-image-editing-in-the-browser</link>
+      <pubDate>Wed, 11 Nov 2015 08:41:46 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/11/article-advanced-image-editing-in-the-browser</guid>
+      <description>&lt;p&gt;Just a quick FYI that I&amp;rsquo;ve released a new article for the Telerik Developer Network: &lt;a href=&#34;http://developer.telerik.com/featured/advanced-image-editing-in-the-browser/&#34;&gt;Advanced Image Editing in the Browser&lt;/a&gt;. The article discusses how you can add tooling to a web site to let non-technical users do basic (and sometimes advanced!) image editing directly in the browser.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Front-End Interview Questions – Part 5</title>
+      <link>http://www.raymondcamden.com/2015/04/10/front-end-interview-questions-part-5</link>
+      <pubDate>Fri, 10 Apr 2015 13:02:13 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/04/10/front-end-interview-questions-part-5</guid>
+      <description>&lt;p&gt;Nearly two months to the day since my last post on this series, I&amp;rsquo;m finally starting it up again. I&amp;rsquo;ll blame my new job for making me forget this for a while, but hopefully I can pick up steam again and finish all these darn questions.&lt;/p&gt;
+
+&lt;p&gt;This post is part of a series I’m writing where I attempt to answer, to the best of my ability, a set of &lt;a href=&#34;https://github.com/h5bp/Front-end-Developer-Interview-Questions&#34;&gt;Front-End developer questions&lt;/a&gt;. I expect/hope my readers will disagree, augment, and generally hash out my answers in the comments below.&lt;/p&gt;
+
+&lt;h4&gt;Name 3 ways to decrease page load (perceived or actual load time).&lt;/h4&gt;
+
+&lt;p&gt;Minimize images. I use &lt;a href=&#34;https://github.com/gruntjs/grunt-contrib-imagemin&#34;&gt;this grunt plugin&lt;/a&gt; before to automate it and it worked great.&lt;/p&gt;
+
+&lt;p&gt;Minimize and combine JavaScript files. I haven&amp;rsquo;t done this in grunt, but I&amp;rsquo;m sure plugins exist for that. The biggest issue I have with this is in development. How do I work on foo.js and goo.js such that I can test them in my browser, but in production, use all.min.js in my HTML code? That&amp;rsquo;s a bit off topic I suppose, but the flip between &amp;ldquo;development mode&amp;rdquo; and &amp;ldquo;production mode&amp;rdquo; for a web application is not something I honestly have a good feel for yet.&lt;/p&gt;
+
+&lt;p&gt;Minimize, combine, and &amp;ldquo;prune&amp;rdquo; CSS files. By prune I mean find unused styles and remove them. Addy Omsani has a good blog post on &lt;a href=&#34;http://addyosmani.com/blog/removing-unused-css/&#34;&gt;removing unused CSS&lt;/a&gt; and you can definitely automate this as well.&lt;/p&gt;
+
+&lt;p&gt;&lt;h4&gt;If you jumped on a project and they used tabs and you used spaces, what would you do?&lt;/h4&gt;
+I&amp;rsquo;d follow the project norm. I personally prefer tabs, but when working on a project, I&amp;rsquo;m going to follow the standards/guidelines/etc that everyone is following. If it was for something important and not cosmetic, I&amp;rsquo;d bring it up for discussion of course.&lt;/p&gt;
+
+&lt;p&gt;&lt;h4&gt;Describe how you would create a simple slideshow page.&lt;/h4&gt;
+Ok, two answers here. If jQuery was already being used, I&amp;rsquo;d probably find a good plugin. I feel kinda lame saying that - but - honestly - a client wants me to get the best tool for the job and would probably not want to pay me to rebuild something that has been done a thousand times over.&lt;/p&gt;
+
+&lt;p&gt;Now - assuming the question really wants to know how I&amp;rsquo;d build one - this is what I&amp;rsquo;d do. I&amp;rsquo;d use simple markup to list my images. Let&amp;rsquo;s say div tags. I&amp;rsquo;d wrap the entire list with one div, we&amp;rsquo;ll call it slideshow. I&amp;rsquo;d use CSS to default them to hidden. Finally I&amp;rsquo;d use JavaScript to get the divs, store them as an array, and make the first one visible. I&amp;rsquo;d build some form of simple navigation (and &amp;ldquo;previous&amp;rdquo; and &amp;ldquo;next&amp;rdquo; button for example) such that clicking them shows/hides the appropriate image. This is probably a bit heavy as all the images are loaded at once. I&amp;rsquo;m kind of assuming though you aren&amp;rsquo;t building a 90 image slide show. You could do it entirely via JavaScript. Store the images in an array and on load show the first one. (You could preload all the images, but if you do, then why not just do it in the DOM instead?) If the slide show was the main part of the page (and not just part of the rest of the page), I&amp;rsquo;d consider using hashes in the URL so someone could bookmark a particular image. (As an FYI, I actually built a mini slide show thing to demonstrate keypress events here: &lt;a href=&#34;http://www.raymondcamden.com/2015/02/16/adding-keyboard-navigation-to-a-client-side-application&#34;&gt;Adding keyboard navigation to a client-side application&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;h4&gt;What tools do you use to test your code&amp;rsquo;s performance?&lt;/h4&gt;
+Primarily just the Network tools in my browser dev tools. I&amp;rsquo;m not making use of profiling yet so I don&amp;rsquo;t have a good grasp on testing the performance of my JS in terms of how it acts on the page once it is loading. I guess you can say I&amp;rsquo;ve maybe got half the picture (getting crap to the browser), but need to get better and understanding the rest (how crap runs in the browser).&lt;/p&gt;
+
+&lt;p&gt;I can share a story though about how I learned about network performance. Like most things learnt - it was by screwing up. I had an existing &amp;ldquo;Web 1.0&amp;rdquo; app (I don&amp;rsquo;t really like that term but I think it makes sense to most of us) that I decided to update and make everything loaded via Ajax. This worked wonderfully until the content became so large that every page load was taking 4-5 seconds because of the size of the XML packets (yes, I used XML, I was still learning) going back and forth. It made me realize that just switching to Ajax doesn&amp;rsquo;t suddenly make your network any less of a concern.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Front-End Interview Questions</title>
+      <link>http://www.raymondcamden.com/2015/01/22/front-end-interview-questions</link>
+      <pubDate>Thu, 22 Jan 2015 11:29:31 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/22/front-end-interview-questions</guid>
+      <description>&lt;p&gt;A few days ago, either someone tweeted or someone shared with me an interesting document: &lt;a href=&#34;https://github.com/h5bp/Front-end-Developer-Interview-Questions&#34;&gt;Front-end Developer Interview Questions&lt;/a&gt;. This document (well, Git repo really) is a large set of questions that could be appropriate for interviewing someone for the role of a front-end developer. While this was new to me, apparently this document started way back in 2009 (did we even have browsers then?) and has had contributions from quite a few people.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve recently gone through a few interviews myself. I&amp;rsquo;ve discovered that I&amp;rsquo;m quite bad at it. Like probably some of you, the second someone asks me a question during a job interview I tend to freeze up. If I&amp;rsquo;m giving a presentation then it typically doesn&amp;rsquo;t really bother me. If I don&amp;rsquo;t know the answer, it is an excellent opportunity to show people what I do when I don&amp;rsquo;t know the answer. (Which, frankly, is more important than rote knowledge imho.) While I&amp;rsquo;m not interviewing anymore (hello IBM!), it bothered me that I performed badly. It also bothered me that there were quite a few things on this list that I felt I didn&amp;rsquo;t have a &lt;strong&gt;firm&lt;/strong&gt; grasp on. I&amp;rsquo;m not ashamed to reveal my ignorance to my blog readers. (Not too ashamed.) Here are a few things that I would have struggled with in a job interview. To be clear, for some of these I think I know the answer, but my confidence in sounding intelligent when answering them would have been low.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;What are the limitations when serving XHTML pages?&lt;/li&gt;
+&lt;li&gt;Are there any problems with serving pages as application/xhtml+xml?&lt;/li&gt;
+&lt;li&gt;How do you serve a page with content in multiple languages?&lt;/li&gt;
+&lt;li&gt;What are the different ways to visually hide content (and make it available only for screen readers)?&lt;/li&gt;
+&lt;li&gt;Any familiarity with styling SVG?&lt;/li&gt;
+&lt;li&gt;What are some of the &#34;gotchas&#34; for writing efficient CSS?&lt;/li&gt;
+&lt;li&gt;What&#39;s the difference between inline and inline-block?&lt;/li&gt;
+&lt;li&gt;Explain how this works in JavaScript (Yes, I admit this. I think I know it, but I don&#39;t think I have a 100% lock down on the answer here and I &lt;strong&gt;want&lt;/strong&gt; a 100% lock down.)&lt;/li&gt;
+&lt;li&gt;AMD vs. CommonJS?&lt;/li&gt;
+&lt;li&gt;What&#39;s the difference between host objects and native objects?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So here&amp;rsquo;s an idea. A challenge - for myself really - but open to my readers. Would it be useful to go through &lt;strong&gt;all&lt;/strong&gt; of the questions, a few at a time, and write up my blog entries on what my answer would be? I don&amp;rsquo;t think this is something I could do quickly, I&amp;rsquo;m thinking this could be a year long project, and heck, maybe I&amp;rsquo;ll give up, but there are topics on that list that I want a firmer understanding of and I think my readers could help flesh out my own misunderstandings.&lt;/p&gt;
+
+&lt;p&gt;&lt;i&gt;Photo credit: &lt;a href=&#34;https://www.flickr.com/photos/omcoc/6751047205/&#34;&gt;Question mark&lt;/a&gt; by ed_needs_a_bicycle&lt;/i&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My review of Ionic&#39;s Visual Application Builder</title>
+      <link>http://www.raymondcamden.com/2014/10/10/My-review-of-Ionics-Visual-Application-Builder</link>
+      <pubDate>Fri, 10 Oct 2014 15:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/10/10/My-review-of-Ionics-Visual-Application-Builder</guid>
+      <description>&lt;p&gt;
+Let me begin by saying that - like most developers I think - I have a pretty strong distrust for visual builders for applications. I&#39;ve been burned by too many tools that create something pretty on screen but generate a horrible mess of code behind the scenes. I think there are definitely tools that do a good job of it now, but once you&#39;ve been scarred by seeing div tags nested twenty layers deep, you get a bit sensitive. I&#39;ve recently become a bit more open minded about it. XCode, in general, has a very powerful UI building metaphor to it and I kinda dig how the Android tools handle it in Eclipse as well. Now that you understand how I approach these tools, let me talk to you a bit about the upcoming &lt;strong&gt;Ionic Creator&lt;/strong&gt; tool from the folks behind Ionic.
+&lt;/p&gt;
+
+&lt;p&gt;
+Ionic Creator is currently in private beta. For a while now folks have been able to sign up for testing and the Ionic team is inviting new batches of people at regular intervals. Earlier this week I was invited to the beta and gave it a spin. When you fire up the tool for the first time, you&#39;re prompted to create a new project. You can specify a starter page based on a few preset templates. This list is a bit bigger than what the CLI provides but for the most part I think you can figure out what each does.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/1.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Once your project is created you&#39;re provided with a blank slate for your first page. 
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/2.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+At the time of this review, there was a pretty serious bug where the project would load the page in an invalid state. If you try to do anything at all now, for the most part, it won&#39;t work. The clue is the lack of a header on the page. If you see this, hit reload, and notice how it changes:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/3.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+It is a small thing, but I ran into this whenever I loaded, or changed, projects. Once past this then it is a simple matter to begin dragging and dropping components onto the page. Components include buttons, cards, images, lists, and form elements. You can also drop in an HTML or Markdown component for free form typing. Currently the application will not let you drop a form element onto the page unless you put it inside a form component. That&#39;s good, but there isn&#39;t any feedback as to &lt;i&gt;why&lt;/i&gt; you can&#39;t drop the component. I&#39;ve already filed an issue suggesting they provide some feedback. Here is my attempt to add some basic controls to the page.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/4.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Notice that the upper left hand corner is used as a simple tree view. You can select items there to edit properties or select them on the page itself. Each component has different things you can modify. As an example, it is pretty easy to modify the list:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/5.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+You can also select items on the page and move them up. Creator intelligently handles &#34;collections&#34; so moving the list will also move the list items. Adding new pages is also a simple matter:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/6.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Each page has a name and a &#34;routing url&#34;. You can then specify that a button, for example, will link to another page. I created a new page called Other and kept the default routing url of /page2. I went back to my first page, selected one of the buttons, and set it to load up the new page:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/7.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+So for the most part, that&#39;s it for the &#39;drag/drop&#39; aspect. You can setup the components as you see fit and create as many pages as you would like. Once you&#39;re done playing around with the widgets, you can easily test it directly in the web page itself:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/8.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+I haven&#39;t tested the preview mode very hard, but basic links do work just fine:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/9.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Ok, so, that&#39;s not bad. But what about the code? Creator provides three different ways to get to the bits. Clicking Export brings up your choices:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/10.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+The first one simply provides you with a unique ID to use at the command line. This is probably the one most folks will use. As far as I know this is a one way street. You can&#39;t push back changes you made locally to Creator, but honestly there is probably no good way to handle what people would send back in. Obviously the first line, &lt;code&gt;npm install&lt;/code&gt; doesn&#39;t make sense if you already have the CLI installed. There should probably be a note there warning folks they don&#39;t need to reinstall Cordova and the Ionic CLI. Then again, the audience for this is probably more on the newbie side and may include people who haven&#39;t ever used the CLI.
+&lt;/p&gt;
+
+&lt;p&gt;
+The Zip File option is just that, a zip of your code. Finally, the Raw HTML is a &lt;i&gt;version&lt;/i&gt; of your application. I say version because they combine the HTML and JavaScript into one file to make it easier to cut and paste. I see the logic of that but it still bugs me a bit. ;) I just noticed that the zip version is also one file. Again, I don&#39;t like that, but that&#39;s just me.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/11.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+If you source a new project via the code given in the export prompt you get a &#39;proper&#39; Ionic project that you can immediately begin using. Oddly, some of the application logic is in index.html as opposed to app.js, but that may be a personal preference type thing. Ignoring that though you can go from the visual builder to your simulator in seconds - yep - seconds:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/icreview/12.png&#34; class=&#34;bthumb&#34;&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+So, final verdict? I&#39;m not sure this is a tool I&#39;d use for my demos, but I&#39;m probably not the target audience. I could definitely see using this as a prototype builder though. Or even asking a semi-technical client to take it for a spin and see what they like. It could save some time in terms of bootstrapping the application and I see some very strong value there. I think if it was tied to a service like PhoneGap Build, it would be a &lt;strong&gt;huge&lt;/strong&gt; win for folks. 
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>UX question, handling notifications</title>
+      <link>http://www.raymondcamden.com/2014/10/02/UX-question-handling-notifications</link>
+      <pubDate>Thu, 02 Oct 2014 11:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/10/02/UX-question-handling-notifications</guid>
+      <description>&lt;p&gt;
+Ok, just a random note. I was going to post this on Google+ but figured I&#39;d get a broader reach here on my blog. Lately I&#39;ve run into two sites that handle notifications in a way that kinda bug me. I wanted to see if it bugs you too. I&#39;m also curious if folks think my ideas for improvement makes sense, or if perhaps something else would be better.
+&lt;/p&gt;
+
+&lt;p&gt;
+The first example I want to share is &lt;a href=&#34;http://www.stackoverflow.com&#34;&gt;Stack Overflow&lt;/a&gt;. When you have a notification, it modifies an &#34;inbox&#34; icon at the top of the page giving you a numeric indicator of the number of messages. I didn&#39;t take a screen shot before I cleared them (and that&#39;s the important point I&#39;m getting too) but this is what I&#39;m talking about:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/shot113.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Clicking on it opens a list of your most recent messages. Again, I didn&#39;t take a screen shot of this, but &lt;strong&gt;unread&lt;/strong&gt; messages will have a darker background. This is nice as it makes it obvious which messages are new.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/shot212.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+So far so good, but the problem I run into is that when you have two or more unread messages, as soon as you click one, the entire list is marked as read. I know this will happen, so it actually prevents me from clicking sometimes as I don&#39;t want to respond unless I have time to respond to all of them.
+&lt;/p&gt;
+
+&lt;p&gt;
+Agreed? Shouldn&#39;t it keep the messages as unread until you actually view each page? I can see the flip side to this as well. If you have a butt load and don&#39;t want to read them all it would be a pain to click them all, but perhaps a small link in the dropdown could do a &#34;Mark All Read&#34; action.
+&lt;/p&gt;
+
+&lt;p&gt;
+The next thing that bugs me is Google Plus and their notifications. When you click, you see a nice list:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/shot38.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Notice how you get an abbreviated version of the post/comment in question. If you click, it switches to a detail view, in context, which is slick, but when you click back, it deletes the notification. What ends up hitting me is I simply want to read the comment now but may not want to respond till later. Having it automatically hide is a nuisance if I plan on responding later. 
+&lt;/p&gt;
+
+&lt;p&gt;
+This used to be more of a pain as it was difficult to find the previously read link, but now it is at the bottom of the list. It&#39;s still behavior that bugs me though.
+&lt;/p&gt;
+
+&lt;p&gt;
+So to be clear, I do not think I can do better UX than Stack Overflow or Google (grin), but I was thinking about these behaviors and just wanted to see what others thought as well.
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Syncing Edge Animate with Window Scroll</title>
+      <link>http://www.raymondcamden.com/2014/09/29/syncing-edge-animate-with-window-scroll</link>
+      <pubDate>Mon, 29 Sep 2014 08:09:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/09/29/syncing-edge-animate-with-window-scroll</guid>
+      <description>&lt;p&gt;
+Recently I&#39;ve come across a few sites that will tie window scrolling with animation. When used in a subtle, small fashion, this is kind of cool. When used to change large portions of the view or really screw with scrolling, I detect it. Like most things, it all comes down to how you use it I suppose. But I was thinking recently - how can we do this with Edge Animate? Turns out it is rather simple.
+&lt;/p&gt;
+
+&lt;p&gt;
+I began by creating a simple animation of a box moving from left to right. That is - unfortunately - the best I can design. Don&#39;t blame Edge Animate. Blame me. Next, I disabled autoplay for the animation. If you can&#39;t find this, be sure the Stage is selected and uncheck the box.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/sho11.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+With autoplay turned off, I then figured out what I needed to do to tie scrolling to animation.
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, I need to ensure the animation stays visible.
+&lt;li&gt;Second, I need to detect a scroll event.
+&lt;li&gt;Third, I then need to figure out how much the person has scrolled against the total amount they &lt;i&gt;can&lt;/i&gt; scroll. Basically, what percentage?
+&lt;li&gt;Finally, I need to set the animation&#39;s current position to that percentage.
+&lt;/ul&gt;
+
+&lt;p&gt;
+Let&#39;s break this down. I began by working in the animation&#39;s creationComplete event. I added an onscroll event first.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;window.onscroll = function(e) {
+    var perc = getScrollPerc();
+    var animPos = (perc/100) * animSize;
+    sym.stop(animPos);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+So, the first thing I do is get the scrolled percentage. That comes from this function:
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;//scroll perc - http://www.sitepoint.com/jquery-capture-vertical-scroll-percentage/
+      function getScrollPerc() {
+        var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
+        return (wintop/(docheight-winheight))*100;
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Thankfully Sam Deering had figured this out for me already and posted it &lt;a href=&#34;http://www.sitepoint.com/jquery-capture-vertical-scroll-percentage/&#34;&gt;here&lt;/a&gt;.  Next, I figured out where I was, percentage wise, in my animation&#39;s timeline. The value animSize is simply the size (timewise) of my animation:
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var animSize = sym.getDuration();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Finally, that last line is what moves the animation to a specific point. I was stuck on this for a while as the &lt;a href=&#34;http://www.adobe.com/devnet-docs/edgeanimate/api/current/index.html&#34;&gt;JavaScript API&lt;/a&gt; for Edge Animate does not specifically call out how to do this. My coworker &lt;a href=&#34;https://twitter.com/elainefinnell&#34;&gt;Elaine Finnell&lt;/a&gt; pointed out that the stop() method lets you move to a particular position. This is documented but I had not even considered looking at stop() as an option!
+&lt;/p&gt;
+
+&lt;p&gt;
+This worked great, but I wanted to add one more thing. If I had scrolled down a bit on my test page and reloaded, I wanted the application to recognize this on load and animate accordingly. I added some code to run &lt;i&gt;immediately&lt;/i&gt; on load:
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;//handle initial scroll
+if(getScrollPerc() &gt; 0) {
+      console.log(&#39;do initial move&#39;);
+      var perc = getScrollPerc();
+      var animPos = (perc/100) * animSize;
+      //timeout is from bugs with the DOM not being 100% ready
+      setTimeout(function() { sym.stop(animPos);}, 0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Basically this is a repeat of my other code, which is kinda bad, but notice the setTimeout. Edge Animate has a bug - or quirk - with working with the DOM in creationComplete. I&#39;ve run into this before and setTimeout, while lame, works around it. Here is my creationComplete code then as a whole.
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;(function($, Edge, compId){
+var Composition = Edge.Composition, Symbol = Edge.Symbol; &amp;#x2F;&amp;#x2F; aliases for commonly used Edge classes
+
+   &amp;#x2F;&amp;#x2F;Edge symbol: &amp;#x27;stage&amp;#x27;
+   (function(symbolName) {
+      
+      &amp;#x2F;&amp;#x2F;scroll perc - http:&amp;#x2F;&amp;#x2F;www.sitepoint.com&amp;#x2F;jquery-capture-vertical-scroll-percentage&amp;#x2F;
+      function getScrollPerc() {
+        var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
+        return (wintop&amp;#x2F;(docheight-winheight))*100;
+      }
+           
+      Symbol.bindSymbolAction(compId, symbolName, &amp;quot;creationComplete&amp;quot;, function(sym, e) {
+          
+          var animSize = sym.getDuration();
+
+          &amp;#x2F;&amp;#x2F;handle initial scroll
+          if(getScrollPerc() &amp;gt; 0) {
+              console.log(&amp;#x27;do initial move&amp;#x27;);
+              var perc = getScrollPerc();
+              var animPos = (perc&amp;#x2F;100) * animSize;
+              &amp;#x2F;&amp;#x2F;timeout is from bugs with the DOM not being 100% ready
+              setTimeout(function() { sym.stop(animPos);}, 0);
+          }
+          
+          window.onscroll = function(e) {
+              var perc = getScrollPerc();
+              var animPos = (perc&amp;#x2F;100) * animSize;
+              sym.stop(animPos);
+          }
+          
+
+      });
+      &amp;#x2F;&amp;#x2F;Edge binding end
+
+   })(&amp;quot;stage&amp;quot;);
+   &amp;#x2F;&amp;#x2F;Edge symbol end:&amp;#x27;stage&amp;#x27;
+
+})(jQuery, AdobeEdge, &amp;quot;EDGE-257179350&amp;quot;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+And it works awesome! Well, to me anyway. Check it out here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2014/sep/29/stickandscroll/Untitled-2.html&#34;&gt;http://www.raymondcamden.com/demos/2014/sep/29/stickandscroll/Untitled-2.html&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+Of course, that&#39;s my ugly version. Imagine if someone with some decent design skills tried it. Elaine did so - and with help from other Adobians (&lt;a href=&#34;https://twitter.com/mvujovic&#34;&gt;Max Vujovic&lt;/a&gt; and
+ &lt;a href=&#34;https://twitter.com/bemjb&#34;&gt;Bem Jones-Bey&lt;/a&gt;) came up with this &lt;i&gt;much&lt;/i&gt; cooler version: &lt;a href=&#34;http://www.raymondcamden.com/demos/2014/sep/29/elainesample/scroll.html&#34;&gt;http://www.raymondcamden.com/demos/2014/sep/29/elainesample/scroll.html&lt;/a&gt;. Check it out!
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Project Parfait moves to Creative Cloud</title>
+      <link>http://www.raymondcamden.com/2014/08/21/Project-Parfait-moves-to-Creative-Cloud</link>
+      <pubDate>Thu, 21 Aug 2014 15:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/08/21/Project-Parfait-moves-to-Creative-Cloud</guid>
+      <description>&lt;p&gt;
+A few months ago I &lt;a href=&#34;http://www.raymondcamden.com/2014/4/22/Project-Parfait--PSD-Introspection-in-the-Browser&#34;&gt;blogged&lt;/a&gt; about the awesome new tool we released, Project Parfait. Project Parfait lets you upload and inspect PSDs directly in the browser. For developers like myself this was especially nice. As powerful as Photoshop is, I don&#39;t have a lot of experience with it. I found Project Parfait to be a much easier tool. As a web developer, being able to quickly see color palettes, font faces, and sizes was a huge benefit.
+&lt;/p&gt;
+
+&lt;p&gt;
+The good news is that as of this morning, Project Parfait has graduated from beta tool to a full release as part of the Creative Cloud. By logging into the Creative Cloud (&lt;a href=&#34;http://creative.adobe.com&#34;&gt;creative.adobe.com&lt;/a&gt;), you get the &lt;strong&gt;same&lt;/strong&gt; features you had with Parfait, even at the &lt;strong&gt;free tier&lt;/strong&gt; of CC.
+&lt;/p&gt;
+
+&lt;p&gt;
+Note that you can also share these PSDs with people not on the Creative Cloud. In the next few months, this feature is going to pop up in other desktop tools as well.
+&lt;/p&gt;
+
+&lt;p&gt;
+As a quick tour, here is what you&#39;ll see different when selecting a PSD file in your Creative Cloud files tab.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/shot19.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Just hit the Extract link in the header and you&#39;ll see the same functionality you had with Parfait:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/shot29.png&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Project Parfait - PSD Introspection in the Browser</title>
+      <link>http://www.raymondcamden.com/2014/04/22/Project-Parfait-PSD-Introspection-in-the-Browser</link>
+      <pubDate>Tue, 22 Apr 2014 18:04:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/04/22/Project-Parfait-PSD-Introspection-in-the-Browser</guid>
+      <description>&lt;p&gt;
+Today Adobe launched a pretty cool new site - &lt;a href=&#34;https://projectparfait.adobe.com&#34;&gt;Project Parfait&lt;/a&gt;. Project Parfait lets you work with PSDs via your web browser. 
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s0.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+By default you&#39;re presented with a default PSD to work with, but you can quickly upload new PSDs by simply dragging them into the browser. I did multiple tests and the service didn&#39;t choke on any of them - even a large 30 megabyte one. Once you&#39;ve uploaded the PSD the service will then start processing your file to extract data from it.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s19.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+When done, you can open the PSD in the interface and start working with the various parts of the file. As a test, I grabbed a PSD a designer gave me for an older site of mine. This is a comp for a homepage redesign she did for me.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s9.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Lots of interesting information is available. The styles tab, for example, shows all available colors and fonts from the PSD. 
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s111.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+If I select one particular element from my PSD, I get both the specific colors used for it as well as CSS information.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s20.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Notice that I can copy the CSS from the right panel, or directly from the blue call-out right below it. See the arrow? This will actually create an asset from the selecting layer. I did this with the logo and it is now available to me from the Assets tab.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s_extract3.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+You can also extract the text if you have something useful there as opposed to the typical Lorem Ipsum. Another tab gives you access to all the layers with the ability to show/hide items.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s_layers.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+So yeah, I&#39;m biased, but this is pretty damn nifty. This is &lt;strong&gt;exactly&lt;/strong&gt; the kind of tool that is useful for me as a web developer. I have a lot of respect for Photoshop, but I find it hard to use at times as I don&#39;t use it very often. Something like Parfait is a heck of a lot simpler for me and I&#39;m willing to bet a lot of developers would think the same. If you try it out, make note of the Chat option in the lower right corner. I found a small bug and reported it via that pod. You can also get support via the &lt;a href=&#34;http://www.adobe.com/go/parfait_forum&#34;&gt;forums&lt;/a&gt; just launched for the project. Finally, check out this video below by my coworker Paul Traini. He covers Parfait as well as some of the other web-related options recently added to Photoshop.
+&lt;/p&gt;
+
+&lt;iframe width=&#34;651&#34; height=&#34;366&#34; src=&#34;//www.youtube.com/embed/wZUjdNmGZko?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Update to my JavaScript Behance API</title>
+      <link>http://www.raymondcamden.com/2014/04/11/Update-to-my-JavaScript-Behance-API</link>
+      <pubDate>Fri, 11 Apr 2014 09:04:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/04/11/Update-to-my-JavaScript-Behance-API</guid>
+      <description>&lt;p&gt;
+After &#34;speaking&#34; with a reader yesterday about my &lt;a href=&#34;http://behance.net&#34;&gt;Behance&lt;/a&gt; JavaScript API, I&#39;ve decided to go ahead and promote it to a proper GitHub repository. You can now find the code here: &lt;a href=&#34;https://github.com/cfjedimaster/BehanceAPI&#34;&gt;https://github.com/cfjedimaster/BehanceAPI&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+I also updated the API to support getProject. There are still a lot of things missing. I&#39;m basically adding functions as people ask for them, but with the number of demos I&#39;ve built with it I thought it was time to move it over to GitHub. Enjoy.
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Edge Animate 3.0</title>
+      <link>http://www.raymondcamden.com/2014/01/21/Edge-Animate-30</link>
+      <pubDate>Tue, 21 Jan 2014 15:01:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/01/21/Edge-Animate-30</guid>
+      <description>&lt;p&gt;
+One of my favorite tools has just hit 3.0 - &lt;a href=&#34;http://html.adobe.com/edge/animate/&#34;&gt;Edge Animate&lt;/a&gt;. New features in this release include:
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;Audio Support!&lt;/b&gt; That&#39;s right - by using native HTML5 audio, your Edge Animate projects can bind audio events to the timeline, to elements, and even do audio transitions.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Responsive Scaling&lt;/b&gt; This is exactly what it sounds like - proportional scaling of your Animate projects.&lt;/li&gt; 
+&lt;li&gt;&lt;b&gt;Script Loading&lt;/b&gt; Edge Animate now makes it easier to include other scripts in your project. You can either add in local libraries or point to CDNs.
+&lt;/ul&gt;
+
+&lt;p&gt;
+There is even more in 3.0. Check out the &lt;a href=&#34;http://helpx.adobe.com/edge-animate/using/whats-new-edge-animate-30.html&#34;&gt;release notes&lt;/a&gt; for more. You can also see 3.0 in action below thanks to product manager and all around cool person Sarah Hunt:
+&lt;/p&gt;
+
+&lt;iframe title=&#34;AdobeTV Video Player&#34; width=&#34;650&#34; height=&#34;373&#34; src=&#34;http://tv.adobe.com/embed/1213/21590/&#34; frameborder=&#34;0&#34; allowfullscreen scrolling=&#34;no&#34;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;
+You can find even more Edge Animate videos over at &lt;a href=&#34;http://tv.adobe.com/product/edge-animate/episode/recently-added/playlist/&#34;&gt;Adobe TV&lt;/a&gt; (the previous link is to recently added videos for Edge Animate) and read our tutorials over on the &lt;a href=&#34;https://helpx.adobe.com/creative-cloud/learn/tutorials/animate.html&#34;&gt;Help&lt;/a&gt; site.
+&lt;/p&gt;
+
+&lt;p&gt;
+As always, if my readers have any questions about this or want to see it in action, let me know!
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Creative Cloud Update Today</title>
+      <link>http://www.raymondcamden.com/2014/01/16/Creative-Cloud-Update-Today</link>
+      <pubDate>Thu, 16 Jan 2014 10:01:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/01/16/Creative-Cloud-Update-Today</guid>
+      <description>&lt;p&gt;
+Just a quick note to let my readers know that another update to Creative Cloud has landed today. Other people have written it up better so I&#39;m just going to share a few links. The updates are to Photoshop CC, Illustrator CC, InDesign CC, and Muse CC. (I saw a presentation on Muse a few weeks back and was really impressed. Obviously it isn&#39;t something I&#39;d use, but for non-technical people it looks like a pretty darn cool solution, especially when you mix in the hosting options.) 
+&lt;/p&gt;
+
+&lt;p&gt;
+Out of all the updates, the coolest though is &lt;a href=&#34;https://helpx.adobe.com/creative-cloud/learn/start/tutorials/photoshop-perspective-warp.html&#34;&gt;perspective warp&lt;/a&gt;. I am convinced that Photoshop is built with pure magic. This is - again - one more example of that. My buddy Andrew Trice created a cool video showing it off. (I&#39;ve linked to his post below.)
+&lt;/p&gt;
+
+&lt;iframe width=&#34;600&#34; height=&#34;338&#34; src=&#34;//www.youtube.com/embed/d4mV2CdaRkQ?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;
+Just to be clear, when you add Optimus to anything you win. Period.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/optimus.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Want to learn more? You can start off over at Adobe.com with this good overview: &lt;a href=&#34;http://blogs.adobe.com/creativelayer/adobe-creative-cloud-a-platform-for-innovation/&#34;&gt;Adobe Creative Cloud--A Platform for Innovation&lt;/a&gt;. Then read Andy&#39;s post here for a look at perspective warp: &lt;a href=&#34;http://www.tricedesigns.com/2014/01/16/perspective-warp-in-adobe-photoshop-cc/&#34;&gt;Perspective Warp in Adobe Photoshop CC&lt;/a&gt;. Remember, if you haven&#39;t signed up for Creative Cloud you can do so for free and get 30 day trials of everything discussed here (plus a crap ton of other products as well). Sign up here: &lt;a href=&#34;https://creative.adobe.com/&#34;&gt;https://creative.adobe.com/&lt;/a&gt;.
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adobe Edge Reflow - Preview 7</title>
+      <link>http://www.raymondcamden.com/2014/01/15/Adobe-Edge-Reflow-Preview-7</link>
+      <pubDate>Wed, 15 Jan 2014 07:01:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/01/15/Adobe-Edge-Reflow-Preview-7</guid>
+      <description>&lt;p&gt;
+Yesterday we released a new update to &lt;a href=&#34;http://html.adobe.com/edge/reflow/&#34;&gt;Edge Reflow&lt;/a&gt;, our responsive design tool part of the Creative Cloud. I&#39;ve spoken about Edge Reflow before. For me - it was the tool that really let me &#34;get&#34; responsive design. Being able to see the design change in real time and the CSS properties associated with those designs just made sense to me whereas before I had a hard time wrapping my head around it. If you haven&#39;t yet checked it out, now is a perfect time. You can try it for free, and of course, if you are a CC member it is included in your collection.
+&lt;/p&gt;
+
+&lt;p&gt;
+One of the biggest changes in the new preview is an updated getting started experience. When you first run Reflow, you now get a starter project with some good examples and tips on how to work with it.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/er.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+As a developer, this design tool can be a intimidating at first until you get used to it, so having this initial project I think will be very helpful.
+&lt;/p&gt;
+
+&lt;p&gt;
+Speaking of getting started, we also launched a whole new set of videos by Paul Trani. You can view them &lt;a href=&#34;https://helpx.adobe.com/creative-cloud/learn/tutorials/reflow.html#fundamentals&#34;&gt;here&lt;/a&gt;. These videos are also available for free so you can take a visual tour of the product before you download.
+&lt;/p&gt;
+
+&lt;p&gt;
+Other updates include:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Form Elements:&lt;/b&gt; You can now add form elements to your designs, including text boxes, radio/checkboxes, text areas, and dropdowns.
+&lt;/p&gt;
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/er2.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Layout Insertion Help:&lt;/b&gt; A new layout insertion caret makes it a bit easier to see where things will land when you move them.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Links and States:&lt;/b&gt; Reflow now includes the ability to add links as well as hover/focus states to UI items.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Group Updates:&lt;/b&gt; Finally, grouping has been improved with better UI. For example, it is easier now to see what it is in a group and modify group items.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Asset Panel:&lt;/b&gt; The asset panel now lets you both search and filter.
+&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;
+For the release notes, see this &lt;a href=&#34;http://forums.adobe.com/docs/DOC-3072&#34;&gt;forums doc&lt;/a&gt; and check out this nice high level &lt;a href=&#34;http://html.adobe.com/edge/reflow/features.html&#34;&gt;feature list&lt;/a&gt; for Reflow in general.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Delaying an Edge Animate asset until visible - Part 4</title>
+      <link>http://www.raymondcamden.com/2013/12/06/Delaying-an-Edge-Animate-asset-until-visible-Part-4</link>
+      <pubDate>Fri, 06 Dec 2013 09:12:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2013/12/06/Delaying-an-Edge-Animate-asset-until-visible-Part-4</guid>
+      <description>&lt;p&gt;
+Welcome to the &lt;b&gt;final&lt;/b&gt; blog post on delaying Edge Animate animations. I&#39;m saying final just because I can&#39;t believe how such a simple thing has turned into so many different blog posts, so many different variations, and so many different fun diversions. Most likely because I said this will be the final post, someone will discover some other interesting opportunity and I&#39;ll have to write a part 5. But hey - that&#39;s the fun part about being a developer, right? Before we start though, please be sure you&#39;ve read the earlier posts. I&#39;ll link to them at the bottom.
+&lt;/p&gt;
+
+&lt;p&gt;
+I had an interesting discussion with Felix in the comments on my &lt;a href=&#34;http://www.raymondcamden.com/index.cfm/2013/7/11/Delaying-an-Edge-Animate-asset-until-visible--Part-2&#34;&gt;second blog entry&lt;/a&gt; on this topic. He discovered an interesting bug. If the animation was scrolled into view, it would play. If the animation completed, and you scrolled it a bit, but just a tiny bit so it never left the view, it would start over. 
+&lt;/p&gt;
+
+&lt;p&gt;
+The issue was simple. My code didn&#39;t know that the asset had stayed visible during the scroll event. To fix this, I simply keep track of the asset becoming visible.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;#x2F;***********************
+* Adobe Edge Animate Composition Actions
+*
+* Edit this file with caution, being careful to preserve 
+* function signatures and comments starting with &amp;#x27;Edge&amp;#x27; to maintain the 
+* ability to interact with these actions from within Adobe Edge Animate
+*
+***********************&amp;#x2F;
+(function($, Edge, compId){
+var Composition = Edge.Composition, Symbol = Edge.Symbol; &amp;#x2F;&amp;#x2F; aliases for commonly used Edge classes
+
+   &amp;#x2F;&amp;#x2F;Edge symbol: &amp;#x27;stage&amp;#x27;
+   (function(symbolName) {
+      
+      
+      Symbol.bindSymbolAction(compId, symbolName, &amp;quot;creationComplete&amp;quot;, function(sym, e) {
+         &amp;#x2F;&amp;#x2F; insert code to be run when the symbol is created here
+        var wasHidden = true;
+
+        &amp;#x2F;&amp;#x2F;http:&amp;#x2F;&amp;#x2F;stackoverflow.com&amp;#x2F;a&amp;#x2F;488073&amp;#x2F;52160
+        function isScrolledIntoView(elem) {
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + $(elem).height();
+    
+            return ((elemBottom &amp;gt;= docViewTop) &amp;amp;&amp;amp; (elemTop &amp;lt;= docViewBottom)
+              &amp;amp;&amp;amp; (elemBottom &amp;lt;= docViewBottom) &amp;amp;&amp;amp;  (elemTop &amp;gt;= docViewTop) );
+        }         
+        
+        &amp;#x2F;&amp;#x2F;Immedidately see if visible
+        if(isScrolledIntoView(sym.element)) {
+            console.log(&amp;#x27;on load vis&amp;#x27;);
+            wasHidden=false;
+            sym.play();
+        }
+          
+        function doStart() {
+            if(isScrolledIntoView(sym.element)) {
+                if(wasHidden) {
+                    console.log(&amp;#x27;Start me up&amp;#x27;);   
+                    sym.play();
+                }
+                wasHidden = false;
+            } else {
+                console.log(&amp;#x27;stop&amp;#x27;);
+                sym.stop();
+                wasHidden = true;
+            }
+            
+        }
+          
+        $(window).on(&amp;quot;scroll&amp;quot;, doStart);
+        
+
+      });
+      &amp;#x2F;&amp;#x2F;Edge binding end
+
+      Symbol.bindTimelineAction(compId, symbolName, &amp;quot;Default Timeline&amp;quot;, &amp;quot;complete&amp;quot;, function(sym, e) {
+         &amp;#x2F;&amp;#x2F;sym.play(&amp;quot;Loop&amp;quot;)
+
+      });
+      &amp;#x2F;&amp;#x2F;Edge binding end
+
+   })(&amp;quot;stage&amp;quot;);
+   &amp;#x2F;&amp;#x2F;Edge symbol end:&amp;#x27;stage&amp;#x27;
+
+})(jQuery, AdobeEdge, &amp;quot;EDGE-62515662&amp;quot;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+If you&#39;ve read the other posts then most of this should make sense already. To see this in action try the demo below.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a href=&#34;http://www.raymondcamden.com/demos/2013/dec/4/Untitled-1.html&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/icon_128.png&#34; title=&#34;Demo, Baby&#34; border=&#34;0&#34;&gt;&lt;/a&gt;   
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Flash Professional CC adds HTML5 Canvas Support</title>
+      <link>http://www.raymondcamden.com/2013/12/03/Flash-Professional-CC-adds-HTML5-Canvas-Support</link>
+      <pubDate>Tue, 03 Dec 2013 12:12:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2013/12/03/Flash-Professional-CC-adds-HTML5-Canvas-Support</guid>
+      <description>&lt;p&gt;
+If you are a Creative Cloud subscriber, be sure to make note of the update to Flash Professional today. Despite being listed as a &#34;Bug Fixes&#34; update, this is actually a quite significant update as it now includes the ability to natively create HTML5 Canvas animations. This is done via the &lt;a href=&#34;http://www.createjs.com/#!/CreateJS&#34;&gt;CreateJS&lt;/a&gt; library.
+&lt;/p&gt;
+
+&lt;p&gt;
+After updating Flash Pro, you will see the option right away in the opening dialog:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/createnew copy.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+As a test, I wrote a quick and simple animation and then published it. The result - as expected - wasn&#39;t a SWF but HTML and JavaScript. You can see an example of the output here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2013/dec/3/Untitled-3.html&#34;&gt;http://www.raymondcamden.com/demos/2013/dec/3/Untitled-3.html&lt;/a&gt;. And of course, being HTML5 based, it works just fine in iOS:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/iOS Simulator Screen shot Dec 3, 2013, 11.17.35 AM.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+For more information, check out the &lt;a href=&#34;http://helpx.adobe.com/flash/using/creating-publishing-html5-canvas-document.html&#34;&gt;documentation&lt;/a&gt; and let me know what you think. 
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Want help with Snap.svg? (And a few more examples...)</title>
+      <link>http://www.raymondcamden.com/2013/11/06/Want-help-with-Snapsvg-And-a-few-more-examples</link>
+      <pubDate>Wed, 06 Nov 2013 15:11:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2013/11/06/Want-help-with-Snapsvg-And-a-few-more-examples</guid>
+      <description>&lt;p&gt;
+Just a quick note that if you are digging &lt;a href=&#34;http://www.snapsvg.io&#34;&gt;Snap.svg&lt;/a&gt; and want some support, you can post to the Google group that was set up: &lt;a href=&#34;https://groups.google.com/forum/#!forum/snapsvg&#34;&gt;https://groups.google.com/forum/#!forum/snapsvg&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+Obviously you can ask me as well (grin), and in fact, someone on the group already asked for a few small examples that I thought I&#39;d share here. Nothing too exciting, but here we go.
+&lt;/p&gt;
+
+&lt;p&gt;
+First - I was asked about how to handle click events using Snap.svg. Snap.svg provides a click handler for your fragments (think parts of your SVG) that makes this easy.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;Ray1&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;script src=&amp;quot;snap.svg-min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script&amp;gt;
+            window.onload = function () {
+                var s = Snap(&amp;quot;100%&amp;quot;, 600);
+                Snap.load(&amp;quot;first.svg&amp;quot;, function(f) {
+                    
+                    redSomething = f.select(&amp;quot;#red&amp;quot;);
+
+                    redSomething.click(function() {
+                        console.log(&amp;quot;You clicked the red thing!&amp;quot;);    
+                    });
+                    
+                    s.append(f);
+                });
+                
+            };
+        
+        &amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+        
+        &amp;lt;div id=&amp;quot;graphic&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+You can run a demo of this here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2013/nov/1/test.html&#34;&gt;http://www.raymondcamden.com/demos/2013/nov/1/test.html&lt;/a&gt;. Be sure to open your console of course and click the red thing. Thrilling.
+&lt;/p&gt;
+
+&lt;p&gt;
+Next I was asked to make the fragment animate to half its size.  Animating a size difference is pretty easy too:
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;Ray1&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;script src=&amp;quot;snap.svg-min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script&amp;gt;
+            window.onload = function () {
+                var s = Snap(&amp;quot;100%&amp;quot;, 600);
+                Snap.load(&amp;quot;first.svg&amp;quot;, function(f) {
+                    
+                    redSomething = f.select(&amp;quot;#red&amp;quot;);
+
+                    redSomething.click(function() {
+                        console.dir(redSomething);
+                        var width = redSomething.attr(&amp;quot;width&amp;quot;);
+                        var height = redSomething.attr(&amp;quot;height&amp;quot;);
+                        redSomething.animate({width:width&amp;#x2F;2,height:height&amp;#x2F;2}, 2000);
+                    });
+                    
+                    s.append(f);
+                });
+                
+            };
+        
+        &amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+        
+        &amp;lt;div id=&amp;quot;graphic&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Again, not terribly thrilling, but easy to do. You can try this yourself here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2013/nov/1/test2.html&#34;&gt;http://www.raymondcamden.com/demos/2013/nov/1/test2.html&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+For something that &lt;i&gt;is&lt;/i&gt; thrilling, check out this article on animating icons with Snap.svg: &lt;a href=&#34;http://tympanus.net/codrops/2013/11/05/animated-svg-icons-with-snap-svg/&#34;&gt;Animated SVG Icons with Snap.svg&lt;/a&gt;. 
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/Screenshot_11_6_13__2_22_PM.jpg&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

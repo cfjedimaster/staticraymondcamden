@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Updating my ColdFusion HTML presentation to use jQuery &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Updating my ColdFusion HTML presentation to use jQuery" />
+<meta property="og:description" content="So a few hours ago I blogged about how you can use the cfpresentation tag to create an HTML-based presentation. As I mentioned in the blog post, the output works, but, is a bit atrocious. It looks like I designed it. Drunk. (To be fair, I&rsquo;d probably do better design if I was drinking.) I spent a few minutes Googling today to see if I could find a nicer example, one based on jQuery. It didn&rsquo;t take long at all. I turned up this blog entry, 8 HTML presentation plugins that you can use, and decided to play around a bit.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/08/08/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery" />
+
+
+<meta property="og:updated_time" content="2011-08-08T17:08:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Updating my ColdFusion HTML presentation to use jQuery">
+<meta itemprop="description" content="So a few hours ago I blogged about how you can use the cfpresentation tag to create an HTML-based presentation. As I mentioned in the blog post, the output works, but, is a bit atrocious. It looks like I designed it. Drunk. (To be fair, I&rsquo;d probably do better design if I was drinking.) I spent a few minutes Googling today to see if I could find a nicer example, one based on jQuery. It didn&rsquo;t take long at all. I turned up this blog entry, 8 HTML presentation plugins that you can use, and decided to play around a bit.
+">
+
+
+<meta itemprop="dateModified" content="2011-08-08T17:08:00&#43;06:00" />
+<meta itemprop="wordCount" content="980">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Updating my ColdFusion HTML presentation to use jQuery"/>
+<meta name="twitter:description" content="So a few hours ago I blogged about how you can use the cfpresentation tag to create an HTML-based presentation. As I mentioned in the blog post, the output works, but, is a bit atrocious. It looks like I designed it. Drunk. (To be fair, I&rsquo;d probably do better design if I was drinking.) I spent a few minutes Googling today to see if I could find a nicer example, one based on jQuery. It didn&rsquo;t take long at all. I turned up this blog entry, 8 HTML presentation plugins that you can use, and decided to play around a bit.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/08/08/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery">
+    <h1 class="article-title" itemprop="name">
+        Updating my ColdFusion HTML presentation to use jQuery
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-08-08 17:08:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-08-08</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>So a few hours ago I <a href="http://www.raymondcamden.com/index.cfm/2011/8/8/cfpresentation-and-HTML-slides">blogged</a> about how you can use the cfpresentation tag to create an HTML-based presentation. As I mentioned in the blog post, the output works, but, is a bit atrocious. It looks like I designed it. Drunk. (To be fair, I&rsquo;d probably do better design if I was drinking.) I spent a few minutes Googling today to see if I could find a nicer example, one based on jQuery. It didn&rsquo;t take long at all. I turned up this blog entry, <a href="http://www.jay-han.com/2011/07/21/8-html-presentation-plugins-that-you-can-use/">8 HTML presentation plugins that you can use</a>, and decided to play around a bit.</p>
+
+<p><p></p>
+
+<p>After looking at a couple of them, I decided my favorite was the simple <a href="http://www.viget.com/inspire/jquery-presentation-plugin/">jQuery Presentation Plugin</a> by Trevor Davis. It wasn&rsquo;t the sexiest of them all, but it was the easiest to work with. (I also liked the <a href="http://code.google.com/p/html5slides/">html5slides</a> project, but I don&rsquo;t like presentations that show you a bit of the next slide on screen. I think it&rsquo;s distracting to the audience.) Here&rsquo;s how simple his code is to use:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;!DOCTYPE html&gt;
+&lt;html class=&ldquo;no-js&rdquo;&gt;
+  &lt;head&gt;
+    &lt;title&gt;jQuery Presentation Plugin&lt;/title&gt;
+    &lt;meta http-equiv=&ldquo;Content-type&rdquo; content=&ldquo;text/html; charset=utf-8&rdquo; /&gt;
+    &lt;script type=&ldquo;text/javascript&rdquo;&gt;(function(H){H.className=H.className.replace(/\bno-js\b/,&lsquo;js&rsquo;)})(document.documentElement)&lt;/script&gt;
+    &lt;link href=&ldquo;stylesheets/screen.css&rdquo; type=&ldquo;text/css&rdquo; rel=&ldquo;stylesheet&rdquo; media=&ldquo;Screen,projection&rdquo; /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&ldquo;header&rdquo;&gt;
+      &lt;div class=&ldquo;container&rdquo;&gt;
+        &lt;h1&gt;jQuery Presentation Plugin&lt;/h1&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;</p>
+
+<pre><code>&amp;lt;div id=&quot;content&quot;&amp;gt;
+  &amp;lt;div id=&quot;slides&quot;&amp;gt;
+    &amp;lt;div class=&quot;slide&quot;&amp;gt;
+      &amp;lt;h2&amp;gt;Slide 1&amp;lt;/h2&amp;gt;
+      &amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&amp;lt;/p&amp;gt;
+      &amp;lt;ul&amp;gt;
+       &amp;lt;li&amp;gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation&amp;lt;/li&amp;gt;
+       &amp;lt;li&amp;gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&amp;lt;/li&amp;gt;
+       &amp;lt;li&amp;gt;Here is a short list item&amp;lt;/li&amp;gt;
+      &amp;lt;/ul&amp;gt;
+
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&quot;slide&quot;&amp;gt;
+      &amp;lt;h2&amp;gt;Slide 2&amp;lt;/h2&amp;gt;
+      &amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&quot;slide&quot;&amp;gt;
+      &amp;lt;h2&amp;gt;Slide 3&amp;lt;/h2&amp;gt;
+      &amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&quot;slide&quot;&amp;gt;
+      &amp;lt;h2&amp;gt;Slide 4&amp;lt;/h2&amp;gt;
+      &amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div class=&quot;slide&quot;&amp;gt;
+      &amp;lt;h2&amp;gt;Slide 5&amp;lt;/h2&amp;gt;
+      &amp;lt;p&amp;gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+
+&amp;lt;div id=&quot;footer&quot;&amp;gt;
+  &amp;lt;div class=&quot;container&quot;&amp;gt;
+    &amp;copy; 2010 Trevor Davis Viget Labs
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;scripts/jquery.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;scripts/jquery.presentation.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;scripts/global.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+</code></pre>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>As you can see, it&rsquo;s just a collection of DIV tags. The presentation is enabled in global.js, but is just this few lines of code:</p>
+
+<p><p></p>
+
+<p><code>
+$(document).ready(function(){
+  $(&lsquo;#slides&rsquo;).presentation();
+});
+</code></p>
+
+<p><p></p>
+
+<p>If you want to see this live on my server, just click here: <a href="http://www.coldfusionjedi.com/demos/aug82011/preso/index.htm">http://www.coldfusionjedi.com/demos/aug82011/preso/index.htm</a>. Note that you can use the left and right arrow to navigate. Also note that the URL changes as you advance. This means you can deep link (for example, <a href="http://www.viget.com/uploads/file/jquery-presentation/#3">slide 3</a>) to a particular slide. I whipped up a quick example using ColdFusion. I apologize for doing yet another art browser.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getArt&rdquo; datasource=&ldquo;cfartgallery&rdquo;&gt;
+select  artid, artname, description, price, largeimage, mediatype, firstname, lastname
+from    art
+left join media on art.mediaid = media.mediaid
+left join artists on art.artistid = artists.artistid
+&lt;/cfquery&gt;</p>
+
+<p>&lt;!DOCTYPE html&gt;
+&lt;html class=&ldquo;no-js&rdquo;&gt;
+  &lt;head&gt;
+    &lt;title&gt;Art Presentation&lt;/title&gt;
+    &lt;meta http-equiv=&ldquo;Content-type&rdquo; content=&ldquo;text/html; charset=utf-8&rdquo; /&gt;
+    &lt;script type=&ldquo;text/javascript&rdquo;&gt;(function(H){H.className=H.className.replace(/\bno-js\b/,&lsquo;js&rsquo;)})(document.documentElement)&lt;/script&gt;
+    &lt;link href=&ldquo;stylesheets/screen.css&rdquo; type=&ldquo;text/css&rdquo; rel=&ldquo;stylesheet&rdquo; media=&ldquo;Screen,projection&rdquo; /&gt;
+    &lt;style&gt;
+        .artImage {
+            float:right;<br />
+            margin-top: 10px;
+            margin-left: 10px;
+            width: 250px;
+            height: 250px;
+        }</p>
+
+<pre><code>&amp;lt;/style&amp;gt;
+</code></pre>
+
+<p>&lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&ldquo;header&rdquo;&gt;
+      &lt;div class=&ldquo;container&rdquo;&gt;
+        &lt;h1&gt;jQuery Presentation Plugin&lt;/h1&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;</p>
+
+<pre><code>&amp;lt;div id=&quot;content&quot;&amp;gt;
+  &amp;lt;div id=&quot;slides&quot;&amp;gt;
+
+    &amp;lt;div class=&quot;slide&quot;&amp;gt;
+      &amp;lt;h2&amp;gt;Art Browser&amp;lt;/h2&amp;gt;
+      &amp;lt;p&amp;gt;Welcome to our Art Browser. It is the most beautiful presentation you will see today...&amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;cfoutput query=&quot;getArt&quot;&amp;gt;
+
+    &amp;lt;div class=&quot;slide&quot;&amp;gt;
+      &amp;lt;h2&amp;gt;#artname#&amp;lt;/h2&amp;gt;
+        &amp;lt;p&amp;gt;
+        &amp;lt;img src=&quot;artgallery/#largeimage#&quot; class=&quot;artImage&quot; &amp;gt;
+            &amp;lt;b&amp;gt;Artist:&amp;lt;/b&amp;gt; #firstname# #lastname#&amp;lt;br/&amp;gt;
+            &amp;lt;b&amp;gt;Media:&amp;lt;/b&amp;gt; #mediatype#&amp;lt;br/&amp;gt;
+            &amp;lt;b&amp;gt;Price:&amp;lt;/b&amp;gt; #dollarFormat(price)#&amp;lt;br/&amp;gt;
+            #description#
+        &amp;lt;/p&amp;gt; 
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;/cfoutput&amp;gt;
+
+
+
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+
+&amp;lt;div id=&quot;footer&quot;&amp;gt;
+  &amp;lt;div class=&quot;container&quot;&amp;gt;
+    &amp;copy; 2010 Trevor Davis Viget Labs
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;scripts/jquery.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;scripts/jquery.presentation.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&quot;text/javascript&quot; src=&quot;scripts/global.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+</code></pre>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>As you can see, I&rsquo;ve added a simple query on top. I then replaced the 2nd-N slides with a simple cfoutput. This gives me a title slide and then one slide per piece of art. I could add a concluding slide as well. To see this in action just hit the big ole demo button below.</p>
+
+<p><p></p>
+
+<p><a href="http://www.coldfusionjedi.com/demos/aug82011/preso/index.cfm"><img src="http://www.coldfusionjedi.com/images/icon_128.png" title="Demo, Baby" border="0"></a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/08\/08\/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery'; 
+this.page.identifier = '/?p=4320'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/08/08/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Updating my ColdFusion HTML presentation to use jQuery" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/08/08/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/08/08/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Updating my ColdFusion HTML presentation to use jQuery" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/08/08/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/08/08/Updating-my-ColdFusion-HTML-presentation-to-use-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

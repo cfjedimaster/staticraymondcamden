@@ -1,0 +1,1727 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Html5 on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/html5/</link>
+    <description>Recent content in Html5 on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 23 Nov 2015 15:34:15 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/html5/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>TIL - Autocomplete and forms</title>
+      <link>http://www.raymondcamden.com/2015/11/23/til-autocomplete-and-forms</link>
+      <pubDate>Mon, 23 Nov 2015 15:34:15 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/23/til-autocomplete-and-forms</guid>
+      <description>&lt;p&gt;As it is Thanksgiving week here in America and my brain has already kinda checked out, I decided to take a quick look at a particular aspect of the input tag - autocomplete.&lt;/p&gt;
+
+&lt;p&gt;As you may, or may not know, most modern web browsers will make an attempt to remember form fields of a &amp;ldquo;similar nature&amp;rdquo; such that entering your name on one site means that when you go to type in your name on another form it will offer to automatically complete the field for you.&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t like this, or perhaps you&amp;rsquo;re using your own autocomplete, you can add autocomplete=&amp;ldquo;off&amp;rdquo; to either the form tag or to an individual input field. The default behavior (most of the time) is to default to on.&lt;/p&gt;
+
+&lt;p&gt;Simple enough. But if you read the &lt;a href=&#34;https://html.spec.whatwg.org/multipage/forms.html#autofill&#34;&gt;spec&lt;/a&gt;, you discovered that the autocomplete attribute can also provide a &amp;ldquo;hint&amp;rdquo; about what field it is. So for example, maybe you&amp;rsquo;ve named your form field f_name, or firName, or usersGiveName, each of which is meant to represent what we commonly consider a &lt;strong&gt;first name&lt;/strong&gt;, you can actually tell the browser to consider each of those variations to be the first name.&lt;/p&gt;
+
+&lt;p&gt;The spec includes support for a large number of &amp;ldquo;hints&amp;rdquo;, including:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;name (full name)&lt;/li&gt;
+&lt;li&gt;given-name (first name)&lt;/li&gt;
+&lt;li&gt;family-name (last name)&lt;/li&gt;
+&lt;li&gt;honorific-suffix (Mr, Dr, etc)&lt;/li&gt;
+&lt;li&gt;new-password (oh my god don&#39;t use this, why would you want to recommend re-using the same password???)&lt;/li&gt;
+&lt;li&gt;address-line1(-3), address-level(-4) (address-level2 is city, of course)&lt;/li&gt;
+&lt;li&gt;country&lt;/li&gt;
+&lt;li&gt;country-name (um)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And so on. If you read the spec closely, it is also supposed to support &amp;ldquo;grouping&amp;rdquo;, such that I can say this is my street-address for shipping versus billing. So with that in mind, I decided to do a bit of digging. I was curious about a few things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;When would the browser prompt me to fill in one field versus an entire form?&lt;/li&gt;
+&lt;li&gt;Can I use crazy field names if I use the right autocomplete value as a hint?&lt;/li&gt;
+&lt;li&gt;What happens if I mix in a datalist in just to be crazy?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So first - a simple form.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+simple form:&amp;lt;br/&amp;gt;
+&amp;lt;form&amp;gt;
+    first name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;firstname&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;   
+    last name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;lastname&amp;quot;&amp;gt;&amp;lt;br/&amp;gt; 
+    &amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing special about that. On Chrome, once I enter a value once, I will get prompted to autofill the field, but only one field at a time. It didn&amp;rsquo;t remember that last time I did &amp;ldquo;Raymond&amp;rdquo; that &amp;ldquo;Camden&amp;rdquo; was an associated value.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot14.png&#34; alt=&#34;shot1&#34; width=&#34;247&#34; height=&#34;86&#34; class=&#34;aligncenter size-full wp-image-7123&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note the lovely pee-yellow CSS Chrome uses to signify an autocomplete field. I honestly don&amp;rsquo;t know why it does this when it requires user action in order to fill. Maybe the thinking is that I&amp;rsquo;ll forget where the name came from? (FYI, apparently you can tweak it: &lt;a href=&#34;http://stackoverflow.com/questions/2781549/removing-input-background-colour-for-chrome-autocomplete&#34;&gt;http://stackoverflow.com/questions/2781549/removing-input-background-colour-for-chrome-autocomplete&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;Firefox has the same behavior (without the CSS pee) as does MS Edge (but with pee).&lt;/p&gt;
+
+&lt;p&gt;Safari lets you use either other forms or your local contact info for form data. You can actually use both if you want:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot21.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;276&#34; class=&#34;aligncenter size-full wp-image-7124&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However, Safari will not begin suggesting a value until you type one letter. To me, that&amp;rsquo;s a mistake, because at the point I&amp;rsquo;m typing, I can finish typing my name in less time it takes for Safari to draw a list of names. The UI for filling from a contact card is different from &amp;lsquo;regular&amp;rsquo; autofill:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/safari.png&#34; alt=&#34;safari&#34; width=&#34;331&#34; height=&#34;145&#34; class=&#34;aligncenter size-full wp-image-7125&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, how about some more tests. I was first curious about why/when a form would &lt;i&gt;completely&lt;/i&gt; fill out. I tried this test:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+autocomplete on, with autocomplete hints&amp;lt;br/&amp;gt;
+&amp;lt;form&amp;gt;
+    first name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;firstname&amp;quot; autocomplete=&amp;quot;given-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;   
+    last name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;lastname&amp;quot; autocomplete=&amp;quot;family-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;    
+    &amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+    
+&amp;lt;p&amp;gt;
+
+autocomplete hints&amp;lt;br/&amp;gt;
+&amp;lt;form&amp;gt;
+    first name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;firstname&amp;quot; autocomplete=&amp;quot;given-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;   
+    last name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;lastname&amp;quot; autocomplete=&amp;quot;family-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;    
+    street: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;street&amp;quot; autocomplete=&amp;quot;street-address&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;
+    &amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In Chrome, while I could autocomplete fields in the first form, only the second form let me completely fill the entire form. I&amp;rsquo;m guessing it is the number of fields that matter here. Again, the UI is slightly different in each case. First, Chrome offering to fill just one field:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot31.png&#34; alt=&#34;shot3&#34; width=&#34;242&#34; height=&#34;74&#34; class=&#34;aligncenter size-full wp-image-7126&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Versus the entire form:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot41.png&#34; alt=&#34;shot4&#34; width=&#34;314&#34; height=&#34;105&#34; class=&#34;aligncenter size-full wp-image-7127&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To be honest, the second screen shot doesn&amp;rsquo;t really imply that it will fill the entire form, but it is certainly different. Maybe the fact that the street address there is supposed to be the clue.&lt;/p&gt;
+
+&lt;p&gt;Firefox does not fill out the entire form, but both Safari and Edge filled out the entire form (the one with three fields).&lt;/p&gt;
+
+&lt;p&gt;Ok, so what about the autocomplete=X feature? In theory, it should let me provide a clue such that my form field names won&amp;rsquo;t matter. Here was my first test.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+autocomplete using hints but weird names
+&amp;lt;form autocomplete=&amp;quot;on&amp;quot;&amp;gt;
+    first name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;firstname2a&amp;quot; autocomplete=&amp;quot;given-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt; 
+    last name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;lastname2a&amp;quot; autocomplete=&amp;quot;family-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;  
+    &amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In theory, this should work, but it completely failed to note that I&amp;rsquo;ve given both names previously. However, all the browsers remembered previous entries when viewing the form again. Then I added another field:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+autocomplete using hints but weird names
+&amp;lt;form autocomplete=&amp;quot;on&amp;quot;&amp;gt;
+    first name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;firstname2poo&amp;quot; autocomplete=&amp;quot;given-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;   
+    last name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;lastname2poo&amp;quot; autocomplete=&amp;quot;family-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;    
+    street: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;NOTAstreetpoo&amp;quot; autocomplete=&amp;quot;street-address&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;
+    &amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And oddly - Chrome finally got it working right:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/Screen-Shot-2015-11-23-at-3.12.41-PM.png&#34; alt=&#34;Screen Shot 2015-11-23 at 3.12.41 PM&#34; width=&#34;307&#34; height=&#34;123&#34; class=&#34;aligncenter size-full wp-image-7128&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;No other browser changed though in terms of its behavior.&lt;/p&gt;
+
+&lt;p&gt;Finally - I thought - why not see what happens when you add in a datalist:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+autocomplete using hints but weird names and datalist
+&amp;lt;form autocomplete=&amp;quot;on&amp;quot;&amp;gt;
+    first name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;firstname2&amp;quot; autocomplete=&amp;quot;given-name&amp;quot; list=&amp;quot;names&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;   
+    &amp;lt;datalist id=&amp;quot;names&amp;quot;&amp;gt;
+        &amp;lt;option&amp;gt;Ray&amp;lt;/option&amp;gt;
+        &amp;lt;option&amp;gt;Bob&amp;lt;/option&amp;gt;
+        &amp;lt;option&amp;gt;Elric&amp;lt;/option&amp;gt;
+    &amp;lt;/datalist&amp;gt;
+    last name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;lastname2&amp;quot; autocomplete=&amp;quot;family-name&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;   
+    street: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;NOTAstreet&amp;quot; autocomplete=&amp;quot;street-address&amp;quot;&amp;gt;&amp;lt;br/&amp;gt;
+    &amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I love datalist - and &lt;a href=&#34;http://caniuse.com/#search=datalist&#34;&gt;support is good&lt;/a&gt; if you ignore Safari (sigh). Firefox and Chrome will render both past entries &lt;i&gt;and&lt;/i&gt; autocomplete values at once, which is kinda nice:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/ff.png&#34; alt=&#34;ff&#34; width=&#34;384&#34; height=&#34;176&#34; class=&#34;aligncenter size-full wp-image-7129&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, while Edge supports datalist, it doesn&amp;rsquo;t handle rendering autocomplete and the list at the same time - you can see them overlapping here:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;750&#34; height=&#34;500&#34; class=&#34;aligncenter size-full wp-image-7130&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It gets weird if you add more values and the field is towards the bottom of the screen:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot10.png&#34; alt=&#34;shot10&#34; width=&#34;680&#34; height=&#34;408&#34; class=&#34;aligncenter size-full wp-image-7131&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;But give it enough space at the bottom and it messes up again:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot111.png&#34; alt=&#34;shot11&#34; width=&#34;589&#34; height=&#34;313&#34; class=&#34;aligncenter size-full wp-image-7132&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I need to remember to file a bug report on this, of course, since I can&amp;rsquo;t expect it to be fixed if I don&amp;rsquo;t bother to report it.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>In defense of the Reset button...</title>
+      <link>http://www.raymondcamden.com/2015/11/03/in-defense-of-the-reset-button</link>
+      <pubDate>Tue, 03 Nov 2015 16:28:08 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/03/in-defense-of-the-reset-button</guid>
+      <description>&lt;p&gt;Earlier this morning, in a fit of intense silliness - I tweeted an observation about reset buttons and forms:&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Speaking of forms, why are we still adding Reset buttons? When was the last time you &lt;em&gt;intentionally&lt;/em&gt; reset a form?&lt;/p&gt;&amp;mdash; Raymond Camden (@raymondcamden) &lt;a href=&#34;https://twitter.com/raymondcamden/status/661550547955150848&#34;&gt;November 3, 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Now, to be clear, I can&amp;rsquo;t remember the last time I accidentally cleared a form, but it still surprises me when I see the element on a page. I honestly cannot remember ever wanting to reset my form and it just feels like a bit of wasted space.&lt;/p&gt;
+
+&lt;p&gt;But of course - as soon as I tweeted this I got some pretty interesting responses that made me re-examine my thoughts on the feature in general. Here they are in no particular order.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-conversation=&#34;none&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/raymondcamden&#34;&gt;@raymondcamden&lt;/a&gt; &lt;a href=&#34;https://twitter.com/zeldman&#34;&gt;@zeldman&lt;/a&gt; for CSS-only drop-down nav controlled by radio inputs, where a reset closes the active menu &lt;a href=&#34;https://t.co/qAtmqPDazl&#34;&gt;https://t.co/qAtmqPDazl&lt;/a&gt;&lt;/p&gt;&amp;mdash; Radoslav Sharapanov (@radogado) &lt;a href=&#34;https://twitter.com/radogado/status/661551413810495488&#34;&gt;November 3, 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so that&amp;rsquo;s an interesting demo there. To be honest, whenever I see CSS doing weird stuff with forms, I get a bit concerned. It seems cool to &amp;ldquo;twist&amp;rdquo; stuff that way but something about it just seems wrong to me. That being said, I can&amp;rsquo;t CSS my way out of a paper bag so what do I know? In the end though, his demo/usage doesn&amp;rsquo;t really match my initial statement about the &amp;ldquo;typical&amp;rdquo; use of the reset button.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-conversation=&#34;none&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/raymondcamden&#34;&gt;@raymondcamden&lt;/a&gt; Only on a form used to filter search results (to reset it back to the default filter criteria).&lt;/p&gt;&amp;mdash; Dan Skaggs (@dskaggs) &lt;a href=&#34;https://twitter.com/dskaggs/status/661553344192708609&#34;&gt;November 3, 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;I replied back to Dan to clarify that he was talking about a form using Ajax and in that respect - I think it makes sense. As long as you change the value of the reset button to something like &amp;ldquo;Clear Search&amp;rdquo; and as long as you clear the results too, then I think this is actually a pretty darn valid use of the reset button.&lt;/p&gt;
+
+&lt;p&gt;And yes - you &lt;i&gt;can&lt;/i&gt; listen for a reset event. I never knew it existed but it makes sense that it does. Here it is in jQuery:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$(&#34;form&#34;).on(&#34;reset&#34;, function(e) {
+    console.log(&#34;reset event&#34;);
+    console.dir(e);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And yes - if you return false from this event you can &lt;strong&gt;block&lt;/strong&gt; a reset event. Why in the world would you do that? I have no idea. But you can.&lt;/p&gt;
+
+&lt;p&gt;As an aside - if you listen to the change event on a form field, even though reset technically changes the value (or &lt;i&gt;may&lt;/i&gt; change the value), you will &lt;strong&gt;not&lt;/strong&gt; get an event fired. I guess this makes sense, but if you are listening for change events and have a reset button, you&amp;rsquo;ll want to listen for the reset event as well.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-conversation=&#34;none&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/raymondcamden&#34;&gt;@raymondcamden&lt;/a&gt; I see them more used (and labelled) as &amp;quot;Cancel&amp;quot; which typically takes you back a page vs just clearing.&lt;/p&gt;&amp;mdash; Jordan Kasper (@jakerella) &lt;a href=&#34;https://twitter.com/jakerella/status/661557901115297792&#34;&gt;November 3, 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;This examples makes sense too - and you would need to listen to the reset event to handle it. But as with my issue with the fancy CSS drop down menu thing, this feels like a small violation of the purpose of the button. Not that the W3C Police will come after you, but it seems wrong.&lt;/p&gt;
+
+&lt;p&gt;Don&amp;rsquo;t forget that modern browsers support the formaction attribute. You could literally do this something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;input type=&#34;submit&#34; value=&#34;Cancel&#34; formaction=&#34;index.html&#34;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This only works on submit buttons though. Support is actually pretty good, and an article over on Wufoo documents this: &lt;a href=&#34;http://www.wufoo.com/html5/attributes/13-formaction.html&#34;&gt;The formaction attribute&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-conversation=&#34;none&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/raymondcamden&#34;&gt;@raymondcamden&lt;/a&gt; Password-protected pages. Happens during testing and in daily use cases for our clients (work at a web dev. company)&lt;/p&gt;&amp;mdash; Sarah Jedrey (@sejedrey) &lt;a href=&#34;https://twitter.com/sejedrey/status/661586179008143362&#34;&gt;November 3, 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;So my take away from this is that Sarah&amp;rsquo;s customers are asking for this on secured pages. I can&amp;rsquo;t see why a customer would ask for this - but at the same time - I&amp;rsquo;ve got intimate knowledge of browsers that a casual user would not have. Seeing a way to remove form data with a single click could be reassuring. And in fact, a bit later Ben S said the same thing:&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-conversation=&#34;none&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/raymondcamden&#34;&gt;@raymondcamden&lt;/a&gt; &lt;a href=&#34;https://twitter.com/zeldman&#34;&gt;@zeldman&lt;/a&gt; Funnily enough we just added them. Our users felt safer (in testing) knowing they could revert &amp;amp; restart their work.&lt;/p&gt;&amp;mdash; Ben S (@beseku) &lt;a href=&#34;https://twitter.com/beseku/status/661590252805599233&#34;&gt;November 3, 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;I guess I can see this helping users feel safe. As a reminder though, don&amp;rsquo;t forget that the reset button doesn&amp;rsquo;t &amp;ldquo;clear&amp;rdquo; forms, it literally resets it. So if your form is using hard coded values, perhaps on a &amp;ldquo;Edit Profile&amp;rdquo; page, the reset button isn&amp;rsquo;t going to clear anything off screen. Rather it will just return the form back to its original values.&lt;/p&gt;
+
+&lt;p&gt;Any comments on this?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Recording of my ORA Static Site Presentation</title>
+      <link>http://www.raymondcamden.com/2015/09/03/recording-of-my-ora-static-site-presentation</link>
+      <pubDate>Thu, 03 Sep 2015 05:53:41 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/09/03/recording-of-my-ora-static-site-presentation</guid>
+      <description>&lt;p&gt;Here is the recording of the presentation I gave yesterday - enjoy: &lt;a href=&#34;http://w.on24.com/r.htm?e=1001065&amp;s=1&amp;k=DAD5EBAFFBD67B61E8DAF6719D546A2A&#34;&gt;http://w.on24.com/r.htm?e=1001065&amp;s=1&amp;k=DAD5EBAFFBD67B61E8DAF6719D546A2A&lt;/a&gt;. Note that you will need to register with O&amp;rsquo;Reilly if you have not done so already. You also have the opportunity of seeing this live if you attend &lt;a href=&#34;http://ncdevcon.com/&#34;&gt;NCDevCon&lt;/a&gt; later this month.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Some initial thoughts on building desktop apps with Ionic and Electron</title>
+      <link>http://www.raymondcamden.com/2015/07/23/some-initial-thoughts-on-building-desktop-apps-with-ionic-and-electron</link>
+      <pubDate>Thu, 23 Jul 2015 11:34:56 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/23/some-initial-thoughts-on-building-desktop-apps-with-ionic-and-electron</guid>
+      <description>&lt;p&gt;Earlier this week I was working with a desktop app (which I can&amp;rsquo;t talk about&amp;hellip; yet) that had an Ionic-look to it. On a whim, I opened up the package contents and discovered it was an &lt;a href=&#34;http://electron.atom.io/&#34;&gt;Electron&lt;/a&gt; app. If you&amp;rsquo;ve never heard of it, Electron is an open source project that lets you build desktop apps (for Mac, Windows, and Linux) using web technologies. The last time I did anything in this space was with Adobe AIR, which was years ago. I&amp;rsquo;ve played with Electron a tiny bit, but I had not tried to use Ionic with it so I thought I&amp;rsquo;d give it a shot. Before digging in, I want to bring up two very important points.&lt;/p&gt;
+
+&lt;p&gt;First, I&amp;rsquo;ve spent maybe three hours looking into this subject, and obviously have not built a production application yet. This post focuses on some of the things I ran into while testing things out, but it is safe to assume more issues probably exist. As time goes on I&amp;rsquo;ll probably blog other things to consider and I hope my readers will share their own discoveries.&lt;/p&gt;
+
+&lt;p&gt;Second, while Electron makes it easy to build a desktop app, I cannot stress enough that you need to remember that app development is not the same as web development. When I talk about Cordova and how it makes it easy to use the web to build mobile apps, I try very hard to remind people that building a mobile app is nothing like building a web page. Repeat that after me: &amp;ldquo;Building a mobile app is nothing like building a web page.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Ok, so with that out of the way, let&amp;rsquo;s talk shop.&lt;/p&gt;
+
+&lt;h2&gt;The Basics&lt;/h2&gt;
+
+&lt;p&gt;The first thing I did was to see what would happen if I took a generic Ionic app and just plain ran it under Electron. To do that, I created a new Ionic app and used the -no-cordova flag. If you aren&amp;rsquo;t aware, you can tell the Ionic CLI to create a new project and skip including all the Cordova bits. You &lt;i&gt;still&lt;/i&gt; get a bunch of extra stuff like the bower file and gulp script, so I simply copied out the www folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot18.png&#34; alt=&#34;shot1&#34; width=&#34;261&#34; height=&#34;149&#34; class=&#34;aligncenter size-full wp-image-6515 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then, following the &lt;a href=&#34;http://electron.atom.io/docs/v0.29.0/tutorial/quick-start/&#34;&gt;Electron quick start&lt;/a&gt;, I added a package.json file and main.js. For my main.js, I copied their code exactly, but removed the bits to open dev tools. (More on that in a bit.)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var app = require(&#39;app&#39;);  // Module to control application life.
+var BrowserWindow = require(&#39;browser-window&#39;);  // Module to create native browser window.
+
+// Report crashes to our server.
+require(&#39;crash-reporter&#39;).start();
+
+// Keep a global reference of the window object, if you don&#39;t, the window will
+// be closed automatically when the JavaScript object is GCed.
+var mainWindow = null;
+
+// Quit when all windows are closed.
+app.on(&#39;window-all-closed&#39;, function() {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform != &#39;darwin&#39;) {
+    app.quit();
+  }
+});
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+app.on(&#39;ready&#39;, function() {
+  // Create the browser window.
+  mainWindow = new BrowserWindow({width: 800, height: 600});
+
+  // and load the index.html of the app.
+  mainWindow.loadUrl(&#39;file://&#39; + __dirname + &#39;/index.html&#39;);
+
+  // Emitted when the window is closed.
+  mainWindow.on(&#39;closed&#39;, function() {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    mainWindow = null;
+  });
+});&lt;/pre&gt;&lt;/code&gt;
+
+Here&#39;s how my directory structure looked. And again, this is the result of taking the www contents from Ionic&#39;s default template (tabs) and adding in the files Electron requires.
+
+&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot24.png&#34; alt=&#34;shot2&#34; width=&#34;255&#34; height=&#34;197&#34; class=&#34;aligncenter size-full wp-image-6516 imgborder&#34; /&gt;
+
+At this point I went and just tried running it with the Electron CLI. Surprisingly, it just plain worked. In fact, even the $ionicPlatform.ready fired. As far as I can tell, it noticed that cordova.js didn&#39;t load and assumed I was running the app on a desktop browser. 
+
+So as I said, it just worked, which was cool, but then I began digging in and figuring out bits and pieces of code I needed to rip out and modify.
+
+The first thing I did was remove cordova.js since - obviously - this was no longer a Cordova application. Here&#39;s the index.html for my app with that modification. I also added a title value. This is going to come into play in a bit.
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;My App&amp;lt;/title&amp;gt;
+
+    &amp;lt;link href=&amp;quot;lib/ionic/css/ionic.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+    &amp;lt;link href=&amp;quot;css/style.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+
+    &amp;lt;script src=&amp;quot;lib/ionic/js/ionic.bundle.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+    &amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;js/controllers.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;js/services.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;/head&amp;gt;
+  
+  &amp;lt;body ng-app=&amp;quot;starter&amp;quot;&amp;gt;
+    &amp;lt;ion-nav-bar class=&amp;quot;bar-stable&amp;quot;&amp;gt;
+      &amp;lt;ion-nav-back-button&amp;gt;
+      &amp;lt;/ion-nav-back-button&amp;gt;
+    &amp;lt;/ion-nav-bar&amp;gt;
+
+    &amp;lt;ion-nav-view&amp;gt;&amp;lt;/ion-nav-view&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next, inside app.js I completely emptied out the run block. We don&amp;rsquo;t need to test for the keyboard plugins, and ionicPlatform.ready does not make sense in this content. Electron lets you do &amp;lsquo;Desktop stuff&amp;rsquo;, but doesn&amp;rsquo;t make you wait for an event in your code.&lt;/p&gt;
+
+&lt;p&gt;I then noticed something odd. Here&amp;rsquo;s the app running:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot32.png&#34; alt=&#34;shot3&#34; width=&#34;500&#34; height=&#34;375&#34; class=&#34;aligncenter size-full wp-image-6517&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And here it is with another tab selected:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot43.png&#34; alt=&#34;shot4&#34; width=&#34;500&#34; height=&#34;375&#34; class=&#34;aligncenter size-full wp-image-6518&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Did you notice the title? The title of the app changes as I change my view. Now, that could be nice, but to me, it doesn&amp;rsquo;t make sense. The app should have a core title, like &amp;ldquo;My App&amp;rdquo;, the one I used in html earlier, and the header could continue to be more context-driven. Unfortunately, the code that updates the title is built into Ionic itself and can&amp;rsquo;t be disabled. I raised the issue in an Ionic chat room, and Leandro Zubrezki spent some time helping me out. The following solution is 100% his idea.&lt;/p&gt;
+
+&lt;p&gt;In order to prevent the title from updating, you can listen for the $ionicView.afterEnter event and stop it. So for example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$scope.$on(&#39;$ionicView.afterEnter&#39;, function(ev, data) { 
+      ev.stopPropagation();
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This can be used in your controllers, but quickly gets repetitive. While talking with Leandro, he suggested using the root level state to define a controller and run it from there. Here is that top level state from the Tabs demo:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.state(&#39;tab&#39;, {
+    url: &#39;/tab&#39;,
+    abstract: true,
+    templateUrl: &#39;templates/tabs.html&#39;,
+    controller:&#39;TestCtrl&#39;
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The change here is the addition of TestCtrl (not the best name). I then added this to the controllers.js file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.controller(&#39;TestCtrl&#39;, function($scope) {
+  
+  console.log(&#39;test ctrl&#39;);
+  $scope.$on(&#39;$ionicView.afterEnter&#39;, function(ev, data) { 
+      ev.stopPropagation();
+  });
+
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that was it! It worked fine at that point.&lt;/p&gt;
+
+&lt;p&gt;One more tip. Don&amp;rsquo;t forget you can enable dev tools for your app from the menu.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot51.png&#34; alt=&#34;shot5&#34; width=&#34;800&#34; height=&#34;619&#34; class=&#34;aligncenter size-full wp-image-6519&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;By default this will appear in the app. Don&amp;rsquo;t forget you can &amp;lsquo;pop it&amp;rsquo; out using the icon highlighted below.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot71.png&#34; alt=&#34;shot7&#34; width=&#34;500&#34; height=&#34;375&#34; class=&#34;aligncenter size-full wp-image-6520&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That icon actually has three states - right, bottom, and popped out. So if it looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot81.png&#34; alt=&#34;shot8&#34; width=&#34;343&#34; height=&#34;119&#34; class=&#34;aligncenter size-full wp-image-6521&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking will just send it to the bottom. Click and hold to open a menu and select the icon I showed earlier. Using this, I was able to have my dev tools nicely separate from the app which made debugging easier. I also made use of the Reload option too so I didn&amp;rsquo;t have to restart the app from the command line.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot91.png&#34; alt=&#34;shot9&#34; width=&#34;452&#34; height=&#34;700&#34; class=&#34;aligncenter size-full wp-image-6522 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Speaking of the command line, it is worth noting that console.log messages will show up there too.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot101.png&#34; alt=&#34;shot10&#34; width=&#34;800&#34; height=&#34;301&#34; class=&#34;aligncenter size-full wp-image-6523&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Whew - that was a lot. So if you want to see the code behind the modified Tabs demo, you can find it here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/ionic_electron_tabs&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/ionic_electron_tabs&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;A Demo&lt;/h2&gt;
+
+&lt;p&gt;With a basic understanding of how to make this work in place, I decided to try a desktop version of my &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_ionic&#34;&gt;RSS Reader&lt;/a&gt;. Here it is up and running:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot112.png&#34; alt=&#34;shot11&#34; width=&#34;600&#34; height=&#34;450&#34; class=&#34;aligncenter size-full wp-image-6524 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot122.png&#34; alt=&#34;shot12&#34; width=&#34;600&#34; height=&#34;450&#34; class=&#34;aligncenter size-full wp-image-6525 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Not the most thrilling app, but let me discuss how I changed it for Electron.&lt;/p&gt;
+
+&lt;p&gt;I began by making the modifications I mentioned above - removing cordova.js and ionicPlatform.ready. I then needed to do the &amp;ldquo;title fix&amp;rdquo; as I mentioned before. This was a bit weird for me as my app did not already have an abstract state on top. I ran into issues with this and got some great help from Mike Hartington. Here is my new app.js with the change to state.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;(function() {
+/* global angular,window,cordova,console */
+
+    angular.module(&#39;starter&#39;, [&#39;ionic&#39;,&#39;rssappControllers&#39;,&#39;rssappServices&#39;])
+
+    .constant(&amp;quot;settings&amp;quot;, {
+        title:&amp;quot;Raymond Camden&#39;s Blog&amp;quot;,
+        rss:&amp;quot;http://feeds.feedburner.com/raymondcamdensblog&amp;quot;
+    })
+
+    .config([&#39;$stateProvider&#39;, &#39;$urlRouterProvider&#39;, function($stateProvider, $urlRouterProvider) {
+
+        $stateProvider
+            .state(&#39;root&#39;, {
+                url: &#39;/root&#39;,
+                abstract: true,
+                controller:&#39;RootCtrl&#39;,
+                template:&#39;&amp;lt;ion-nav-view /&amp;gt;&#39;
+              })
+            .state(&#39;root.Home&#39;, {
+                url: &#39;/home&#39;,
+                controller: &#39;HomeCtrl&#39;,
+                templateUrl: &#39;partials/home.html&#39;
+            })
+            .state(&#39;root.Entries&#39;, {
+                url: &#39;/entries&#39;,
+                controller: &#39;EntriesCtrl&#39;,
+                templateUrl: &#39;partials/entries.html&#39;,
+            })
+            .state(&#39;root.Entry&#39;, {
+                url: &#39;/entry/:index&#39;,
+                controller: &#39;EntryCtrl&#39;,
+                templateUrl: &#39;partials/entry.html&#39;,
+            })
+            .state(&#39;root.Offline&#39;, {
+                url: &#39;/offline&#39;,
+                templateUrl: &#39;partials/offline.html&#39;
+            });
+
+        $urlRouterProvider.otherwise(&amp;quot;/root/home&amp;quot;);
+
+    }])
+
+    .run([&#39;$ionicPlatform&#39;,&#39;$rootScope&#39;,&#39;$state&#39;, function($ionicPlatform, $rootScope, $state) {
+
+        $rootScope.goHome = function() {
+            $state.go(&amp;quot;root.Entries&amp;quot;);
+        };
+
+    }]);
+
+}());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Essentially, my root state has a blank template because that&amp;rsquo;s required in Angular. Well, not blank, but a template with just a nav-view. All I really wanted was my root controller. I won&amp;rsquo;t show the code as it is the same event hack I described above.&lt;/p&gt;
+
+&lt;p&gt;Next, I had to make another modification. My RSS Reader app used the Network Information Cordova plugin (and ngCordova) to check to see if you were online. This is somewhat simpler in Electron - you just use navigator.onLine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;if(navigator.onLine) {
+    rssService.getEntries(settings.rss).then(function(entries) {
+        $ionicLoading.hide();
+        $rootScope.entries = entries;
+        $state.go(&#34;root.Entries&#34;);
+    });
+
+} else {
+    console.log(&#34;offline, push to error&#34;);
+    $ionicLoading.hide();
+    $state.go(&#34;root.Offline&#34;);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So far so good. My final change was to the &amp;ldquo;Read Entry on Site&amp;rdquo; button. In the Cordova demo, this uses the InAppBrowser. But in Electron, we can actually use a shell command to open a url. The cool thing is that this will then use the user&amp;rsquo;s desired browser to open a new tab:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$scope.readEntry = function(e) {
+    var shell = require(&#39;shell&#39;);
+    shell.openExternal(e.link);
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pretty cool, right? If you want the full source code, you may find it here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_electron&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_electron&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;All in all, I think this is an interesting idea. Ionic provides a great UI, and it looks just as good on desktop as it does mobile, and obviously the power of Angular to help architect your application is just as useful here. Certainly there are issues to keep in mind when building a desktop app that won&amp;rsquo;t apply to mobile, but they are things you can address. I&amp;rsquo;d love to hear what people think, and if you build something (or have built something), please share it in the comments below!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SauceDB - Building the back end with IBM Bluemix</title>
+      <link>http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix</link>
+      <pubDate>Mon, 20 Jul 2015 14:40:36 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix</guid>
+      <description>&lt;p&gt;Welcome to another post detailing my efforts to build an &lt;a href=&#34;http://ionicframework.com&#34;&gt;Ionic&lt;/a&gt;-based mobile app backed by Node.js and Cloudant on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. In my &lt;a href=&#34;http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end&#34;&gt;last post&lt;/a&gt;, I focused on the front end of the application. I talked about the various screens I built and how my service layer used mock data to generate data. In today&amp;rsquo;s post, I&amp;rsquo;m going to setup, design, and connect a back end server to start replacing some of that mock data with real information. As a reminder, you can find the initial post in this series &lt;a href=&#34;http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb&#34;&gt;here&lt;/a&gt;,&lt;/p&gt;
+
+&lt;p&gt;Alright - so as I mentioned, I&amp;rsquo;m going to use &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt; to host the application. I&amp;rsquo;ve talked about Bluemix before, but let me give you a quick refresher on what it offers.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/Bluemix-logo-right.png&#34; alt=&#34;Bluemix-logo-right&#34; width=&#34;450&#34; height=&#34;167&#34; class=&#34;aligncenter size-full wp-image-6429&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Bluemix is a PaaS offering. If you aren&amp;rsquo;t up to date on the latest acronyms the cool kids use, this is &amp;ldquo;Platform as a Service&amp;rdquo;. In short, it lets you set up applications and services on the cloud all via a simple dashboard and command line. There&amp;rsquo;s a variety of different services, some I&amp;rsquo;ve already blogged about here before, and a large library of code you can add to your application to make using those services even easier. I&amp;rsquo;ve already set up my application in Bluemix, but let me walk you through what the process was like.&lt;/p&gt;
+
+&lt;p&gt;After signing in (and you can sign up for a trial for free), I clicked on Create App:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot16.png&#34; alt=&#34;shot1&#34; width=&#34;800&#34; height=&#34;408&#34; class=&#34;aligncenter size-full wp-image-6430&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then selected Mobile:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot23.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;341&#34; class=&#34;aligncenter size-full wp-image-6431&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And then the option for Hybrid:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot31.png&#34; alt=&#34;shot3&#34; width=&#34;800&#34; height=&#34;404&#34; class=&#34;aligncenter size-full wp-image-6432&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I clicked continue on the detail and then named the app. Note that in the screen shot below I used a slightly different name so as to not conflict with the app I already created.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot42.png&#34; alt=&#34;shot4&#34; width=&#34;800&#34; height=&#34;386&#34; class=&#34;aligncenter size-full wp-image-6433&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After you hit finish, your application is going to be staged and a number of default services assigned to it.&lt;/p&gt;
+
+&lt;p&gt;At this point, you have a few options. You can take an existing Node.js app and configure to work with Bluemix services, or you can take their boilerplate code and work with that. Since this is a new app, I recommend getting the boilerplate. You can find that by clicking &amp;ldquo;Start coding&amp;rdquo; in the left hand nav:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot6.png&#34; alt=&#34;shot6&#34; width=&#34;350&#34; height=&#34;317&#34; class=&#34;aligncenter size-full wp-image-6435&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This leads you to a documentation page where you can download both the command line interface, something you&amp;rsquo;ll only need to do once, and the boilerplate. As I said, I recommend getting the boilerplate as it has the required modules to work with Bluemix already defined in the package.json. It also includes some sample code that you&amp;rsquo;ll probably want to remove. For example, I&amp;rsquo;m not using the Mobile Application Security service so I don&amp;rsquo;t need the package. But it is a good place to start.&lt;/p&gt;
+
+&lt;p&gt;In case your curious, the &amp;ldquo;Enable Node.js app&amp;rdquo; you&amp;rsquo;ll see on top&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot5.png&#34; alt=&#34;shot5&#34; width=&#34;800&#34; height=&#34;463&#34; class=&#34;aligncenter size-full wp-image-6434&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;is just another link to documentation that you can read later. Whenever I see this UI I assume that is a &lt;i&gt;required&lt;/i&gt; link, but it is not. To be clear, your Bluemix app itself is ready to kick butt right away, you don&amp;rsquo;t need to flip some toggle. You do need to upload your code using the cf command line. That &amp;ldquo;Start coding&amp;rdquo; link I just mentioned explains how to do that. It&amp;rsquo;s fairly simple and I won&amp;rsquo;t repeat it here.&lt;/p&gt;
+
+&lt;p&gt;For SauceDB, I needed to modify the services set up by Bluemix. Here is what you get by default:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot7.png&#34; alt=&#34;shot7&#34; width=&#34;800&#34; height=&#34;322&#34; class=&#34;aligncenter size-full wp-image-6436&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Since I&amp;rsquo;m not using them, I removed both Mobile Application Security and Mobile Data. You can do that using the little gear icon in the upper right side of each service. To add in support for Cloudant, you simply click &amp;ldquo;Add a Service or API&amp;rdquo; and find the Cloudant service on the next page. As I said, Bluemix provides access to a bunch of services, so you can use the search form on top to filter them out:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot8.png&#34; alt=&#34;shot8&#34; width=&#34;600&#34; height=&#34;550&#34; class=&#34;aligncenter size-full wp-image-6437&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so that was a lot, so let me quickly review. I use Bluemix to setup a new mobile application, gave it a new name, and then added a Cloudant service. I can now start building my Node.js app (again, using their boilerplate as a starting point), and then push to Bluemix when I want to deploy. For everything I&amp;rsquo;ve done with SauceDB so far, I have yet to actually push my app to Bluemix, which is good because I can work much quicker locally during development.&lt;/p&gt;
+
+&lt;p&gt;So, enough with the consoles and crap, let&amp;rsquo;s talk code. First off, everything I&amp;rsquo;m showing below is available up on the Github project: &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One of the first things I did was look for a npm module for cloudant. Here&amp;rsquo;s the one I used: &lt;a href=&#34;https://www.npmjs.com/package/cloudant&#34;&gt;https://www.npmjs.com/package/cloudant&lt;/a&gt;. After adding it to my package.json and installing, I added the library to my app.js code and pointed to a database.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var cloudant = require(&#39;cloudant&#39;)(credentials.cloudant_access_url);
+var db = cloudant.use(&#34;sauces&#34;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The URL value you see there, which comes from a credentials.json file that will &lt;i&gt;not&lt;/i&gt; be in Github, comes from the service description in the Bluemix console. You can see it by simply clicking the &amp;ldquo;Show credentials&amp;rdquo; link:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;443&#34; height=&#34;600&#34; class=&#34;aligncenter size-full wp-image-6438&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Alright&amp;hellip; so I&amp;rsquo;m connecting to a database called sauces, which doesn&amp;rsquo;t actually exist yet. If you click the Cloudant service &amp;hellip; um&amp;hellip; &amp;ldquo;box&amp;rdquo; I suppose, the detail page will include a link to launch the Cloudant console:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot10.png&#34; alt=&#34;shot10&#34; width=&#34;800&#34; height=&#34;473&#34; class=&#34;aligncenter size-full wp-image-6439 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;At this point, you can use the &amp;ldquo;Add New Database&amp;rdquo; button to add a new database. I did this for &amp;ldquo;sauces&amp;rdquo;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot111.png&#34; alt=&#34;shot11&#34; width=&#34;800&#34; height=&#34;407&#34; class=&#34;aligncenter size-full wp-image-6440&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;My goal now was to create some data so that my Node.js app could pick it up and send it back to the mobile app. If you remember the &lt;a href=&#34;http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end&#34;&gt;last post&lt;/a&gt;, my application begins with a &amp;ldquo;feed&amp;rdquo; of reviews. Every review is made by a user and involves a sauce. Cloudant lets you create new docs by hand, so I built a sauce object to start off with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  &#34;_id&#34;: &#34;786fe8d99eaf2c7e5927afe9d2afe44c&#34;,
+  &#34;name&#34;: &#34;Sauce 1&#34;,
+  &#34;company&#34;: &#34;Company 1&#34;,
+  &#34;reviews&#34;: [
+    {
+      &#34;posted&#34;: &#34;2014/05/21 10:00:00&#34;,
+      &#34;rating&#34;: 2,
+      &#34;text&#34;: &#34;This was a bad sauce.&#34;,
+      &#34;user&#34;: {
+        &#34;name&#34;: &#34;Joe&#34;,
+        &#34;img&#34;: &#34;http://placekitten.com/g/40/40&#34;
+      }
+    },
+    {
+      &#34;posted&#34;: &#34;2014/12/21 10:00:00&#34;,
+      &#34;rating&#34;: 2,
+      &#34;text&#34;: &#34;December This was a bad sauce.&#34;,
+      &#34;user&#34;: {
+        &#34;name&#34;: &#34;Joe&#34;,
+        &#34;img&#34;: &#34;http://placekitten.com/g/40/40&#34;
+      }
+    },
+    {
+      &#34;posted&#34;: &#34;2015/6/1 10:00:00&#34;,
+      &#34;rating&#34;: 2,
+      &#34;text&#34;: &#34;NO IM MORE RECENT This was a bad sauce.&#34;,
+      &#34;user&#34;: {
+        &#34;name&#34;: &#34;Joe&#34;,
+        &#34;img&#34;: &#34;http://placekitten.com/g/40/40&#34;
+      }
+    }
+  ]
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User&amp;rsquo;s should probably be a look up reference, but I just wanted some sample data. This data represents one sauce with three reviews. I created a second sauce with one review. At this point I realized I had a problem. It isn&amp;rsquo;t difficult to get all the documents in a database. But that&amp;rsquo;s not what I want. In my case, I need the &lt;i&gt;reviews&lt;/i&gt; from the objects, and I need to sort them. I spent a good few hours in the &lt;a href=&#34;https://docs.cloudant.com/&#34;&gt;Cloudant docs&lt;/a&gt;, and I discovered that a &amp;ldquo;View&amp;rdquo; could do what I needed. I&amp;rsquo;m not going to pretend that this is the &lt;strong&gt;best&lt;/strong&gt; answer, but it seemed to work well.&lt;/p&gt;
+
+&lt;p&gt;I set up a new design document, and using the Cloudant dashboard, I was able to both write my view and test it interactively, which was a big help. Here&amp;rsquo;s the code I used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function(doc) {
+  if(doc.reviews.length === 0) return;
+  for(var i=0;i&amp;lt;doc.reviews.length;i++) {
+      var review = doc.reviews[i];
+      emit(review.posted, {review:review,sauce_name:doc.name,sauce_company:doc.company});
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here it is in the dashboard with the output to the right.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot121.png&#34; alt=&#34;shot12&#34; width=&#34;800&#34; height=&#34;408&#34; class=&#34;aligncenter size-full wp-image-6441&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s cool is - using the Cloudant npm library, it was incredibly trivial to get this view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;db.view(&#34;Reviews&#34;, &#34;reviews&#34;, {descending:true}, function(err, body) {&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s simple as heck - but there&amp;rsquo;s one more aspect to this whole thing that I needed to setup. One of the features you can use with your hybrid mobile application is called &lt;a href=&#34;https://hub.jazz.net/project/bluemixmobilesdk/ibmcloudcode-javascript/overview&#34;&gt;Cloud Code&lt;/a&gt;. While it offers a couple features, in general, you can think of it as way to &amp;ldquo;short cut&amp;rdquo; your calls to your Node.js application. Using this requires a few changes in your hybrid application. Obviously you have to get the JavaScript library and include it in your HTML.&lt;/p&gt;
+
+&lt;p&gt;Next, you need to initialize Bluemix from within your code. Mine is in app.js, inside $ionicPlatform.ready:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova &amp;&amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+    
+    var config = {
+      applicationId:&#39;38a0a550-b018-4a10-b879-aec68868c249&#39;,
+      applicationRoute:&#39;http://saucedb.mybluemix.net&#39;,
+      applicationSecret:&#39;735c7d0de828ab956bae772e996a55620676ff05&#39;
+    };
+    
+    IBMBluemix.initialize(config).then(function() {
+      console.log(&#39;ok maybe?&#39;);
+    }, function(err) {
+       console.log(&#39;crap your pants time&#39;);
+    });
+    
+    
+  });
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Obviously I&amp;rsquo;m not actually handling the error case here, but it&amp;rsquo;s something I&amp;rsquo;ll worry about later. (Famous last words.) That sets up basic configuration - and this is where Cloud Code comes in. I can hit my Node.js app with the following code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var cc = IBMCloudCode.initializeService();
+cc.get(&#34;/feed&#34;).then(function(data){
+    data = JSON.parse(data);
+},function(err){
+    console.log(err);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note how I just request /feed and nothing more. Because of the earlier configuration code where I specified my application tokens, the Bluemix code knows how to route my requests to my Node.js application on Bluemix. But I just said I was running locally - so how do I fix that?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var cc = IBMCloudCode.initializeService();
+cc.setBaseUrl(&#39;http://localhost:3000&#39;);
+cc.get(&#34;/feed&#34;).then(function(data){
+    data = JSON.parse(data);
+},function(err){
+    console.log(err);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the actual full call now in my services.js file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var getFeed = function() {
+    var deferred = $q.defer();
+    
+    //fake it till we make it
+    var feed = [];
+
+        //now try the app
+        var cc = IBMCloudCode.initializeService();
+        cc.setBaseUrl(&#39;http://localhost:3000&#39;);
+        cc.get(&#34;/feed&#34;).then(function(data){
+            data = JSON.parse(data);
+            for(var i=0;i&amp;lt;data.length;i++) {
+                var result = data[i];
+                console.log(&#39;did i run&#39;);
+                var item = {
+                    id:result.id,
+                    posted:result.review.posted,
+                    sauce:{
+                        name:result.sauce_name,
+                        company:result.sauce_company
+                    },
+                    rating:result.review.rating,
+                    avgrating:0,
+                    text:result.review.text,
+                    user:{
+                        img:result.review.user.img,
+                        name:result.review.user.name
+                    }
+                };
+                feed.push(item);
+            }
+            console.log(&#39;sending &#39;+feed);
+            deferred.resolve(feed);
+            
+        },function(err){
+            console.log(err);
+        });
+
+    
+    return deferred.promise;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On the server side, I have to slightly modify how I create my route. Instead of just app.get(&amp;lsquo;&amp;hellip;.&amp;rsquo;), I do something slightly different:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var ibmconfig = ibmbluemix.getConfig();
+app.get(ibmconfig.getContextRoot()+&#39;/feed&#39;,  function(req, res) {
+    console.log(&#39;Requesting feed&#39;);
+
+    db.view(&#34;Reviews&#34;, &#34;reviews&#34;, {descending:true}, function(err, body) {
+        //stuff cut out here to keep the code snippet simpler
+    });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I get an instance of the ibmbluemix config object and grab the context root. This essentially creates a special path that is coordinated (may not be the best word) with the mobile side.&lt;/p&gt;
+
+&lt;p&gt;Whew! That was a lot. Did it feel like a lot to you? To be fair, this post covered a &lt;i&gt;lot&lt;/i&gt; of setup. We got a server up and running on Bluemix (technically all we did was provision it and we&amp;rsquo;re running code locally), we set up Cloudant, and we created an API to fetch feed data and display it in the mobile app. The end result is real, ok, hand-written essentially, data being driven by Cloudant:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-20-2015-2.33.22-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 20, 2015, 2.33.22 PM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6442 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Remember, you can see all the source code here:  &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for now. In the next post, I&amp;rsquo;ll continue to flesh out the views and start writing data from the mobile app back to the server.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using JavaScript, IndexedDB to cheat at WordBrain</title>
+      <link>http://www.raymondcamden.com/2015/07/17/using-javascript-indexeddb-to-cheat-at-wordbrain</link>
+      <pubDate>Fri, 17 Jul 2015 08:45:09 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/17/using-javascript-indexeddb-to-cheat-at-wordbrain</guid>
+      <description>&lt;p&gt;Warning - what follows is a complete waste of time. Do not spend time reading this blog post. Still here? Of course you are. For the past few days I&amp;rsquo;ve been addicted to a cool little game called &lt;a href=&#34;https://play.google.com/store/apps/details?id=se.maginteractive.wordbrain&#34;&gt;WordBrain&lt;/a&gt;. It is a simple idea. You&amp;rsquo;re presented with a grid of letters and must find two words within it by drawing a &amp;lsquo;path&amp;rsquo; from one letter to the next. I like word games, but oddly have never really played any on my mobile devices before. Now I know why - they&amp;rsquo;re incredibly addictive. While playing a few days ago I found myself stuck on one particular puzzle.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/device1mod.png&#34; alt=&#34;device1mod&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6418&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve obscured the hints in case you want to try to figure it out yourself before reading on. The obscured area though does provide you with a clue. You get the length of each word. In this case, the first word is five letters long and the second one is four letter.&lt;/p&gt;
+
+&lt;p&gt;One thing you run into very early in the game is that there will almost always be valid words that don&amp;rsquo;t match. So looking at the puzzle above you&amp;rsquo;ll see FONT, PINT, PITA, and possibly more words. They are valid, but not what the puzzle wants.&lt;/p&gt;
+
+&lt;p&gt;As I stared at this puzzle and got more and more frustrated, I naturally thought - I bet I could cheat at this! I&amp;rsquo;m absolutely pro-cheating in games. Heck, I &lt;i&gt;learned&lt;/i&gt; to program because I wanted to cheat. I figured out hex so I could edit my Bard&amp;rsquo;s Tale characters (and it worked, so hah).&lt;/p&gt;
+
+&lt;p&gt;Given that we know the length of a word, and we can figure out a &amp;lsquo;path&amp;rsquo; through the grid, and assuming we can find an English word list, in theory, it should be possible to figure out all the possible words, right?&lt;/p&gt;
+
+&lt;p&gt;Heck yes!&lt;/p&gt;
+
+&lt;p&gt;I began by finding a good English word list: &lt;a href=&#34;http://dreamsteep.com/downloads/word-games-and-wordsmith-utilities/120-the-english-open-word-list-eowl.html&#34;&gt;The English Open Word List&lt;/a&gt;. The web site describes the data like so:&lt;/p&gt;
+
+&lt;blockquote&gt;
+The EOWL currently contains about 128,985 words. To make EOWL more usable for computer word games there are no words longer than 10 letters, and no proper nouns or words requiring diacritical symbols, hyphens, or apostrophes.
+&lt;/blockquote&gt;
+
+&lt;p&gt;Sounds perfect, right? The source data consists of one file per letter, so I combined them into one big text file with a word per line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;aa
+aah
+aal
+aalii
+aardvark
+aardvarks
+aardwolf
+aardwolves
+aargh
+aarrghh
+aasvogel
+aasvogels
+and so one for a long, long, time
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;While some of the words were a bit questionable (like that last one), I figured it would be a good source set. I didn&amp;rsquo;t want to keep all of this data in memory, so I decided I&amp;rsquo;d used IndexedDB to store the words. Here is how the application starts up:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;//globals
+var db;
+var $wordLength;
+var $wordGrid;
+
+$(document).ready(function() {
+    if(!(&amp;quot;indexedDB&amp;quot; in window)) {
+        alert(&amp;quot;This will not work for you. Your browser must support IndexedDB.&amp;quot;);    
+        return;
+    }
+    
+    $wordLength = $(&amp;quot;#wordLength&amp;quot;);
+    $wordGrid = $(&amp;quot;#wordGrid&amp;quot;);
+    
+    loadDatabase();
+        
+});
+
+function loadDatabase() {
+    var words;
+
+    var openDB = indexedDB.open(&amp;quot;words2&amp;quot;, 1);
+    openDB.onupgradeneeded = function(e) {
+        
+        var thisDB = e.target.result;
+        
+        if(!thisDB.objectStoreNames.contains(&amp;quot;words&amp;quot;)) {
+            var store = thisDB.createObjectStore(&amp;quot;words&amp;quot;, {keyPath:&amp;quot;word&amp;quot;});
+            store.createIndex(&amp;quot;length, word&amp;quot;, [&amp;quot;length&amp;quot;,&amp;quot;word&amp;quot;]);
+        }
+
+    }
+    
+    openDB.onerror = function(e) {
+        console.log(&amp;quot;Error opening/setting up db&amp;quot;);
+        console.dir(e); 
+    }
+    
+    openDB.onsuccess = function(e) {
+        db = e.target.result;
+        if(!localStorage[&amp;quot;dataloaded&amp;quot;]) {
+            console.log(&amp;quot;begin loading the db, first, we XHR the data.&amp;quot;);
+            seedData(startUI);
+        } else {
+            startUI();
+        }
+    }
+    
+    
+    var seedData = function(cb) {
+        $.get(&amp;quot;allwords.txt&amp;quot;).then(function(res) {
+            words = res.split(&amp;quot;\n&amp;quot;);
+            console.log(&amp;quot;Going to load &amp;quot;+words.length + &amp;quot; words.&amp;quot;);
+        
+            console.log(&amp;quot;seeding data&amp;quot;);
+            var transaction = db.transaction([&amp;quot;words&amp;quot;], &amp;quot;readwrite&amp;quot;);
+            var store = transaction.objectStore(&amp;quot;words&amp;quot;);
+            
+            for(var i=0;i&amp;lt;words.length;i++) {
+                if(i%250 == 0) console.log(&amp;quot;250 done&amp;quot;);
+                if(words[i].length &amp;gt; 0) store.add({word:words[i].toLowerCase(),length:words[i].length});
+            }
+        
+            transaction.onerror = function(e) {
+                console.log(&amp;quot;transaction error&amp;quot;);
+                console.dir(e);
+            }
+            
+            transaction.oncomplete = function(event) {
+                console.log(&amp;quot;I think I&#39;m done now. Yeah probably&amp;quot;);
+                localStorage[&amp;quot;dataloaded&amp;quot;] = 1;
+                cb();   
+            }
+        });
+
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Taking it from the top, and ignoring globals variables and the such, I start off with a call to open up and setup my IndexedDB. This is fairly boiler plate, but I will point out the compound index was based on an initial idea I had for getting the solution. I ended up not using it. The seedData function just does an XHR and loads the word list. The file is 1.1 megs which is large, but not horribly so, and we only need to load it one time. I loop over the words and store each value in my IndexedDB object store. (And again, I&amp;rsquo;m storing the length because of some plans I had originally that changed while I was working. I&amp;rsquo;ll detail that in a sec.)&lt;/p&gt;
+
+&lt;p&gt;So at this point, I&amp;rsquo;ve got a database of words. Now I need to ask the user for the length of the word they want to find and have them input the grid. I could have made something fancy, but I just used form fields:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot15.png&#34; alt=&#34;shot1&#34; width=&#34;167&#34; height=&#34;71&#34; class=&#34;aligncenter size-full wp-image-6419 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;How in the heck do we solve this? Considering we have a grid, we can iterate over every letter, and find every possible N-lengthed path from there. The game allows a path of any direction and you can&amp;rsquo;t go over a previously used square. My initial thought was this:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Start at the upper left and find the paths from there.&lt;/li&gt;
+&lt;li&gt;We&#39;d have: RF, RN, and RO.&lt;/li&gt;
+&lt;li&gt;We can search the IDB for words that are N characters long that begin with RF, etc. If any match, then find paths from RF.
+&lt;/ul&gt;
+
+&lt;p&gt;In theory, using the data above, RF and RN would &amp;ldquo;die&amp;rdquo; as possibilities but RO would not. I began to work down this path but had difficulty with the asynch nature. I thought about using promises, but&amp;hellip; it just didn&amp;rsquo;t click. To be honest, someone smarter could probably figure it out. I decided to take another approach.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;For each letter, get all the N length paths possible.&lt;/li&gt;
+&lt;li&gt;Given a monster list of N length words, check to IDB to see if it is a valid word.&lt;/li&gt;
+&lt;li&gt;Profit&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is my ugly, incredibly ugly, solution. Note I probably have multiple unused variables and bad practices here. Also, I just output to console. Oh, and I also assume a 3x3 grid. I&amp;rsquo;m pretty sure I could make the &amp;lsquo;find paths&amp;rsquo; portion handle any square sized grid, but for now, I&amp;rsquo;m keeping it (somewhat) simple.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/*
+Given position X, and a possibly null history, I return paths you can go
+*/
+function getPaths(position, size, history) {
+    if(!history) history = [];
+    var paths = [];
+    //console.log(&#39;entered getPaths(&#39;+position+&#39;,&#39;+size+&#39;,[&#39;+history+&#39;])&#39;);
+    //check all 8 directions
+
+    //up
+    if(position &amp;gt; 2 &amp;amp;&amp;amp; history.indexOf(position-3) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position-3);
+        paths.push(newPath);            
+    }
+
+    //ne
+    if(position&amp;gt;2 &amp;amp;&amp;amp; position!=5 &amp;amp;&amp;amp; position!=8 &amp;amp;&amp;amp; history.indexOf(position-2) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position-2);
+        paths.push(newPath);
+    }
+    
+    //e
+    if(position!=2 &amp;amp;&amp;amp; position!=5 &amp;amp;&amp;amp; position!=8 &amp;amp;&amp;amp; history.indexOf(position+1) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position+1);
+        paths.push(newPath);
+    }
+    
+    //se
+    if(position&amp;lt;6 &amp;amp;&amp;amp; position!=2 &amp;amp;&amp;amp; position!=5 &amp;amp;&amp;amp; history.indexOf(position+4) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position+4);
+        paths.push(newPath);
+    }
+    
+    //s
+    if(position&amp;lt;6 &amp;amp;&amp;amp; history.indexOf(position+3) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position+3);
+        paths.push(newPath);
+    }
+     
+    //sw
+    if(position&amp;lt;6 &amp;amp;&amp;amp; position!=3 &amp;amp;&amp;amp; position!=0 &amp;amp;&amp;amp; history.indexOf(position+2) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position+2);
+        paths.push(newPath);
+    }
+    
+    //w
+    if(position!=0 &amp;amp;&amp;amp; position!=3 &amp;amp;&amp;amp; position!=6 &amp;amp;&amp;amp; history.indexOf(position-1) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position-1);
+        paths.push(newPath);
+    }
+    
+    //nw
+    if(position&amp;gt;2 &amp;amp;&amp;amp; position!=3 &amp;amp;&amp;amp; position!=6 &amp;amp;&amp;amp; history.indexOf(position-4) == -1) {
+        var newPath = history.slice(0);
+        newPath.push(position-4);
+        paths.push(newPath);
+    }
+    
+    //console.log(&#39;before if, i have &#39;+paths.length+&#39; paths and my size is &#39;+paths[0].length+&#39; and it is &#39;+paths[0]);
+    //console.dir(paths);
+    if(paths.length &amp;amp;&amp;amp; paths[0].length &amp;lt; size) {
+        var newPathResults = [];
+        for(var i=0;i&amp;lt;paths.length;i++) {
+            var thisPath = paths[i];
+            //console.log(&#39;inner call with tip &#39;+thisPath[thisPath.length-1]+&#39; size=&#39;+size+&#39; thisPath: &#39;+thisPath);
+            var newPathsInner = getPaths(thisPath[thisPath.length-1], size, thisPath);
+            //console.log(&#39;newPathsInner has results len of &#39;+newPathsInner.length);
+            for(var x=0;x&amp;lt;newPathsInner.length;x++) {
+                newPathResults.push(newPathsInner[x]);
+            }
+        }
+        //console.log(&amp;quot;newPathResults&amp;quot;);
+        //console.dir(newPathResults);
+        return newPathResults;
+    } else {
+        //console.log(&#39;returning from getPaths with &#39;+JSON.stringify(paths));
+        return paths;
+    }
+}
+
+function getPhrase(path) {
+    var grid = $wordGrid.val();
+    var gridArray = grid.split(&amp;quot;,&amp;quot;);
+    var phrase = &amp;quot;&amp;quot;;
+    for(var i=0;i&amp;lt;path.length;i++) {
+        phrase += gridArray[path[i]];   
+    }
+    return phrase;
+}
+
+function doSearch() {
+    var wordlen = $wordLength.val();
+    if(wordlen === &#39;&#39;) return;
+    wordlen = Number(wordlen);
+
+    var grid = $wordGrid.val();
+    /*
+    grid is A,B,C,D,E,F,G,H,I
+    
+    A B C
+    D E F
+    G H I
+    
+    Right now we assume 3x3
+    */
+
+    var gridArray = grid.split(&amp;quot;,&amp;quot;);
+
+    var paths = [];
+        
+    for(var i=0;i&amp;lt;9;i++) {
+        var letter = gridArray[i];
+        //console.log(&amp;quot;position &amp;quot;+i+&amp;quot; letter &amp;quot;+letter);
+        //first, based on position, get initial paths
+        var pathsForPos = getPaths(i,wordlen,[i]);
+        //console.log(&amp;quot;i found &amp;quot;+pathsForPos.length+&amp;quot; valid paths&amp;quot;);
+        for(var x=0;x&amp;lt;pathsForPos.length;x++) {
+            paths.push(pathsForPos[x]);
+        }
+    }
+    console.log(&amp;quot;we have &amp;quot;+paths.length+&amp;quot; total words to check&amp;quot;);
+    //console.dir(paths);
+
+    //now convert them all to words to check
+    var wordsToCheck = [];
+    for(var i=0;i&amp;lt;paths.length;i++) {
+        wordsToCheck.push(getPhrase(paths[i]).toLowerCase());
+    }
+    //console.dir(wordsToCheck);
+
+    var wordStore = db.transaction([&amp;quot;words&amp;quot;], &amp;quot;readonly&amp;quot;).objectStore(&amp;quot;words&amp;quot;);  
+    var matches = [];
+    
+    wordsToCheck.forEach(function(word) {
+        wordStore.get(word).onsuccess = function(e) {
+            if(e.target.result) {
+                var word = e.target.result.word;
+                if(matches.indexOf(word) == -1) {
+                    console.log(word);
+                    matches.push(word); 
+                }
+            }
+            //console.dir(e.target.result); 
+        };
+    });
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Got all that? Nice and simple, right? FYI, I could have used a oncomplete for my transaction to tell the user when I&amp;rsquo;m done, but since I&amp;rsquo;m simply spitting out to the console, it doesn&amp;rsquo;t matter. Also, since my code fires asynch, my &amp;ldquo;don&amp;rsquo;t repeat words&amp;rdquo; code could fail too. Again, using an oncomplete would let me handle that better. Who cares! Let&amp;rsquo;s see the results:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot22.png&#34; alt=&#34;shot2&#34; width=&#34;385&#34; height=&#34;369&#34; class=&#34;aligncenter size-full wp-image-6420 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Woot! Cool, right? I went through the words and then discovered something weird - none of them worked. So&amp;hellip; I gave up and used the hints system the game doles out at certain times. I discovered that the 4 letter word was RAF. Obviously that&amp;rsquo;s RAFT, right? But looking at the screen shot, you can see they don&amp;rsquo;t hook up. Then I remembered - when you find a word, the letters disappear and the others &amp;lsquo;fall&amp;rsquo; down. At this point, I kid you not - I immediately saw the 5 letter word. No kidding, I figured it out in seconds. But for the heck of it, I tried my tool:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot41.png&#34; alt=&#34;shot4&#34; width=&#34;258&#34; height=&#34;132&#34; class=&#34;aligncenter size-full wp-image-6421 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The answer was PIANO. Selecting that left RAFT. And that&amp;rsquo;s that. Want to run it yourself? Keep in mind you&amp;rsquo;ll need an IDB-compatible browser and this code is &lt;i&gt;very&lt;/i&gt; brittle. Here it is: &lt;a href=&#34;http://static.raymondcamden.com/wordbrainsolver/&#34;&gt;http://static.raymondcamden.com/wordbrainsolver/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Quick Tip: Navigating in Ionic without History</title>
+      <link>http://www.raymondcamden.com/2015/07/14/quick-tip-navigating-in-ionic-without-history</link>
+      <pubDate>Tue, 14 Jul 2015 13:06:11 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/14/quick-tip-navigating-in-ionic-without-history</guid>
+      <description>&lt;p&gt;Before I start, just a quick note. What I&amp;rsquo;m describing here is clearly &lt;a href=&#34;http://ionicframework.com/docs/api/service/$ionicHistory/&#34;&gt;documented&lt;/a&gt;, but as I keep reminding myself I&amp;rsquo;ve yet to read 100% of the Ionic docs and I really need to. A big thank you goes out to @breakingthings on the &lt;strong&gt;Ionic Worldwide&lt;/strong&gt; Slack channel for letting me know about this. So here&amp;rsquo;s the question. Imagine you have an Ionic app with a login screen:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-14-2015-12.58.55-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 14, 2015, 12.58.55 PM&#34; width=&#34;282&#34; height=&#34;500&#34; class=&#34;aligncenter size-full wp-image-6389 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After logging in, you want to automatically move the user to a new state:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$state.go(&#39;Home&#39;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But when you do, you end up with this in your header:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot2.png&#34; alt=&#34;shot2&#34; width=&#34;281&#34; height=&#34;500&#34; class=&#34;aligncenter size-full wp-image-6390 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That link back to the Login view comes from how Ionic handles view history and the header. Most of the time you probably want that, but in this case, I definitely do not want it. Luckily it is rather simple to fix using &lt;a href=&#34;http://ionicframework.com/docs/api/service/$ionicHistory/&#34;&gt;$ionicHistory&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$ionicHistory.nextViewOptions({
+    disableBack: true
+});
+$state.go(&#39;Home&#39;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yep, that&amp;rsquo;s it. Nice and simple. And just in case it isn&amp;rsquo;t clear, this modification &lt;i&gt;only&lt;/i&gt; impacts the next change.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New Demo Project: SauceDB</title>
+      <link>http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb</link>
+      <pubDate>Tue, 14 Jul 2015 10:27:56 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb</guid>
+      <description>&lt;p&gt;Today I&amp;rsquo;m kicking off a new project for the purposes of demonstrating &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; and &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. While I&amp;rsquo;m not sure I&amp;rsquo;ll actually release this application (I&amp;rsquo;m building something I actually &lt;i&gt;want&lt;/i&gt;, so I kinda want to), my intent here is to build a full application demonstrating multiple facets of Ionic with Bluemix handling the back end. Let me start off by talking about what this application actually does.&lt;/p&gt;
+
+&lt;h2&gt;The App&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;m a huge fan of &lt;a href=&#34;https://untappd.com/&#34;&gt;Untappd&lt;/a&gt; and &lt;a href=&#34;https://www.goodreads.com/&#34;&gt;Goodreads&lt;/a&gt;. For me, these apps help me organize two of my favorite passions in life - good beer and good books. (And hey, Budweiser, you can officially take your anti-micro-brew campaign and shove it where the sun doesn&amp;rsquo;t shine.) Both sites/apps follow the same basic principle - they allow you to track and rate things are you consuming. I have pretty crap memory, so I find both apps to be incredibly useful. Both also include a social aspect to them that - honestly - I don&amp;rsquo;t really care about. I &lt;i&gt;do&lt;/i&gt; like to know what beers my friends are enjoying and what books they&amp;rsquo;ve read, but I typically talk about that in the real world. I can&amp;rsquo;t honestly remember the last time I used either app to check what &lt;i&gt;other&lt;/i&gt; people are doing.&lt;/p&gt;
+
+&lt;p&gt;My application, SauceDB, is basically a BBQ Sauce version of Untappd. The features will be:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Sauce stream (um, that sounds kinda gross): Essentially a &#39;feed&#39; of the most recent sauce ratings. As I mentioned, I don&#39;t necessarily care much for the social aspect, so this app won&#39;t have &#34;friends&#34;. Basically you see what everyone has posted. (And since this is a &#39;proof of concept&#39; with few users, it will make it easier to see content.)&lt;/li&gt;
+&lt;li&gt;Add a sauce review: Sauces include a name, a company, your rating, and a description of the sauce. Optionally a picture as well. The app will recognize existing sauces and not add a new record for the sauce if it already exists.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I whipped up a quick prototype on paper first. Here is my completely incomprehensible attempt at drawing screens.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/IMAG2260.jpg&#34; alt=&#34;IMAG2260&#34; width=&#34;565&#34; height=&#34;1000&#34; class=&#34;aligncenter size-full wp-image-6383&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m actually pretty impressed by how bad my drawing is. If I was a D&amp;amp;D character and Drawing was a skill, I&amp;rsquo;d have a -5 in it. In case you can&amp;rsquo;t read my chicken scratch, the screens are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Login&lt;/li&gt;
+&lt;li&gt;Feed&lt;/li&gt;
+&lt;li&gt;Feed item (ie, a sauce review)&lt;/li&gt;
+&lt;li&gt;Search to add a new review&lt;/li&gt;
+&lt;li&gt;New item (ie, adding a new sauce + review)&lt;/li&gt;
+&lt;li&gt;New review only (adding a review to an existing sauce&lt;/lli&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I don&amp;rsquo;t create prototypes often, but I definitely see the value. Just typing out the list there makes me realize I don&amp;rsquo;t have a page that is Sauce-centric, ie a Sauce with all the reviews. I went ahead and set up a &amp;ldquo;real&amp;rdquo; prototype using &lt;a href=&#34;http://creator.ionic.io&#34;&gt;Ionic Creator.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/Ionic_Creator.png&#34; alt=&#34;Ionic_Creator&#34; width=&#34;800&#34; height=&#34;659&#34; class=&#34;aligncenter size-full wp-image-6384 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I essentially built all the screens you saw from the pen drawing above and added some basic interactivity. So for example, the login button goes right to the feed. Doing this was also helpful. For example, the &amp;lsquo;feed&amp;rsquo; page (see the shot above) used a list view, but I&amp;rsquo;m pretty sure I&amp;rsquo;ll switch to a card view to give the reviews more space.&lt;/p&gt;
+
+&lt;p&gt;Ionic Creator has multiple export options, including a way to use it as a seed for a new project.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot13.png&#34; alt=&#34;shot1&#34; width=&#34;462&#34; height=&#34;241&#34; class=&#34;aligncenter size-full wp-image-6385 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I find the output of Ionic Creator to be a bit undesirable, so I used this in a new project just for the Creator output. I then &lt;a href=&#34;https://surge.sh&#34;&gt;Surged&lt;/a&gt; it up to a real site: &lt;a href=&#34;http://jittery-bait.surge.sh&#34;&gt;http://jittery-bait.surge.sh&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;The Tech&lt;/h2&gt;
+
+&lt;p&gt;So what does my stack look like?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Obviously, Ionic. I&#39;ve made no secret of my opinion that Ionic is the absolute best tool to use for building hybrid mobile applications with Cordova. 
+&lt;li&gt;&lt;a href=&#34;https://github.com/ccoenraets/OpenFB&#34;&gt;OpenFB&lt;/a&gt;, a Facebook API library by Christophe Coenraets. I&#39;ve used &lt;a href=&#34;https://github.com/nraboy/ng-cordova-oauth&#34;&gt;ng-cordova-oauth&lt;/a&gt; in the past, but I just need FB now and I need a way to use their API as well.
+&lt;li&gt;Node.js running on Bluemix. This will essentially be a proxy to...
+&lt;li&gt;&lt;a href=&#34;https://cloudant.com/&#34;&gt;IBM Cloudant&lt;/a&gt; for the database. 
+&lt;/ul&gt;
+
+&lt;p&gt;Some &amp;ldquo;possible&amp;rdquo; stuff I want to add too - time permitting:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ionic Analytics
+&lt;li&gt;Pictures (no idea where I&#39;ll store the file blobs yet)
+&lt;li&gt;Push (maybe a notice for every new review - again - this will be a pretty low used app)
+&lt;/ul&gt;
+
+&lt;p&gt;I&amp;rsquo;ll also be sharing everything I&amp;rsquo;ve built up on Github. My code base is currently a bit messy, so the repo is empty, but it will be here: &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using friendlier URLs for a HarpJS Static Site</title>
+      <link>http://www.raymondcamden.com/2015/07/08/using-friendlier-urls-for-a-harpjs-static-site</link>
+      <pubDate>Wed, 08 Jul 2015 09:38:45 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/08/using-friendlier-urls-for-a-harpjs-static-site</guid>
+      <description>&lt;p&gt;Ok, &amp;ldquo;friendly&amp;rdquo; is in the eye of the beholder, but honestly, I spent about five minutes trying to think of the &amp;ldquo;best&amp;rdquo; title for this post and just gave up. What I&amp;rsquo;m really trying to describe here is how to use &amp;ldquo;year/month/date/slug&amp;rdquo; type URLs for a &lt;a href=&#34;http://www.harpjs.com&#34;&gt;HarpJS&lt;/a&gt; static site. As an example, the URL for this blog entry includes the year, month, day, and a &amp;lsquo;slug&amp;rsquo; or &amp;ldquo;URL-friendly&amp;rdquo; version of the title. In general, Harp doesn&amp;rsquo;t care what folder structure you use, but the issue I ran into was how to handle metadata about the blog. So for example, how do you generate a list on the home page of the most recent articles and create an RSS feed?&lt;/p&gt;
+
+&lt;p&gt;By default, HarpJS asks you to place a _data.json file in your folder to associate metadata with content. That works fine if you have one folder for your entries, but for my demo, I&amp;rsquo;ve got a bunch of folders. One for the year, one for the month, one for the day, and finally, one for the article. Heres an example of just how deep/complex this can get:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot12.png&#34; alt=&#34;shot1&#34; width=&#34;574&#34; height=&#34;650&#34; class=&#34;alignnone size-full wp-image-6365&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You could, if you wanted, create a _data.json file in every single folder. That wouldn&amp;rsquo;t be horrible per se, but if you ever change the structure of your metadata, to add categories for example, you would need to update a butt-load of files. So I wanted to figure out another solution that would make handling the metadata easier. I also wanted a solution that emphasized ease of content creation. I didn&amp;rsquo;t necessarily mind if the core solution itself was complex, but the actual act of writing a blog entry should require minimal work/direction/etc in order to publish. Here is what I came up with.&lt;/p&gt;
+
+&lt;p&gt;First, I created a _data.json file for the root of my site. Within it, I create a key called &amp;ldquo;articles&amp;rdquo;. Within it, I&amp;rsquo;m going to list my articles. The idea is to be similar to the default metadata examples Harp provide, but using an array instead of an object. Here is a sample, with some of the data removed to make it shorter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+    &#34;articles&#34;:[
+        {
+            &#34;title&#34;:&#34;Why I like goo&#34;,
+            &#34;posted&#34;:&#34;2014-07-11 10:30 AM&#34;,
+            &#34;path&#34;:&#34;2014/07/11/an-article-about-goo&#34;
+        },
+        {
+            &#34;title&#34;:&#34;Foo is dead&#34;,
+            &#34;posted&#34;:&#34;2015-03-20 9:59 PM&#34;,
+            &#34;path&#34;:&#34;2015/03/20/an-article-about-foo&#34;
+        },
+        {
+            &#34;title&#34;:&#34;An article about Foo!&#34;,
+            &#34;posted&#34;:&#34;2014-07-02 9:49 AM&#34;,
+            &#34;path&#34;:&#34;2014/07/02/an-article-about-foo&#34;
+        }
+
+    ]
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Each article instance contains a title, a posted value, and a path. Why the path? One of the things Harp provides when using _data.json is an automatic &amp;ldquo;sync&amp;rdquo; between your current URL and metadata. In order words, if you are at url /article/foo.html and you had a &amp;ldquo;foo&amp;rdquo; key in the article folder&amp;rsquo;s metadata, Harp will copy that data to the global scope automatically. As a practical example of that, you can use &amp;ldquo;title&amp;rdquo; in your layout and have it default to a global value but then automatically switch to the article&amp;rsquo;s title when viewing that page.&lt;/p&gt;
+
+&lt;p&gt;That behavior is nice, but we won&amp;rsquo;t have it because we&amp;rsquo;re skipping the &amp;ldquo;put a data file in every folder&amp;rdquo; thing. I&amp;rsquo;m ok with that. The article writing process now is:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Make your folder:
+&lt;ul&gt;
+&lt;li&gt;year, if the first entry of the year&lt;/li&gt;
+&lt;li&gt;month, if the first entry of the month&lt;/li&gt;
+&lt;li&gt;day, if the first entry of the day&lt;/li&gt;
+&lt;li&gt;&#34;slug&#34; - friendly version of the title&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Write your blog article.&lt;/li&gt;
+&lt;li&gt;Add to the list of articles in the root _data.json file.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Everything outside of step 2 there is &amp;ldquo;process crap&amp;rdquo; that I want to minimize, and I think that&amp;rsquo;s pretty good.&lt;/p&gt;
+
+&lt;p&gt;So how about working with the data? How do we create a list of articles on the home page? I began by creating a file called _article_parser.ejs. The idea behind this file was to do various &amp;ldquo;parsing&amp;rdquo; things for my article data so I had easier access to them in my templates. (As a reminder, files that begin with _ in Harp are automatically ignored when generating the static version.) Let&amp;rsquo;s take a look at the code and then I&amp;rsquo;ll explain what it does.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;%
+var articlesRaw = public._data.articles;
+
+//This create a variable templates can use to iterate over articles
+articles = articlesRaw.sort(function(a, b) {
+    var aDate = new Date(a.posted);
+    var bDate = new Date(b.posted);
+    return aDate &amp;lt; bDate;
+});
+
+//This sniffs to see if we are on an article, and if so, overwrites globals
+pageTitle = title;
+isArticle = false;
+if(current.path.length === 5) {
+    isArticle = true;
+    //http://davidwalsh.name/javascript-clone-array
+    var path = current.path.slice(0);
+    path.pop();     
+    var testPath = path.join(&amp;quot;/&amp;quot;);
+    for(var i=0;i&amp;lt;articles.length;i++) {
+        if(articles[i].path === testPath) {
+            pageTitle = articles[i].title;
+        }
+    }
+}
+
+%&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;rsquo;s two main blocks here. The first grabs the article array and performs a sort on it. I wanted to ensure that when the author entered data, they didn&amp;rsquo;t have to worry about putting things in a particular order. Most likely they will always just add to the end or the bottom, but this code ensures I don&amp;rsquo;t have to worry about it. Note the use of var for articlesRaw versus articles. Var scoping articlesRaw keeps it to this file, while not scoping articles means I can use it outside in my template.&lt;/p&gt;
+
+&lt;p&gt;The next block is a bit weird. As I mentioned, when we don&amp;rsquo;t have a &amp;ldquo;url to path&amp;rdquo; match in data files, we don&amp;rsquo;t have an easy way of having global variables, like title, automatically switch when viewing a particular file. The second code block handles this by looking at the current scope. The &lt;a href=&#34;http://harpjs.com/docs/development/current&#34;&gt;current scope&lt;/a&gt; provides information about where you are in the site. I simply assume that if we&amp;rsquo;re at a place with 5 levels, we&amp;rsquo;re viewing a blog entry. I could make this a bit tighter. For example, I could look at the first part of the path and see if it is all numeric and 4 characters, but that wasn&amp;rsquo;t necessary now so I kept it simple. I compare the path from the current data to the path in my JSON file and if there is a match, I have new title to use.&lt;/p&gt;
+
+&lt;p&gt;So, how do we use this? Check out my home page:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;h1&amp;gt;Welcome to the Blog&amp;lt;/h1&amp;gt;
+
+
+&amp;lt;%- partial(&amp;quot;_article_parser&amp;quot;) %&amp;gt;
+
+&amp;lt;h3&amp;gt;Articles&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;% 
+for(var i=0;i&amp;lt;Math.min(5, articles.length);i++) { 
+    article = articles[i];
+%&amp;gt;
+
+    &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;&amp;lt;%= article.path %&amp;gt;&amp;quot;&amp;gt;&amp;lt;%= article.title %&amp;gt;&amp;lt;/a&amp;gt; - posted &amp;lt;%= article.posted %&amp;gt;&amp;lt;/li&amp;gt;
+
+&amp;lt;% } %&amp;gt;
+&amp;lt;/ul&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the most part, this is pretty similar to other Harp demos. The only difference is that I loaded up my article &amp;ldquo;library&amp;rdquo; and it provided a variable, articles, that I could use. In my case I&amp;rsquo;m just showing the 5 most recent articles.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s done - but there&amp;rsquo;s one more part to this I think is kind of cool. I wanted a custom layout for blog entries, and HarpJS, using EJS, doesn&amp;rsquo;t support nested layouts. If you remember, my article parser created a flag that represented the user being on an article. I&amp;rsquo;m able to use that within my layout template. Let&amp;rsquo;s check it out:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;% partial(&amp;quot;_article_parser&amp;quot;) %&amp;gt;
+  
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;title&amp;gt;&amp;lt;%= pageTitle %&amp;gt;&amp;lt;/title&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;/main.css&amp;quot;&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+
+  &amp;lt;% if(isArticle) { %&amp;gt;
+     &amp;lt;%- partial(&amp;quot;_article_layout&amp;quot;) %&amp;gt;
+  &amp;lt;% } else { %&amp;gt;
+    &amp;lt;%- yield %&amp;gt;
+  &amp;lt;% } %&amp;gt;
+    
+  &amp;lt;footer&amp;gt;&amp;lt;p&amp;gt;Copyright &amp;amp;copy; &amp;lt;%= new Date().getFullYear() %&amp;gt; ~ &amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;Home&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/footer&amp;gt;  
+
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So - as before - load in the parser. I then check for isArticle and if it is true, load in another layout file. Let&amp;rsquo;s look at that.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;h1&amp;gt;&amp;lt;%- pageTitle %&amp;gt;&amp;lt;/h1&amp;gt;
+
+&amp;lt;%- yield %&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yeah, there isn&amp;rsquo;t much there, but you get the idea. I can now create a unique layout for my blog entries all from one file, which I like.&lt;/p&gt;
+
+&lt;p&gt;So, that&amp;rsquo;s it. There&amp;rsquo;s a bit missing here - for example - how to handle archives. I&amp;rsquo;m not really a big fan of them as I don&amp;rsquo;t personally find myself using them on sites, but I may come back to this demo tomorrow and address that. (I&amp;rsquo;ve got some ideas already.) Want to see all the code? It&amp;rsquo;s up on GitHub here: &lt;a href=&#34;https://github.com/cfjedimaster/Static-Site-Examples/tree/master/yearmonthday&#34;&gt;https://github.com/cfjedimaster/Static-Site-Examples/tree/master/yearmonthday&lt;/a&gt; And for the hell of it, I surged up the output so you can run it in your browser. Warning - it isn&amp;rsquo;t pretty: &lt;a href=&#34;http://opposite-fly.surge.sh/&#34;&gt;http://opposite-fly.surge.sh/&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using the Google Analytics Embed API to Build a Dashboard</title>
+      <link>http://www.raymondcamden.com/2015/07/07/using-the-google-analytics-embed-api-to-build-a-dashboard</link>
+      <pubDate>Tue, 07 Jul 2015 09:29:18 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/07/using-the-google-analytics-embed-api-to-build-a-dashboard</guid>
+      <description>&lt;p&gt;About a year and a half ago I created a demo (&lt;a href=&#34;http://www.raymondcamden.com/2014/01/24/Proof-of-Concept-Dashboard-for-Google-Analytics&#34;&gt;Proof of Concept – Dashboard for Google Analytics&lt;/a&gt;) of a Google Analytics Dashboard. This demo was entirely client-side based and made use of the API libraries Google created. For the most part, the process was fairly simple. After I figured out how to authenticate the user and query the data, I spent more time making it look pretty than actually working with the API, which is a good thing. More recently I discovered the new &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/embed/v1/&#34;&gt;Analytics Embed API&lt;/a&gt;. The cool thing about the Embed API is that it greatly simplifies the authentication/authorization aspect of getting analytics data and even provides built in charting capabilities. I blogged an example (&lt;a href=&#34;http://www.raymondcamden.com/2015/06/10/quick-example-of-the-google-analytics-embed-api&#34;&gt;Quick example of the Google Analytics Embed API&lt;/a&gt;) and I thought it might be fun to revisit my dashboard concept using this simpler API.&lt;/p&gt;
+
+&lt;p&gt;Before I show the code behind this demo, let me share a screen shot so you can see it in action. I switched to a new charting library for this demo (&lt;a href=&#34;http://www.chartjs.org/&#34;&gt;ChartJS&lt;/a&gt;) mainly because Google used it themselves in one of their demos. I didn&amp;rsquo;t spend much time making this pretty - I was going for &amp;lsquo;quick impact&amp;rsquo; in terms of visuals. Obviously though it could be better.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot11.png&#34; alt=&#34;shot1&#34; width=&#34;800&#34; height=&#34;566&#34; class=&#34;alignnone size-full wp-image-6360 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Each chart represents one of my properties. Each line represents page views per days, with the darker blue being the most recent page seven days and the lighter gray being the seven days before that.&lt;/p&gt;
+
+&lt;p&gt;The code is made up of several parts. The authentication, as I said, is handled almost entirely by the embed API.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;gapi.analytics.ready(function() {
+
+  var CLIENT_ID = &#39;818125206534-g1r0datdtu9serq2pf9cp5vkuih3h8pv.apps.googleusercontent.com&#39;;
+
+  gapi.analytics.auth.authorize({
+    container: &#39;auth-button&#39;,
+    clientid: CLIENT_ID,
+    userInfoLabel:&#34;&#34;
+  });
+
+  gapi.analytics.auth.on(&#39;success&#39;, function(response) {
+    //hide the auth-button
+    document.querySelector(&#34;#auth-button&#34;).style.display=&#39;none&#39;;
+    console.log(&#34;get profiles&#34;);
+    getProfiles(function(profs) {
+      window.profiles = profs;
+      processProfiles();      
+    });
+  
+  });
+
+  Chart.defaults.global.animationSteps = 60;
+  Chart.defaults.global.animationEasing = &#39;easeInOutQuart&#39;;
+  Chart.defaults.global.responsive = true;
+  Chart.defaults.global.maintainAspectRatio = false;
+  
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to get profiles for my account, I make use of a management API. &lt;code&gt;getProfiles&lt;/code&gt; handles fetching, and caching, this result. (I use caching as I had planned, still plan on, adding a few additional filtering options to the report.)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function getProfiles(cb) {
+  //do we have a cached version?
+  if(sessionStorage[&#34;gaProfiles&#34;]) {
+    console.log(&#34;profiles fetched from cache&#34;);
+    cb(JSON.parse(sessionStorage[&#34;gaProfiles&#34;]));
+    return;
+  }
+
+  gapi.client.analytics.management.accounts.list().then(function(res) { 
+    var accountId = res.result.items[0].id;
+    var profiles = [];
+    gapi.client.analytics.management.webproperties.list({&#39;accountId&#39;: accountId}).then(function(res) {
+  
+        res.result.items.forEach(function(item) {
+            if(item.defaultProfileId) profiles.push({id:&#34;ga:&#34;+item.defaultProfileId,name:item.name});
+        });
+      sessionStorage[&#34;gaProfiles&#34;] = JSON.stringify(profiles);    
+      cb(profiles);      
+    });
+  });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that I do &lt;i&gt;not&lt;/i&gt; make use of promises in this block and that&amp;rsquo;s a mistake. I make use of it a bit later in another function so I need (well, I want) to be consistent. Now for the fun part. For all of my properties, I need to fetch data for each site. I was able to rip code from one of Google&amp;rsquo;s demos but I quickly ran into rate limit issues. To get around this, I single thread the calls &lt;i&gt;and&lt;/i&gt; add a slight delay.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;//Credit: https://ga-dev-tools.appspot.com/embed-api/third-party-visualizations/
+function query(params) {
+  return new Promise(function(resolve, reject) {
+    var data = new gapi.analytics.report.Data({query: params});
+    data.once(&#39;success&#39;, function(response) { resolve(response); })
+        .once(&#39;error&#39;, function(response) { reject(response); })
+        .execute();
+  });
+}
+
+function makeCanvas(id) {
+  var container = document.getElementById(id);
+  var canvas = document.createElement(&#39;canvas&#39;);
+  var ctx = canvas.getContext(&#39;2d&#39;);
+
+  container.innerHTML = &#39;&#39;;
+  canvas.width = container.offsetWidth;
+  canvas.height = container.offsetHeight;
+  container.appendChild(canvas);
+
+  return ctx;
+}
+      
+function processProfiles() {
+  console.log(&amp;quot;working on profile &amp;quot;+profiles[curProfile].name);
+  
+  var now = moment();
+  var id = profiles[curProfile].id;
+  
+  var thisWeek = query({
+    &#39;ids&#39;: id,
+    &#39;dimensions&#39;: &#39;ga:date,ga:nthDay&#39;,
+    &#39;metrics&#39;: &#39;ga:pageviews&#39;,
+    &#39;start-date&#39;: moment(now).subtract(8, &#39;day&#39;).format(&#39;YYYY-MM-DD&#39;),
+    &#39;end-date&#39;: moment(now).subtract(1,&#39;day&#39;).format(&#39;YYYY-MM-DD&#39;)
+  });
+
+  var lastWeek = query({
+    &#39;ids&#39;: id,
+    &#39;dimensions&#39;: &#39;ga:date,ga:nthDay&#39;,
+    &#39;metrics&#39;: &#39;ga:pageviews&#39;,
+    &#39;start-date&#39;: moment(now).subtract(15, &#39;day&#39;).subtract(1, &#39;week&#39;)
+    .format(&#39;YYYY-MM-DD&#39;),
+    &#39;end-date&#39;: moment(now).subtract(8, &#39;day&#39;).subtract(1, &#39;week&#39;)
+    .format(&#39;YYYY-MM-DD&#39;)
+  });
+    
+    
+  Promise.all([thisWeek, lastWeek]).then(function(results) {
+    console.log(&amp;quot;Promise.all&amp;quot;);console.dir(results);
+      
+    var data1 = results[0].rows.map(function(row) { return +row[2]; });
+    var data2 = results[1].rows.map(function(row) { return +row[2]; });
+    var labels = results[1].rows.map(function(row) { return +row[0]; });
+
+    var totalThisWeek = results[0].totalsForAllResults[&amp;quot;ga:pageviews&amp;quot;];
+    var totalLastWeek = results[1].totalsForAllResults[&amp;quot;ga:pageviews&amp;quot;];
+    var percChange = (((totalThisWeek - totalLastWeek) / totalLastWeek) * 100).toFixed(2);
+    console.log(totalLastWeek, totalThisWeek, percChange);
+    
+    labels = labels.map(function(label) {
+      return moment(label, &#39;YYYYMMDD&#39;).format(&#39;ddd&#39;);
+    });
+
+    var data = {
+      labels : labels,
+      datasets : [
+        {
+          label: &#39;Last Week&#39;,
+          fillColor : &#39;rgba(220,220,220,0.5)&#39;,
+          strokeColor : &#39;rgba(220,220,220,1)&#39;,
+          pointColor : &#39;rgba(220,220,220,1)&#39;,
+          pointStrokeColor : &#39;#fff&#39;,
+          data : data2
+        },
+        {
+          label: &#39;This Week&#39;,
+          fillColor : &#39;rgba(151,187,205,0.5)&#39;,
+          strokeColor : &#39;rgba(151,187,205,1)&#39;,
+          pointColor : &#39;rgba(151,187,205,1)&#39;,
+          pointStrokeColor : &#39;#fff&#39;,
+          data : data1
+        }
+      ]
+    };
+
+    var titleStr = profiles[curProfile].name + &amp;quot; &amp;quot;;
+    if(totalLastWeek &amp;gt; 0 &amp;amp;&amp;amp; totalThisWeek &amp;gt; 0) {
+      if(percChange &amp;lt; 0) {
+        titleStr += &amp;quot;&amp;lt;span class=&#39;down&#39;&amp;gt;(Down &amp;quot;+Math.abs(percChange) + &amp;quot;%)&amp;lt;/span&amp;gt;&amp;quot;;
+      } else {
+        titleStr += &amp;quot;&amp;lt;span class=&#39;up&#39;&amp;gt;(Up &amp;quot;+percChange + &amp;quot;%)&amp;lt;/span&amp;gt;&amp;quot;;      
+      }
+    }
+        
+      $(&amp;quot;body&amp;quot;).append(&amp;quot;&amp;lt;div class=&#39;reportContainer&#39;&amp;gt;&amp;lt;div class=&#39;chartTitleContainer&#39;&amp;gt;&amp;quot;+titleStr+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;div class=&#39;chartContainer&#39; id=&#39;chart-&amp;quot;+curProfile+&amp;quot;-container&#39;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+
+    new Chart(makeCanvas(&#39;chart-&#39;+curProfile+&#39;-container&#39;)).Line(data);
+
+    if(curProfile+1 &amp;lt; profiles.length) {
+      curProfile++;
+      //settimeout to try to avoid GA rate limits
+      setTimeout(processProfiles,200);
+    }
+  });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that&amp;rsquo;s basically it. As I said, I&amp;rsquo;d like to add a few options to this. Specifically, the ability to compare the current and past 30 days as well as this year versus the past. I&amp;rsquo;d also like the ability to dismiss/hide some sites I don&amp;rsquo;t care about. I could use LocalStorage to remember those properties and hide them automatically.&lt;/p&gt;
+
+&lt;p&gt;Want to see the complete code and test it yourself? Check out the online demo here: &lt;a href=&#34;http://static.raymondcamden.com/ga_embed/test10.html&#34;&gt;http://static.raymondcamden.com/ga_embed/test10.html&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Angular and a Content Security Policy? Watch out for this...</title>
+      <link>http://www.raymondcamden.com/2015/07/03/using-angular-and-a-content-security-policy-watch-out-for-this</link>
+      <pubDate>Fri, 03 Jul 2015 08:57:16 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/03/using-angular-and-a-content-security-policy-watch-out-for-this</guid>
+      <description>&lt;div style=&#34;background-color:#ececec&#34;&gt;Edit on July 6, 2015: Kevin H, in the comments below, pointed out that the docs for ngShow actually talk about this! I missed this completely. The solution the docs recommend, including an additional CSS file, worked fine for me, and feels like a &#34;better&#34; solution than mine, so I recommend following the docs lead.&lt;/div&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been working on a Cordova app that uses AngularJS. It has been working fine for a while now but I needed to do a bit of cleanup. After I pushed up my changes, my client noticed something odd. We have a button that only shows up under certain situations. Basically, if some scope variable is true, we display it.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;button ng-show=&#34;featureEnabled&#34;&amp;gt;Feature&amp;lt;/button&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;All of a sudden, the button began showing up in all cases, even when the variable was false. I began to debug. I double checked to ensure my variable wasn&amp;rsquo;t being set true when it shouldn&amp;rsquo;t be. That wasn&amp;rsquo;t the problem. I then added some simple tests to my view.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+first test, &amp;lt;span ng-show=&amp;quot;!barcodeAllowed.status&amp;quot;&amp;gt;DONT SHOW&amp;lt;/span&amp;gt;&amp;lt;br/&amp;gt;
+second test, &amp;lt;span ng-show=&amp;quot;barcodeAllowed.status == false&amp;quot;&amp;gt;DONT SHOW&amp;lt;/span&amp;gt;&amp;lt;br/&amp;gt;
+test -{{barcodeAllowed.status}}-end -{{!barcodeAllowed.status}}- -{{barcodeAllowed | json}}-&amp;lt;br/&amp;gt;
+test if &amp;lt;span ng-if=&amp;quot;barcodeAllowed.status&amp;quot;&amp;gt; if was true&amp;lt;/span&amp;gt;&amp;lt;br/&amp;gt;
+test opp if &amp;lt;span ng-if=&amp;quot;!barcodeAllowed.status&amp;quot;&amp;gt; will see it&amp;lt;/span&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, I checked both the negation of the variable an the variable itself. I also output it, and the negation, as well as the JSON version of the variable. Finally I did two tests using ng-if.&lt;/p&gt;
+
+&lt;p&gt;Here is where things got freaky. &lt;strong&gt;Both&lt;/strong&gt; of the first two ng-show tests showed up! Even though the value in the third line was exactly what I expected - false.&lt;/p&gt;
+
+&lt;p&gt;And to make things even more weird - the ng-if&amp;rsquo;s worked perfectly! At this point, I was just considering switching to ng-if, but then I punted and asked over on &lt;a href=&#34;http://stackoverflow.com/questions/31194526/odd-issue-with-ng-show-always-evaluating-to-true/&#34;&gt;StackOverflow&lt;/a&gt;. I had a long &amp;ldquo;conversation&amp;rdquo; with user &lt;a href=&#34;http://stackoverflow.com/users/3530970/thsorens&#34;&gt;thsorens&lt;/a&gt; and he reminded me that ng-show/ng-hide will add/remove CSS classes based on the condition.&lt;/p&gt;
+
+&lt;p&gt;Then I paused and thought a bit. When I did my &amp;lsquo;cleanup&amp;rsquo; of the app, I made a few different changes. For example, I had been using a remote Angular JS library and I switched it to a local one. I double checked to ensure it wasn&amp;rsquo;t a version issue. I also made use of a Content Security Policy. I talked about this &lt;a href=&#34;http://www.raymondcamden.com/2015/05/25/important-information-about-cordova-5&#34;&gt;on my blog&lt;/a&gt; a few months ago. As a reminder, it is a way to lock down the resources your Cordova app, or any web app, can make use of. On a whim, I renamed the meta tag that defined the CSP and bammo - things worked!&lt;/p&gt;
+
+&lt;p&gt;I didn&amp;rsquo;t want to just remove the CSP, so I dug a bit deeper. It occurred to me that JavaScript was being used to create and manipulate CSS, so I looked at the script-src I had defined:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;script-src &amp;lsquo;self&amp;rsquo;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;I then though&amp;hellip; I bet Angular is using eval. So I added this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;script-src &amp;lsquo;self&amp;rsquo; &amp;lsquo;unsafe-eval&amp;rsquo;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;And that did it. Here is a code sample that demonstrates the issue. First, the HTML:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html ng-app=&amp;quot;plunker&amp;quot;&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge,chrome=1&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;Content-Security-Policy&amp;quot; 
+            content=&amp;quot;default-src &#39;self&#39; &#39;unsafe-eval&#39;; style-src &#39;self&#39; &#39;unsafe-inline&#39;; script-src &#39;self&#39; https://cdnjs.cloudflare.com &#39;unsafe-inline&#39; &#39;unsafe-eval&#39;;&amp;quot;&amp;gt;
+
+        &amp;lt;title&amp;gt;App&amp;lt;/title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+
+        &amp;lt;script src=&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.1/angular.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+        &amp;lt;script src=&amp;quot;test.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body ng-controller=&amp;quot;MainCtrl&amp;quot;&amp;gt;
+
+        barcodeAllowed=&amp;lt;span ng-show=&amp;quot;barcodeAllowed&amp;quot;&amp;gt;barcode Allowed&amp;lt;/span&amp;gt;&amp;lt;br/&amp;gt;
+        true=&amp;lt;span ng-show=&amp;quot;true&amp;quot;&amp;gt;true&amp;lt;/span&amp;gt;&amp;lt;br/&amp;gt;
+        false=&amp;lt;span ng-show=&amp;quot;false&amp;quot;&amp;gt;false&amp;lt;/span&amp;gt;
+
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here is the JavaScript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var app = angular.module(&#39;plunker&#39;, []);
+
+app.controller(&#39;MainCtrl&#39;, function($scope) {
+  $scope.barcodeAllowed = false;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you remove &amp;lsquo;unsafe-eval&amp;rsquo; from the meta tag, it stops working. If you would rather just run a live demo of this, view this Plunker I created: &lt;a href=&#34;http://plnkr.co/edit/Hqo4G2NqwwAQU3Tu001J?p=preview&#34;&gt;http://plnkr.co/edit/Hqo4G2NqwwAQU3Tu001J?p=preview&lt;/a&gt;. You can &lt;i&gt;only&lt;/i&gt; see this in Chrome as it appears Firefox doesn&amp;rsquo;t support CSP yet. The issue shows up in Safari as well.&lt;/p&gt;
+
+&lt;p&gt;Upon running the Plunker, you will see the ng-show&amp;rsquo;s failing to correctly work. Just go into the meta tag and add &amp;lsquo;unsafe-eval&amp;rsquo; to the script-src area and it will work correctly.&lt;/p&gt;
+
+&lt;p&gt;At the end, a very understandable issue I suppose. The lesson here is that while CSPs are a powerful tool to lock down your web app, you&amp;rsquo;re going to need to look out for side effects like this.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>A look at New Relic Browser</title>
+      <link>http://www.raymondcamden.com/2015/05/30/a-look-at-new-relic-browser</link>
+      <pubDate>Sat, 30 May 2015 15:14:05 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/30/a-look-at-new-relic-browser</guid>
+      <description>&lt;p&gt;While at Fluent Conf this year, I was walking by the &lt;a href=&#34;http://www.newrelic.com&#34;&gt;New Relic&lt;/a&gt; booth when I noticed something interesting - a product called New Relic Browser. Back when I converted my blog to Wordpress, I ran into a lot of problems. My server went down, WordPress crashed, it was a bit frustrating. (Much like how lemonade in a paper cut is a bit frustrating.) One of the tools I used to help diagnose my server was the &lt;a href=&#34;http://newrelic.com/server-monitoring&#34;&gt;New Relic Server monitor&lt;/a&gt;. Outside of a few issues installing, I was &lt;i&gt;really&lt;/i&gt; impressed with the level of detail the monitor provided. While it wasn&amp;rsquo;t the final solution for fixing my problem, it definitely helped me pinpoint what was sucking up all the RAM on my box, and helped me check my changes to ensure things were going well. Best of all, this was entirely free. I&amp;rsquo;ll give them &lt;strong&gt;huge&lt;/strong&gt; props for offering such a powerful tool for no up front money. Because I had such a good experience with them on the server side, I thought I&amp;rsquo;d give their &lt;a href=&#34;http://newrelic.com/browser-monitoring&#34;&gt;Browser product&lt;/a&gt; a try as well.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot112.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot112.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;340&#34; class=&#34;aligncenter size-full wp-image-6224 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can guess, this tool is meant to help you gain insights into how well your web application is performing. I decided to try it on my blog, which, admittedly, is probably not the best use case for this product. WordPress isn&amp;rsquo;t something I need to hack up and outside of the performance issues I had on the server side, I figured the client side was pretty much good enough. It certainly seemed good enough to me. But at the same time, my blog gets quite a bit of traffic so I figured it would also provide a good set of data to dig into as well.&lt;/p&gt;
+
+&lt;p&gt;Setup is relatively simple. You begin by selecting a deployment method:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/New_Browser_Application_-_New_Relic-copy.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/New_Browser_Application_-_New_Relic-copy.png&#34; alt=&#34;New_Browser_Application_-_New_Relic copy&#34; width=&#34;800&#34; height=&#34;451&#34; class=&#34;aligncenter size-full wp-image-6225 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I selected Copy/Paste as I figured that would be simpler. On the next page, I said I was &lt;i&gt;not&lt;/i&gt; using APM, even though I guess I kinda was. I was trying to test this as someone who was &lt;i&gt;not&lt;/i&gt; also using the server side product, so there may be things I missed out on. Typically when I try products like this though I try to keep things as simple as possible.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/New_Browser_Application_-_New_Relic2-copy.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/New_Browser_Application_-_New_Relic2-copy.png&#34; alt=&#34;New_Browser_Application_-_New_Relic2 copy&#34; width=&#34;754&#34; height=&#34;648&#34; class=&#34;aligncenter size-full wp-image-6226 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The final step was copying a ginormous JavaScript string into my WordPress template.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/New_Browser_Application_-_New_Relic3-copy.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/New_Browser_Application_-_New_Relic3-copy.png&#34; alt=&#34;New_Browser_Application_-_New_Relic3 copy&#34; width=&#34;800&#34; height=&#34;793&#34; class=&#34;aligncenter size-full wp-image-6227 imgborder &#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So that was that. I copied in the code, cleared my WordPress cache, and then promptly forgot about it for a week or so. I then took a look back at my stats. There&amp;rsquo;s a tremendous amount of information you get right on the front dashboard.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot24.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot24.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;605&#34; class=&#34;aligncenter size-full wp-image-6228&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;First off - note the browser load times. I&amp;rsquo;m averaging 6.8 seconds or so which is quite high and not what I expected. For over ten years I ran my blog with &lt;i&gt;very&lt;/i&gt; precise knowledge of what I had going on within my templates. With WordPress, I&amp;rsquo;ve kinda gotten lazy about it and have given up being so deeply involved. This gives me a clue that maybe I need to take a closer look at my template and plugins and see if I need everything I&amp;rsquo;ve got.&lt;/p&gt;
+
+&lt;p&gt;Also note the error graph. On average, 2% of my pages have JavaScript errors. The real question is - how often do those JavaScript errors impact the core thing people need to do on my site - read a blog post.&lt;/p&gt;
+
+&lt;p&gt;As I said, the dashboard is pretty packed, but let&amp;rsquo;s go deeper. First, the &lt;strong&gt;Page views&lt;/strong&gt; report.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot33.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot33.png&#34; alt=&#34;shot3&#34; width=&#34;800&#34; height=&#34;632&#34; class=&#34;aligncenter size-full wp-image-6229 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This report shows recent pages and which page requests are consuming the most load time. You can mouse over each line item for a detailed view:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-29-at-4.01.17-PM.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-29-at-4.01.17-PM.png&#34; alt=&#34;Screen Shot 2015-05-29 at 4.01.17 PM&#34; width=&#34;584&#34; height=&#34;238&#34; class=&#34;aligncenter size-full wp-image-6230 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You can also switch the &amp;ldquo;Sort by&amp;rdquo; to show average page load time:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot42.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot42.png&#34; alt=&#34;shot4&#34; width=&#34;377&#34; height=&#34;540&#34; class=&#34;aligncenter size-full wp-image-6231 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;And yes - that twenty plus second item on top there made me crap my pants. Honestly I&amp;rsquo;m not sure why that page averaged so high as it is relatively simple, but it does give me something to dig into deeper.&lt;/p&gt;
+
+&lt;p&gt;The next link, &lt;strong&gt;Session traces&lt;/strong&gt;, is not what you may think. I had assumed this was a report of a &amp;lsquo;session&amp;rsquo; for one visitor to my blog. Instead, it is a deep look at one particular web page. And when I say deep, I mean deep. Here is a top level report for one session:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot51.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot51.png&#34; alt=&#34;shot5&#34; width=&#34;800&#34; height=&#34;515&#34; class=&#34;aligncenter size-full wp-image-6232 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Note all the detail in the chart. You can then scroll through the session and look at every particular darn thing in the one request. For example, here I can look at what Google Analytics is doing.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-29-at-4.09.41-PM.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-29-at-4.09.41-PM.png&#34; alt=&#34;Screen Shot 2015-05-29 at 4.09.41 PM&#34; width=&#34;800&#34; height=&#34;654&#34; class=&#34;aligncenter size-full wp-image-6233 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The next report shows you the &lt;strong&gt;AJAX&lt;/strong&gt; requests your web app is making. You get details on &lt;i&gt;what&lt;/i&gt; is making requests as well as throughput and data size. I can say from experience that the data size chart could be really useful. Back when I first learned Ajax I made the mistake of not considering the size of my packets and my applications suffered through it. This is a rather long page so I&amp;rsquo;ve split the screen shot into two parts.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot61.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot61.png&#34; alt=&#34;shot6&#34; width=&#34;800&#34; height=&#34;421&#34; class=&#34;aligncenter size-full wp-image-6235 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot71.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot71.png&#34; alt=&#34;shot7&#34; width=&#34;800&#34; height=&#34;675&#34; class=&#34;aligncenter size-full wp-image-6236 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m thinking that in &amp;lsquo;real&amp;rsquo; web app the Ajax report will be the number one place you&amp;rsquo;ll find nuggets of information. Of similar importance is the &lt;strong&gt;JS errors&lt;/strong&gt; report.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot81.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot81.png&#34; alt=&#34;shot8&#34; width=&#34;800&#34; height=&#34;391&#34; class=&#34;aligncenter size-full wp-image-6237 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking on a particular item will give you details:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot91.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot91.png&#34; alt=&#34;shot9&#34; width=&#34;800&#34; height=&#34;642&#34; class=&#34;aligncenter size-full wp-image-6238 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you click on the instance details, you can see the line number where this error was thrown.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot101.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot101.png&#34; alt=&#34;shot10&#34; width=&#34;800&#34; height=&#34;545&#34; class=&#34;aligncenter size-full wp-image-6239 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;While not this particular error, earlier I found an issue with Gravatar. I didn&amp;rsquo;t think I was using Gravatar, but it turned out one plugin was making use of it and throwing an error. I modified the plugin and the error went away.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;Browsers&lt;/strong&gt; report gives you details about what types of browsers are hitting your site and how well they perform. I mentioned how I was a bit surprised by the page load times on my site, well in this report I can see what browsers are having the worst issues with page load:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot113.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot113.png&#34; alt=&#34;shot11&#34; width=&#34;800&#34; height=&#34;405&#34; class=&#34;aligncenter size-full wp-image-6240 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Look at that jump for IE and Opera! That&amp;rsquo;s fascinating to me. It doesn&amp;rsquo;t necessarily mean those are bad browsers, but it gives me an area to focus in if I were to start digging into my site performance.&lt;/p&gt;
+
+&lt;p&gt;You can then go to the &lt;strong&gt;Geo&lt;/strong&gt; report to see how different areas of the world (and America) handle your site.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot122.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot122.png&#34; alt=&#34;shot12&#34; width=&#34;800&#34; height=&#34;315&#34; class=&#34;aligncenter size-full wp-image-6241 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Along with just reporting, you can also create alerts too. You get a default alert policy out of the box and can define your own as well. This is fairly similar to what you get in the server product as well.&lt;/p&gt;
+
+&lt;p&gt;From what I can see, this is a really darn good tool, and as I said, I had great success with the server tool. So how much does it cost? Here is the price plans as of the time I wrote the post:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot132.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot132.png&#34; alt=&#34;shot13&#34; width=&#34;800&#34; height=&#34;439&#34; class=&#34;aligncenter size-full wp-image-6242&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;150 a month isn&amp;rsquo;t necessarily cheap, but heck, that&amp;rsquo;s my rate for development (yes, that&amp;rsquo;s what I charge by the hour) and considering how much data you get the forensic information is easily worth it. The free (Lite) version also has fewer reports.  If you go to their &lt;a href=&#34;http://newrelic.com/browser-monitoring/pricing&#34;&gt;pricing page&lt;/a&gt; you can see what you don&amp;rsquo;t get at that tier, but note that you get 14 days of free access to the top tier to see if it is worth it.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ionic hits 1.0</title>
+      <link>http://www.raymondcamden.com/2015/05/12/ionic-hits-1-0</link>
+      <pubDate>Tue, 12 May 2015 16:31:56 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/12/ionic-hits-1-0</guid>
+      <description>&lt;p&gt;The title says it all - and I assume most folks heard about this on Twitter or via the Ionic blog, but on the wild chance you did not, today &lt;a href=&#34;http://blog.ionic.io/announcing-ionic-1-0/&#34;&gt;Ionic 1.0&lt;/a&gt; was announced.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/ionic1.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/ionic1.png&#34; alt=&#34;ionic1&#34; width=&#34;600&#34; height=&#34;280&#34; class=&#34;aligncenter size-full wp-image-6133&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Don&amp;rsquo;t forget you can easily update an existing Ionic project using &lt;code&gt;ionic lib update&lt;/code&gt;. Check out this real example:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot11.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot11.png&#34; alt=&#34;shot1&#34; width=&#34;650&#34; height=&#34;189&#34; class=&#34;aligncenter size-full wp-image-6134&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Be sure to read to the end of the &lt;a href=&#34;http://blog.ionic.io/announcing-ionic-1-0/&#34;&gt;announcement post&lt;/a&gt; as they go into detail about what the future holds for the Ionic framework and platform.&lt;/p&gt;
+
+&lt;p&gt;Finally, if you want an introduction to Ionic, you can always check out my presentation tomorrow at &lt;a href=&#34;http://www.devobjective.com/&#34;&gt;devObjective&lt;/a&gt;, or watch the recording of my ORA presentation here: &lt;a href=&#34;http://www.oreilly.com/pub/e/3407&#34;&gt;http://www.oreilly.com/pub/e/3407&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Fluent 2015</title>
+      <link>http://www.raymondcamden.com/2015/05/11/fluent-2015</link>
+      <pubDate>Mon, 11 May 2015 15:35:07 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/11/fluent-2015</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/fluent_web_platform_og200x200.gif&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/fluent_web_platform_og200x200.gif&#34; alt=&#34;fluent_web_platform_og200x200&#34; width=&#34;200&#34; height=&#34;200&#34; class=&#34;alignleft size-full wp-image-6128&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I had meant to write up my thoughts on &lt;a href=&#34;http://fluentconf.com/javascript-html-2015&#34;&gt;Fluent 2015&lt;/a&gt; as soon as I got back home, but, life has a way of - well - being life. And as I&amp;rsquo;m about to leave for &lt;i&gt;another&lt;/i&gt; conference tomorrow I figured I&amp;rsquo;d better write up some thoughts about Fluent 2015 before I head out. I should point out that these nuggets are not in any particular order (heck, the first one is probably the least important), and that I&amp;rsquo;ve been to a couple Fluent conferences so part of my what I&amp;rsquo;m responding to are changes from previous years (and in &lt;strong&gt;every&lt;/strong&gt; case - a good change).&lt;/p&gt;
+
+&lt;ul&gt;
+
+&lt;li&gt;One of my memories of the first Fluent was how awful the food was. Yeah, I know that isn&#39;t the most important thing, but if I can still remember that then you know how bad it was. (Or I&#39;m just really preoccupied with food.) This year it was great. 
+
+&lt;li&gt;Another memory of an earlier Fluent was having difficulty going from one room to another. I seem to remember a twisty path going up flights of stairs, entering a blue police box, etc. You get the idea. This year everything was nice and tightly packed. It was very easy to go from one room to another. I will &lt;strong&gt;gladly&lt;/strong&gt; take a location that is half as fancy as another if it means a conference with easy to find rooms. Of course, this year the location was both fancy and well setup, so location-wise, it was perfect.
+
+&lt;li&gt;Wifi was a problem. Not always, but enough to stand out. That&#39;s the only black mark I can give this conference, and frankly, if they told me that wifi would be just as bad next year, it wouldn&#39;t make me reconsider going for one second. I&#39;m going to include it here because it &lt;strong&gt;should&lt;/strong&gt; be corrected and checked thoroughly for next year, but it certainly didn&#39;t take away from my enjoyment and education.
+
+&lt;li&gt;Content has always been a strong point of Fluent and this year was no different. This is one of the few conferences where if I wasn&#39;t elected to speak, I&#39;d beg my employer to send me as an attendee. (And thankfully now I have an employee that would actually do so.) So yeah, the content kicked ass, but I think what stuck out the most was how the content topics seemed to have shifted quite a bit since my first Fluent. That&#39;s to be expected, of course, but I noticed a dramatic lack of Angular. In fact, I think this one session (&lt;a href=&#34;http://fluentconf.com/javascript-html-2015/public/schedule/detail/38980&#34;&gt;Accessibility in AngularJS and Beyond&lt;/a&gt;) was the only one with Angular in the title. (I&#39;m not going to review the entire schedule, I&#39;m probably wrong.) It wasn&#39;t that I heard any Angular-bashing as well, it just seemed like Angular was &lt;i&gt;everywhere&lt;/i&gt; previously and now... now it isn&#39;t. Of course, I used Angular in my session on Ionic and it wasn&#39;t called out in my title. So maybe that&#39;s the thing - it&#39;s just kinda assumed now?
+
+On the flip side, there was a big honking batch of ES6. I&#39;ve been paying attention to ES6 but not actually writing any yet as it just feels a bit too early. Of course, I knew I could &lt;i&gt;write&lt;/i&gt; ES6 now with transcompilers, but I have to be honest. I feel uneasy using them. It&#39;s the same feeling I had with CoffeeScript (along with not liking the syntax either). My gut felt like if I was writing code that would be completely transformed before it hit the browser than I was giving up some essential link to my environment. That&#39;s how I felt. 
+
+Then I sat in on Brian Holt&#39;s &lt;a href=&#34;http://fluentconf.com/javascript-html-2015/public/schedule/detail/39074&#34;&gt;React session&lt;/a&gt; where a transcompiler was part of a gulp script where it just made it all work automagically and you know what? Writing ES6 with React was pretty freaking cool. Cool enough for me to maybe think I need to get over my apprehension and start considering using it sooner rather than later. Parts of ES6 are - frankly - confusing as hell, but writing classes for React felt right to me.
+
+While I&#39;m raving about content, I&#39;ll also give props out to my friend Brian Rinaldi and his &lt;a href=&#34;http://fluentconf.com/javascript-html-2015/public/schedule/detail/39344&#34;&gt;practical web audio&lt;/a&gt; session. It had no code - just discussions of how one could use web audio in the real world (outside of games) and what would work and what would not. This type of content is something I wish conferences would push a bit harder to cover. It is something I&#39;ve tried to focus on as well in my career. I&#39;ve sat in too many &#34;OMFG UNREAL GAME ENGINE IN JAVASCRIPT&#34; sessions that were cool but useless to my development. 
+
+&lt;/ul&gt;
+
+&lt;p&gt;Anyway - if you missed out - you can still purchase a full pass to watch videos of all the sessions. At the time of this review it wasn&amp;rsquo;t yet available, but &lt;a href=&#34;http://fluentconf.com/javascript-html-2015/public/sv/q/677&#34;&gt;this form&lt;/a&gt; would let you sign up to be notified when they became available.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Article: The Epic, Awesome &amp; Supremely Useful Data Attribute</title>
+      <link>http://www.raymondcamden.com/2015/05/05/article-the-epic-awesome-supremely-useful-data-attribute</link>
+      <pubDate>Tue, 05 May 2015 08:38:13 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/05/article-the-epic-awesome-supremely-useful-data-attribute</guid>
+      <description>&lt;p&gt;One of my favorite companies, &lt;a href=&#34;http://www.telerik.com&#34;&gt;Telerik&lt;/a&gt;, has published an article of mine on their developer network: &lt;a href=&#34;http://developer.telerik.com/featured/the-epic-awesome-supremely-useful-data-attribute/&#34;&gt;The Epic, Awesome &amp;amp; Supremely Useful Data Attribute&lt;/a&gt;. Yes, the title is a bit over the top, but hopefully it is useful to my readers. Check it out and let me know what you think. (Obviously you should comment there, not here. :)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

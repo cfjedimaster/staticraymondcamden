@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Music on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/music/</link>
+    <description>Recent content in Music on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 18 Feb 2009 10:02:00 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/music/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Officer Roseland offers a unique take on &#39;Stimulus Package&#39;</title>
+      <link>http://www.raymondcamden.com/2009/02/18/Officer-Roseland-offers-a-unique-take-on-Stimulus-Package</link>
+      <pubDate>Wed, 18 Feb 2009 10:02:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2009/02/18/Officer-Roseland-offers-a-unique-take-on-Stimulus-Package</guid>
+      <description>&lt;p&gt;I don&amp;rsquo;t blog about music too often here, but I figured this was a special case. I first heard of Officer Roseland when Brian Jones pinged me. He was using BlogCFC for their &lt;a href=&#34;http://www.officerroseland.com/blog/&#34;&gt;band blog&lt;/a&gt; so I asked for a sample of his music. He gladly obliged, and I was pretty impressed. Very much an indie band, reminding me a bit of the 80s, but more Pixies than synth pop. As a sample:&lt;/p&gt;
+
+&lt;p&gt;&lt;object width=&#34;425&#34; height=&#34;344&#34;&gt;&lt;param name=&#34;movie&#34; value=&#34;http://www.youtube.com/v/XKvkQ54FdaM&amp;hl=en&amp;fs=1&amp;rel=0&#34;&gt;&lt;/param&gt;&lt;param name=&#34;allowFullScreen&#34; value=&#34;true&#34;&gt;&lt;/param&gt;&lt;param name=&#34;allowscriptaccess&#34; value=&#34;always&#34;&gt;&lt;/param&gt;&lt;embed src=&#34;http://www.youtube.com/v/XKvkQ54FdaM&amp;hl=en&amp;fs=1&amp;rel=0&#34; type=&#34;application/x-shockwave-flash&#34; allowscriptaccess=&#34;always&#34; allowfullscreen=&#34;true&#34; width=&#34;425&#34; height=&#34;344&#34;&gt;&lt;/embed&gt;&lt;/object&gt;&lt;/p&gt;
+
+&lt;p&gt;Today the band released their 4th album, &lt;a href=&#34;http://www.mystimuluspackage.org/stimulus/&#34;&gt;Stimulus Package&lt;/a&gt;. Unlike other bands who release their music for free and sell physical CDs or other extras, Officer Roseland is doing something unique. When you ask to download their album, you can choose to either GIVE or TAKE. If you GIVE, the band will donate to a charity. If you TAKE, they will send you a dollar. Seriously. They will pay you to download their music.&lt;/p&gt;
+
+&lt;p&gt;I know zip about the music business so I have no idea how well this will work, but I can definitely recommend folks give their new album a try. (It sounds much more polished then the embedded video above.)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MTV Music (Yes, it has an API)</title>
+      <link>http://www.raymondcamden.com/2008/10/28/MTV-Music-Yes-it-has-an-API</link>
+      <pubDate>Tue, 28 Oct 2008 10:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2008/10/28/MTV-Music-Yes-it-has-an-API</guid>
+      <description>&lt;p&gt;MTV launched a new music video service, &lt;a href=&#34;http://www.mtvmusic.com/&#34;&gt;MTV Music&lt;/a&gt;. The UI is rather nice. Maybe it&amp;rsquo;s the old man in me but I love the large, super obvious search box. They also allow for embedding&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;embed src=&#34;http://media.mtvnservices.com/mgid:uma:video:mtvmusic.com:58679&#34; width=&#34;320&#34; height=&#34;271&#34; type=&#34;application/x-shockwave-flash&#34; flashVars=&#34;dist=http://www.mtvmusic.com&amp;autoplay=false&#34; allowFullScreen=&#34;true&#34; AllowScriptAccess=&#34;never&#34;&gt;&lt;/embed&gt; &lt;div style=&#34;margin:0; text-align:center; width:320px;font-family:Arial,sans-serif;font-size:10px;&#34;&gt;&lt;a style=&#34;color:#000000;&#34; href=&#34;http://www.mtv.com/music/artist/lush/artist.jhtml&#34;&gt;Lush&lt;/a&gt; |&lt;a style=&#34;color:#000000;&#34; href=&#34;http://www.mtvmusic.com/&#34;&gt;MTV Music&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;What surprised me though was the lack of depth. I mean I was kind of pushing it with some non-popular choices (Control Machete, Chapterhouse, Shelby), but this is MTV! They should have something like 2 trillion videos in their vault. They had all the &amp;lsquo;expected&amp;rsquo; alternative videos (Cure, Depeche Mode, etc), but anything a bit too far out there was absent. Shoot, they didn&amp;rsquo;t even have Siouxsie, and any music site without the Banshees is sorely lacking. I can certainly find everything at YouTube.&lt;/p&gt;
+
+&lt;p&gt;Anyway, my excuse to bring this up was to point out that they have a nice API: &lt;a href=&#34;http://developer.mtvnservices.com/&#34;&gt;MTVN Content API&lt;/a&gt;. Let&amp;rsquo;s see who can get the first CFC wrapper done.&lt;/p&gt;
+
+&lt;p&gt;Hey - maybe if this Internet thing works for em, they could try it on TV as well. Imagine it - a whole TV station that did nothing but play videos. Nah, that wouldn&amp;rsquo;t work.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>2 quick links (one tech, one music)</title>
+      <link>http://www.raymondcamden.com/2008/05/03/2-quick-links-one-tech-one-music</link>
+      <pubDate>Sat, 03 May 2008 16:05:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2008/05/03/2-quick-links-one-tech-one-music</guid>
+      <description>&lt;p&gt;First off, Todd Sharp has just released &lt;a href=&#34;http://slidesix.com/index.cfm?event=&#34;&gt;slidesix&lt;/a&gt;, which he describes in more detail &lt;a href=&#34;http://cfsilence.com/blog/client/index.cfm/2008/5/3/What-Is-slidesixcom&#34;&gt;here&lt;/a&gt;. It is a presentation hosting service built in ColdFusion (with Model-Glue FTW!). One of the coolest features is that you can record audio for a slideshow directly on the site.&lt;/p&gt;
+
+&lt;p&gt;Secondly - NIN has released this second new single, also for free. This time they used Facebook. You can download it &lt;a href=&#34;http://apps.facebook.com/ilike/artist/Nine+Inch+Nails/track/Echoplex&#34;&gt;here&lt;/a&gt;. As I&amp;rsquo;m in the middle of Mark Madenl&amp;rsquo;s Transfer presentation, I haven&amp;rsquo;t played it yet, but the first free track was pretty darn good.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Happy Halloween! And what is on your soundtrack today?</title>
+      <link>http://www.raymondcamden.com/2006/10/31/Happy-Halloween-And-what-is-on-your-soundtrack-today</link>
+      <pubDate>Tue, 31 Oct 2006 07:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2006/10/31/Happy-Halloween-And-what-is-on-your-soundtrack-today</guid>
+      <description>&lt;p&gt;What&amp;rsquo;s going to be on your playlist today to help celebrate Halloween? For me its:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;Bloodletting&lt;/b&gt; by Concrete Blonde. A cool song that got way overplayed at the local bar during college. Now that it is a few years past though it has regained the cool factor for me.
+&lt;li&gt;&lt;b&gt;Everyday is Halloween&lt;/b&gt; by Ministry. This is before they got all industrial and were a bit more like a harsher Depeche Mode.
+&lt;/ul&gt;
+
+&lt;p&gt;Any other suggestions? If anyone says &lt;b&gt;Monster Mash&lt;/b&gt; I&amp;rsquo;m banning them forever! ;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Pandora, a music lovers treat</title>
+      <link>http://www.raymondcamden.com/2006/05/26/Pandora-a-music-lovers-treat</link>
+      <pubDate>Fri, 26 May 2006 15:05:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2006/05/26/Pandora-a-music-lovers-treat</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m probably the last one to know about this (and when I read about this morning, I remember someone showing it to me earlier), but if you like online music radio, you should consider &lt;a href=&#34;http://www.pandora.com&#34;&gt;Pandora&lt;/a&gt;. It is a free service that builds stations built around your tastes.&lt;/p&gt;
+
+&lt;p&gt;What does that mean? I created my first station by entering Public Enemy. Pandora recognized this as old school rap and began to play music in the same theme. I then tried the Charlatans UK and Depeche Mode. In both cases Pandora was pretty dang good, almost scarily good, at finding music that was similar in nature. At the same time, it is playing a lot of good music from bands I&amp;rsquo;ve never heard of.&lt;/p&gt;
+
+&lt;p&gt;For each track, you can ask Pandora to tell you why it was recommended, as well as how to purchase the track.&lt;/p&gt;
+
+&lt;p&gt;I did run into two small problems. The first is that the Flash-based music player would stop every now and then when Firefox loaded another page in other tabs or windows. I just opened up Pandora in the &lt;a href=&#34;http://www.microsoft.com/ie&#34;&gt;Devil&amp;rsquo;s Browser&lt;/a&gt; and that solved that. The next problem is that it seemingly had no idea who Lush was. Maybe it just doesn&amp;rsquo;t get the &lt;a href=&#34;http://en.wikipedia.org/wiki/Shoegazer&#34;&gt;shoegazer&lt;/a&gt; genre, but I&amp;rsquo;m going to try a few alternatives to see if it can figure it out.&lt;/p&gt;
+
+&lt;p&gt;Have I said before how much I hate corporate radio? Or to be fair, over the air radio. XM and Sirius seem pretty cool. Maybe if - lord forbid - radio stations actually played music &amp;hellip; no - I&amp;rsquo;m going to stop now. This will not be another rant.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>\&#34;My backpack, gots jets, I&#39;m Boba, the Fett\&#34;</title>
+      <link>http://www.raymondcamden.com/2006/04/14/My-backpack-gots-jetts-Im-Boba-the-Fett</link>
+      <pubDate>Fri, 14 Apr 2006 08:04:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2006/04/14/My-backpack-gots-jetts-Im-Boba-the-Fett</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://www.mcchris.com&#34;&gt;&lt;img src=&#34;http://ray.camdenfamily.com/images/fett.jpg&#34; border=&#34;0&#34; align=&#34;left&#34; hspace=&#34;5&#34;&gt;&lt;/a&gt; So it was the end of the day yesterday when one of my coworkers mentioned &lt;a href=&#34;http://www.mcchris.com&#34;&gt;MC Chris&lt;/a&gt; to me. I had never heard of him, but he said I should head over to his web site and download Fett&amp;rsquo;s Vette. This is - without a doubt - one of the funniest songs I&amp;rsquo;ve heard in a long time. You &lt;b&gt;must&lt;/b&gt; stop what you are doing and download it now. In fact, his entire album is free, and actually pretty cool I think. As a word of warning, this song throws the F-bomb about 10 times more than your average Sopranos episode, so it may not be work safe. Put the headphones on!&lt;/p&gt;
+
+&lt;p&gt;Speaking of Star Wars, my wife got me the Slave 1 for my birthday. It is about a third done and I may post a picture of two when I get done. My brother in law actually got the Star Destroyer. Not the new &amp;ldquo;wimpy&amp;rdquo; one with 300 or so pieces, but the three &lt;i&gt;thousand&lt;/i&gt; piece one. Serious legos I tell you.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Music for Throwing Muses Fans...</title>
+      <link>http://www.raymondcamden.com/2005/12/20/Music-for-Throwing-Muses-Fans</link>
+      <pubDate>Tue, 20 Dec 2005 12:12:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2005/12/20/Music-for-Throwing-Muses-Fans</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve always been a big fan of Throwing Muses, so it was quite a delight to here a track from the new band by Kristin Hersh on &lt;a href=&#34;http://www.woxy.com&#34;&gt;WOXY&lt;/a&gt; a few days ago. (If you like alternative/indie music, WOXY is a gift from God.) I was even happier to find out that her new band, 50Footwave, has an entire EP for &lt;b&gt;free&lt;/b&gt; download. You can find the tracks &lt;a href=&#34;http://www.throwingmusic.com/freemusic/&#34;&gt;here&lt;/a&gt;. The tracks are pretty good I think and you can&amp;rsquo;t beat the price.&lt;/p&gt;
+
+&lt;p&gt;Musically I haven&amp;rsquo;t heard much lately that has impressed me. The new &lt;a href=&#34;http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;tag=raymondcamden-20&amp;camp=1789&amp;creative=9325&amp;path=tg%2Fdetail%2F-%2FB000B2YQX4%2Fqid%3D1135098249%2Fsr%3D2-1%2Fref%3Dpd_bbs_b_2_1%3Fv%3Dglance%2526s%3Dmusic&#34;&gt;Depeche Mode CD&lt;/a&gt;&lt;img src=&#34;http://www.assoc-amazon.com/e/ir?t=raymondcamden-20&amp;amp;l=ur2&amp;amp;o=1&#34; width=&#34;1&#34; height=&#34;1&#34; border=&#34;0&#34; alt=&#34;&#34; style=&#34;border:none !important; margin:0px !important;&#34; /&gt; is&amp;hellip; ok&amp;hellip; but it is unfortunate that no other track comes even close to &amp;ldquo;Precious&amp;rdquo;. When I heard that I thought I was in for a return of the &amp;ldquo;old&amp;rdquo; Depeche Mode, but it wasn&amp;rsquo;t to be.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m not a big drum and bass fan, but a friend sent me &lt;a href=&#34;http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;tag=raymondcamden-20&amp;camp=1789&amp;creative=9325&amp;path=tg%2Fdetail%2F-%2FB0009Y33BK%2Fqid%3D1135098311%2Fsr%3D2-1%2Fref%3Dpd_bbs_b_2_1%3Fv%3Dglance%2526s%3Dmusic&#34;&gt;Pendulum&lt;/a&gt;&lt;img src=&#34;http://www.assoc-amazon.com/e/ir?t=raymondcamden-20&amp;amp;l=ur2&amp;amp;o=1&#34; width=&#34;1&#34; height=&#34;1&#34; border=&#34;0&#34; alt=&#34;&#34; style=&#34;border:none !important; margin:0px !important;&#34; /&gt; - and that is quite nice. If you have even a passing interest in drum and base, I&amp;rsquo;d check it out.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New Depeche Mode Single: Precious</title>
+      <link>http://www.raymondcamden.com/2005/08/25/New-Depeche-Mode-Single-Precious</link>
+      <pubDate>Thu, 25 Aug 2005 10:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2005/08/25/New-Depeche-Mode-Single-Precious</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://www.depechemode.com&#34;&gt;Depeche Mode&lt;/a&gt; have released their newest single, &amp;ldquo;Precious&amp;rdquo;, and it actually is pretty good. I&amp;rsquo;ve been a fan of DM for &lt;i&gt;many&lt;/i&gt; years, and own every single album, but to be honest, I just haven&amp;rsquo;t been excited about their last few offerings. The new single, however, sounds quite a bit like their old stuff (Violator-era), and while the lyrics don&amp;rsquo;t do much for me, the beat is pretty darn good.&lt;/p&gt;
+
+&lt;p&gt;I had the pleasure of seeing Depeche Mode perform in New Orleans many years ago (for their Songs of Faith and Devotion tour) and they were quite good in person. Every song they played was &amp;ldquo;mixed&amp;rdquo; a bit making it a surprise once the music started playing. Made for an interesting and fun concert.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New Music - Saint Etienne</title>
+      <link>http://www.raymondcamden.com/2005/08/11/New-Music-Saint-Etienne</link>
+      <pubDate>Thu, 11 Aug 2005 11:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2005/08/11/New-Music-Saint-Etienne</guid>
+      <description>&lt;p&gt;Well, not &amp;ldquo;new&amp;rdquo; per se, but new to me. I&amp;rsquo;ve recently fallen in love with a band called &lt;a href=&#34;http://www.saintetienne.com/mainmenu.html&#34;&gt;Saint Etienne&lt;/a&gt;. They seem to be a mix of pop, funk, and just plain unique sounds. I especially like &amp;ldquo;Only Love Can Break Your Heart&amp;rdquo; and &amp;ldquo;Like a Motorway.&amp;rdquo; If you are looking for something different, check them out. (I&amp;rsquo;d recommend: &lt;b&gt;Smash The System Singles 1990-94&lt;/b&gt; for a good sampling.)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New Beck Single</title>
+      <link>http://www.raymondcamden.com/2005/02/22/3BEB76F6-D408-7AC1-3A8561544FFFB2FB</link>
+      <pubDate>Tue, 22 Feb 2005 16:02:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2005/02/22/3BEB76F6-D408-7AC1-3A8561544FFFB2FB</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve always liked Beck, but didn&amp;rsquo;t really consider myself a real fan. I had one of his CDs - I generally found myself liking his music. I was listening to WOXY (more on that in a bit) last week when I heard his new single, E-pro, and was just floored. This is just an amazing single. I&amp;rsquo;ve also taken the time to listen to more of his music and I&amp;rsquo;m just having a hard time understanding why I haven&amp;rsquo;t paid more attention.&lt;/p&gt;
+
+&lt;p&gt;So WOXY - I hate radio. I despise radio. Whenever I hear a DJ I want to curl up into a ball and die. I love music. I haven&amp;rsquo;t taken the satellite radio plunge yet. Mainly I&amp;rsquo;ve been turning on my MP3 collection and just hitting Play with shuffle turned on. Every now and then I&amp;rsquo;ll listen to net based radio. About two weeks ago I discovered www.woxy.com. This is an alternative station with a great mix of genres and music. I highly recommend it.&lt;/p&gt;
+
+&lt;p&gt;Which brings me to another old rant. (I&amp;rsquo;m getting old now - forgive me.) Something else I hate - applications that steal focus. In general, WOXY has  worked just fine for me. Today it had connection problems.&lt;/p&gt;
+
+&lt;p&gt;Now, even though I&amp;rsquo;m coding Really Important Stuff, and writing Really Important Emails, iTunes feels it is necessary to pop open a warning and let me know that the network connection is being rebuffered. &lt;i&gt;Because it&amp;rsquo;s just sooo important!&lt;/i&gt; I wish applications would mind their own business. The only time I want an application to steal focus is if it somehow is tired to a national defense system and wants to alert that a) a giant asteroid is heading our way and b) Bruce Willis and Ben Afleck (don&amp;rsquo;t ask me to spell check that) are too busy to save us.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

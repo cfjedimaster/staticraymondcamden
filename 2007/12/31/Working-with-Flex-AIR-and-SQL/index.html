@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Working with Flex, AIR, and SQL &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Working with Flex, AIR, and SQL" />
+<meta property="og:description" content="I decided to give myself a new AIR/Flex project, one that would specifically use the built-in database. My project was a simple one - a time tracker.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2007/12/31/Working-with-Flex-AIR-and-SQL" />
+
+
+<meta property="og:updated_time" content="2007-12-31T15:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Working with Flex, AIR, and SQL">
+<meta itemprop="description" content="I decided to give myself a new AIR/Flex project, one that would specifically use the built-in database. My project was a simple one - a time tracker.
+">
+
+
+<meta itemprop="dateModified" content="2007-12-31T15:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="1281">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Working with Flex, AIR, and SQL"/>
+<meta name="twitter:description" content="I decided to give myself a new AIR/Flex project, one that would specifically use the built-in database. My project was a simple one - a time tracker.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2007/12/31/Working-with-Flex-AIR-and-SQL">
+    <h1 class="article-title" itemprop="name">
+        Working with Flex, AIR, and SQL
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2007-12-31 15:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2007-12-31</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/flex">Flex</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I decided to give myself a new AIR/Flex project, one that would specifically use the built-in database. My project was a simple one - a time tracker.</p>
+
+<p>I currently use <a href="http://www.sidejobtrack.com">Side Job Track</a> to track all of my clients, projects, and hours. While this has the benefit of being a web site and available from multiple locations, it has a few quirks that really bug me. It just doesn&rsquo;t <i>flow</i> right for me. It is also a bit slow. All in all - I&rsquo;m just tired of using it and figured, why not build something better? Since I&rsquo;ll be the only user, I&rsquo;ll have exactly one person to please, so how hard can that be?</p>
+
+<p>I began by deciding to use Flex. I really like the HTML side of AIR, but I&rsquo;ve got to practice my Flex more. I&rsquo;m not going to show a lot of my Flex code as it - well - sucks - but let&rsquo;s take a look at how easy it is to use databases in AIR.</p>
+
+<p>You begin my creating/opening your database. The cool thing is that this is all one statement. When you connect to a database AIR will simply create it if it doesn&rsquo;t exist. So my Flex app runs the following code:</p>
+
+<p><code>
+public var conn:SQLConnection = new SQLConnection();
+public var dbFile:File = File.applicationStorageDirectory.resolvePath(&ldquo;data.db&rdquo;);</p>
+
+<p>public function init():void {
+    conn.addEventListener(SQLEvent.OPEN, openDBHandler);
+    conn.addEventListener(SQLErrorEvent.ERROR, errorDBHandler);<br />
+    conn.openAsync(dbFile);
+}<br />
+</code></p>
+
+<p>So line by line, let me describe what is going on - and let me remind folks - I&rsquo;m learning this myself. If I get the details wrong, please correct me.</p>
+
+<p>The first line simply creates a connection object. We are going to use this as our main &ldquo;pipe&rdquo; to our database.</p>
+
+<p>The second line simply creates a file pointer. The applicationStorageDirectory is a shortcut to a private area for my application. Basically, it asks AIR to give me a file name in a special place just for my application. I <b>love</b> how AIR does that. The file name I picked, data.db, is nothing special.</p>
+
+<p>Next up is the init() function. I have this running from the creationComplete() of my Flex app. I add two events to my connection. One for an error, one for success. I then simple open it. Again - here is where AIR will create the database if it doesn&rsquo;t exist.</p>
+
+<p>So at this point - we have a database. How do we seed it with tables? We can run SQL that will create the table if it doesn&rsquo;t exist. If you remember, I had an event run when the database was opened. This function looks like so:</p>
+
+<p><code>
+public function openDBHandler(event:SQLEvent):void {
+    trace(&ldquo;db opened, now making new sql&rdquo;);
+    //create tables, will do nothing if table already exists
+    var sql:String =
+    &ldquo;CREATE TABLE IF NOT EXISTS clients(&rdquo; +
+    &ldquo; id INTEGER PRIMARY KEY AUTOINCREMENT, &rdquo; +
+    &ldquo; name TEXT, &rdquo; +
+    &ldquo; description TEXT &rdquo; +
+    &ldquo;)&rdquo;;
+    var createStmt:SQLStatement = new SQLStatement();
+    createStmt.sqlConnection = conn;
+    createStmt.text = sql;
+    createStmt.addEventListener(SQLEvent.RESULT, dbReadyResult);
+    createStmt.addEventListener(SQLErrorEvent.ERROR, errorDBHandler);
+    createStmt.execute();
+}
+</code></p>
+
+<p>I&rsquo;ll skip to the interesting bits. The sql string is just that - a string. Notice the &ldquo;if not exists&rdquo; - basically this SQL will create the table if it hasn&rsquo;t already been made yet. My time tracker will be simple, but in a complex application, you may want to introspect the database to see if a table exists instead of running a bunch of create statements.</p>
+
+<p>I make a SQLStatement object, and tell it what connection to use, what SQL to use, and want events to run.</p>
+
+<p>With me so far? So here is where I had to think a bit. My time tracker application will have 2 buttons to start off with (in my first draft). A clients button will let you add/edit/delete clients, where clients are just a name and a description. The projects button will let me add/edit/delete projects, with a name, client foreign key, and &lsquo;active&rsquo; state.</p>
+
+<p>My application was going to start on the clients page. (I actually want it to jump into &lsquo;hour entry&rsquo; mode, but I&rsquo;m building the client portion first.) But I can&rsquo;t load clients until the database is opened, created, setup, you get the picture.</p>
+
+<p>So what I did probably wasn&rsquo;t best. To handle the asynchronous nature of my db calls (note that AIR supports a synchronous version as well) I used a Flex ViewStack. My initial view would be a loading screen. When everything was done loading up, I&rsquo;d load my clients screen:</p>
+
+<p><code>
+public function dbReadyResult(event:SQLEvent):void {
+    mainView.selectedChild = clientsView;
+    trace(&ldquo;all done, let&rsquo;s boogie&rdquo;);
+}
+</code></p>
+
+<p>Don&rsquo;t worry about mainView/clientsView for now - they are just visual components (and I&rsquo;m including the full source at the end).</p>
+
+<p>Ok - so now that I have a database, I wanted to build a datagrid to display the information in the clients table. The SQL was again - fairly simple:</p>
+
+<p><code>
+private function loadData():void {
+    selectData = new SQLStatement();
+    selectData.sqlConnection = dbconnection;<br />
+    selectData.text = &ldquo;select id, name, description from clients order by name asc&rdquo;;
+    selectData.addEventListener(SQLEvent.RESULT, resultHandler);
+    selectData.execute();
+}
+</code></p>
+
+<p>The only trouble I ran into was changing the result data into an arrayCollection for my datagrid. I tried to cast it, which would make it super simple to use, but that didn&rsquo;t work. What&rsquo;s odd is that it didn&rsquo;t give an error either. So I did it by hand:</p>
+
+<p><code>
+private function resultHandler(event:SQLEvent):void {
+    clientData = new ArrayCollection();
+    var result:SQLResult = selectData.getResult();
+    trace(&lsquo;num of client rows is &lsquo;+result.data.length);
+    for (var i:int = 0; i &lt; result.data.length; i++) {
+        var row:Object = new Object();
+        row[&ldquo;name&rdquo;] = result.data[i][&ldquo;name&rdquo;];
+        row[&ldquo;description&rdquo;] = result.data[i][&ldquo;description&rdquo;];
+        row[&ldquo;id&rdquo;] = result.data[i][&ldquo;id&rdquo;];
+        clientData.addItem(row);
+    }
+}
+</code></p>
+
+<p>I&rsquo;m surprised there isn&rsquo;t a generic way of doing it. The AIR docs show a generic way to trace() the results, so I may convert that to a generic function I can use to build an arrayCollection from a SQLResult object. (<b>Edit: Please see note below.</b>)</p>
+
+<p>The rest of my code was pretty much grunt work. I added a simple form and a way to add, edit, and delete. I will point out something cool. AIR/SQLLite support parameters, just like the cfqueryparam tag in ColdFusion. They are pretty easy to use as well. First, just use the :XXX syntax:</p>
+
+<p><code>
+insert into clients(name,description) values(:name,:description)
+</code></p>
+
+<p>And then provide values for the parameters. Here is a full example of an insert:</p>
+
+<p><code>
+var insStmt:SQLStatement = new SQLStatement();
+insStmt.sqlConnection = dbconnection;
+var sql:String = &ldquo;insert into clients(name,description) values(:name,:description)&ldquo;;
+insStmt.parameters[&rdquo;:name&rdquo;] = namefield.text;
+insStmt.parameters[&rdquo;:description&rdquo;] = descriptionfield.text;</p>
+
+<p>insStmt.text = sql;
+insStmt.addEventListener(SQLEvent.RESULT, refreshHandler);</p>
+
+<p>insStmt.execute();
+</code></p>
+
+<p>You can also do positional paramters. You can also tell AIR what the column types are for select statements, as well as retrieve only a set of rows instead of the full result set.</p>
+
+<p>I&rsquo;m very impressed with what I see so far. If you want to check out my demo please click the download link below. I included a AIR package as well. Please note that my client form doesn&rsquo;t do validation, so be nice to it.</p>
+
+<p>Please remember to not take my code as &lsquo;best practices&rsquo;.</p>
+
+<p>My next goal is to get Projects working, and then the data entry form.</p>
+
+<p>The last thing I&rsquo;ll do is play with the Reports area so I can try out charts, and see if I can get an Excel/Numbers export working.</p>
+
+<p><b>Edit</b> I spoke with Todd Sharp, and he pointed out a simpler way to turn my SQLResult into an ArrayCollection. I changed my code to just this:</p>
+
+<p><code>
+private function resultHandler(event:SQLEvent):void {
+    var result:SQLResult = selectData.getResult();
+    clientData = new ArrayCollection(result.data);
+}
+</code></p>
+
+<p>I don&rsquo;t have the line I tried originally, but it wasn&rsquo;t that. Anyway - that is a lot slimmer. I&rsquo;ve updated the zip (although I kept in the old code in a comment) and I rebuilt the AIR.<p><a href='enclosures/D%3A%5Chosts%5Cwww%2Ecoldfusionjedi%2Ecom%5Cenclosures%2FArchive15%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2007\/12\/31\/Working-with-Flex-AIR-and-SQL'; 
+this.page.identifier = '/?p=2566'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/31/Working-with-Flex-AIR-and-SQL" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Working with Flex, AIR, and SQL" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/31/Working-with-Flex-AIR-and-SQL" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/31/Working-with-Flex-AIR-and-SQL" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Working with Flex, AIR, and SQL" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/31/Working-with-Flex-AIR-and-SQL" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/31/Working-with-Flex-AIR-and-SQL" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

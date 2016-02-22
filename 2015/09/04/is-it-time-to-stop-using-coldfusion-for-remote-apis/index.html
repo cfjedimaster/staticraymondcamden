@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Is it time to stop using ColdFusion for remote APIs? &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Is it time to stop using ColdFusion for remote APIs?" />
+<meta property="og:description" content="So, let me begin by saying I&rsquo;m a bit frustrated, and so this blog post may be one I regret later on, but, I try to be as honest as possible here and right now, I&rsquo;m kinda ticked off about something and I want to get it off my chest. For a long time now I&rsquo;ve had an incredible amount of respect for how ColdFusion makes it easy to access data from client-side code (or remote servers). As much as I&rsquo;m digging Node.js these days, the fact that I can write up a CFC and get an API that can be used by JavaScript is pretty darn powerful. This feature has come a long way. When it first came out, the only option for output was WDDX. You can now output anything, from WDDX, to SOAP, to XML, plain strings, and of course, JSON.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis" />
+
+
+<meta property="og:updated_time" content="2015-09-04T16:55:13&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Is it time to stop using ColdFusion for remote APIs?">
+<meta itemprop="description" content="So, let me begin by saying I&rsquo;m a bit frustrated, and so this blog post may be one I regret later on, but, I try to be as honest as possible here and right now, I&rsquo;m kinda ticked off about something and I want to get it off my chest. For a long time now I&rsquo;ve had an incredible amount of respect for how ColdFusion makes it easy to access data from client-side code (or remote servers). As much as I&rsquo;m digging Node.js these days, the fact that I can write up a CFC and get an API that can be used by JavaScript is pretty darn powerful. This feature has come a long way. When it first came out, the only option for output was WDDX. You can now output anything, from WDDX, to SOAP, to XML, plain strings, and of course, JSON.
+">
+
+
+<meta itemprop="dateModified" content="2015-09-04T16:55:13&#43;06:00" />
+<meta itemprop="wordCount" content="1137">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Is it time to stop using ColdFusion for remote APIs?"/>
+<meta name="twitter:description" content="So, let me begin by saying I&rsquo;m a bit frustrated, and so this blog post may be one I regret later on, but, I try to be as honest as possible here and right now, I&rsquo;m kinda ticked off about something and I want to get it off my chest. For a long time now I&rsquo;ve had an incredible amount of respect for how ColdFusion makes it easy to access data from client-side code (or remote servers). As much as I&rsquo;m digging Node.js these days, the fact that I can write up a CFC and get an API that can be used by JavaScript is pretty darn powerful. This feature has come a long way. When it first came out, the only option for output was WDDX. You can now output anything, from WDDX, to SOAP, to XML, plain strings, and of course, JSON.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis">
+    <h1 class="article-title" itemprop="name">
+        Is it time to stop using ColdFusion for remote APIs?
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-09-04 16:55:13 &#43;0600 &#43;0600" itemprop="datePublished">2015-09-04</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>So, let me begin by saying I&rsquo;m a bit frustrated, and so this blog post may be one I regret later on, but, I try to be as honest as possible here and right now, I&rsquo;m kinda ticked off about something and I want to get it off my chest. For a long time now I&rsquo;ve had an incredible amount of respect for how ColdFusion makes it easy to access data from client-side code (or remote servers). As much as I&rsquo;m digging Node.js these days, the fact that I can write up a CFC and get an API that can be used by JavaScript is pretty darn powerful. This feature has come a long way. When it first came out, the only option for output was WDDX. You can now output anything, from WDDX, to SOAP, to XML, plain strings, and of course, JSON.</p>
+
+<p>In fact, I like this feature so much that I proposed a topic for it at this years <a href="https://cfsummit.adobeevents.com/">ColdFusion Summit</a>. My session will be an overview of how to generate output for remote consumption and cover everything from the beginning (ColdFusion MX and earlier) to the upcoming release (12).</p>
+
+<p>However&hellip;</p>
+
+<p>Since the beginning of <i>native</i> JSON support in ColdFusion (ColdFusion 8), there have been consistent issues with serialization. This all drives from the fact that ColdFusion variables are typeless and therefore the server has to (or does it?) make guesses as to how to convert values into JSON. Over the past three releases, I&rsquo;ve seen multiple bugs, and multiple fixes, and while I had no real proof (more on that in a minute), my gut told me that things had simmered down a bit and that ColdFusion 11 had this problem licked.</p>
+
+<p>Or so I thought.</p>
+
+<p>Turns out <a href="https://bugbase.adobe.com/index.cfm?event=bug&id=3337394">bug 3337394</a>, created nearly <i>three</i> years ago, oh one marked closed and fixed, is still very much an issue for serialization. If you have data in a struct, and it has the string value &ldquo;No&rdquo;, ColdFusion will convert it to false. Here is a sample:</p>
+
+<pre><code class="language-javascript">x = {"name":"No"};
+y = queryNew("id,name", "integer,varchar", [{"id":1, "name":"ray"},{"id":2, "name":"No"}]); 
+writeoutput(serializeJSON(x));
+writeoutput("<p/>");
+writeoutput(serializeJSON(y,"struct"));
+</code></pre>
+
+<p>Which gives you:</p>
+
+<pre><code>
+{"name":false}
+
+[{"ID":1,"NAME":"ray"},{"ID":2,"NAME":"No"}]
+</code></pre>
+
+<p>As you can see, the struct is broken, the query works fine. (As reported in the bug itself.)</p>
+
+<p>Another issue involves strings that contain numbers. Consider these two examples:</p>
+
+<pre><code class="language-javascript">z = {"productkey":"89900909130939081290830983019819023"};
+z2 = queryNew("id,name", "integer,varchar", [{"id":1, "name":"ray"},{"id":2, "name":"89900909130939081290830983019819023"}]);
+
+writeoutput("<p/>");
+writeoutput(serializeJSON(z));
+writeoutput("<p/>");
+writeoutput(serializeJSON(z2));
+</code></pre>
+
+<p>This returns:</p>
+
+<pre><code>
+{"productkey":89900909130939081290830983019819023}
+
+{"COLUMNS":["ID","NAME"],"DATA":[[1,"ray"],[2,"89900909130939081290830983019819023"]]}
+</code></pre>
+
+<p>As you can see, productkey is now a number, and one that will be converted to 8.990090913093909e+34 in JavaScript.</p>
+
+<p>So&hellip;. yeah. In all cases, there are workarounds. But let me ask you this. Would you use a database that randomly changed values on you?</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/09/aw_hell_no.png" alt="aw_hell_no" width="380" height="285" class="aligncenter size-full wp-image-6735" /></p>
+
+<p>It seems ridiculous that this is still a problem now. It may be <i>incredibly</i> difficult. Heck, I won&rsquo;t pretend to be able to solve it. But here are some suggestions:</p>
+
+<ul>
+<li>Obviously the ColdFusion team has a unit test for this. They must. So when the unit test is updated for the items found in the bug, share it with us. I know there are <i>multiple</i> people in the community who would give their time to help flesh out the unit test, or heck, just have it locally and test when new versions come up. So that's my first request - let us see the tests for JSON serialization. Speaking of unit tests, the last time this bug was fixed, why not share the test immediately? I mean, we won't see it working, but I <i>promise</i> you people who have asked why a bug involving data serialization had a test that only tested queries (and CFCs I believe). I don't want to harp on the engineer who fixed this - we all make mistakes - but why not post the test when you write it and share it with us? 
+
+Of course, one could write essays on the lack of communication that goes on sometimes on the bug tracker, which is a real shame. You know, I get that some people don't like to engage or are basically shy. But there's no excuse for it anymore. I'm very shy too. When someone speaks to me, I have to work hard to respond to their questions with questions of my own. I recognize my lack of engagement in basic human communication and force myself to hack around my lack of social skills. Make a list and put it on a PostIt next to your monitor. "When I fix a bug, respond with details about how I fixed it, how I tested it, and what I may be concerned about. The reporter may have good input!"</li>
+<li>Given that the "glue" aspect of ColdFusion is one of its greatest selling points, make JSON serialization a priority for ColdFusion 12. Obviously the issue isn't licked yet, which, ok, fine, it's been years but fine. The ColdFusion 12 road map says this: "Ability to manage, monitor, regulate, secure REST and SOAP web services – API management". Before I manage my APIs, I want 100% certainty that they actually process data correctly.</li>
+<li>And hey - how about the nuclear option? If the very nature of ColdFusion variables means the problem is not 100% solvable, then remove the feature. Seriously.  Ok, maybe that's overkill, but there are things in ColdFusion now that haven't been updated in a while, look abandoned, and maybe should be dropped. So if they can't fix it, remove it.
+</ul>
+
+<p>So I started this blog entry with a somewhat bold title - is it time to stop using ColdFusion for remote APIs? Many of us in the community have already argued against using <a href="http://www.raymondcamden.com/2014/01/23/Im-not-going-to-tell-you-to-stop-using-ColdFusion-UI-tags-anymore">ColdFusion UI features</a>. If we can&rsquo;t trust the data coming out of CF&rsquo;s built-in JSON serialization than is it time to stop using it completely? What do you think?</p>
+
+<p>p.s. Don&rsquo;t forget you can switch to Nadel&rsquo;s excellent <a href="http://www.bennadel.com/blog/2505-jsonserializer-cfc---a-data-serialization-utility-for-coldfusion.htm">JSONSerializer.cfc</a>.</p>
+
+<p>p.s. On top I made the point that ColdFusion has to guess at the data type. Adam Cameron makes a great comment in the bug about this: &ldquo;You speak good sense Peter: it&rsquo;s inconvenient but understood that CF can&rsquo;t infer data types in situations like this, so - on that basis - <em>don&rsquo;t try</em>. If you know you can&rsquo;t do something&hellip; don&rsquo;t then go ahead and try do it anyhow.&rdquo; Given that &ldquo;No&rdquo; is a string, don&rsquo;t convert it. If someone is using No for false in their data, then why not punish <i>them</i> instead of everyone else?</p>
+
+<p>p.s. As I was writing this, it occurred to me that we have other places where things get a bit fuzzy with data. Math, for example, breaks down in large numbers. I get that that&rsquo;s an issue across other languages, and certainly we shouldn&rsquo;t remove arithmetic from ColdFusion because of it, but it just <i>feels</i> like a different domain than what I&rsquo;m seeing in JSON serialization.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/09\/04\/is-it-time-to-stop-using-coldfusion-for-remote-apis'; 
+this.page.identifier = '/?p=6734'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Is it time to stop using ColdFusion for remote APIs?" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Is it time to stop using ColdFusion for remote APIs?" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

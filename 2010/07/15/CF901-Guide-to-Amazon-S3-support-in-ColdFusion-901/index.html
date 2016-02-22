@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>CF901: Guide to Amazon S3 support in ColdFusion 9.0.1 &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="CF901: Guide to Amazon S3 support in ColdFusion 9.0.1" />
+<meta property="og:description" content="One of the most exciting parts of ColdFusion 9.0.1 is Amazon S3 support. If you&rsquo;ve never heard of S3, here is the marketing copy. I&rsquo;ll follow this up with my take on it.
+
+
+
+
+Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers.
+
+Amazon S3 provides a simple web services interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web. It gives any developer access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. The service aims to maximize benefits of scale and to pass those benefits on to developers.
+
+
+
+Ok, so in English, what in the heck does this mean?
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/07/15/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901" />
+
+
+<meta property="og:updated_time" content="2010-07-15T13:07:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="CF901: Guide to Amazon S3 support in ColdFusion 9.0.1">
+<meta itemprop="description" content="One of the most exciting parts of ColdFusion 9.0.1 is Amazon S3 support. If you&rsquo;ve never heard of S3, here is the marketing copy. I&rsquo;ll follow this up with my take on it.
+
+
+
+
+Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers.
+
+Amazon S3 provides a simple web services interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web. It gives any developer access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. The service aims to maximize benefits of scale and to pass those benefits on to developers.
+
+
+
+Ok, so in English, what in the heck does this mean?
+
+">
+
+
+<meta itemprop="dateModified" content="2010-07-15T13:07:00&#43;06:00" />
+<meta itemprop="wordCount" content="2371">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="CF901: Guide to Amazon S3 support in ColdFusion 9.0.1"/>
+<meta name="twitter:description" content="One of the most exciting parts of ColdFusion 9.0.1 is Amazon S3 support. If you&rsquo;ve never heard of S3, here is the marketing copy. I&rsquo;ll follow this up with my take on it.
+
+
+
+
+Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers.
+
+Amazon S3 provides a simple web services interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web. It gives any developer access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. The service aims to maximize benefits of scale and to pass those benefits on to developers.
+
+
+
+Ok, so in English, what in the heck does this mean?
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/07/15/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901">
+    <h1 class="article-title" itemprop="name">
+        CF901: Guide to Amazon S3 support in ColdFusion 9.0.1
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-07-15 13:07:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-07-15</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>One of the most exciting parts of ColdFusion 9.0.1 is Amazon S3 support. If you&rsquo;ve never heard of S3, here is the marketing copy. I&rsquo;ll follow this up with my take on it.</p>
+
+<p>
+
+<blockquote>
+Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers.
+<br/><br/>
+Amazon S3 provides a simple web services interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web. It gives any developer access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. The service aims to maximize benefits of scale and to pass those benefits on to developers.
+</blockquote>
+
+<p>
+Ok, so in English, what in the heck does this mean?
+<p>
+
+You can think of S3 as a remote hard drive of infinite size. If you've ever built a web application that lets users upload files (images, attachments, etc), then you know that disk size is a concern. Sure it may take months or years before you have to be worried, and sure, hard drives are pretty cheap, but the point is you <i>still have to think about it!</i>. Amazon S3 gives us a way to <i>not</i> worry about it. (Not that it's totally without worry, see my closing notes below.)
+
+<p>
+
+To begin playing with S3, you need to first sign up for an account. You can do that here: <a href="http://aws.amazon.com/s3/">http://aws.amazon.com/s3/</a>. You <b>will</b> need to provide a credit card. This worried me. Pricing is based on how much stuff you put on S3 and how much it's accessed. Details can be found <a href="http://aws.amazon.com/s3/#pricing">here</a>. But to be honest, this kind of read like the <a href="http://www.amazon.com/Original-Handbook-Recently-Manual-Field-Operators/dp/0895560682">The Original Handbook for the Recently Deceased</a>. However, in all my testing, I've yet to incur a bill over 5 cents. Obviously your bill will be different, but for testing, I'd say this is a non-concern.
+
+<p>
+
+Once you've set up your account, you need to get two special pieces of information: Your access key and your secret access key. Once you have logged into S3, this may be found under Account/Security Credentials. Copy these down in a safe place. You will need them later.
+
+<p>
+
+Ok, so let's talk about S3 usage in ColdFusion. The code comes down to 4 distinct areas:
+
+<ul>
+<li>Credentials: You have two ways to "tell" ColdFusion your access credentials. I'll cover that below.
+<li>File operations: This is the nut and bolts of using S3, creating your storage and copying and updating files.
+<li>Permissions: This is where you set up who can access resources.
+<ii>Metadata: This is where you can add additional information about your resources. S3 allows you to set <i>anything</i> you want.
+</ul>
+
+<p>
+Let's begin with credentials. For all the code below, assume K1 and K2 are my real values. I trust you guys, but not <i>all</i> of you guys. ;)
+
+<p>
+<code>
+component {
+
+     this.name="s3test2";
+     //s3 info
+     this.s3.accessKeyid = "K1";
+     this.s3.awsSecretKey = "K2";
+        
+}
+</code>
+
+<p>
+
+As you can see, I've provided Application-level credentials. This means any S3 calls in my code will use these values. However, you can also provide the credentials in the path itself. If your application needs multiple different connections then that is the option you would use.
+
+<p>
+
+Now let's talk about file operations. The most important thing you must learn is the concept of buckets. A bucket is like a root folder. Your account can have any number of buckets and you must have at least one if you want to store files. Buckets are unique through the entire world. So that means you won't be using a bucket name like "images". From the S3 documentation, we have the following rules for buckets:
+
+<p>
+
+<blockquote>
+Only contain lowercase letters, numbers, periods (.),
+and dashes (-)<br/>
+Start with a number or letter<br/>
+Be between 3 and 63 characters long<br/>
+Not be in an IP address style (e.g., "192.168.5.4")<br/>
+Not end with a dash<br/>
+Not contain dashes next to periods
+(e.g., "my-.bucket.com" and "my.-bucket" are invalid)
+</blockquote>
+<p>
+
+The generally accepted practice is to use a bucket name that matches your domain. So imaging you want to use S3 to store images for foo.com. Your bucket name could then be: images.foo.com. You can also create a bucket for your development work: dev.images.foo.com. And obviously staging too: staging.images.foo.com.
+<p>
+
+Once you've decided on your bucket then creating it as simple as creating any directory. The only difference is that you will use the s3:// prefix. Much like the VFS system, this tells ColdFusion that the operation is for S3, and not your local file system. Here is a quick example:
+<p>
+
+<code>
+&lt;cfif not directoryExists("s3://demos10.coldfusionjedi.com")&gt;
+     &lt;cfset directoryCreate("s3://demos10.coldfusionjedi.com")&gt;
+&lt;/cfif&gt;
+
+Done
+</code>
+<p>
+
+The example above makes use of both directoryExists and directoryCreate. If not for the s3 prefix, this code would look just like code we've used for years. (Well ok, the directoryCreate function is kind of new!) Writing files is just as easy. Consider this next example:
+
+<p>
+<code>
+&lt;cfset fileWrite("s3://demos10.coldfusionjedi.com/#createUUID()#.txt", "Foo")&gt;
+&lt;cfset files = directoryList("s3://demos10.coldfusionjedi.com")&gt;
+&lt;cfdump var="#files#"&gt;
+</code>
+<p>
+
+On every reload, a new file is created (with the text 'Foo'). I use the directoryList command to get all the files from the folder. Here is an example result:
+<p>
+
+<img src="http://www.raymondcamden.com/images/Screen shot 2010-07-15 at 8.15.11 AM.png" />
+
+<p>
+
+I could read these files as well, and copy them to my local server. Deletes too. For the most part, you can almost forget that S3 is being used at all. However, you probably want to actually share these files with others. Images being the best example. Just because you copy the image to S3 doesn't mean folks can actually <i>see</i> the image. Enter the ACL, or Access Control List. This is how S3 does permissions.
+
+<p>
+
+ACLs consist of a entity (the thing you are granting permissions to) and the actual permission. The entity is either a group (like all), an email address, or an ID value (the docs call this a canonical value). Think of that like a user id. Permissions are:
+
+<p>
+<ul>
+<li>read
+<li>write
+<li>read_acp (basically the ability to get permissions)
+<li>write_acp (basically the ability to set permissions)
+<li>full_control
+</ul>
+</p>
+
+<p><p>
+You have four main ways to work with ACLs. You can get an ACL, using storeGetACL(url). This returns an array of ACLs for the object. That can either be the main bucket (again, think root directory), or an individual file. You can set ACLs using storeSetACL(url, array). This will set <b>all</b> the permissions of the object. This is important. It&rsquo;s going to bite us in the rear in the next example. Next, you can add an ACL using storeAddACL(url, struct). Finally, you can set ACLs when creating a bucket using the cfdirectory tag. Let&rsquo;s look at an example of this, and as I said, this code is going to have a problem. You will see why in a minute.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfif not directoryExists(&ldquo;s3://demos11.coldfusionjedi.com&rdquo;)&gt;
+    &lt;cfset perms = [
+        {group=&ldquo;all&rdquo;, permission=&ldquo;read&rdquo;}
+    ]&gt;
+    &lt;cfdirectory action=&ldquo;create&rdquo; directory=&ldquo;s3://demos11.coldfusionjedi.com&rdquo; storeacl=&ldquo;#perms#&rdquo;&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfset fileWrite(&ldquo;s3://demos11.coldfusionjedi.com/#createUUID()#.txt&rdquo;, &ldquo;Foo&rdquo;)&gt;
+&lt;cfset files = directoryList(&ldquo;s3://demos11.coldfusionjedi.com&rdquo;)&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#files#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>So going from the top, we first see if our bucket exists. If not, we are going to create it. But we begin by creating an array of ACLs. ACLs are just structures really, and in this case I have one. I&rsquo;m giving everyone read access to it. I then pass this array to the cfdirectory tag when I create the bucket. Easy peasy. I follow this up with a simple write command, like our last command. However, now this returns an error:</p>
+
+<p><p></p>
+
+<blockquote>
+<b>S3 Error Message. Access DeniedCould not close the output stream for file "s3://demos11.coldfusionjedi.com/62ECAED9-EB00-C07E-3C0F435E525D1B06.txt"..</b><br/><br/>
+
+RootCause - org.apache.commons.vfs.FileSystemException: Could not close the output stream for file "s3://demos11.coldfusionjedi.com/62ECAED9-EB00-C07E-3C0F435E525D1B06.txt".
+</blockquote>
+
+<p><p></p>
+
+<p>What the heck? Turns out - when we created the directory, we <b>set</b> the permissions. In other words, we told S3 that those were the <b>only</b> permissions allowed for the bucket. In other words, I didn&rsquo;t give myself access! So this is easy enough to fix - if I get my user ID I can give myself full control. But what in the heck is my user id? It isn&rsquo;t my logon. Luckily if you go back to the <b>Account/Security Credentials</b> page, towards the bottom, there is a link: View canonical user ID. Clicking that gives you a long ID value. I&rsquo;m going to modify my code now to ensure I&rsquo;ve got permission as well.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfif not directoryExists(&ldquo;s3://demos12.coldfusionjedi.com&rdquo;)&gt;
+    &lt;cfset perms = [
+        {group=&ldquo;all&rdquo;, permission=&ldquo;read&rdquo;},
+        {id=&ldquo;this is not the real value&rdquo;, permission=&ldquo;full_control&rdquo;}
+    ]&gt;
+    &lt;cfdirectory action=&ldquo;create&rdquo; directory=&ldquo;s3://demos12.coldfusionjedi.com&rdquo; storeacl=&ldquo;#perms#&rdquo;&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfset fileWrite(&ldquo;s3://demos12.coldfusionjedi.com/#createUUID()#.txt&rdquo;, &ldquo;Foo&rdquo;)&gt;
+&lt;cfset files = directoryList(&ldquo;s3://demos12.coldfusionjedi.com&rdquo;)&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#files#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>For the most part this is the same code as before. Note that I&rsquo;m using a new bucket though. (Remember, you can <b>add</b> ACLs too. So we could have fixed that last bucket.) Now my array of ACLs includes one for myself as well, and I&rsquo;ve given myself full control. This is <b>not</b> necessary if you don&rsquo;t pass any ACLs at all, as I did the first time I created a bucket. So what do the ACLs look like if you get them? If I modify the previous template to add this:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset acls = storeGetACL(&ldquo;s3://demos12.coldfusionjedi.com&rdquo;)&gt;
+&lt;cfdump var=&ldquo;#acls#&rdquo;&gt;
+</code></p>
+
+<p><p></p>
+
+<p>You end up with this:</p>
+
+<p><p></p>
+
+<p><img src="http://www.coldfusionjedi.com/images/acl.png" /></p>
+
+<p><p></p>
+
+<p>Forgive my horrible attempt to obscure my ID. As you can see, I pretty much just got the same set of structs back. I do get a display name though. Depending on your needs, that could be useful to display on your site&rsquo;s front end.</p>
+
+<p><p></p>
+
+<p>So you may ask -  how would you use S3 to display images? Or how would you link to them in general? Well obviously you have to give everyone permission to read the file. Without that an anonymous request will be blocked. Once you&rsquo;ve done that, you have a few options.</p>
+
+<p><p></p>
+
+<p>The first option is to simply use an Amazon URL. Here is the generic form: <a href="http://s3.amazonaws.com/#bucket#/#yourfile#">http://s3.amazonaws.com/#bucket#/#yourfile#</a>. Here is an example: <a href="http://s3.amazonaws.com/demos3.coldfusionjedi.com/dalek_war_low.jpg">http://s3.amazonaws.com/demos3.coldfusionjedi.com/dalek_war_low.jpg</a>. And here it is in viewed on the web page (notice I set the width a bit smaller so it wouldn&rsquo;t be so huge on the page):</p>
+
+<p><p></p>
+
+<p><img src="http://s3.amazonaws.com/demos3.coldfusionjedi.com/dalek_war_low.jpg" width="200"></p>
+
+<p><p></p>
+
+<p>The second option is to make use of a CNAME. This is a domain alias where you basically point one of your domains. I&rsquo;ve set up demos3.coldfusionjedi.com as an alias to s3.amazonaws.com. That means the image above can also be found at <a href="http://demos3.coldfusionjedi.com/dalek_war_low.jpg">http://demos3.coldfusionjedi.com/dalek_war_low.jpg</a>. That way no one knows you are even using S3. (Although I included &lsquo;s3&rsquo; in the name so that kinda gives it away.)</p>
+
+<p><p></p>
+
+<p>Finally you could - although I wouldn&rsquo;t recommend it, copy media down when requested. For attachments that may be ok. For images it would be overkill. But interestingly enough imageNew() works just fine using S3 for a source image.</p>
+
+<p><p></p>
+
+<p>So now let&rsquo;s look at another interesting aspect: Metadata. S3 automatically creates a set of default metadata for every file you put up there. This includes: (and I should credit Adobe for this - it comes from their new CF901 reference)</p>
+
+<ul>
+<li>last_modified
+<li>date
+<li>owner
+<li>etag
+<li>content_length
+<li>content_type
+<li>content_encoding
+<li>content_disposition
+<li>content_language
+<li>content_md5
+<li>md5_hash
+</ul>
+
+<p>Buckets also include metadata, but only date and owner. What&rsquo;s cool though is that you can add any additional metadata you want. So first, let&rsquo;s look at an example of getting metadata.</p>
+
+<p><p>
+<code>
+&lt;cfset files = directoryList(&ldquo;s3://demos12.coldfusionjedi.com&rdquo;)&gt;</p>
+
+<p>&lt;cfloop index=&ldquo;theFile&rdquo; array=&ldquo;#files#&rdquo;&gt;
+    &lt;cfset md = storeGetMetadata(theFile)&gt;
+    &lt;cfdump var=&ldquo;#md#&rdquo; label=&ldquo;#theFile#&rdquo;&gt;
+&lt;/cfloop&gt;
+</code></p>
+
+<p><p></p>
+
+<p>This template simply lists the contents of my last bucket and for each file grabs the metadata. Here is the result:</p>
+
+<p><p></p>
+
+<p><img src="http://www.coldfusionjedi.com/images/getmd.png" title="Result of get metadata" /></p>
+
+<p><p></p>
+
+<p>Adding metadata is as simple as passing a structure of name, value keys.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset files = directoryList(&ldquo;s3://demos12.coldfusionjedi.com&rdquo;)&gt;</p>
+
+<p>&lt;cfloop index=&ldquo;theFile&rdquo; array=&ldquo;#files#&rdquo;&gt;
+    &lt;cfset md = storeGetMetadata(theFile)&gt;
+    &lt;cfdump var=&ldquo;#md#&rdquo; label=&ldquo;#theFile#&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;!--- Add coolness ---&amp;gt;
+&amp;lt;cfset storeSetMetadata(theFile, { coolness=randRange(1,100) })&amp;gt;
+</code></pre>
+
+<p>&lt;/cfloop&gt;
+</code></p>
+
+<p><p></p>
+
+<p>This is kind of a silly example since I&rsquo;m using a random number, but after running this a few times, you can see the impact in the metadata.</p>
+
+<p><p></p>
+
+<p><img src="http://www.coldfusionjedi.com/images/setmd.png" title="Result of setting metadata" /></p>
+
+<p><p></p>
+
+<p>So - at a high level - you can see how to read and write to S3. You can see how to set permissions and metadata. What&rsquo;s next? Here are some things to consider.</p>
+
+<ul>
+<li>Amazon S3 is not perfect. It <b>has</b> failed. The flip side to this is that nothing is perfect. I'd rather let Amazon worry about hard drive safety and backups. I trust them more than I trust myself. If I were the CIA, I wouldn't use them. If I were Flickr... I'd use them with caution and ensure I had a strong plan to cover any issues with Amazon. If I were a forum, or a blog, or simply making use of them to store media that isn't mission critical (forum avatars certainly are not, message attachments certainly are not), then I'd <b>strongly</b> recommend them. If you are ok with Amazon perhaps being down once a year, but want to ensure you never lose anything (and to be clear, I've heard of S3 being down, but not ever <i>losing</i> date), then I'd consider a monthly backup to a local hard drive. The take away from this though is that <b>anytime you make use of a remote resource, please be sure to code for that resource not being available.</b> I'll demonstrate an example of that later this week. (Remind me if I forget.)
+<li>Custom metadata is cool, but right now I'm not aware of a way for you to search it via ColdFusion's API. So if you wanted to create a link between resources in a bucket and a user on your system, consider having a database table that links the user (and any other metadata) and the S3 file ID. This way you can search locally and fetch the files as needed.
+<li>One of the cooler features of S3 is the ability to create temporary links. This allows you to keep a file protected, but say that anyone with this URL can grab a resource for N minutes of time. CF901 does not provide support for that. However, you can grab Barney Boisvert's cool Amazon S3 <a href="http://www.barneyb.com/barneyblog/projects/amazon-s3-cfc/">here</a>. It has a method just for that purpose. And while I recommend everyone upgrade to ColdFusion 9.0.1., I'll point out that Barney's CFC provides full read/write support. (I don't see ACL support but maybe I'm missing it.)
+<li>Amazon provides a web based interface to your S3 account. When you screw up, and you will, it can help you figure out what's going wrong. Once logged in, you can hit it here: <a href="https://console.aws.amazon.com/s3/home">https://console.aws.amazon.com/s3/home</a>
+<li>Random link - this blog entry contained some cool ideas and tips for S3: <a href="http://carltonbale.com/9-hidden-features-of-amazon-s3">9 Hidden Features of Amazon S3</a>
+</ul>
+
+<p><p></p>
+
+<p>Any questions?</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/07\/15\/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901'; 
+this.page.identifier = '/?p=3878'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/07/15/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="CF901: Guide to Amazon S3 support in ColdFusion 9.0.1" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/07/15/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/07/15/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="CF901: Guide to Amazon S3 support in ColdFusion 9.0.1" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/07/15/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/07/15/CF901-Guide-to-Amazon-S3-support-in-ColdFusion-901" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

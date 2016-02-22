@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>File Upload Guide &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="File Upload Guide" />
+<meta property="og:description" content="About two months ago I was asked by a client to help her understand file uploads and ColdFusion. I wrote her up a document and then asked if I could blog it. She graciously agreed (I&rsquo;ve been lucky in that regard - I&rsquo;ve hard multiple clients pay me for work and then ask that I share it with the world. Clients rule!) and I&rsquo;ve pasted the document below. It is very basic - but figured it may be useful to share. I&rsquo;ve also included a PDF export.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2007/10/12/File-Upload-Guide" />
+
+
+<meta property="og:updated_time" content="2007-10-12T10:10:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="File Upload Guide">
+<meta itemprop="description" content="About two months ago I was asked by a client to help her understand file uploads and ColdFusion. I wrote her up a document and then asked if I could blog it. She graciously agreed (I&rsquo;ve been lucky in that regard - I&rsquo;ve hard multiple clients pay me for work and then ask that I share it with the world. Clients rule!) and I&rsquo;ve pasted the document below. It is very basic - but figured it may be useful to share. I&rsquo;ve also included a PDF export.
+">
+
+
+<meta itemprop="dateModified" content="2007-10-12T10:10:00&#43;06:00" />
+<meta itemprop="wordCount" content="2032">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="File Upload Guide"/>
+<meta name="twitter:description" content="About two months ago I was asked by a client to help her understand file uploads and ColdFusion. I wrote her up a document and then asked if I could blog it. She graciously agreed (I&rsquo;ve been lucky in that regard - I&rsquo;ve hard multiple clients pay me for work and then ask that I share it with the world. Clients rule!) and I&rsquo;ve pasted the document below. It is very basic - but figured it may be useful to share. I&rsquo;ve also included a PDF export.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2007/10/12/File-Upload-Guide">
+    <h1 class="article-title" itemprop="name">
+        File Upload Guide
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2007-10-12 10:10:00 &#43;0600 &#43;0600" itemprop="datePublished">2007-10-12</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>About two months ago I was asked by a client to help her understand file uploads and ColdFusion. I wrote her up a document and then asked if I could blog it. She graciously agreed (I&rsquo;ve been lucky in that regard - I&rsquo;ve hard multiple clients pay me for work and then ask that I share it with the world. Clients rule!) and I&rsquo;ve pasted the document below. It is very basic - but figured it may be useful to share. I&rsquo;ve also included a PDF export.</p>
+
+<p><b>Working with File Uploads</b></p>
+
+<p>Adding a file upload feature to your web site is relatively simple, but there are some basic questions you should answer first before writing code. The first question you want to ask is what types of files are allowed. For example - if your intent is to allow someone to upload a resume, most likely you want to allow for Word docs, PDFs, and TXT files. If you site is letting someone upload a picture, than you want to restrict the types to GIF, JPG and PNG. You may also want to go further than just checking the file extension. You may want to use a third party tool like Alagad Image CFC or ColdFusion 8&rsquo;s built in image support to not only confirm that the file is indeed an image, but also ensure that the dimensions aren&rsquo;t too big.</p>
+
+<p>The next consideration to make is where these files will be stored. You have a few concerns here:</p>
+
+<p>1) The first concern is a basic one - disk space. If you are letting people upload images, it is possible that your hard drive could get filled. With the sizes of today&rsquo;s hard drives and with most of us not getting a lot of traffic (comparatively), you may never even get close to filling your hard drive. The question is though - how would you know? There is no built in way within ColdFusion to determine the amount of free space available on a drive (although CFLib has two different Windows only options, <a href="http://www.cflib.org/udf.cfm?ID=101">AvailableSpace</a> and <a href="http://www.cflib.org/udf.cfm?ID=105">FreeSpace</a>). You could however simply generate a report of the total size of one folder. This can be done using a recursive cfdirectory and query of query:</p>
+
+<p><code>
+&lt;cfdirectory directory=&ldquo;#expandPath(&lsquo;.&rsquo;)#&rdquo; recurse=&ldquo;true&rdquo; action=&ldquo;list&rdquo; name=&ldquo;allfiles&rdquo;&gt;</p>
+
+<p>&lt;cfquery name=&ldquo;getSize&rdquo; dbtype=&ldquo;query&rdquo;&gt;
+select    sum(size) as total
+from    allfiles
+&lt;/cfquery&gt;</p>
+
+<p>&lt;cfoutput&gt;Total size in bytes is: #getSize.total#&lt;/cfoutput&gt;
+</code></p>
+
+<p>This could be done daily and sent via email using a scheduled task. Or it could be displayed in the your web site&rsquo;s administration section. Either way - you want to at least have a good idea of how much space is being used and how much space is available. If your site gets a lot of traffic and could possibly have quite a few uploads, you may need to look into using another server just for the storage and serving of the media files.</p>
+
+<p>2) The next question is how you will handle files with the same name. ColdFusion provides a simple way to handle that when uploading. It has a makeUnique feature that will automatically detect a file name conflict and give your upload a new name, but you need to be sure you use this (if it makes sense) and that you recognize the file changed. If you store the file name in the database (a good idea so that you can associate uploads with a user) you may want to consider storing both the original file and the file name ColdFusion used. This lets the user see his original (and recognized) file name while keeping a link to the real file name on the system.</p>
+
+<p>So hopefully now at this point you have an idea of what you want to do with the files - now lets look at the actual code. First and foremost you will need a form. The only way a browser can upload a file is via a form that uses a input tag with type of file. There is no other way (outside of a Java or Flash file) that you can let users upload a file. So a very, very simple upload form could look like so:</p>
+
+<p><code>
+&lt;form action=&ldquo;test.cfm&rdquo; method=&ldquo;post&rdquo;&gt;
+Select a file: &lt;input type=&ldquo;file&rdquo; name=&ldquo;uploadfile&rdquo;&gt;
+&lt;input type=&ldquo;submit&rdquo; value=&ldquo;Upload File&rdquo;&gt;
+&lt;/form&gt;
+</code></p>
+
+<p>While this looks ok, there is one problem. When using a file upload, you have to specify a special type of form. You won&rsquo;t see a problem until you actually try to upload the file with CFFILE. The error you will see is:</p>
+
+<p>The cffile action=&ldquo;upload&rdquo; requires forms to use enctype=&ldquo;multipart/form-data&rdquo;</p>
+
+<p>Well you have to hand it to ColdFusion. It told you exactly what was wrong, and don&rsquo;t feel too bad - I forget this all the time. All you need to do is add the specified enctype attribute to your form tag, like so:</p>
+
+<p><code>
+&lt;form action=&ldquo;test.cfm&rdquo; method=&ldquo;post&rdquo; enctype=&ldquo;multipart/form-data&rdquo;&gt;
+Select a file: &lt;input type=&ldquo;file&rdquo; name=&ldquo;uploadfile&rdquo;&gt;
+&lt;input type=&ldquo;submit&rdquo; value=&ldquo;Upload File&rdquo;&gt;
+&lt;/form&gt;
+</code></p>
+
+<p>So this fixes the form - now lets move on to the processing. As hinted at above - the CFFILE tag will actually do the upload. To be clear - the web server handles the file upload, but the CFFILE tag is what actually lets your process the upload. It gives you a way to say, &ldquo;Take the user&rsquo;s file and put it here.&rdquo; Let&rsquo;s look at a simple example:</p>
+
+<p><code>
+&lt;cfif structKeyExists(form, &ldquo;uploadfile&rdquo;)&gt;
+    &lt;cfset destination = expandPath(&ldquo;./files&rdquo;)&gt;
+    &lt;cfif not directoryExists(destination)&gt;
+        &lt;cfdirectory action=&ldquo;create&rdquo; directory=&ldquo;#destination#&rdquo;&gt;
+    &lt;/cfif&gt;</p>
+
+<pre><code>&amp;lt;cffile action=&quot;upload&quot; filefield=&quot;uploadfile&quot; destination=&quot;#destination#&quot; nameConflict=&quot;makeUnique&quot; result=&quot;upload&quot;&amp;gt;
+&amp;lt;cfdump var=&quot;#upload#&quot;&amp;gt;
+</code></pre>
+
+<p>&lt;/cfif&gt;
+</code></p>
+
+<p>This code block will only run when the form field, uploadfile, exists. The first 4 lines simply check to see if a subdirectory named files exists. Normally you would probably use a folder that already exists, but this is a handy way to set it up for me. (I&rsquo;m a lazy SOB.) The real critical line here is the CFFILE tag. Let&rsquo;s look at each attribute. The first attribute, action, specifies that we are doing an upload. (Duh.) The next attribute is interesting. You tell ColdFusion the name of the form field that contains the file. Notice I didn&rsquo;t use #s or form. I just used the form field name. (And yes - you can have more than one file upload in a form.) Next I specify a destination folder, using the variable I created earlier.</p>
+
+<p>Now pay special attention to the nameConflict attribute. As I mentioned above, if you have multiple users uploading files (or even just one user uploading multiple files), the chance that two files could have the same name will grow. You have 4 options for this attribute:</p>
+
+<ul>
+<li>Error: If error is used and a file name conflicts, an error will be thrown.
+<li>Skip: The file will simply not be saved.
+<li>Overwrite: This will overwrite the existing file.
+<li>MakeUnique: This will create a new file name.
+</ul>
+
+<p>The last attribute, result, simply specifies that the result of the action should be stored in a structure named upload. In ColdFusion 6 and earlier, this variable was always named CFFILE. So what gets stored in the structure? Quite a bit actually. Here are the keys you can expect to be returned:</p>
+
+<ul>
+<li>attemptedserverfile: This is the file name ColdFusion tries to use for the file it will save. As far as I can see, this seems to match with the name of file on your system. Most likely the name would only change if you uploaded a file with a name that was valid on your system and not valid on ColdFusion's host operating system.
+<li>clientDirectory: The directory of the file that user upload.
+<li>clientFile: The file the user uploaded.
+<li>clientFileExt: The extension of the file the user upload.
+<li>clientFileName: This is a weird one. This value is the filename of the file uploaded - minus the extension. I get confused by this all the time.
+<li>contentType and contentSubType: The MIME content type and subtype of the file uploaded. This can be used to restrict uploads to certain types of files.
+<li>dateLastAccessed: The docs say this is the date and time the file was last accessed. When I look at this result though I see only the date.
+<li>fileExisted: This is a boolean that tells you if a file with the same name existed when you ran the CFFILE tag. If you use nameConflict="skip", this would be one way to determine if a skip action occured.
+<li>fileSize: The size of the uploaded file.
+<li>fileWasAppended: A boolean that tells you if the file was appended to an existing file. Since "append" isn't even a valid option, I'm not quite sure why this exists.
+<li>fileWasOverwritten: A boolean that tells you if the file was overwritten. This would only work if nameConflict was set to overwrite. Otherwise it will always be false.
+<li>fileWasRenamed: A boolean that tells you if the file was renamed. This would only work if nameConflict was set to makeUnique. Otherwise it will always be false.
+<li>fileWasSaved: A boolean that tells you if the file operation completed. This would only be false if skip was used for nameConflict.
+<li>oldFileSize: If a file upload overwrites another file, this will tell you the size of the old file. Not quite sure how useful this is.
+<li>serverDirectory: The directory where the file was saved.
+<li>serverFile: The filename of the file. Useful when makeUnique is used.
+<li>serverFileExt: The extension of the uploaded file.
+<li>serverFileName: Like clientFileName, this is the filename of the file minus the extension.
+<li>timeCreated and timeLastModified: The create and lastmodified values for the uploaded file. Unlike dateLastAccessed, this seems to be a complete date and time stamp.
+</ul>
+
+<p>Ok, so a lot was covered there. Basically the structure gives you everything you need to handle the post-upload process. Need to store the uploaded file name and remember the original file name? The data is there. Want to use ColdFusion 8&rsquo;s image functions to ensure the image is the right size? The data is there. (And if you want an example of that - download the sample code from my blog post on CFIMAGE: <a href="http://www.raymondcamden.com/index.cfm/2007/8/9/Recording-from-ColdFusion-8-Image-Presentation">Recording from ColdFusion 8 Image Presentation</a>.)</p>
+
+<p><b>Security Concerns</b><br>
+Before allowing a user to upload a file, think long and hard about what this means for security. First off - will you be storing the files under web root? If so - it means anyone can then link to the file - whether or not you intended them to do so. You may have a nice, family oriented web  site, but if you let folks upload images, there is a good chance someone could upload porn, and then link to it from other sites. Most likely you do not want to store any uploaded file under the web root. You also want to make it easy to review uploaded files. You could fire off an email everytime someone uploads a file. You could also build an admin interface that lets you browse uploaded files and double check them for appropriateness.</p>
+
+<p>Another concern would be allowing users to upload code. Imagine if you let users upload anything and they decided to upload a CFM file? The user would then be able to execute any code against your server they want if the file was stored under web root. You definitely want to prevent this by ensuring that the file isn&rsquo;t under web root.</p>
+
+<p>One last tip you may want to consider. If you do want to limit what types of files can be uploaded, consider the accept attribute. This attribute takes a list of MIME types you want to allow. The docs demonstrate allowing Word and JPG files like so: accept = &ldquo;image/jpg,application/msword&rdquo;. Two small issues with this. First - you need to know the MIME types. Since my brain only has room for useless Star Wars trivia, I usually have to look this up. (Here is a good URL for a list of MIME types: <a href="http://www.w3schools.com/media/media_mimeref.asp">http://www.w3schools.com/media/media_mimeref.asp</a>) The second thing to consider is that the accept attribute only checks the extension. A user could write a text file, save it with a .jpg extension, and the accept attribute would gladly let it pass. Note that ColdFusion 8 provides native functions to see if a file is a PDF or image. These can be used along with accept to really ensure a file is proper.<p><a href='enclosures/D%3A%5Chosts%5Cwww%2Ecoldfusionjedi%2Ecom%5Cenclosures%2FWorking%20with%20File%20Uploads%2Epdf'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2007\/10\/12\/File-Upload-Guide'; 
+this.page.identifier = '/?p=2406'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/10/12/File-Upload-Guide" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="File Upload Guide" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/10/12/File-Upload-Guide" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/10/12/File-Upload-Guide" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="File Upload Guide" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/10/12/File-Upload-Guide" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/10/12/File-Upload-Guide" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

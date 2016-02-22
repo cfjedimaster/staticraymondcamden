@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Building a Twitter Report in ColdFusion &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Building a Twitter Report in ColdFusion" />
+<meta property="og:description" content="For a while now I&rsquo;ve made use of a service called Twilert. The site has one simple purpose. It allows you to create Twitter search profiles and
+generate an email report to you daily (or weekly, etc). I thought it might be interesting to look at how difficult this would be to build in ColdFusion. Luckily Twitter goes a long
+way to providing both a simple to use API and a very powerful API as well. Here&rsquo;s what I came up with - and hopefully this can be useful to others.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/09/14/Building-a-Twitter-Report-in-ColdFusion" />
+
+
+<meta property="og:updated_time" content="2009-09-14T11:09:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Building a Twitter Report in ColdFusion">
+<meta itemprop="description" content="For a while now I&rsquo;ve made use of a service called Twilert. The site has one simple purpose. It allows you to create Twitter search profiles and
+generate an email report to you daily (or weekly, etc). I thought it might be interesting to look at how difficult this would be to build in ColdFusion. Luckily Twitter goes a long
+way to providing both a simple to use API and a very powerful API as well. Here&rsquo;s what I came up with - and hopefully this can be useful to others.
+">
+
+
+<meta itemprop="dateModified" content="2009-09-14T11:09:00&#43;06:00" />
+<meta itemprop="wordCount" content="1365">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Building a Twitter Report in ColdFusion"/>
+<meta name="twitter:description" content="For a while now I&rsquo;ve made use of a service called Twilert. The site has one simple purpose. It allows you to create Twitter search profiles and
+generate an email report to you daily (or weekly, etc). I thought it might be interesting to look at how difficult this would be to build in ColdFusion. Luckily Twitter goes a long
+way to providing both a simple to use API and a very powerful API as well. Here&rsquo;s what I came up with - and hopefully this can be useful to others.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/09/14/Building-a-Twitter-Report-in-ColdFusion">
+    <h1 class="article-title" itemprop="name">
+        Building a Twitter Report in ColdFusion
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-09-14 11:09:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-09-14</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>For a while now I&rsquo;ve made use of a service called <a href="http://www.twilert.com">Twilert</a>. The site has one simple purpose. It allows you to create Twitter search profiles and
+generate an email report to you daily (or weekly, etc). I thought it might be interesting to look at how difficult this would be to build in ColdFusion. Luckily Twitter goes a <i>long</i>
+way to providing both a simple to use API and a very <i>powerful</i> API as well. Here&rsquo;s what I came up with - and hopefully this can be useful to others.</p>
+
+<p>First - let me define what I want to build. Like the Twilert service, I&rsquo;ll start with a set of search terms. I&rsquo;ll perform my search daily via a scheduled task that runs right past midnight
+and then delivers the report to me via email. The Twitter API is very nicely <a href="http://apiwiki.twitter.com/">documented</a>. In particular, the <a href="http://apiwiki.twitter.com/Twitter-Search-API-Method%3A-search">Search</a> API is the one we care about. Also of note are the <a href="http://apiwiki.twitter.com/Rate-limiting">rate limits</a> Twitter applies. While my code won&rsquo;t hit that limit, it is something to keep in mind. I&rsquo;d suggest spending a few minutes scanning all of the previous links to get a feel
+for the Twitter API and what is supports. Now that you&rsquo;ve done done (ok, be honest, if you are like me, you probably decided to skip it and read it later), let&rsquo;s start to build out our
+report generator.</p>
+
+<p>First, the search term. This could be dynamic, perhaps based on the URL, which would then make it easy to set up a few scheduled tasks, each with different values. For now though I just hard coded it:</p>
+
+<p><code>
+&lt;!&mdash; Search terms, max 140, minus date portion &mdash;&gt;
+&lt;cfset search = &ldquo;coldfusion&rdquo;&gt;
+</code></p>
+
+<p>Twitter supports basic AND/OR style searches as well. But I&rsquo;ll keep it simple and just one word. Now, I mentioned the rate limits before. Another thing to note is that when you perform a search, you can only return 100 results at one time. Twitter supports a Page attribute, but they limit you to 15 pages. That&rsquo;s 1500 results which seems a bit much, especially for an email. I created a variable to represent the total number of network requests, or pages, of data to get:</p>
+
+<p><code>
+&lt;!&mdash; Max number of HTTP requests &mdash;&gt;
+&lt;cfset maxRequests = 10&gt;
+</code></p>
+
+<p>For the most part, this is pretty arbitrary. If I got an email with 1000 results in it I doubt I&rsquo;d read past the first twenty or so. Obviously this is something you can change to your
+liking, within the limits of Twitter&rsquo;s API.</p>
+
+<p><code>
+&lt;!&mdash; current page &mdash;&gt;
+&lt;cfset page = 1&gt;</p>
+
+<p>&lt;!&mdash; max results per page is 100 &mdash;&gt;
+&lt;cfset max = 100&gt;
+</code></p>
+
+<p>The page variable just tracks the current page and max will be sent to Twitter to request the maximum amount of results possible.</p>
+
+<p><code>
+&lt;!&mdash; Loop until we run out of results or hit maxRequests. Use a simple boolean to check both &mdash;&gt;
+&lt;cfset done = false&gt;</p>
+
+<p>&lt;!&mdash; A flag to see if something went wrong. &mdash;&gt;
+&lt;cfset errorFlag = false&gt;</p>
+
+<p>&lt;!&mdash; A flag to determine if we maxed out our search &mdash;&gt;
+&lt;cfset maxFlag = false&gt;
+</code></p>
+
+<p>These three variables are just flags. I&rsquo;ll be using the done variable in a loop coming up. The errorFlag will notice if something goes wrong with one of the HTTP calls. The maxFlag
+will be used if we hit the maximum number of requests.</p>
+
+<p><code>
+&lt;!&mdash; append yesterdays date to the search url &mdash;&gt;
+&lt;cfset yesterday = dateAdd(&ldquo;d&rdquo;, -1, now())&gt;
+&lt;cfset searchURL = search &amp; &ldquo; since:#dateFormat(yesterday,&lsquo;yyyy-mm-dd&rsquo;)#&rdquo;&gt;
+&lt;cfset searchURL = urlEncodedFormat(search)&gt;
+</code></p>
+
+<p>Next up we add the date filter to our search terms. Remember I&rsquo;m running this every day so I want to limit the results to entries from yesterday. This is done with the since operator. Twitter also supports an until operator, but as I plan on running this report right past midnight, it won&rsquo;t matter. (You can see a good report of all the operators <a href="http://search.twitter.com/operators">here</a>.)</p>
+
+<p><code>
+&lt;cfset results = []&gt;
+</code></p>
+
+<p>The last bit of code before we actually begin to search is to create the array that will store our results. Ok - so everything so far was setup - now let&rsquo;s look at the actual search:</p>
+
+<p><code>
+&lt;cfloop condition=&ldquo;not done&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfhttp url=&quot;http://search.twitter.com/search.json?page=#page#&amp;rpp=#max#&amp;q=#searchURL#&quot; result=&quot;result&quot;&amp;gt;
+
+&amp;lt;cfif result.responseheader.status_code is &quot;200&quot;&amp;gt;
+    &amp;lt;cfset content = result.fileContent.toString()&amp;gt;
+    &amp;lt;cfset data = deserializeJSON(content)&amp;gt;
+
+    &amp;lt;cfloop index=&quot;item&quot; array=&quot;#data.results#&quot;&amp;gt;
+        &amp;lt;cfset arrayAppend(results, item)&amp;gt;
+    &amp;lt;/cfloop&amp;gt;
+    &amp;lt;cfif structKeyExists(data, &quot;next_page&quot;)&amp;gt;
+        &amp;lt;cfset page++&amp;gt;
+        &amp;lt;cfif page gt maxRequests&amp;gt;
+            &amp;lt;cfset maxFlag = true&amp;gt;
+            &amp;lt;cfset done = true&amp;gt;
+        &amp;lt;/cfif&amp;gt;
+    &amp;lt;cfelse&amp;gt;
+        &amp;lt;cfset done = true&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+&amp;lt;cfelse&amp;gt;
+    &amp;lt;cfset errorFlag = true&amp;gt;
+    &amp;lt;cfset done = true&amp;gt;
+&amp;lt;/cfif&amp;gt;
+</code></pre>
+
+<p>&lt;/cfloop&gt;
+</code></p>
+
+<p>Ok, let me describe this line by line. The loop will continue until the done variable is true. In each iteration I use cfhttp to hit Twitter. Notice that I ask for JSON back, pass in both page and max, and pass in my search query.</p>
+
+<p>If the result status is 200, it should be good. I get the content and deserialize the JSON. I loop through each result and simply append it to the global results array. If the result JSON contains a next_page value, then more data exists. I do a check first though to see that I&rsquo;ve not made too many requests. Lastly, I&rsquo;ve got an ELSE block for times when the status wasn&rsquo;t 200. I could add additional logging here, but for now I just use the simple error flag.</p>
+
+<p>Now that we have results, let&rsquo;s begin the display portion:</p>
+
+<p><code>
+&lt;!&mdash; prepare result &mdash;&gt;
+&lt;cfsavecontent variable=&ldquo;report&rdquo;&gt;
+&lt;cfoutput&gt;
+&lt;style&gt;
+h2, p, .twit_date { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; }</p>
+
+<p>.twit_date { font-size: 10px; }</p>
+
+<p>.twit_odd {
+    padding: 10px;
+}
+.twit_even {
+    padding: 10px;
+    background-color: ##f0f0f0;
+}
+&lt;/style&gt;
+</code></p>
+
+<p>I&rsquo;ve begun my display with a cfsavecontent. The reason for this is that I considered also generating a PDF report as well. I didn&rsquo;t end up doing it, but since I&rsquo;ll have my report in a
+nice variable, I&rsquo;ll be able to do just about anything with it. I then put on my designer hat (it has stars on it) and whipped up some simple CSS I&rsquo;ll use later. <i>Please</i> feel free
+to send suggestions on nicer CSS.</p>
+
+<p><code>
+&lt;h2&gt;Twitter Search Results&lt;/h2&gt;
+&lt;p&gt;
+The following report was generated for the search term(s): #search#.&lt;br/&gt;
+It contains matches found from &lt;b&gt;#dateFormat(yesterday,&ldquo;mmmm dd, yyyy&rdquo;)#&lt;/b&gt; to now.&lt;br/&gt;
+A total of &lt;b&gt;#arrayLen(results)#&lt;/b&gt; result(s) were found.&lt;br/&gt;
+&lt;cfif maxFlag&gt;&lt;b&gt;Note: The maximumum number of results were found. More may be available.&lt;/b&gt;&lt;br/&gt;&lt;/cfif&gt;
+&lt;cfif errorFlag&gt;&lt;b&gt;Note: An error ocurred during the report.&lt;/b&gt;&lt;br/&gt;&lt;/cfif&gt;
+&lt;/p&gt;
+</code></p>
+
+<p>Next up is a simple header. I report on the search term, the date, number of results, and on my flags.</p>
+
+<p><code>
+&lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#arrayLen(results)#&rdquo;&gt;
+    &lt;cfset twit = results[x]&gt;
+    &lt;cfif x mod 2 is 0&gt;
+        &lt;cfset class = &ldquo;twit_even&rdquo;&gt;
+    &lt;cfelse&gt;
+        &lt;cfset class = &ldquo;twit_odd&rdquo;&gt;
+    &lt;/cfif&gt;</p>
+
+<pre><code>&amp;lt;!--- massage date a bit to remove +XXXX ---&amp;gt;
+&amp;lt;cfset twitdate = twit.created_at&amp;gt;
+&amp;lt;cfset twitdate = listDeleteAt(twitdate, listLen(twitdate, &quot; &quot;), &quot; &quot;)&amp;gt;
+
+&amp;lt;p class=&quot;#class#&quot;&amp;gt;
+&amp;lt;img src=&quot;#twit.profile_image_url#&quot; align=&quot;left&quot;&amp;gt;
+&amp;lt;a href=&quot;http://twitter.com/#twit.from_user#&quot;&amp;gt;#twit.from_user#&amp;lt;/a&amp;gt; #twit.text#&amp;lt;br/&amp;gt;
+&amp;lt;span class=&quot;twit_date&quot;&amp;gt;#twitdate#&amp;lt;/span&amp;gt;
+&amp;lt;br clear=&quot;left&quot;&amp;gt;
+&amp;lt;/p&amp;gt;
+</code></pre>
+
+<p>&lt;/cfloop&gt;
+</code></p>
+
+<p>Now I loop over each Twit. Twitter reports a variety of fields for each result. I decided to only care about the time, the user (and his or her profile image), and the text. Please keep in
+mind though that there is even more information in the results. This is what I decided was important. The display is rather simple. Profile picture to the left, name and text on top, and the formatted date below it. (FYI: Notice the x mod 2 if clause there? I actually had the ColdFusion 9 ternary clause first and it was a lot slimmer. I know I could switch it to IIF but I hate that function.)</p>
+
+<p><code>
+&lt;/cfoutput&gt;
+&lt;/cfsavecontent&gt;</p>
+
+<p>&lt;cfoutput&gt;#report#&lt;/cfoutput&gt;
+</code></p>
+
+<p>The final bits simply close up our tags and then output to screen. So I did lie a bit - I don&rsquo;t actually email the report, but as you can imagine, that would take about two seconds. I&rsquo;d just wrap the report result in cfmail tags. I&rsquo;ve got a few ideas on how to make this report even slicker. That will be in the next entry. So - is this useful? I could imagine this being a great way for a business to automate monitoring of their name and products.</p>
+
+<p>You can download the full bits below.<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Freport%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/09\/14\/Building-a-Twitter-Report-in-ColdFusion'; 
+this.page.identifier = '/?p=3524'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/09/14/Building-a-Twitter-Report-in-ColdFusion" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Building a Twitter Report in ColdFusion" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/09/14/Building-a-Twitter-Report-in-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/09/14/Building-a-Twitter-Report-in-ColdFusion" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Building a Twitter Report in ColdFusion" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/09/14/Building-a-Twitter-Report-in-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/09/14/Building-a-Twitter-Report-in-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

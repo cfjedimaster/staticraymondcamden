@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using the new Bluemix Visual Recognition service in Cordova &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using the new Bluemix Visual Recognition service in Cordova" />
+<meta property="og:description" content="Before I begin, a quick disclaimer. I&rsquo;ve been at IBM for a grand total of five days. Considering three were taken up by travel and orientation, I&rsquo;m very much the new kid on the block here. I&rsquo;ve only begun to look into MobileFirst and Bluemix so you should take what I show here with the same confidence you would give anyone using a new technology for two days. In other words - proceed with caution! ;)
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova" />
+
+
+<meta property="og:updated_time" content="2015-02-06T11:11:41&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using the new Bluemix Visual Recognition service in Cordova">
+<meta itemprop="description" content="Before I begin, a quick disclaimer. I&rsquo;ve been at IBM for a grand total of five days. Considering three were taken up by travel and orientation, I&rsquo;m very much the new kid on the block here. I&rsquo;ve only begun to look into MobileFirst and Bluemix so you should take what I show here with the same confidence you would give anyone using a new technology for two days. In other words - proceed with caution! ;)
+">
+
+
+<meta itemprop="dateModified" content="2015-02-06T11:11:41&#43;06:00" />
+<meta itemprop="wordCount" content="1344">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using the new Bluemix Visual Recognition service in Cordova"/>
+<meta name="twitter:description" content="Before I begin, a quick disclaimer. I&rsquo;ve been at IBM for a grand total of five days. Considering three were taken up by travel and orientation, I&rsquo;m very much the new kid on the block here. I&rsquo;ve only begun to look into MobileFirst and Bluemix so you should take what I show here with the same confidence you would give anyone using a new technology for two days. In other words - proceed with caution! ;)
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova">
+    <h1 class="article-title" itemprop="name">
+        Using the new Bluemix Visual Recognition service in Cordova
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-02-06 11:11:41 &#43;0600 &#43;0600" itemprop="datePublished">2015-02-06</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/bluemix">bluemix</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Before I begin, a quick disclaimer. I&rsquo;ve been at IBM for a grand total of five days. Considering three were taken up by travel and orientation, I&rsquo;m <i>very</i> much the new kid on the block here. I&rsquo;ve only begun to look into <a href="https://www.ibm.com/mobilefirst/us/en/">MobileFirst</a> and <a href="http://www.ibm.com/software/bluemix">Bluemix</a> so you should take what I show here with the same confidence you would give anyone using a new technology for two days. In other words - proceed with caution! ;)</p>
+
+<p>Bluemix is a cloud platform that offers both Platform as a Service (PaaS) and MBaaS (Mobile Backend as a Service). The PaaS offerings let you deploy web applications using a variety of engines, including Node. I&rsquo;m currently use <a href="http://www.appfog.com">AppFog</a> as my PaaS for a few sites so I&rsquo;m already a bit familiar with the concept. The MBaaS side are services that integrate with your web or mobile apps. These include things like NoSQL datastorage and access to IBM Watson.</p>
+
+<p>Yesterday we announced <a href="https://developer.ibm.com/watson/blog/2015/02/04/new-watson-services-available/">five new services</a> that make use of the Watson. They include: <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/speech-to-text.html">Speech to Text</a> and <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/text-to-speech.html">Text to Speech</a>, <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/visual-recognition.html">Visual Recognition</a>, <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/concept-insights.html">Concept Insights</a>, and <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/tradeoff-analytics.html">Tradeoff Analytics</a>.</p>
+
+<p>As soon as I saw the Visual Recognition API (<a href="http://visual-recognition-demo.mybluemix.net/">demo link</a>) I thought - this would be cool in Cordova!</p>
+
+<p>One thing I wasn&rsquo;t sure of though was how to use the service by itself, and not with a particular application. I checked the docs and came across this <a href="https://www.ng.bluemix.net/docs/#services/reqnsi.html#config">Enabling external applications and third-party tools to use Bluemix services</a>:</p>
+
+<blockquote>
+You might have applications that were created and run outside of Bluemix, or you might use third-party tools. If Bluemix services provide endpoints that are accessible from the internet, you can use those services with your local apps or third-party tools.
+
+To enable an external application or third-party tool to use a Bluemix service, complete the following steps:
+
+<ol>
+<li>Request an instance of the service for an existing Bluemix application. The credentials and connection parameters for the service are created. For more information about requesting a service instance, see Requesting a new service instance.
+<li>Retrieve the credentials and the connection parameters of the service instance from the VCAP_SERVICES environment variable of the Bluemix application.
+<li>Specify the credentials and the connection parameters in your external application or third-party tool.
+</ol>
+</blockquote>
+
+<p>My understanding of that was that I needed to make a new Node application and simply create a view that would dump out VCAP_SERVICES. I wished it were easier, but I figured if I did this once, I could reuse the same Node code in the future when I needed to test out another service. Turns out I didn&rsquo;t need to do all those steps. This next section will focus on what you have to do on the Bluemix side to prepare the service. I&rsquo;ll then switch to the Cordova side.</p>
+
+<p>After signing up for Bluemix (you can get a free, 30 day trial), you want to first create an application. You won&rsquo;t actually be <i>using</i> the application, but it is necessary to get the proper credentials to use the service.</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm1.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm1.png" alt="bm1" width="750" height="380" class="alignnone size-full wp-image-5645" /></a></p>
+
+<p>On the next screen I selected Web. This may be something I change next time I do this.</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm2.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm2.png" alt="bm2" width="750" height="315" class="alignnone size-full wp-image-5646" /></a></p>
+
+<p>And then I selected the Node option. Since I really wasn&rsquo;t using the app, I probably could have selected &ldquo;I Have Code Already.&rdquo;</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm3.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm3.png" alt="bm3" width="750" height="284" class="alignnone size-full wp-image-5647" /></a></p>
+
+<p>For the application name, pick anything. If you pick &ldquo;RayIsTheBestNewIBMer&rdquo; you get double the time for your free trial. (Note - the preceding statement may not be exactly true.)</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm4.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm4.png" alt="bm4" width="750" height="314" class="alignnone size-full wp-image-5648" /></a></p>
+
+<p>On the next screen, select Add a Service:</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm5.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm5.png" alt="bm5" width="750" height="393" class="alignnone size-full wp-image-5649" /></a></p>
+
+<p>And then - obviously - select the Visual Recognition service. Note the beta label. Results may vary. Yada, yada, yada.</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm6.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm6.png" alt="bm6" width="750" height="411" class="alignnone size-full wp-image-5650" /></a></p>
+
+<p>Since you added this service <i>from</i> an app, it will be automatically selected in the next screen. (You may not have a &ldquo;Space&rdquo; though. I made a few while testing and I don&rsquo;t remember if it is required or not.)</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm7.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm7.png" alt="bm7" width="412" height="521" class="alignnone size-full wp-image-5651" /></a></p>
+
+<p>You&rsquo;ll get a warning about needing to restage the application, but since you don&rsquo;t have anything there anyway you can just go ahead and let it restart the app. Woot - almost done. Now we need the authentication and API info. Back on the app dashboard, note there is a link to show credentials for the service:</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm8.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm8.png" alt="bm8" width="750" height="433" class="alignnone size-full wp-image-5652" /></a></p>
+
+<p>Clicking that will expose properties for the service including the ones we care about: <strong>url</strong>, <strong>username</strong>, and <strong>password</strong>:</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm9.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm9.png" alt="bm9" width="631" height="750" class="alignnone size-full wp-image-5653" /></a></p>
+
+<p>Ok, we&rsquo;ve got what we came for, let&rsquo;s talk about the Cordova side. I began by creating a simple application that would make use of the Camera API. I created a web page with two buttons - one to source from the device camera and one from the photo gallery. Once I had the image file, I would then make use of the File Transfer plugin to post to the API.</p>
+
+<p>Documentation for the Visual Recognition API may be found here: <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/apis/#!/visual-recognition/">http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/apis/#!/visual-recognition/</a>. I focused my attention on the POST call to /v1/tag/recognize. I saw there that I needed to send the image with a file name of <strong>img_file</strong>. Let&rsquo;s take a look at the code (this portion and the rest may be found in the Github URL I&rsquo;ll share towards the end):</p>
+
+<pre><code class="language-javascript">
+
+var API_URL = &quot;https:&#x2F;&#x2F;gateway.watsonplatform.net&#x2F;visual-recognition-beta&#x2F;api&quot;;
+var API_USER = &quot;supersecret&quot;;
+var API_PASSWORD = &quot;anothersecret&quot;;
+
+$(document).on(&quot;deviceready&quot;, function() {
+
+    function uploadWin(res) {
+        var data = JSON.parse(res.response);
+        var labels = data.images[0].labels;
+        var result = &quot;&lt;p&gt;Detected the following possible items:&lt;br&#x2F;&gt;&quot;;
+        for(var i=0, len=labels.length; i&lt;len; i++) {
+            result += &quot;&lt;b&gt;&quot;+labels[i].label_name + &quot;&lt;&#x2F;b&gt;&lt;br&#x2F;&gt;&quot;;   
+        }
+        $(&quot;#status&quot;).html(result);
+    }
+    
+    function uploadFail() {
+        console.log(&#x27;uploadFail&#x27;);
+        console.dir(arguments);
+    }
+    
+    &#x2F;&#x2F;Credit: http:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;14313052&#x2F;52160
+    function authHeaderValue(username, password) {
+        var tok = username + &#x27;:&#x27; + password;
+        var hash = btoa(tok);
+        return &quot;Basic &quot; + hash;
+    };
+    
+    function onCamSuccess(imageData) {
+        var image = document.getElementById(&#x27;myImage&#x27;);
+        $(&quot;#imgDisplay&quot;).attr(&quot;src&quot;, imageData);
+
+        $(&quot;#status&quot;).html(&quot;&lt;i&gt;Uploading picture for BlueMix analysis...&lt;&#x2F;i&gt;&quot;);
+        
+        var options = new FileUploadOptions();
+        options.fileKey = &quot;img_file&quot;;
+        options.fileName = imageData.substr(imageData.lastIndexOf(&#x27;&#x2F;&#x27;) + 1);
+        
+        options.headers = {&#x27;Authorization&#x27;: authHeaderValue(API_USER, API_PASSWORD) };
+        
+        var ft = new FileTransfer();
+        ft.upload(imageData, encodeURI(API_URL+&quot;&#x2F;v1&#x2F;tag&#x2F;recognize&quot;), uploadWin, uploadFail, options);
+
+    }
+
+    function onCamFail(message) {
+    alert(&#x27;Failed because: &#x27; + message);
+    }   
+    
+    &#x2F;&#x2F;Touch handlers for the two buttons, one uses lib, one uses cam
+    $(&quot;#cameraButton, #galleryButton&quot;).on(&quot;touchend&quot;, function() {
+        var source = ($(this).prop(&quot;id&quot;)===&quot;cameraButton&quot;)?Camera.PictureSourceType.CAMERA:Camera.PictureSourceType.PHOTOLIBRARY;
+        
+        navigator.camera.getPicture(onCamSuccess, onCamFail, { 
+            quality: 50,
+            sourceType: source,
+            destinationType: Camera.DestinationType.FILE_URI
+        });
+
+    });
+    
+});
+</code></pre>
+
+<p>I assume the camera usage is not necessarily new for my readers. All I do &ldquo;fancy&rdquo; here is switch my source based on the button clicked. As soon as I have the image I render it on the app so the user can see it. I then begin my file transfer. I use the URL I got from the service and ensure I include my authorization info. I&rsquo;m using fake values in the code above of course. (More on that in a minute.)</p>
+
+<p>Once done, I take the result and simply output the labels to the app. The service returns labels with an underscore between words and that could be cleaned up, but I didn&rsquo;t really bother. Here are a few samples. Of course, the results are not perfect, but close, and can be improved. First, a scary picture of myself.</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm10.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm10.png" alt="bm10" width="360" height="750" class="alignnone size-full wp-image-5654" /></a></p>
+
+<p>I&rsquo;m not quite sure where <strong>Combat Sport</strong> came from, but I&rsquo;m all about the combat sport. <strong>Meat Eater</strong> is also dead on too. On a serious note, <strong>human</strong>, <strong>indoors</strong> and <strong>person view</strong> were perfect.</p>
+
+<p>Each label returns a score and you could use that to filter out items that appear to be too low. I&rsquo;m not doing that in this demo but that would help improve the results shown to the user. Ok, another test.</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm11.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/bm11.png" alt="bm11" width="360" height="750" class="alignnone size-full wp-image-5655" /></a></p>
+
+<p>Personally I think <strong>toothed whale</strong> is pretty damn funny. It didn&rsquo;t recognize shark, but it got close, which I think is pretty good.</p>
+
+<p>Another option the API supports is including labels to narrow down the search. One could use that to help direct the results as well.</p>
+
+<p>So - the obvious issue we have with this demo is that the username and password are available in the source code. One way around that would be to actually <i>use</i> the Node application and have it work as a proxy. That would let me log, monitor, restrict to authorized users, etc.</p>
+
+<p>I&rsquo;ve put the source code for this up on my Github repo of Cordova demos. You can find it here: <a href="https://github.com/cfjedimaster/Cordova-Examples/tree/master/imagerecognitionbluemix">https://github.com/cfjedimaster/Cordova-Examples/tree/master/imagerecognitionbluemix</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/02\/06\/using-the-new-bluemix-visual-recognition-service-in-cordova'; 
+this.page.identifier = '/?p=5644'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using the new Bluemix Visual Recognition service in Cordova" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using the new Bluemix Visual Recognition service in Cordova" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Tips for folks new to CFBuilder and the Eclipse Platform &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Tips for folks new to CFBuilder and the Eclipse Platform" />
+<meta property="og:description" content="For some people trying out CFBuilder, this will be their first experience with an Eclipse-based application. Eclipse has been around for a while now and is an excellent platform for IDEs. While it is extremely powerful and is chock full of features, it can be a bit&hellip; alien to people who have never used it before. This blog post will share some basic tips/suggestions for working with CFBuilder and Eclipse. It is certainly not meant to be a complete guide to everything Ecplise-wise, but I thought it might be helpful to share a few things that may confuse/frustrate people migrating from non-Eclipse IDEs. These are in no particular order, and I would greatly appreciate other people&rsquo;s tips as well.
+
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/03/26/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform" />
+
+
+<meta property="og:updated_time" content="2010-03-26T16:03:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Tips for folks new to CFBuilder and the Eclipse Platform">
+<meta itemprop="description" content="For some people trying out CFBuilder, this will be their first experience with an Eclipse-based application. Eclipse has been around for a while now and is an excellent platform for IDEs. While it is extremely powerful and is chock full of features, it can be a bit&hellip; alien to people who have never used it before. This blog post will share some basic tips/suggestions for working with CFBuilder and Eclipse. It is certainly not meant to be a complete guide to everything Ecplise-wise, but I thought it might be helpful to share a few things that may confuse/frustrate people migrating from non-Eclipse IDEs. These are in no particular order, and I would greatly appreciate other people&rsquo;s tips as well.
+
+
+">
+
+
+<meta itemprop="dateModified" content="2010-03-26T16:03:00&#43;06:00" />
+<meta itemprop="wordCount" content="1599">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Tips for folks new to CFBuilder and the Eclipse Platform"/>
+<meta name="twitter:description" content="For some people trying out CFBuilder, this will be their first experience with an Eclipse-based application. Eclipse has been around for a while now and is an excellent platform for IDEs. While it is extremely powerful and is chock full of features, it can be a bit&hellip; alien to people who have never used it before. This blog post will share some basic tips/suggestions for working with CFBuilder and Eclipse. It is certainly not meant to be a complete guide to everything Ecplise-wise, but I thought it might be helpful to share a few things that may confuse/frustrate people migrating from non-Eclipse IDEs. These are in no particular order, and I would greatly appreciate other people&rsquo;s tips as well.
+
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/03/26/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform">
+    <h1 class="article-title" itemprop="name">
+        Tips for folks new to CFBuilder and the Eclipse Platform
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-03-26 16:03:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-03-26</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>For some people trying out CFBuilder, this will be their first experience with an Eclipse-based application. Eclipse has been around for a while now and is an excellent platform for IDEs. While it is extremely powerful and is chock full of features, it can be a bit&hellip; alien to people who have never used it before. This blog post will share some basic tips/suggestions for working with CFBuilder and Eclipse. It is certainly not meant to be a <i>complete</i> guide to everything Ecplise-wise, but I thought it might be helpful to share a few things that may confuse/frustrate people migrating from non-Eclipse IDEs. These are in no particular order, and I would <b>greatly</b> appreciate other people&rsquo;s tips as well.</p>
+
+<p><p/></p>
+
+<h2>Definitions</h2>
+
+<p><p/></p>
+
+<p>First off, some quick definitions. When you use CFBuilder, you are working in a workspace. The workspace is, for all intents and purposes, the entire IDE, your settings, layout, and projects. Many people never work with additional workspaces. (I don&rsquo;t, and will explain why below.) But if you want to have radically different setups for your development, you should look at using multiple workspaces.</p>
+
+<p><p/></p>
+
+<p>Next - you will often here people refer to &ldquo;Views&rdquo;. Views are panels in the IDE and kind of act like mini applications. Some views you will see often are Navigator, Outline, Servers, etc. Views can be dragged and moved around the editor. They can be shrunk and expanded as you see fit. One tip - if you are on a laptop and want to quickly get more room for your code, double click on the tab above your code that contains the filename. This will expand the editor to the maximum size of the IDE. If you here people talk about a view but don&rsquo;t see it, you can add a view by going to going to the Window/Show View menu.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/showview.png" title="Show View" /></p>
+
+<p><p/></p>
+
+<p>This shows a subset of comment views. You will probably <i>not</i> see the one you want. Just click other. What&rsquo;s cool and not evident (it wasn&rsquo;t to me for many months!) is that you can use the filter box on top. Yes, I know it says &ldquo;type filter text&rdquo;, but I just never really noticed it, or got the intent. So if you are looking for a particular thing, like Tail View, you can type in a few characters and the list will filter to it. This works in <i>many</i> places within Eclipse.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/showviewfiltered.png" title="Show View (Filtered)" /></p>
+
+<p><p/></p>
+
+<p>The next term is Perspective. Like a workspace, this is a group of views, or, a layout. Changing your perspective can greatly change what you see on screen. Unlike workspaces, perspectives work in the same projects though. You will probably encounter a new perspective when you first try out debugging.</p>
+
+<p><p/></p>
+
+<p>You can find more definitions here at the CFB Documentation: <a href="http://help.adobe.com/en_US/ColdFusionBuilder/Using/WS0ef8c004658c1089-2cf13501121af8ece2c-7fff.html">About the workbench</a>. I&rsquo;ll also point out the entire section, <a href="http://help.adobe.com/en_US/ColdFusionBuilder/Using/WS0ef8c004658c1089-2cf13501121af8ece2c-8000.html">ColdFusion Builder Workbench Basics</a>, as another excellent resource (that goes more deep than I am here!)</p>
+
+<p><p/></p>
+
+<h2>I want to edit a CFM, why can't I?</h2>
+
+<p><p/></p>
+
+<p>One of the biggest issues for me when I first started using Eclipse was the fact that it <b>greatly prefers</b> you to use projects. CFBuilder has a &ldquo;Files&rdquo; view that allows you to browse the file system and edit any CFM at will. You can also use RDS to edit files. However - in general you really want to start working with and using projects. These are created in the Navigator panel and typically should be set up so that each project relates to one set of files. For me, I&rsquo;ve got a project for each of my open source projects and each client. I&rsquo;ve also got a project for my generic web root. This is where I dump all my tests and &ldquo;just playing scripts&rdquo;. Here is a snapshot of my Navigator now.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/navigator.png" title="Navigator" /></p>
+
+<p><p/></p>
+
+<p>Notice that I only have three projects. That&rsquo;s because I recently blew away all my settings. As I need to touch each of my existing projects I&rsquo;ll either create a new project or use the import action to bring it in.</p>
+
+<p><p/></p>
+
+<p>So as I said - you <i>can</i> work with ad hoc files. On Windows you can even double click a CFM/CFC to open it in CFBuilder. But in general you want to start using projects. On my Mac, I use TextMate for CFM/CFCs double clicked in the finder. I typically only use this for quick modifications.</p>
+
+<p><p/></p>
+
+<h2>How do I search, and why is search scanning all my code?</h2>
+
+<p><p/></p>
+
+<p>To perform a multi-file search (and replace), you can use the Search menu. Obvious, right? What isn&rsquo;t obvious is the <i>scope</i> of the search. By default, Eclipse wants to search your entire workspace. That can be a Huge Ass amount of files (Huge Ass is a technical term, look it up.) There is an option to search only within &ldquo;Selected Resources&rdquo;, but it may be grayed out. In order to actually use that scope, you must first click on the project, or folder, in Navigator. This frustrates me to no end. I&rsquo;m typically typing in a file when I feel the need to search. If i forgot to first click in the Navigator I&rsquo;m not able to filter my results. I go into more detail about this topic <a href="http://www.raymondcamden.com/index.cfm/2009/3/16/Multifile-search-and-replace-in-Eclipse">here</a>.</p>
+
+<p><p/></p>
+
+<h2>I tried to open a file, and it opened in another editor!</h2>
+
+<p><p/></p>
+
+<p>Eclipse has a set of &ldquo;recognized&rdquo; file types and extensions. Obviously CFC and CFM are supported, HTML, CSS, and JS. But what about other files? I&rsquo;ve seen some developers use the .inc extension for files they include in their ColdFusion projects. As an example, on my system, Dreamweaver is configured to run inc files. You can tell by the icon used in Navigator.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/badfiletype.png" title="Bad file type. Baaaaad." /></p>
+
+<p><p/></p>
+
+<p>So what to do? You have two options. If you just want to get the darn thing open quickly, right click, and select Open With - Text Editor. While that works, you won&rsquo;t have native color coding.</p>
+
+<p><p/></p>
+
+<p>The better solution is to tell Eclipse about the file association for inc. Go into your preferences and select General / Editors / File Associations. (As just a reminder, I had no idea where that was, but I used the tip mentioned above to filter the preferences until I found it.) Click Add (next to File Types) and enter the file extension:</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/newfiletype.png" title="New File Type" /></p>
+
+<p><p/></p>
+
+<p>Hit ok, and then ensure it is selected. You will notice nothing in the Associated editors box. So click Add&hellip; there and then select Adobe CFML Editor.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/choseadobecfeditor.png" title="Choose the Adobe CFML Editor" /></p>
+
+<p><p/></p>
+
+<p>Hit Ok a few times to close out the dialog, close the file (if you had it open), and open it up again. Now here is where you may get tricked. If you open your file and don&rsquo;t see color coding, you may think you made a mistake. You didn&rsquo;t. Eclipse is remembering that you said to open that file with the Text Editor. It recognizes .inc as a CFML file (Navigator will show the right icon), but since you previously told it to use the text editor, it will remember that preference for the file. Just right click, open with, and select Adobe CFML Editor. From now on, and for other .inc files, it should use the right editor.</p>
+
+<p><p/></p>
+
+<h2>I added a file to my project, where is it?</h2>
+
+<p><p/></p>
+
+<p>Here is one that bites me at least once a week. While a project may be based on your file system, Eclipse does not constantly monitor the file system for changes. If you add a new file, or delete one, via the file system, you want to go into Eclipse, right click on the project, and select refresh. You can refresh at the folder level as well.</p>
+
+<p><p/></p>
+
+<h2>Navigating the Navigator</h2>
+
+<p><p/></p>
+
+<p>Have a large project? Hate constantly moving up and down to find stuff? There is an option you can use called &ldquo;Link with Editor&rdquo;</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/linkeditor.png" title="Forgive my drawing skills" /></p>
+
+<p><p/></p>
+
+<p>If enabled, when you select an open file, the Navigator will scroll up to where the file is located. This is darn handy when you are working &ldquo;high and low&rdquo; in a big project. I also tend to turn it on and off as it is annoying when I don&rsquo;t want to use it.</p>
+
+<p><p/></p>
+
+<h2>Can I hide files?</h2>
+
+<p><p/></p>
+
+<p>Yes and no. The Navigator lets you hide files based on a pattern match, but if you don&rsquo;t like their existing patterns you are out of luck. In the upper right side of the Navigator is a downward arrow. Click on it then select Filters. You can then chose to enable/disable filters to your liking. I tend to use .* as it hides .svn stuff.</p>
+
+<p><p/></p>
+
+<h2>I've got a lot of projects - is there a way to organize them?</h2>
+
+<p><p/></p>
+
+<p>Yes! Remember earlier when I said I don&rsquo;t like using multiple Workspaces? I prefer to use something else - Working Sets. A Working Set is a collection of projects. By default you have no working set. You can start working with them by using the same downward arrow mentioned above. Click it and pick Select Working Set.</p>
+
+<p><p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/selectws.png" title="Select Working Set" /></p>
+
+<p><p/></p>
+
+<p>You can add a new working set and give it a nice name. Now be aware - until you add your projects to the working set, they will not show up in the navigator. I&rsquo;ve typically used working sets to handle &ldquo;Current&rdquo; and &ldquo;Archived&rdquo; projects, so old stuff doesn&rsquo;t get in the way. Some folks use it to differentiate between client and personal projects. The choice is yours.</p>
+
+<p><p/></p>
+
+<h2>Copy/Paste works in Navigator</h2>
+
+<p><p/></p>
+
+<p>Did you know you can copy and paste files and folders in Navigator? Yep, you can, just as if it were a operating system folder. Just select a file, or folder, right click, Copy, and then find a lace to paste it.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/03\/26\/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform'; 
+this.page.identifier = '/?p=3765'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/26/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Tips for folks new to CFBuilder and the Eclipse Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/26/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/26/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Tips for folks new to CFBuilder and the Eclipse Platform" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/26/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/26/Tips-for-folks-new-to-CFBuilder-and-the-Eclipse-Platform" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

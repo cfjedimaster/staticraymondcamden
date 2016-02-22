@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Adding Internationalization/Localization Support to Web Applications &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Adding Internationalization/Localization Support to Web Applications" />
+<meta property="og:description" content="I thought I&rsquo;d spend some time this week looking at how to add localization support to web applications, specifically client-side heavy web applications. The original intent for this article was to look at the subject matter in terms of PhoneGap applications, but there&rsquo;s no reason why this can&rsquo;t be applied to desktop sites as well.
+
+The purpose of this blog entry is to introduce and discuss some of the basic concepts, as well as provide a few examples of the concepts in practice. It is not my intent to cover every detail. I hope, though, that this blog entry will give you an idea of what&rsquo;s involved and get you started along the process with your own work.
+
+Before going any further, I wish to thank Paul Hastings for his advice and help. He is an expert on the subject and has offered his support in this article and many times in the past. Any mistakes I make here our my fault entirely (and knowing Paul, he will rip me a new one with corrections ;).
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2012/02/15/Adding-InternationalizationLocalization-Support-to-Web-Applications" />
+
+
+<meta property="og:updated_time" content="2012-02-15T12:02:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Adding Internationalization/Localization Support to Web Applications">
+<meta itemprop="description" content="I thought I&rsquo;d spend some time this week looking at how to add localization support to web applications, specifically client-side heavy web applications. The original intent for this article was to look at the subject matter in terms of PhoneGap applications, but there&rsquo;s no reason why this can&rsquo;t be applied to desktop sites as well.
+
+The purpose of this blog entry is to introduce and discuss some of the basic concepts, as well as provide a few examples of the concepts in practice. It is not my intent to cover every detail. I hope, though, that this blog entry will give you an idea of what&rsquo;s involved and get you started along the process with your own work.
+
+Before going any further, I wish to thank Paul Hastings for his advice and help. He is an expert on the subject and has offered his support in this article and many times in the past. Any mistakes I make here our my fault entirely (and knowing Paul, he will rip me a new one with corrections ;).
+
+">
+
+
+<meta itemprop="dateModified" content="2012-02-15T12:02:00&#43;06:00" />
+<meta itemprop="wordCount" content="2155">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Adding Internationalization/Localization Support to Web Applications"/>
+<meta name="twitter:description" content="I thought I&rsquo;d spend some time this week looking at how to add localization support to web applications, specifically client-side heavy web applications. The original intent for this article was to look at the subject matter in terms of PhoneGap applications, but there&rsquo;s no reason why this can&rsquo;t be applied to desktop sites as well.
+
+The purpose of this blog entry is to introduce and discuss some of the basic concepts, as well as provide a few examples of the concepts in practice. It is not my intent to cover every detail. I hope, though, that this blog entry will give you an idea of what&rsquo;s involved and get you started along the process with your own work.
+
+Before going any further, I wish to thank Paul Hastings for his advice and help. He is an expert on the subject and has offered his support in this article and many times in the past. Any mistakes I make here our my fault entirely (and knowing Paul, he will rip me a new one with corrections ;).
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2012/02/15/Adding-InternationalizationLocalization-Support-to-Web-Applications">
+    <h1 class="article-title" itemprop="name">
+        Adding Internationalization/Localization Support to Web Applications
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2012-02-15 12:02:00 &#43;0600 &#43;0600" itemprop="datePublished">2012-02-15</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I thought I&rsquo;d spend some time this week looking at how to add localization support to web applications, specifically client-side heavy web applications. The original intent for this article was to look at the subject matter in terms of PhoneGap applications, but there&rsquo;s no reason why this can&rsquo;t be applied to desktop sites as well.
+<p>
+The purpose of this blog entry is to <u>introduce</u> and discuss some of the basic concepts, as well as provide a few examples of the concepts in practice. It is not my intent to cover every detail. I hope, though, that this blog entry will give you an idea of what&rsquo;s involved and get you started along the process with your own work.
+<p>
+Before going any further, I wish to thank <b>Paul Hastings</b> for his advice and help. He is an expert on the subject and has offered his support in this article and many times in the past. Any mistakes I make here our my fault entirely (and knowing Paul, he will rip me a new one with corrections ;).
+<p></p>
+
+<h2>Some Terms</h2>
+<p/>
+
+Before we begin, it helps to define a few basic terms so we can ensure we're on the same track. When it comes to localization, there's really two main things going on:
+
+<p>
+
+1) Internationalization (often abbreviated as i18n) is the process by which you "prepare" your code to be localized. So for example, it isn't the actual display of something in French, but rather preparing your code so that it <i>could</i> be displayed in French, or Japanese, or any language. Internationalization will be the main focus for this blog entry. At least to me, this is the fun part.
+
+<p>
+
+2) Localization (often abbreviated as l10n) is the actual process by which you make your code available in a language. So if step one made it possible for my application to be usable by the French and the Japanese, this step actually gets it done. This is the not so fun aspect. It involves the creating of language files and other fun translation type services. Do not assume you can just go to Google Translate and be done. This is the part that will take far longer than you expect. 
+
+<p>
+
+3) And finally, just to add one more rhyming word, the combination of internationalization and localization leads to an end result of Globalization (often abbreviated as g11n). 
+
+<p>
+
+<h2>Identifying Internationalization Targets</h2>
+
+<p><p></p>
+
+<p>So what can internationalize? For web apps, I think this falls into three main categories:</p>
+
+<p><p></p>
+
+<p>1) Static UI components: This includes things like Submit buttons and form fields. Even though I say &ldquo;Static&rdquo;, some of these items may be displayed dynamically. For example, consider a web application that lists your friends. Next to each friend is a button that lets you delete that friend. While the button is displayed dyamically, the text is static, &ldquo;Delete&rdquo;. This is something that could be localized into French or Japanese.</p>
+
+<p><p></p>
+
+<p>2) Numbers and Dates. Quick, what day is 2/3/2012? If you said February 3rd, 2012, congrats. You are an American and should be proud. If you said March 2nd, I pity you for not living in the greatest nation on Earth. All kidding aside, numeric dates are very prone to this type of confusion, and while it&rsquo;s mostly non-Americans who get screwed by this, I know it&rsquo;s bitten me on a few web sites as well. Numbers are not necessarily that big of a deal. Some places switch out the comma and period so that 1,209.21 would be 1.209,21. However, I think most folks would recognize either form. That being said, it&rsquo;s a concern. Currency also falls into this as well.</p>
+
+<p><p></p>
+
+<p>3) Dynamic content: Technically this is not part of the web app, instead, it represents the database content your web app is a front end for, or the remote API your web app may be making use of. This is not something that will be covered for this blog entry. However, as I&rsquo;ll be talking about how to detect the user&rsquo;s language, note that you can pass that value with your calls to the server.</p>
+
+<p><p></p>
+
+<h2>Our Demo</h2>
+
+<p><p></p>
+
+<p>So given the targets above, let&rsquo;s talk about a simple web application we can use to help demonstrate these concepts. Our web application is a simple product status checker. It provides a form with a few basic options, a search button, and will hit the server to return matched products as well as their date of availability, the quantity in stock, and a price. You can view the demo here:</p>
+
+<p><p></p>
+
+<p><a href="http://www.raymondcamden.com/demos/2012/feb/15/v1">http://www.raymondcamden.com/demos/2012/feb/15/v1/</a></p>
+
+<p><p></p>
+
+<p>To begin, simply type &ldquo;e&rdquo; and notice how the products are displayed. Feel free to try other search terms of course. The web application is pretty simple and most of the content is dynamic. That makes it an ideal candidate for our purposes. Let&rsquo;s get started!</p>
+
+<p><p></p>
+
+<h2>Localizing Static Strings</h2>
+
+<p><p></p>
+
+<p>The first thing we want to look at is how we could localize some of the static content. Consider the basic layout of the site:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/shot11.png" /></p>
+
+<p><p></p>
+
+<p>In this screen capture, the &ldquo;Product Search&rdquo; is a title and would - most likely - not be something we&rsquo;d care to translate. But the search and introductory text are good candidates for localization. To begin, I&rsquo;m going to add a simple drop down to my top header to support selecting a language. For the purposes of this demo I&rsquo;ll support English, French, and Japanese.</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/shot2.png" /></p>
+
+<p><p></p>
+
+<p>So how do I handle the actual changing of the strings into localized versions? For that I&rsquo;m going to use a jQuery plugin: <a href="http://code.google.com/p/jquery-i18n-properties/">jquery-i18-properties</a>. This plugin allows the use of &ldquo;Resource Bundles&rdquo;, a Java-standard way of created localization resources. These bundles are simply text files based on a key and a translation. So for example, I may define a key as &ldquo;Search&rdquo;, I can then create an English version like so:
+<p></p>
+
+<p>search = Search</p>
+
+<p><p></p>
+
+<p>and a French version like so</p>
+
+<p><p></p>
+
+<p>search = Rechercher</p>
+
+<p><p></p>
+
+<p>A good engine then can handle reading and parsing these files for you. Your code can then simply say, &ldquo;Hey, for my current language, give me the &lsquo;search&rsquo; key.&rdquo; That&rsquo;s exactly what this plugin does. Even better, you can perform translation at a later stage. If you don&rsquo;t have time to completely translate values for French speakers, the code will automatically fall back to English. As a coder, it means I can globalize the code and translators later can handle the localization.</p>
+
+<p><p></p>
+
+<p>Here is an example:</p>
+
+<p><p></p>
+
+<p><code>
+$.i18n.properties({
+    name:&lsquo;terms&rsquo;,
+    path:&lsquo;bundles/&rsquo;,
+    mode:&lsquo;map&rsquo;,
+    callback:function() {
+        $(&ldquo;#intromsg&rdquo;).text($.i18n.prop(&ldquo;intromsg&rdquo;));
+        $(&ldquo;#searchText&rdquo;).attr(&ldquo;placeholder&rdquo;, $.i18n.prop(&ldquo;search&rdquo;));
+    }
+});
+</code></p>
+
+<p><p></p>
+
+<p>This code calls the plugin and uses the browser&rsquo;s settings to determine the current language. When done, a callback is fired and I can then update my values. My demo is going to let user&rsquo;s select a language and will default to English. I began by abstracting out my localization call into a function:</p>
+
+<p><p></p>
+
+<p><code>
+function loadAndDisplayLanguages(lang) {</p>
+
+<pre><code>$.i18n.properties({
+    name:'terms',
+    path:'bundles/',
+    mode:'map',
+    language:lang,
+    callback:function() {
+        $(&quot;#intromsg&quot;).text($.i18n.prop(&quot;intromsg&quot;));
+        $(&quot;#searchText&quot;).attr(&quot;placeholder&quot;, $.i18n.prop(&quot;search&quot;));
+    }
+});
+</code></pre>
+
+<p>}
+</code></p>
+
+<p><p></p>
+
+<p>And within my jQuery document.ready block, I fired off the request defaulting to &ldquo;en&rdquo;:</p>
+
+<p><p></p>
+
+<p><code>
+loadAndDisplayLanguages(&lsquo;en&rsquo;);
+</code></p>
+
+<p><p></p>
+
+<p>Finally, I added a simple click handler for my drop down menu:</p>
+
+<p><p></p>
+
+<p><code>
+$(&ldquo;.langpick&rdquo;).on(&ldquo;click&rdquo;,function(e) {
+    loadAndDisplayLanguages($(this).data(&ldquo;lang&rdquo;));
+});
+</code></p>
+
+<p><p></p>
+
+<p>What&rsquo;s the data call there? I used a data attribute to store the language code for my 3 supported languages:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;li&gt;&lt;a href=&ldquo;#&rdquo; class=&ldquo;langpick&rdquo; data-lang=&ldquo;en&rdquo;&gt;English&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&ldquo;#&rdquo; class=&ldquo;langpick&rdquo; data-lang=&ldquo;fr&rdquo;&gt;French&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&ldquo;#&rdquo; class=&ldquo;langpick&rdquo; data-lang=&ldquo;ja&rdquo;&gt;Japanese&lt;/a&gt;&lt;/li&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Ok, with me so far? We aren&rsquo;t quite done yet. These modification work to update the search button placeholder text and intro text. But what about our product searches? Every product result has 4 values: the name, the available date, and the quantity:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/shot31.png" /></p>
+
+<p><p></p>
+
+<p>In order to update these values, we need to ensure we have them in our properties, and we need to ensure jQuery can find them so we can replace them. My English properties file now looks like this:</p>
+
+<p><p></p>
+
+<p><code>
+intromsg = To display products, use the search form above.
+search = Search
+price = Price
+available = Available
+quantity = Quantity
+</code></p>
+
+<p><p></p>
+
+<p>I then edited my result handler to wrap the values in spans:</p>
+
+<p><p></p>
+
+<p><code>
+$.post(&ldquo;service.cfc?method=searchproducts&rdquo;, {search:s}, function(res,code) {
+                var dsp = &ldquo;&rdquo;;
+                for(var i=0; i&lt;res.length; i++) {
+                    dsp += &ldquo;&lt;div class=&lsquo;productResult&rsquo;&gt;&lt;h3&gt;&rdquo;+res[i].name+&rdquo;&lt;/h3&gt;&rdquo;;
+                    dsp += &ldquo;&lt;p&gt;&lt;span class=&lsquo;pricelabel&rsquo;&gt;&rdquo;+PRICE_STR+&rdquo;&lt;/span&gt;: &ldquo;+res[i].price+&rdquo;&lt;br/&gt;&rdquo;;
+                    dsp += &ldquo;&lt;span class=&lsquo;availlabel&rsquo;&gt;&rdquo;+AVAILABLE_STR+&rdquo;&lt;/span&gt;: &ldquo;+res[i].available+&rdquo;&lt;br/&gt;&rdquo;;
+                    dsp += &ldquo;&lt;span class=&lsquo;quantlabel&rsquo;&gt;&rdquo;+QUANTITY_STR+&rdquo;&lt;/span&gt;: &ldquo;+res[i].quantity+&rdquo;&lt;br/&gt;&rdquo;;
+                    dsp += &ldquo;&lt;/p&gt;&lt;/div&gt;&rdquo;;
+                }
+                $(&ldquo;#results&rdquo;).html(dsp);
+            },&ldquo;json&rdquo;);
+</code></p>
+
+<p><p></p>
+
+<p>Note the use of 3 variables, PRICE_STR, AVAILABLE_STR, QUANTITY_STR. My JavaScript code now creates 3 global variables for this, and my loadAndDisplayLanguages function can update them:</p>
+
+<p><p></p>
+
+<p><code>
+//store strings for price, available, and quantity
+var PRICE_STR = &ldquo;&rdquo;;
+var AVAILABLE_STR = &ldquo;&rdquo;;
+var QUANTITY_STR = &ldquo;&rdquo;;</p>
+
+<p>function loadAndDisplayLanguages(lang) {</p>
+
+<pre><code>$.i18n.properties({
+    name:'terms',
+    path:'bundles/',
+    mode:'map',
+    language:lang,
+    callback:function() {
+        $(&quot;#intromsg&quot;).text($.i18n.prop(&quot;intromsg&quot;));
+        $(&quot;#searchText&quot;).attr(&quot;placeholder&quot;, $.i18n.prop(&quot;search&quot;));
+        PRICE_STR = $.i18n.prop(&quot;price&quot;);
+        AVAILABLE_STR = $.i18n.prop(&quot;available&quot;);
+        QUANTITY_STR = $.i18n.prop(&quot;quantity&quot;);
+        $(&quot;.pricelabel&quot;).text(PRICE_STR);
+        $(&quot;.availlabel&quot;).text(AVAILABLE_STR);
+        $(&quot;.quantlabel&quot;).text(QUANTITY_STR);
+    }
+});
+</code></pre>
+
+<p>}
+</code></p>
+
+<p><p></p>
+
+<p>Woot! To test this version out, hit this url:</p>
+
+<p><p></p>
+
+<p><a href="http://www.raymondcamden.com/demos/2012/feb/15/v2/">http://www.raymondcamden.com/demos/2012/feb/15/v2</a></p>
+
+<p><p></p>
+
+<p>Try switching your language to French or Japanese. Note that there is nothing there for Japanese. That&rsquo;s ok. Eventually (well, if this were real) we could create that properties file and everything would just work.</p>
+
+<p><p></p>
+
+<p>So most our our &lsquo;labels&rsquo; and simple text is updated, but we&rsquo;ve got more work we can do. Note that the numeric and date values are not localized. That&rsquo;s our next target.</p>
+
+<p><p></p>
+
+<h2>Globalizing Numbers and Dates</h2>
+
+<p><p></p>
+
+<p>To work with the numbers and dates, I&rsquo;m going to use another jQuery Plugin - globalize (<a href="https://github.com/jquery/globalize">https://github.com/jquery/globalize</a>). As you can guess by the name, it handles globalizing/localizing numbers and dates. (It also has similar support to the i18n plugin.) In general, this plugin worked great, but I did run into one issue. In order to support various locales, you have to add additional script tags. So for example, I have to include a script tag for French and Japanese. Unlike the i18n plugin which simply tries to include things dynamically, the globalize plugin requires you to explicitly add support. (And yes, I know I could load those script files dynamically too.) One big thing to watch out for here - when I initially added French support, I did it like so:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;js/cultures/globalize.culture.fr.js&rdquo;&gt;&lt;/script&gt;
+</code></p>
+
+<p><p></p>
+
+<p>But my results were garbage. Turns out, I forgot about the chartset attribute. Adding this cleared this up immediately:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;js/cultures/globalize.culture.fr.js&rdquo; charset=&ldquo;utf-8&rdquo;&gt;&lt;/script&gt;
+</code></p>
+
+<p><p></p>
+
+<p>One more small note - the globalize plugin is - in some ways - much more advanced then the i81n plugin. It recognizes a concept of &ldquo;culture&rdquo; which is more specific then a simple language code. You can still use language codes, but advanced users will want to read the docs carefully and see if they want to make use of this feature.</p>
+
+<p><p></p>
+
+<p>So, how about an example? Given our quantity values are numbers, we can use the plugin like so:</p>
+
+<p><p></p>
+
+<p><code>
+Globalize.format(res[i].quantity,&ldquo;n0&rdquo;)
+</code></p>
+
+<p><p></p>
+
+<p>Dates are a bit more trickier. You want to parse your original value first, then format it:</p>
+
+<p><p></p>
+
+<p><code>
+var dateStr = Globalize.parseDate(res[i].available,&ldquo;MMMM, dd yyyy hh:mm:ss&rdquo;,&ldquo;en&rdquo;);
+&hellip; Globalize.format(dateStr,&ldquo;d&rdquo;) &hellip;
+</code></p>
+
+<p><p></p>
+
+<p>Notice I explicitly set the language to English. Since my data is coming in with an English format, this is ok. The format function will use the currently selected language. I haven&rsquo;t covered that yet, but you can set a language (or culture) like so:</p>
+
+<p><p></p>
+
+<p><code>
+Globalize.culture(&ldquo;en&rdquo;);
+</code></p>
+
+<p><p>
+Ok&hellip; so in general, easy enough to use, right? However, we have two things to consider here. First, we need to use these formatting functions when displaying our search results. Second, we need to ensure we can update them dynamically. But - we are taking original values and converting them into a language specific value. I assumed (and note, I could be wrong!) that once localized, the plugin may have an issue converting it back into something else. So I decided to once again make use of data values. This time I&rsquo;m going to store my original values so I can fetch em later:</p>
+
+<p><p></p>
+
+<p><code>
+            $.post(&ldquo;service.cfc?method=searchproducts&rdquo;, {search:s}, function(res,code) {
+                var dsp = &ldquo;&rdquo;;
+                for(var i=0; i&lt;res.length; i++) {
+                    dsp += &ldquo;&lt;div class=&lsquo;productResult&rsquo;&gt;&lt;h3&gt;&rdquo;+res[i].name+&rdquo;&lt;/h3&gt;&rdquo;;
+                    dsp += &ldquo;&lt;p&gt;&lt;span class=&lsquo;pricelabel&rsquo;&gt;&rdquo;+PRICE_STR+&rdquo;&lt;/span&gt;: &lt;span class=&lsquo;priceval&rsquo; data-price=&lsquo;&ldquo;+res[i].price+&ldquo;&rsquo;&gt;&rdquo;+Globalize.format(res[i].price,&ldquo;c&rdquo;)+&rdquo;&lt;/span&gt;&lt;br/&gt;&rdquo;;
+                    var dateStr = Globalize.parseDate(res[i].available,&ldquo;MMMM, dd yyyy hh:mm:ss&rdquo;,&ldquo;en&rdquo;);
+                    dsp += &ldquo;&lt;span class=&lsquo;availlabel&rsquo;&gt;&rdquo;+AVAILABLE_STR+&rdquo;&lt;/span&gt;: &lt;span class=&lsquo;dateval&rsquo; data-date=&lsquo;&ldquo;+res[i].available+&ldquo;&rsquo;&gt;&rdquo;+Globalize.format(dateStr,&ldquo;d&rdquo;)+&rdquo;&lt;/span&gt;&lt;br/&gt;&rdquo;;
+                    dsp += &ldquo;&lt;span class=&lsquo;quantlabel&rsquo;&gt;&rdquo;+QUANTITY_STR+&rdquo;&lt;/span&gt;: &lt;span class=&lsquo;quantval&rsquo; data-quant=&lsquo;&ldquo;+res[i].quantity+&ldquo;&rsquo;&gt;&rdquo;+Globalize.format(res[i].quantity,&ldquo;n0&rdquo;)+&rdquo;&lt;/span&gt;&lt;br/&gt;&rdquo;;
+                    dsp += &ldquo;&lt;/p&gt;&lt;/div&gt;&rdquo;;
+                }
+</code></p>
+
+<p><p></p>
+
+<p>That handles the display, now let&rsquo;s go back to loadAndDisplayLanguages. I&rsquo;ve updated it to handle the new globalization calls. Note that - oddly - I had to be explicit with my language when formatting.</p>
+
+<p><p></p>
+
+<p><code>
+    function loadAndDisplayLanguages(lang) {</p>
+
+<pre><code>    $.i18n.properties({
+        name:'terms',
+        path:'bundles/',
+        mode:'map',
+        language:lang,
+        callback:function() {
+            $(&quot;#intromsg&quot;).text($.i18n.prop(&quot;intromsg&quot;));
+            $(&quot;#searchText&quot;).attr(&quot;placeholder&quot;, $.i18n.prop(&quot;search&quot;));
+            PRICE_STR = $.i18n.prop(&quot;price&quot;);
+            AVAILABLE_STR = $.i18n.prop(&quot;available&quot;);
+            QUANTITY_STR = $.i18n.prop(&quot;quantity&quot;);
+            $(&quot;.pricelabel&quot;).text(PRICE_STR);
+            $(&quot;.availlabel&quot;).text(AVAILABLE_STR);
+            $(&quot;.quantlabel&quot;).text(QUANTITY_STR);
+
+            $(&quot;.priceval&quot;).each(function(i,el) {
+                var thisPrice = $(this).data(&quot;price&quot;);
+                var newPrice = Globalize.format(thisPrice, &quot;c&quot;,lang);
+                $(this).text(newPrice);
+            });
+
+            $(&quot;.dateval&quot;).each(function(i,el) {
+                var thisDate = $(this).data(&quot;date&quot;);
+                var dateP = Globalize.parseDate(thisDate,&quot;MMMM, dd yyyy hh:mm:ss&quot;,&quot;en&quot;);
+                var newDate = Globalize.format(dateP, &quot;d&quot;,lang);
+                $(this).text(newDate);
+            });
+
+            $(&quot;.quantval&quot;).each(function(i,el) {
+                var thisQuant = $(this).data(&quot;quant&quot;);
+                var newQuant = Globalize.format(thisQuant, &quot;n0&quot;,lang);
+                $(this).text(newQuant);
+            });
+
+        }
+    });
+
+}
+</code></pre>
+
+<p></code></p>
+
+<p><p></p>
+
+<p>You can demo this here&hellip;</p>
+
+<p><p></p>
+
+<p><a href="http://www.raymondcamden.com/demos/2012/feb/15/v3/"><img src="http://www.raymondcamden.com/images/icon_128.png" title="Demo, Baby" border="0"></a></p>
+
+<p><p></p>
+
+<p>And that&rsquo;s that. Obviously there is a lot more to consider here. I cannot stress enough how much more additional work will be necessary for proper localization. I&rsquo;d love to hear people chime in with corrections, real life examples, or other comments.</p>
+
+<p><p></p>
+
+<p>p.s. I didn&rsquo;t bother attaching the server side code as it&rsquo;s a simple ColdFusion service using fake data. If anyone wants it just ask.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2012\/02\/15\/Adding-InternationalizationLocalization-Support-to-Web-Applications'; 
+this.page.identifier = '/?p=4525'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/02/15/Adding-InternationalizationLocalization-Support-to-Web-Applications" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Adding Internationalization/Localization Support to Web Applications" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/02/15/Adding-InternationalizationLocalization-Support-to-Web-Applications" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/02/15/Adding-InternationalizationLocalization-Support-to-Web-Applications" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Adding Internationalization/Localization Support to Web Applications" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/02/15/Adding-InternationalizationLocalization-Support-to-Web-Applications" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/02/15/Adding-InternationalizationLocalization-Support-to-Web-Applications" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

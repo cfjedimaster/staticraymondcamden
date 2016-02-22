@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using Ripple for PhoneGap Development &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using Ripple for PhoneGap Development" />
+<meta property="og:description" content="Ripple has been around for a while now, but only recently have I really noticed how freaking cool it is. I thought it might be helpful for my readers if I wrote up an introduction guide to Ripple and how you can more effectively use it. This will be a reflection of the issues and cool things I&rsquo;ve run into personally and as always, I&rsquo;d love to hear your opinions as well.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2013/02/06/Using-Ripple-for-PhoneGap-Development" />
+
+
+<meta property="og:updated_time" content="2013-02-06T15:02:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using Ripple for PhoneGap Development">
+<meta itemprop="description" content="Ripple has been around for a while now, but only recently have I really noticed how freaking cool it is. I thought it might be helpful for my readers if I wrote up an introduction guide to Ripple and how you can more effectively use it. This will be a reflection of the issues and cool things I&rsquo;ve run into personally and as always, I&rsquo;d love to hear your opinions as well.
+">
+
+
+<meta itemprop="dateModified" content="2013-02-06T15:02:00&#43;06:00" />
+<meta itemprop="wordCount" content="1492">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using Ripple for PhoneGap Development"/>
+<meta name="twitter:description" content="Ripple has been around for a while now, but only recently have I really noticed how freaking cool it is. I thought it might be helpful for my readers if I wrote up an introduction guide to Ripple and how you can more effectively use it. This will be a reflection of the issues and cool things I&rsquo;ve run into personally and as always, I&rsquo;d love to hear your opinions as well.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2013/02/06/Using-Ripple-for-PhoneGap-Development">
+    <h1 class="article-title" itemprop="name">
+        Using Ripple for PhoneGap Development
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2013-02-06 15:02:00 &#43;0600 &#43;0600" itemprop="datePublished">2013-02-06</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Ripple has been around for a while now, but only recently have I really noticed how freaking cool it is. I thought it might be helpful for my readers if I wrote up an introduction guide to Ripple and how you can more effectively use it. This will be a reflection of the issues and cool things I&rsquo;ve run into personally and as always, I&rsquo;d love to hear your opinions as well.</p>
+
+<p>First and foremost, what in the heck is Ripple? Ripple is an open source project in incubation status at Apache (<a href="http://incubator.apache.org/projects/ripple.html">http://incubator.apache.org/projects/ripple.html</a>). Its aim is to allow your browser to emulate a mobile device. Currently it has support for both Blackberry WebWorks and PhoneGap. For this blog entry I&rsquo;ll just be focusing on PhoneGap.</p>
+
+<p>It works via a Chrome extension, which means, obviously, it is Chrome only. You can get the plugin by either searching in Chrome&rsquo;s online store or by simply clicking <a href="https://chrome.google.com/webstore/detail/geelfhphabnejjhdalkjhgipohgpdnoc">here</a>.</p>
+
+<p>Once installed, your Chrome browser will get a new icon up by the URL:</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip170.png" /></p>
+
+<p>The extension works with any HTTP-based URL, even your local server. You aren&rsquo;t required to upload your files to a public host. As a test, you can simply point to an HTML file on your local server and then click the Ripple icon.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip171.png" /></p>
+
+<p>Click to enable Ripple and the page is reloaded with the Ripple emulator UI. Note - Ripple will (should) remember this setting. If you return to the page later it automatically loads Ripple. Just click the icon again to disable Ripple for that site. (Note - I&rsquo;m not 100% sure on how long this &lsquo;sticks&rsquo; - you may see something different.)</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip172.png" /></p>
+
+<p>There&rsquo;s a heck of a lot going on here. Each of the boxes surrounding your app allow for various configuration/testing options, but if you want to focus on just your app you can click the little arrows above the device simulator to hide them.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip173.png" /></p>
+
+<p>You can selectively close them as well. (I.e., keep the right one open but close the left.)</p>
+
+<p>For the most part the UI here should be self-explanatory. I&rsquo;ll go through it anyway  to provide some additional context.</p>
+
+<h2>Devices</h2>
+
+<p>The devices pod allows you to select from a pretty large set of options. What&rsquo;s cool is that this integrates fully with PhoneGap&rsquo;s <a href="http://docs.phonegap.com/en/2.3.0/cordova_device_device.md.html#Device">Device API</a>. If you run the example code for the API and toggle between different devices, you see the right results in Ripple. Here are some examples.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip175.png" />
+<p/></p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip176.png" /></p>
+
+<h2>Platforms</h2>
+
+<p>To be honest, I never need to touch this. You can select PhoneGap 1.0.0 if you really want to, but honestly, I just leave it at the default. It always seems to default to PhoneGap 2.0.0 for me.</p>
+
+<h2>Information</h2>
+
+<p>Never use it. I suppose it is useful, but I&rsquo;d just click the header to minimize it.</p>
+
+<h2>Accelerometer</h2>
+
+<p>This allows you to test motion-enabled applications. You can either click on the little device and move your mouse or just click the Shake button. Everything described in the PhoneGap <a href="http://docs.phonegap.com/en/2.3.0/cordova_accelerometer_accelerometer.md.html#Accelerometer">Accelerometer API</a> should work fine here. I <a href="http://www.raymondcamden.com/index.cfm/2013/1/15/PhoneGap-Sample--Shake-to-Roll">blogged</a> an example application of the accelerometer last month that made use of Ripple.</p>
+
+<h2>Settings</h2>
+
+<p>Again, should be obvious. Tooltips and Themes simply provide some UI options to Ripple itself. However, the <b>Cross Domain Proxy</b> is a very important one.</p>
+
+<p>One of the issues you run into when using your desktop browser for mobile development is the inability of your Ajax code to make cross domain requests. This is a browser security issue and is pretty darn well out of your control. There are options though. In Chrome, you can start the browser with a flag to bypass that restriction. Another option is to just use JSON/P. Finally, if the remote service uses CORS, then you can just use the API without worry.</p>
+
+<p>Ripple allows you to use remote APIs directly by simply using a proxy service. So when your code requests foo.com/fancy.api, Ripple intercepts this, makes a request for the data from its own server, and proxies the result back to you.</p>
+
+<p>For the most part this just works, but I&rsquo;ve run into two situations now where it caused problems.</p>
+
+<p>First - I did some testing a while ago against an API where everything worked fine in Chrome by itself (<b>when using the flag to allow cross domain calls</b>), but failed in Ripple. Why? I forgot that the API had employed remote IP rules. It worked fine from my IP, but not the remote IP. To fix that, I simply asked my friend to temporarily remove the IP rules.</p>
+
+<p>Second - Ripple&rsquo;s proxy completely borked <a href="http://www.parse.com">Parse.com</a> calls. I&rsquo;m not exactly sure why, but it just did.</p>
+
+<p>Luckily, there is an easy fix for that. Parse.com can work with CORS, and Ripple now lets you disable the proxy.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip177.png" /></p>
+
+<p>I tested this a few minutes ago with a Parse.com demo and as soon as I disabled it, it worked fine in Ripple.</p>
+
+<h2>Device &amp; Network Settings</h2>
+
+<p>This allows you to set the connection type as well as simulate lag. Again, this is fully compliant with PhoneGap&rsquo;s <a href="http://docs.phonegap.com/en/2.3.0/cordova_connection_connection.md.html#Connection">Connection API</a>. My latest article for the Adobe Developer Connection (<a href="http://www.adobe.com/devnet/phonegap/articles/using-parse-with-phonegap-part-2-the-phone-strikes-back.html">Using Parse.com with PhoneGap – Part 2: The phone strikes back</a>) discusses using the Connection API to enable/disable UI items based on network availability. It works great with Ripple.</p>
+
+<h2>Geo Location</h2>
+
+<p>You wouldn&rsquo;t normally need any help with Geolocation since it works just fine in Chrome, but Ripple lets you emulate different locations. This is <i>incredibly</i> helpful during testing.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip178.png" /></p>
+
+<h2>Config</h2>
+
+<p>If you are using config.xml files for your PhoneGap app, then Ripple will attempt to read and parse the XML file. Here is an example.</p>
+
+<p><img src="http://www.raymondcamden.com/images/screenshot61.png" /></p>
+
+<h2>Events</h2>
+
+<p>Finally, the Event section lets you simulate various events. This is not a complete list of events supported by the PhoneGap <a href="http://docs.phonegap.com/en/2.3.0/cordova_events_events.md.html#Events">Events API</a>. As an example, the battery events are missing. But you could easily go into your console and trigger those events by hand if you need to.</p>
+
+<h2>What Else?</h2>
+
+<p>So to be honest, one of the reasons I avoided Ripple in the past is because I believed that&rsquo;s all Ripple supported. But that&rsquo;s not the case. For example, Ripple supports the PhoneGap <a href="http://docs.phonegap.com/en/2.3.0/cordova_camera_camera.md.html#Camera">Camera API</a>. It works by simply asking you to upload a picture instead. Here is an example of what you would see if your app requests the device camera.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip179.png" /></p>
+
+<p>Hitting Select File gives you a regular browser based file selector. Once you select a file, you even get a preview, much like a real device.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip180.png" /></p>
+
+<p>Another feature that works is <a href="http://docs.phonegap.com/en/2.3.0/cordova_notification_notification.md.html#Notification">notification</a> - partially. You can fire off a notification.alert but the title and button value attributes are not used. The callback worked, but fired immediately, not after I closed the alert. Vibration worked by simply shaking the simulator (which would be a pretty incredible vibration in real life I think).</p>
+
+<p>Beep did not, but it brings up something cool. So what happens when you call an API not supported by Ripple?</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip181.png" /></p>
+
+<p>As you can see, Ripple noticed the problem but provided you a quick way to handle it. You can type in a JSON result to &lsquo;fake&rsquo; the result you expected.</p>
+
+<p>How about the <a href="http://docs.phonegap.com/en/2.3.0/cordova_compass_compass.md.html#Compass">Compass API</a>? Yep, it works too. If you modify settings under Geo Location you will see them reflected in calls to the compass API. Again - I had just assumed that panel was for one feature. It never occurred to me that it would work with the compass.</p>
+
+<p>How about the <a href="http://docs.phonegap.com/en/2.3.0/cordova_contacts_contacts.md.html#Contacts">Contact API</a>? Create works just fine, although it isn&rsquo;t obviously storing a new contact on your desktop. Search fails, but again, Ripple handles it nicely, letting you paste in a JSON response.</p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip182.png" /></p>
+
+<p>How about the <a href="http://docs.phonegap.com/en/2.3.0/cordova_file_file.md.html#File">File API</a>? This is one I haven&rsquo;t played with yet. Chrome supports the File System API, so some parts should &ldquo;just work&rdquo;, but I&rsquo;d be surprised if the File Transfer portion works at all. (Then again, every time I think Ripple can&rsquo;t do something it surprises me.)</p>
+
+<p><a href="http://docs.phonegap.com/en/2.3.0/cordova_globalization_globalization.md.html#Globalization">Globalization</a> does not seem to be supported at all currently. Ditto for <a href="http://docs.phonegap.com/en/2.3.0/cordova_media_capture_capture.md.html#Capture">Capture</a> and <a href="http://docs.phonegap.com/en/2.3.0/cordova_media_media.md.html#Media">Media</a>. I didn&rsquo;t even try <a href="http://docs.phonegap.com/en/2.3.0/cordova_splashscreen_splashscreen.md.html#Splashscreen">Splashscreen</a> since it involves native settings as well.</p>
+
+<p>Since the <a href="http://docs.phonegap.com/en/2.3.0/cordova_inappbrowser_inappbrowser.md.html#InAppBrowser">InAppBrowser API</a> uses window.open, this will just plain work, but I&rsquo;d imagine the various events will not be supported.</p>
+
+<p>And finally, <a href="http://docs.phonegap.com/en/2.3.0/cordova_storage_storage.md.html#Storage">Storage</a> is just WebSQL so it will work fine in Chrome.</p>
+
+<p>I&rsquo;ll wrap this up with one pretty crucial tip. When using Ripple, you <i>do</i> want to include a script tag that points to a copy of cordova.js. Unlike PhoneGap Build, this will be a <b>real</b> file on your file system. <b>It is crucial that you use the Android version, not iOS.</b> I lost time today trying to debug a very odd issue. My deviceready event was firing twice (and by the way, did I mention Ripple handles firing this for you automatically). The culprit turned out to be the iOS cordova.js file. Very odd, but luckily it was easy enough to get around.</p>
+
+<p>As a last tip, you can find links to the source and support forums at <a href="http://ripple.tinyhippos.com/">http://ripple.tinyhippos.com/</a>.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2013\/02\/06\/Using-Ripple-for-PhoneGap-Development'; 
+this.page.identifier = '/?p=4848'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/02/06/Using-Ripple-for-PhoneGap-Development" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using Ripple for PhoneGap Development" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/02/06/Using-Ripple-for-PhoneGap-Development" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/02/06/Using-Ripple-for-PhoneGap-Development" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using Ripple for PhoneGap Development" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/02/06/Using-Ripple-for-PhoneGap-Development" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2013/02/06/Using-Ripple-for-PhoneGap-Development" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

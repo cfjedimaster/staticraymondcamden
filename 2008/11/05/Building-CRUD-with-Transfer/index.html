@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Building CRUD with Transfer &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Building CRUD with Transfer" />
+<meta property="og:description" content="I decided to not wait till late night for my next Transfer post and instead write during lunch. Young and the Restless is a good one today so hopefully I won&rsquo;t get distracted!
+
+First off - an important point to make about my last post. I did not actually walk you through creating a DSN or setting up the database. I did talk about the datasource.xml file, but I didn&rsquo;t actually tell folks to go ahead and make the database. This may have led to bugs when folks tried to run the code. Fred posted a quick SQL script that would work well and I&rsquo;ll include a script in the this entries zip.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2008/11/05/Building-CRUD-with-Transfer" />
+
+
+<meta property="og:updated_time" content="2008-11-05T13:11:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Building CRUD with Transfer">
+<meta itemprop="description" content="I decided to not wait till late night for my next Transfer post and instead write during lunch. Young and the Restless is a good one today so hopefully I won&rsquo;t get distracted!
+
+First off - an important point to make about my last post. I did not actually walk you through creating a DSN or setting up the database. I did talk about the datasource.xml file, but I didn&rsquo;t actually tell folks to go ahead and make the database. This may have led to bugs when folks tried to run the code. Fred posted a quick SQL script that would work well and I&rsquo;ll include a script in the this entries zip.
+">
+
+
+<meta itemprop="dateModified" content="2008-11-05T13:11:00&#43;06:00" />
+<meta itemprop="wordCount" content="1050">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Building CRUD with Transfer"/>
+<meta name="twitter:description" content="I decided to not wait till late night for my next Transfer post and instead write during lunch. Young and the Restless is a good one today so hopefully I won&rsquo;t get distracted!
+
+First off - an important point to make about my last post. I did not actually walk you through creating a DSN or setting up the database. I did talk about the datasource.xml file, but I didn&rsquo;t actually tell folks to go ahead and make the database. This may have led to bugs when folks tried to run the code. Fred posted a quick SQL script that would work well and I&rsquo;ll include a script in the this entries zip.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2008/11/05/Building-CRUD-with-Transfer">
+    <h1 class="article-title" itemprop="name">
+        Building CRUD with Transfer
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2008-11-05 13:11:00 &#43;0600 &#43;0600" itemprop="datePublished">2008-11-05</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I decided to not wait till late night for my next Transfer post and instead write during lunch. Young and the Restless is a good one today so hopefully I won&rsquo;t get distracted!</p>
+
+<p>First off - an important point to make about my last <a href="http://www.raymondcamden.com/index.cfm/2008/11/4/Setting-up-my-Transfer-Application">post</a>. I did <b>not</b> actually walk you through creating a DSN or setting up the database. I did talk about the datasource.xml file, but I didn&rsquo;t actually tell folks to go ahead and make the database. This may have led to bugs when folks tried to run the code. Fred <a href="http://www.coldfusionjedi.com/index.cfm/2008/11/4/Setting-up-my-Transfer-Application#c6D4BB629-19B9-E658-9DDA6F59F701EB51">posted</a> a quick SQL script that would work well and I&rsquo;ll include a script in the this entries zip.</p>
+
+<p>To be 100% crystal clear: Transfer does <b>not</b> automatically create your tables for you. This is something you will need to do. In my past work with Transfer (for <a href="http://www.broadchoice.com">Broadchoice</a>), I typically began by editing the Transfer.xml file first to define the properties for my object, and then I went to the table.</p>
+
+<p>One of the real nice things about Hibernate is that it does all of this for you. You can literally drop the entire set of tables and Hibernate will have no problem recreating it for you. Shoot, you can even add a property in your model and Hibernate will handle adding the column.</p>
+
+<p>Transfer doesn&rsquo;t do this - but it certainly does do a lot, so don&rsquo;t take this as &ldquo;Transfer Sucks!&rdquo; view. I wouldn&rsquo;t be writing about Transfer if I didn&rsquo;t find it both cool and pretty darn practical.</p>
+
+<p>So with that said, and with your database setup (again, I&rsquo;ve included the SQL file in the zip), you can now begin doing CRUD operations within Transfer. CRUD is a shorthand way of saying Create (make a new thing), Read (get a persisted thing), Update (make changes and persist the thing), and Delete (send the thing to the Forbidden Zone).</p>
+
+<p>The Transfer component we made yesterday has methods for all of these. Let&rsquo;s start simple and look at how we can make an Employee. The <a href="http://docs.transfer-orm.com/wiki/Persisting_and_Retrieving_Objects.cfm#Transfer.new(class)">new</a> method takes the name of a class (what we defined in Transfer.xml) and creates an object from it. Here is an example:</p>
+
+<p><code>
+&lt;cfset e = application.transfer.new(&ldquo;employee&rdquo;)&gt;
+</code></p>
+
+<p>This creates an object that is a CFML representation of the XML we used to define employees. To prove this, we can output the objects first and last name:</p>
+
+<p><code>
+&lt;cfoutput&gt;#e.getFirstName()# #e.getLastName()#&lt;/cfoutput&gt;
+</code></p>
+
+<p>Of course, since this was a brand new object, there aren&rsquo;t any values for these properties yet. But consider this:</p>
+
+<ul>
+<li>No need to write any SQL
+<li>No need to worry about the database table. If for some reason a column name changed, we can handle it in the XML
+<li>No need to make a 'bean' CFC.
+</ul>
+
+<p>Transfer calls these TransferObjects. If you dump it, you will see a whole set of methods. For each property you will see one get and set method. You will also see other methods that Transfer provides as well. Right now the only one I&rsquo;ll specifically point out is getMemento(). This is a method that is useful for debugging. It will return a structure that matches the properties defined in XML. This should <b>not</b> be used for anything real, but is great for debugging. If you dump it, you will see:</p>
+
+<p><img src="http://www.coldfusionjedi.com/images//Picture 124.png"></p>
+
+<p>The transfer_* properties are obviously specific to Transfer. You can use another debug function, getPropertyMemento(), to return only the properties that relate to your object.</p>
+
+<p>So cool, we got a nice little object. Let&rsquo;s set some data in it, just for the heck of it.</p>
+
+<p><code>
+&lt;cfset e.setFirstName(&ldquo;Victor&rdquo;)&gt;
+&lt;cfset e.setLastName(&ldquo;Newman&rdquo;)&gt;
+&lt;cfset e.setDOB(createDate(1973,4,8))&gt;
+&lt;cfset e.setEmail(&ldquo;vnewman@newmanenterprizes.com&rdquo;)&gt;
+&lt;cfset e.setPhone(&ldquo;555-555-5555&rdquo;)&gt;
+</code></p>
+
+<p>Now that we have data in our TransferObject, how can we save it? We use one more method from the Transfer component: <a href="http://docs.transfer-orm.com/wiki/Persisting_and_Retrieving_Objects.cfm#Transfer.save(transferObject%2C_%5BuseTransaction%5D)">save</a>.</p>
+
+<p>Taking the data from the code above, we can ask Transfer to persist it using this line of code:</p>
+
+<p><code>
+&lt;cfset application.transfer.save(e)&gt;
+</code></p>
+
+<p>Wow, that&rsquo;s pretty difficult. There is also a <a href="http://docs.transfer-orm.com/wiki/Persisting_and_Retrieving_Objects.cfm#Transfer.create(transferObject%2C_%5BuseTransaction%5D)">create</a> method, but since save can handle both new and old objects, I don&rsquo;t see much point in using it.</p>
+
+<p>Here is a complete example. I put this in index.cfm, again, thinking baby steps here, and dumped out the memento values both before and after the save.</p>
+
+<p><code>
+&lt;cfset e = application.transfer.new(&ldquo;employee&rdquo;)&gt;
+&lt;cfset e.setFirstName(&ldquo;Victor&rdquo;)&gt;
+&lt;cfset e.setLastName(&ldquo;Newman&rdquo;)&gt;
+&lt;cfset e.setDOB(createDate(1973,4,8))&gt;
+&lt;cfset e.setEmail(&ldquo;vnewman@newmanenterprizes.com&rdquo;)&gt;
+&lt;cfset e.setPhone(&ldquo;555-555-5555&rdquo;)&gt;
+&lt;cfdump var=&ldquo;#e.getMemento()#&rdquo;&gt;
+&lt;cfset application.transfer.save(e)&gt;
+&lt;cfdump var=&ldquo;#e.getMemento()#&rdquo;&gt;
+</code></p>
+
+<p>Notice in this screen shot. Before the save, my TO (TransferObject) had an ID of 0. After the save, it had the ID returned from the database.</p>
+
+<p><img src="http://www.coldfusionjedi.com/images//Picture 210.png"></p>
+
+<p>Woot! We are halfway through our CRUD. Let&rsquo;s look at read. There are actually multiple ways of getting data via Transfer. You can get lists of objects (as a query) or a single object. This can be done via searches or by getting a particular object by id. For today&rsquo;s blog entry we will focus on simply loading an object based on an ID. As you can probably guess, there is another method in Transfer we will use: <a href="http://docs.transfer-orm.com/wiki/Persisting_and_Retrieving_Objects.cfm#Transfer.get(class%2C_key)">get</a></p>
+
+<p>The get method takes a class name and a ID value. Here is a simple example.</p>
+
+<p><code>
+&lt;cfset e2 = application.transfer.get(&ldquo;employee&rdquo;, e.getID())&gt;
+&lt;cfdump var=&ldquo;#e2.getMemento()#&rdquo;&gt;
+</code></p>
+
+<p>Remember that &lsquo;e&rsquo; was my test object. I basically just asked Transfer to get another Transfer object using the same ID from the one I just created. In case your curious, both e2 and e actually point to the same data. If you do e2.setFirstName() and then examine e, you will see the same value.</p>
+
+<p>Alright, the last piece of the puzzle then is deleting. It should come to no surprise that the Transfer component has a <a href="http://docs.transfer-orm.com/wiki/Persisting_and_Retrieving_Objects.cfm#Transfer.delete(transferObject%2C_%5BuseTransaction%5D)">delete</a> method. Probably the only thing odd (well to me anyway) about delete is that you can&rsquo;t do it by primary key. You have to actually get the object first and then delete it. Here is an example:</p>
+
+<p><code>
+&lt;cfset employee = application.transfer.get(&ldquo;employee&rdquo;, url.delete)&gt;
+&lt;cfset application.transfer.delete(employee)&gt;
+</code></p>
+
+<p>So tonight I&rsquo;ll post a followup to this entry showing a simple admin I built using these methods above. To be honest, it&rsquo;s nothing too exciting, but we will get to look at a new method that will be useful for returning all our employees.</p>
+
+<p>(As before, those of you new to Transfer, keep the feedback coming on pacing, or point out anything I was too vague on. Those who know Transfer well, feel free to correct me!)<p><a href='enclosures/D%3A%5Chosts%5Cwww%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fempdirectory1%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2008\/11\/05\/Building-CRUD-with-Transfer'; 
+this.page.identifier = '/?p=3085'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/11/05/Building-CRUD-with-Transfer" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Building CRUD with Transfer" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/11/05/Building-CRUD-with-Transfer" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/11/05/Building-CRUD-with-Transfer" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Building CRUD with Transfer" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/11/05/Building-CRUD-with-Transfer" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/11/05/Building-CRUD-with-Transfer" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

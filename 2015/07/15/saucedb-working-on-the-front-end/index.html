@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>SauceDB - Working on the front end &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="SauceDB - Working on the front end" />
+<meta property="og:description" content="Yesterday I blogged about a new project I&rsquo;m building to demonstrate both Ionic and IBM Bluemix. I&rsquo;ve made some progress on the project so I thought I&rsquo;d share what I&rsquo;ve built so far. My thinking is that as this project goes on I&rsquo;ll continue to share these updates so folks can see how I approach projects. Feel free to comment, criticize and make suggestions!
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end" />
+
+
+<meta property="og:updated_time" content="2015-07-15T16:04:07&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="SauceDB - Working on the front end">
+<meta itemprop="description" content="Yesterday I blogged about a new project I&rsquo;m building to demonstrate both Ionic and IBM Bluemix. I&rsquo;ve made some progress on the project so I thought I&rsquo;d share what I&rsquo;ve built so far. My thinking is that as this project goes on I&rsquo;ll continue to share these updates so folks can see how I approach projects. Feel free to comment, criticize and make suggestions!
+">
+
+
+<meta itemprop="dateModified" content="2015-07-15T16:04:07&#43;06:00" />
+<meta itemprop="wordCount" content="1175">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="SauceDB - Working on the front end"/>
+<meta name="twitter:description" content="Yesterday I blogged about a new project I&rsquo;m building to demonstrate both Ionic and IBM Bluemix. I&rsquo;ve made some progress on the project so I thought I&rsquo;d share what I&rsquo;ve built so far. My thinking is that as this project goes on I&rsquo;ll continue to share these updates so folks can see how I approach projects. Feel free to comment, criticize and make suggestions!
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end">
+    <h1 class="article-title" itemprop="name">
+        SauceDB - Working on the front end
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-07-15 16:04:07 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-15</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/cordova">cordova</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/ionic">ionic</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Yesterday I <a href="http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb">blogged</a> about a new project I&rsquo;m building to demonstrate both <a href="http://www.ionicframework.com/">Ionic</a> and <a href="https://ibm.biz/IBM-Bluemix">IBM Bluemix</a>. I&rsquo;ve made some progress on the project so I thought I&rsquo;d share what I&rsquo;ve built so far. My thinking is that as this project goes on I&rsquo;ll continue to share these updates so folks can see how I approach projects. Feel free to comment, criticize and make suggestions!</p>
+
+<p>Before I begin, note that I&rsquo;ve checked in my code to the Github repo: <a href="https://github.com/cfjedimaster/SauceDB">https://github.com/cfjedimaster/SauceDB</a>. You can find the bits I&rsquo;m covering today in the <code>mobile</code> folder.</p>
+
+<p>This release focuses on the front end. I&rsquo;ve decided to try to get as much of the mobile app done as possible. By using services in my Angular app, in theory, I can mock everything up with fake data and then - in theory - just replace with calls to the Node.js server. I&rsquo;m not going to pretend that I think this will happen perfectly, but I find that if I focus on one aspect of the project at a time I can be a bit more productive. So let&rsquo;s look at the screens done so far.</p>
+
+<h2>Login</h2>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-15-2015-2.51.51-PM.png" alt="iOS Simulator Screen Shot Jul 15, 2015, 2.51.51 PM" width="394" height="700" class="aligncenter size-full wp-image-6398 imgborder" /></p>
+
+<p>This has a lot of wasted space - and I&rsquo;d imagine some nice logo above the button - but as I don&rsquo;t have a logo yet (any volunteers) I&rsquo;ve let it simple. The Facebook button is going to use the <a href="https://github.com/ccoenraets/OpenFB">OpenFB</a> library I mentioned before. Let&rsquo;s take a look at the controller.</p>
+
+<pre><code class="language-javascript">.controller('LoginCtrl', function($scope, $ionicPlatform, ngFB, $rootScope, $state, $ionicHistory) {
+    console.log('LoginCtrl');
+  
+  //used to skip auth when testing
+  var skipAuth=true;
+  
+  $ionicPlatform.ready(function() {
+
+    ngFB.init({appId: '467761313406666'});
+    
+    $scope.doLogin = function() {
+
+      if(skipAuth) {
+        $ionicHistory.nextViewOptions({
+          disableBack: true
+        });
+        $state.go('Home');        
+        return;
+      }
+
+      ngFB.login({scope: 'email'}).then(function(response) {          
+          console.log('Facebook login succeeded', response.authResponse.accessToken);
+          $rootScope.accessToken = response.authResponse.accessToken;
+          ngFB.api({
+            path:'/me',
+            params: { fields: 'id,name'}
+          }).then(
+            function(user) {
+              console.log(user);
+              $rootScope.user = user;
+              $ionicHistory.nextViewOptions({
+                disableBack: true
+              });
+              $state.go('Home');
+            }, function(err) {
+              
+          });
+      },function(error) {
+          alert('Facebook login failed: ' + error);
+      });
+                 
+    }
+        
+  });
+    
+})</code></pre>
+
+<p>The first thing you&rsquo;ll notice is a &ldquo;skipAuth&rdquo; flag. As you can guess, this lets me skip login while testing. Since I&rsquo;m focused on building out my views and basic integration, I didn&rsquo;t want to have to relogin every time the page reloaded. When that little hack isn&rsquo;t enabled, you can see how I use OpenFB to both authenticate and then call the API to get information about the current user. My thinking here is that I want some basic details about you (email, name, profile picture) so I can greet you by name.</p>
+
+<h2>Feed</h2>
+
+<p>Next up is the &ldquo;Feed&rdquo;/Stream/etc view. This is meant to show all the most recent sauce reviews. Here is how it looks - and yes - it definitely needs some love. This also handles the &ldquo;Add Review&rdquo; logic of writing your own sauce reviews. For now though we&rsquo;ll focus on the feed.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-15-2015-3.40.26-PM.png" alt="iOS Simulator Screen Shot Jul 15, 2015, 3.40.26 PM" width="394" height="700" class="aligncenter size-full wp-image-6399 imgborder" /></p>
+
+<p>Let&rsquo;s take a look at the code. First, the controller.</p>
+
+<pre><code class="language-javascript">.controller('HomeCtrl', function($scope,dataService,$ionicLoading,$ionicModal,$state) {
+  console.log('HomeCtrl');
+  $ionicLoading.show({template:&quot;Loading feed...&quot;});
+  
+  dataService.getFeed().then(function(res) {
+    $ionicLoading.hide();
+    $scope.feed = res;
+  });
+
+  $ionicModal.fromTemplateUrl('partials/findsauce.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  
+  $scope.doSearch = function(term) {
+    console.log('search for: '+term);
+    dataService.searchSauce(term).then(function(res) {
+      console.log('back from search with '+JSON.stringify(res));
+      $scope.results = res;
+    });
+  }
+  
+  $scope.doLoad = function(id) {
+    $scope.modal.hide();
+    $state.go(&quot;AddReview&quot;, {id:id});
+  }
+  
+  $scope.addReviewForm = function() {
+    $scope.modal.show();
+  }
+
+})</code></pre>
+
+<p>The part that gets the feed simply speaks to the dataService I mentioned earlier. I&rsquo;ll talk more about &lsquo;Add Review&rsquo; in a bit. Here&rsquo;s the service method handling the feed:</p>
+
+<pre><code class="language-javascript">var getFeed = function() {
+    var deferred = $q.defer();
+        
+    //fake it till we make it
+    var feed = [];
+    var promises = [];
+        
+    for(var i=1;i&lt;5;i++) {
+        promises.push($http.get('http://api.randomuser.me/?x='+Math.random()));
+    }
+
+    $q.all(promises).then(function(data) {
+        for(var i=0;i&lt;data.length;i++) {
+            var user = data[i].data.results[0].user;
+            var item = {
+                id:i,
+                posted:&quot;July 14, 2015 at 2:32 PM&quot;,
+                sauce:{
+                    name:&quot;Sauce &quot;+i,
+                    company:&quot;Company &quot;+i
+                },
+                rating:Math.round(Math.random()*5) + 1,
+                avgrating:Math.round(Math.random()*5) + 1,
+                text:&quot;This sauce was rather spicy with a nice aftertaste...&quot;,
+                user:{
+                    img:user.picture.thumbnail,
+                    name:user.name.first+' '+user.name.last
+                }
+            }
+            feed.push(item);            
+        }
+        deferred.resolve(feed);
+    });
+        
+    return deferred.promise;
+}</code></pre>
+
+<p>For absolutely no good reason, I decided I&rsquo;d make use of the <a href="https://randomuser.me/">Random User Generator</a> API for my mocked data. On reflection that seems kind of stupid and a waste of time, but it was fun to check out the service and get &lsquo;real&rsquo; pictures/names in the feed. Plus, it made the service a bit slow which felt a bit more life like. Each feed item consists of a sauce object (just the name, company) and a review object (user, rating, etc). As I write this, I see that &ldquo;avgrating&rdquo; really should be part of the Sauce object (something I naturally did in other code) so I&rsquo;ll have to fix that soon.</p>
+
+<p>Clicking on Add Review pops open a modal. The idea for the modal is to let you search for a sauce to see if it exists. If it does, you can select it and then just write your review. Otherwise you need to include the sauce name and company when writing the review. I built a very simple &ldquo;search as you type&rdquo; service in the modal window:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-15-2015-3.52.45-PM.png" alt="iOS Simulator Screen Shot Jul 15, 2015, 3.52.45 PM" width="394" height="700" class="aligncenter size-full wp-image-6400 imgborder" /></p>
+
+<p>I showed the search code at the controller layer up above. The search service itself is hard coded:</p>
+
+<pre><code class="language-javascript">var searchSauce = function(term) {
+    var deferred = $q.defer();
+    term = term.toLowerCase();
+        
+    //use hard coded set of names 
+    var names = [
+        &quot;Alpha&quot;,&quot;Amma&quot;,&quot;Anna&quot;,&quot;Anno&quot;,&quot;Alphabet&quot;,&quot;Alcazam&quot;
+    ]
+    var results = [];
+    for(var i=0;i&lt;names.length;i++) {
+        if(names[i].toLowerCase().indexOf(term) &gt;= 0) results.push({id:1,label:names[i]});   
+    }
+    deferred.resolve(results);
+    return deferred.promise;
+    
+}</code></pre>
+
+<h2>Adding a Review</h2>
+
+<p>My static list is short, but useful enough for testing. For now, I don&rsquo;t support adding new sauces, so I just bound the list to a new review form:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-15-2015-3.55.02-PM.png" alt="iOS Simulator Screen Shot Jul 15, 2015, 3.55.02 PM" width="394" height="700" class="aligncenter size-full wp-image-6401 imgborder" /></p>
+
+<p>The fancy star widget there came from <a href="https://github.com/fraserxu/ionic-rating">https://github.com/fraserxu/ionic-rating</a>. It&rsquo;s rather easy to use. You can see it in the view below:</p>
+
+<pre><code class="language-markup">&lt;!--
+    I'll be used for adding a new review to an existing sauce and
+    for adding a review to a new sauce.
+--&gt;
+&lt;ion-view title=&quot;Add Review&quot;&gt;
+    
+    &lt;ion-content class=&quot;padding&quot;&gt;
+    
+        &lt;div ng-if=&quot;existingSauce&quot;&gt;
+            Sauce: {{sauce.name}}&lt;br/&gt;
+            Company: {{sauce.company}}
+        &lt;/div&gt;
+        
+        &lt;!-- your text --&gt;
+        &lt;div class=&quot;list list-inset&quot;&gt;
+          &lt;label class=&quot;item item-input&quot;&gt;
+              &lt;textarea placeholder=&quot;Your Review&quot; ng-model=&quot;review.text&quot;&gt;&lt;/textarea&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+
+        Rating: &lt;rating ng-model=&quot;review.rate&quot; max=&quot;max&quot;&gt;&lt;/rating&gt;      
+
+        &lt;button class=&quot;button button-assertive button-full&quot; ng-click=&quot;addReview()&quot;&gt;Add Rating&lt;/button&gt;
+
+    &lt;/ion-content&gt;
+
+&lt;/ion-view&gt;</code></pre>
+
+<p>For now, clicking the Add Review button just returns the user to the sauce.</p>
+
+<h2>Sauce View</h2>
+
+<p>Speaking of - you can also view a sauce and all its reviews. This really needs some formatting love:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-15-2015-3.59.17-PM.png" alt="iOS Simulator Screen Shot Jul 15, 2015, 3.59.17 PM" width="394" height="700" class="aligncenter size-full wp-image-6402 imgborder" /></p>
+
+<p>For yet another completely silly reason, I changed the user pics here to kittens. Because kittens. Here&rsquo;s the service method that &ldquo;fakes&rdquo; a sauce retrieval:</p>
+
+<pre><code class="language-javascript">var getSauce = function(id) {
+    var deferred = $q.defer();
+    //so a review is the Sauce object + array of reviews
+    //to keep it simpler, we'll skip the fancy randomuser integration
+    var sauce = {
+        name:&quot;Sauce &quot;+id,
+        company:&quot;Company &quot;+id,
+        avgrating:Math.round(Math.random()*5) + 1,
+        reviews:[]
+    }
+    for(var i=0;i&lt;Math.round(Math.random()*10) + 1;i++) {
+        var item = {
+            id:i,
+            posted:&quot;July 14, 2015 at 2:32 PM&quot;,
+            rating:Math.round(Math.random()*5) + 1,
+            text:&quot;This sauce was rather spicy with a nice aftertaste...&quot;,
+            user:{
+                img:&quot;http://placekitten.com/g/40/40&quot;,
+                name:&quot;Joe Blow&quot;
+            }
+        }
+        sauce.reviews.push(item);
+    }
+    deferred.resolve(sauce);
+    return deferred.promise;
+}</code></pre>
+
+<p>So there ya go. It isn&rsquo;t pretty - but it is coming together. Tomorrow I&rsquo;m going to switch to the server side and start setting up both my Cloudant database and the Node.js application.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/07\/15\/saucedb-working-on-the-front-end'; 
+this.page.identifier = '/?p=6397'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="SauceDB - Working on the front end" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="SauceDB - Working on the front end" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

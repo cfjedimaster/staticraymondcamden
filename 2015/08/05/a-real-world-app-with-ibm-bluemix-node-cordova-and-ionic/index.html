@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>A real world app with IBM Bluemix, Node, Cordova, and Ionic &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="A real world app with IBM Bluemix, Node, Cordova, and Ionic" />
+<meta property="og:description" content="I&rsquo;m still working on my large SauceDB project, but during a meeting at work earlier this week my coworkers and I came up with a simple project that may be a nicer introduction to working with Bluemix and Ionic. What follows is a complete application (both back and front end) that is also somewhat simple. There&rsquo;s multiple moving parts here so it does require some setup, but I think this guide would be a good introduction for developers. Of course, the entire thing is also up on GitHub (https://github.com/cfjedimaster/IonicBluemixDemo) with the instructions mirrored there as well. Alright, let&rsquo;s get started!
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic" />
+
+
+<meta property="og:updated_time" content="2015-08-05T17:01:10&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="A real world app with IBM Bluemix, Node, Cordova, and Ionic">
+<meta itemprop="description" content="I&rsquo;m still working on my large SauceDB project, but during a meeting at work earlier this week my coworkers and I came up with a simple project that may be a nicer introduction to working with Bluemix and Ionic. What follows is a complete application (both back and front end) that is also somewhat simple. There&rsquo;s multiple moving parts here so it does require some setup, but I think this guide would be a good introduction for developers. Of course, the entire thing is also up on GitHub (https://github.com/cfjedimaster/IonicBluemixDemo) with the instructions mirrored there as well. Alright, let&rsquo;s get started!
+">
+
+
+<meta itemprop="dateModified" content="2015-08-05T17:01:10&#43;06:00" />
+<meta itemprop="wordCount" content="2737">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="A real world app with IBM Bluemix, Node, Cordova, and Ionic"/>
+<meta name="twitter:description" content="I&rsquo;m still working on my large SauceDB project, but during a meeting at work earlier this week my coworkers and I came up with a simple project that may be a nicer introduction to working with Bluemix and Ionic. What follows is a complete application (both back and front end) that is also somewhat simple. There&rsquo;s multiple moving parts here so it does require some setup, but I think this guide would be a good introduction for developers. Of course, the entire thing is also up on GitHub (https://github.com/cfjedimaster/IonicBluemixDemo) with the instructions mirrored there as well. Alright, let&rsquo;s get started!
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic">
+    <h1 class="article-title" itemprop="name">
+        A real world app with IBM Bluemix, Node, Cordova, and Ionic
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-08-05 17:01:10 &#43;0600 &#43;0600" itemprop="datePublished">2015-08-05</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/bluemix">bluemix</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/cordova">cordova</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/ionic">ionic</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I&rsquo;m still working on my <a href="https://github.com/cfjedimaster/SauceDB">large SauceDB project</a>, but during a meeting at work earlier this week my coworkers and I came up with a simple project that may be a nicer introduction to working with <a href="https://ibm.biz/IBM-Bluemix">Bluemix</a> and <a href="http://www.ionicframework.com">Ionic</a>. What follows is a complete application (both back and front end) that is also somewhat simple. There&rsquo;s multiple moving parts here so it does require some setup, but I think this guide would be a good introduction for developers. Of course, the entire thing is also up on GitHub (<a href="https://github.com/cfjedimaster/IonicBluemixDemo">https://github.com/cfjedimaster/IonicBluemixDemo</a>) with the instructions mirrored there as well. Alright, let&rsquo;s get started!</p>
+
+<h2>What are we building?</h2>
+
+<p>Before we get to the code, what are we actually building? We&rsquo;re building an application that makes use of the <a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/visual-recognition.html">Watson Visual Recognition</a> service. We&rsquo;ll create a mobile application that lets you select a picture and send it to the Watson service so it can try and find what&rsquo;s in the picture. If this sounds familiar, it should. I <a href="http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova">blogged</a> about this back in February. However, back then I built a simple Cordova-only demo with the service credentials hard coded into the code. That was bad. This version is &ldquo;proper&rdquo; with a Node.js server running as a proxy to Watson on Bluemix. Here&rsquo;s a screen show of the mobile app on start:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/iOS-Simulator-Screen-Shot-Aug-5-2015-10.40.39-AM.png" alt="iOS Simulator Screen Shot Aug 5, 2015, 10.40.39 AM" width="500" height="323" class="aligncenter size-full wp-image-6588 imgborder" /></p>
+
+<p>Clicking the button brings up a prompt to select an image. Note - it would be trivial to make this use a real camera - but by using the photo gallery it is easier to run on a simulator. And obviously you could use two buttons so the user could choose.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/iOS-Simulator-Screen-Shot-Aug-5-2015-10.42.25-AM1.png" alt="iOS Simulator Screen Shot Aug 5, 2015, 10.42.25 AM" width="259" height="300" class="aligncenter size-full wp-image-6590 imgborder" /></p>
+
+<p>After you select the image, it will be uploaded to the Node.js server, sent to Watson for processing (I imagine Watson as millions of tiny minions), and the results returned to the mobile app. Watson includes both labels for things it believe it found as well as scores, but for this app, we&rsquo;ll just display the labels.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/iOS-Simulator-Screen-Shot-Aug-5-2015-10.44.48-AM.png" alt="iOS Simulator Screen Shot Aug 5, 2015, 10.44.48 AM" width="338" height="600" class="aligncenter size-full wp-image-6591 imgborder" /></p>
+
+<h2>Prereqs</h2>
+
+<p>In order to build this project, there&rsquo;s a few things you&rsquo;ll need to get started.</p>
+
+<ul>
+<li><a href="http://cordova.apache.org">Apache Cordova</a> should be installed, and at least one of the mobile SDKs. I tested with iOS, but this should work fine in Android and other platforms as well. In theory, you could try the <a href="http://view.ionic.io/">Ionic View</a> application, but there is one part that I'm fairly certain will not work well. I'm going to test that a bit later.</li>
+<li><a href="http://www.ionicframework.com">Ionic</a>.</li>
+<li>A <a href="https://ibm.biz/IBM-Bluemix">Bluemix</a> account. Remember, this is 100% free. Yes you will be asked for a credit card after 30 days, but even then you can run Bluemix, and every service on there, at a free tier appropriate for testing. I think our verbiage is a bit unclear on this, but you can run it for free. Free. Did I say it was free? Yes, free.</li>
+<li>Node.js installed so you can test locally.</li>
+</ul>
+
+<h2>Set up</h2>
+
+<p>Let&rsquo;s begin by creating the application on Bluemix. Assuming you&rsquo;ve logged in, begin by clicking Create App under Cloud Foundry Apps.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot1.png" alt="shot1" width="500" height="217" class="aligncenter size-full wp-image-6593" /></p>
+
+<p>Then select Mobile for the type of app you are creating. To be clear, this will only set some default services. You can, and we will in this project, also create a web site via your Node.js application.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot2.png" alt="shot2" width="500" height="204" class="aligncenter size-full wp-image-6594" /></p>
+
+<p>Now select the Mobile option that supports hybrid. To be clear, even though you aren&rsquo;t picking iOS 8, you can still deploy to iOS 8. All we&rsquo;re doing is driving what&rsquo;s automatically added to our application in Bluemix.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot3.png" alt="shot3" width="500" height="246" class="aligncenter size-full wp-image-6595" /></p>
+
+<p>Click Continue and then give this bad boy a name. I like to name my applications optimistically:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot4.png" alt="shot4" width="500" height="220" class="aligncenter size-full wp-image-6596" /></p>
+
+<p>Click Finish and let Bluemix set stuff up for you. When done, you&rsquo;ll get a confirmation screen with some tips for where to go next.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot5.png" alt="shot5" width="600" height="490" class="aligncenter size-full wp-image-6597" /></p>
+
+<p>Just hit continue, and then select the <strong>Start Coding</strong> link in the left hand nav. This next page has a few important links on it:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot6.png" alt="shot6" width="510" height="600" class="aligncenter size-full wp-image-6598 imgborder" /></p>
+
+<p>That first item, &ldquo;Download CF Command Line Interface&rdquo;, is a <strong>one time</strong> download to get the command line tool. The command line tool, cf, lets you push up your code to the Bluemix server. You&rsquo;ll do this when you want to deploy the app live to the Internet. For our project here you won&rsquo;t ever <i>need</i> to do that, but can if you want to show your app to others.</p>
+
+<p>The second item, &ldquo;Download Start Code&rdquo;, gives you the Node.js code to start your server. Normally you could download this to get started on a new application. But our project exists up on GitHub already. Before diving into the code, let&rsquo;s go ahead and set up the service our application will load. Click &ldquo;Overview&rdquo; to return to the main application home page, and then &ldquo;Add a Service or API&rdquo;.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot8.png" alt="shot8" width="600" height="456" class="aligncenter size-full wp-image-6600" /></p>
+
+<p>Bluemix offers quite a few services, and while I can see &ldquo;Visual Recognition&rdquo; there clearly, you may not. You can use the search field on top to quickly narrow down your search. When you click on the Visual Recognition service it will give you a confirmation of the price (free, well, beta, but free!) and where the service will be installed. For now you can accept the defaults.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot9.png" alt="shot9" width="700" height="368" class="aligncenter size-full wp-image-6601" /></p>
+
+<h2>Recap</h2>
+
+<p>Ok, just to recap. We create a new application in Bluemix and added one new service to it, Watson Visual Recognition.
+Now it&rsquo;s time to crack the code!</p>
+
+<h2>The Server</h2>
+
+<p>At the command line, check out the repo: <a href="https://github.com/cfjedimaster/IonicBluemixDemo">https://github.com/cfjedimaster/IonicBluemixDemo</a></p>
+
+<p>This will give you two folders: server and mobile. The server folder is where the Node.js code will run and the mobile folder is where the Cordova/Ionic code will run. We&rsquo;ll worry about the mobile side in a second. For now, go into the server folder via your Terminal and type:</p>
+
+<p><code>npm install</code></p>
+
+<p>This will install the necessary dependencies the application needs. Now, let&rsquo;s open the core file of the application, app.js.</p>
+
+<pre><code class="language-javascript">var express  = require('express'),
+    app         = express(),
+    ibmbluemix  = require('ibmbluemix'),
+    config      = {
+        // change to real application route assigned for your application
+        applicationRoute : &quot;put your route here&quot;,
+        // change to real application ID generated by Bluemix for your application
+        applicationId : &quot;put your id here...&quot;
+    };
+
+var watson = require('watson-developer-cloud');
+var fs = require('fs');
+    
+var formidable = require('formidable');
+
+/* This could be read from environment variables on Bluemix */
+var visual_recognition = watson.visual_recognition({
+  username: 'get this from the BM services panel for Visual Recog',
+  password: 'ditto',
+  version: 'v1'
+});
+
+// init core sdk
+ibmbluemix.initialize(config);
+var logger = ibmbluemix.getLogger();
+
+//redirect to cloudcode doc page when accessing the root context
+app.get('/', function(req, res){
+    res.sendfile('public/index.html');
+});
+
+app.get('/desktop', function(req, res){
+    res.sendfile('public/desktop.html');
+});
+
+app.post('/uploadpic', function(req, result) {
+    
+    console.log('uploadpic');
+    
+    var form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    
+    form.parse(req, function(err, fields, files) {
+        var params = {
+            image_file: fs.createReadStream(files.image.path)
+        };
+     
+        visual_recognition.recognize(params, function(err, res) {
+          if (err)
+            console.log(err);
+          else {
+              var results = [];
+              for(var i=0;i&lt;res.images[0].labels.length;i++) {
+                results.push(res.images[0].labels[i].label_name);  
+              }
+              console.log('got '+results.length+' labels from good ole watson');
+
+              /* simple toggle for desktop/mobile mode */
+              if(!fields.mode) {
+                  result.send(results);
+              } else {              
+                result.send(&quot;&lt;h2&gt;Results from Watson&lt;/h2&gt;&quot;+results.join(', '));  
+              }
+          }
+        });
+
+    });
+    
+});
+
+// init service sdks 
+app.use(function(req, res, next) {
+    req.logger = logger;
+    next();
+});
+
+// init basics for an express app
+app.use(require('./lib/setup'));
+
+var ibmconfig = ibmbluemix.getConfig();
+
+logger.info('mbaas context root: '+ibmconfig.getContextRoot());
+// &quot;Require&quot; modules and files containing endpoints and apply the routes to our application
+app.use(ibmconfig.getContextRoot(), require('./lib/staticfile'));
+
+app.listen(ibmconfig.getPort());
+logger.info('Server started at port: '+ibmconfig.getPort());</code></pre>
+
+<p>Ok, let&rsquo;s break this down. The first thing you&rsquo;ll notice is a config block:</p>
+
+<pre><code class="language-javascript">config   = {
+    // change to real application route assigned for your application
+    applicationRoute : "put your route here",
+    // change to real application ID generated by Bluemix for your application
+    applicationId : "put your id here..."
+};</code></pre>
+
+<p>You need to change these values to the ones specified in the Bluemix console. If you go back to that web page and click the <code>Mobile Options</code> link, you&rsquo;ll see the values there:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot7.png" alt="shot7" width="420" height="120" class="aligncenter size-full wp-image-6599" /></p>
+
+<p>In the screen shot above, the <code>app key</code> value is the <code>applicationId</code> value in code.</p>
+
+<p>Now let&rsquo;s look at this portion:</p>
+
+<pre><code class="language-javascript">var watson = require('watson-developer-cloud');
+// ... stuff
+
+var visual_recognition = watson.visual_recognition({
+  username: 'get this from the BM services panel for Visual Recog',
+  password: 'ditto',
+  version: 'v1'
+});</code></pre>
+
+<p>So first off, we&rsquo;ve added a library called <a href="https://www.npmjs.com/package/watson-developer-cloud">watson-developer-cloud</a> to our application. This provides simple access to various Watson services including the visual recognition one. In order to use the service you need to configure access by supplying the username and password. You can find it by clicking the &ldquo;Show Credentials&rdquo; link for the service.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot10.png" alt="shot10" width="400" height="374" class="aligncenter size-full wp-image-6602" /></p>
+
+<p>I want to point out something kinda important here. When your app runs in the Bluemix environment, you have access to environment variables for everything, including services and their authentication information. A <i>better</i> approach here would be for my code to sniff for those variable and use hard coded values when they aren&rsquo;t available. For now though we&rsquo;re keeping it simple. This will let us run the code locally and on Bluemix. Let&rsquo;s carry on through the code. (Note - I&rsquo;m skipping over some code from the boilerplate that isn&rsquo;t necessarily important. If there is something you want to ask me about, just use the comments below.)</p>
+
+<pre><code class="language-javascript">app.get('/desktop', function(req, res){
+    res.sendfile('public/desktop.html');
+});</code></pre>
+
+<p>This block will be used to give us a simple web based version of our service. It&rsquo;s going to point to the same API our mobile application will use. By creating this HTML version we end up with a simple (and fast) way to test the functionality of the application before moving to the device.</p>
+
+<pre><code class="language-javascript">app.post('/uploadpic', function(req, result) {
+    
+    console.log('uploadpic');
+    
+    var form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    
+    form.parse(req, function(err, fields, files) {
+        var params = {
+            image_file: fs.createReadStream(files.image.path)
+        };
+     
+        visual_recognition.recognize(params, function(err, res) {
+          if (err)
+            console.log(err);
+          else {
+              var results = [];
+              for(var i=0;i&lt;res.images[0].labels.length;i++) {
+                results.push(res.images[0].labels[i].label_name);  
+              }
+              console.log('got '+results.length+' labels from good ole watson');
+
+              /* simple toggle for desktop/mobile mode */
+              if(!fields.mode) {
+                  result.send(results);
+              } else {              
+                result.send(&quot;&lt;h2&gt;Results from Watson&lt;/h2&gt;&quot;+results.join(', '));  
+              }
+          }
+        });
+
+    });
+    
+});</code></pre>
+
+<p>Ok, so this is the main API that listens for images. To process the form I&rsquo;m using a Node package called <a href="https://github.com/felixge/node-formidable">Formidable</a>. This is a super simple package that makes working with file uploads very easy in Node. I create an instance of a form using their API and then ask it to keep extensions. Why? By default Formidable is going to store the file in the operating system&rsquo;s temporary directory. It saves the file with a unique name that has no extension. This file is a valid copy of the binary data you sent to it, but if you try to send it to Watson, the service can&rsquo;t handle the lack of an extension. So I simply tell Formidable to keep the same extension I used when uploading.</p>
+
+<p>So - finally - we can use the Visual Recognition service to check the file. It is a simple matter of specifying the file (we get that from Formidable) and then pass it to Watson. The result is a complex object including both labels ans scores, but I copy out just the labels to make it easy.</p>
+
+<p>This final portion:</p>
+
+<pre><code class="language-javascript">/* simple toggle for desktop/mobile mode */
+if(!fields.mode) {
+    result.send(results);
+} else {                
+result.send(&quot;&lt;h2&gt;Results from Watson&lt;/h2&gt;&quot;+results.join(', '));  
+}</code></pre>
+
+<p>is a somewhat lame way of handling mobile vs desktop testing. A &ldquo;proper&rdquo; API would check the headers of the requester to see if it wanted HTML versus JSON and respond accordingly. Since I&rsquo;m just testing, I use a form field flag to handle this instead.</p>
+
+<p>And that&rsquo;s it. The desktop form is just that - a simple form (you can see all the code <a href="https://github.com/cfjedimaster/IonicBluemixDemo/blob/master/server/public/desktop.html">here</a>), but let&rsquo;s take a look at what this renders in the browser.</p>
+
+<p>At the command line, fire up the server by typing <code>node app</code> then open your browser to the port mentioned in the last line of your terminal:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot11.png" alt="shot11" width="400" height="53" class="aligncenter size-full wp-image-6603" /></p>
+
+<p>Given that your port is probably 3000, open your browser to localhost:3000/desktop:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot12.png" alt="shot12" width="274" height="97" class="aligncenter size-full wp-image-6604 imgborder" /></p>
+
+<p>Select an image and then submit the form. We don&rsquo;t have any validation on the upload for now so be sure to select a valid image. When done, you&rsquo;ll get a result.</p>
+
+<p>Here&rsquo;s the source image:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/Bj1dYR8IUAAaDE4.jpg" alt="Bj1dYR8IUAAaDE4" width="300" height="300" class="aligncenter size-full wp-image-6605" /></p>
+
+<p>And here is the result:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/08/shot13.png" alt="shot13" width="500" height="82" class="aligncenter size-full wp-image-6606 imgborder" /></p>
+
+<p>Ok, time to turn to the mobile device!</p>
+
+<h2>The Mobile Client</h2>
+
+<p>As mentioned above, the front end is going to be built using Apache Cordova and Ionic. If you check out the <a href="https://github.com/cfjedimaster/IonicBluemixDemo">Git repo</a> for the project you&rsquo;ve got the code already. You will want to create a new Ionic project using the www folder from the Git project as the source. At the time I write this post, the Ionic CLI doesn&rsquo;t make it clear (I filed a bug report and it looks to be fixed already) that you can create a new Ionic project based on a local folder. At your terminal, you can do this:</p>
+
+<p><code>ionic start mymobileapp ./mobile/www</code></p>
+
+<p>This assumes you are in the same directory as the Git checkout and you want to call your new folder, mymobileapp. You can call it whatever you want obviously.</p>
+
+<p>You&rsquo;ll want to add your desired platform (for example, <code>ionic platform add ios</code>) and then add the following plugins:</p>
+
+<ul>
+<li>cordova-plugin-camera</li>
+<li>cordova-plugin-file-transfer</li>
+</ul>
+
+<p>You can also use <code>ionic state restore</code> to load plugins from the package.json file.</p>
+
+<p>In theory, you&rsquo;ll be able to test the app right away, but let&rsquo;s take a quick look at the code. First, the index.html page.</p>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width&quot;&gt;
+    &lt;title&gt;&lt;/title&gt;
+
+    &lt;link href=&quot;lib/ionic/css/ionic.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;link href=&quot;css/style.css&quot; rel=&quot;stylesheet&quot;&gt;
+
+    &lt;script src=&quot;lib/ionic/js/ionic.bundle.js&quot;&gt;&lt;/script&gt;
+
+    &lt;script src=&quot;cordova.js&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- your app's js --&gt;
+    &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body ng-app=&quot;starter&quot;&gt;
+
+    &lt;ion-pane ng-controller=&quot;MainCtrl&quot;&gt;
+      &lt;ion-header-bar class=&quot;bar-stable&quot;&gt;
+        &lt;h1 class=&quot;title&quot;&gt;Ionic + Bluemix + Watson Demo&lt;/h1&gt;
+      &lt;/ion-header-bar&gt;
+      &lt;ion-content class=&quot;padding&quot;&gt;
+                &lt;button class=&quot;button button-energized button-block&quot; ng-click=&quot;selectPicture()&quot; ng-disabled=&quot;!cordovaReady&quot;&gt;Select Picture&lt;/button&gt;
+                
+                &lt;p&gt;
+                &lt;img ng-src=&quot;{{pic}}&quot; class=&quot;selPicture&quot;&gt;
+                &lt;/p&gt;
+                
+                &lt;ion-list class=&quot;list-inset&quot;&gt;
+                    &lt;ion-item ng-repeat=&quot;result in results&quot;&gt;{{result}}&lt;/ion-item&gt;
+                &lt;/ion-list&gt;
+                
+      &lt;/ion-content&gt;
+    &lt;/ion-pane&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p>The good stuff starts inside the &lt;body&gt; so let&rsquo;s focus there. The app has a grand total of one screen so we aren&rsquo;t using the fancy State router or views even - we just have one view right inside the index.html file. On top is the button that we&rsquo;ll use to select an image. We then have a blank image that will render the one you selected. Finally, I use a simple &lt;ion-list&gt; to render the results from Watson. Now let&rsquo;s look at the JavaScript.</p>
+
+<pre><code class="language-javascript">// Ionic Starter App
+
+// angular.module is a global place for creating, registering and retrieving Angular modules
+// 'starter' is the name of this angular module example (also set in a &lt;body&gt; attribute in index.html)
+// the 2nd parameter is an array of 'requires'
+angular.module('starter', ['ionic'])
+
+.controller('MainCtrl', function($scope,$ionicPlatform,$ionicLoading) {
+    
+    $scope.results = [];
+    $scope.cordovaReady = false;
+
+    $ionicPlatform.ready(function() {   
+        $scope.$apply(function() {
+            $scope.cordovaReady = true;
+        });
+    });
+
+    $scope.selectPicture = function() {
+                    
+        var gotPic = function(fileUri) {
+
+            $scope.pic = fileUri;
+            $scope.results = [];
+
+            $ionicLoading.show({template:'Sending to Watson...'});
+                        
+            //So now we upload it
+            var options = new FileUploadOptions();
+            
+            options.fileKey=&quot;image&quot;;
+            options.fileName=fileUri.split('/').pop();
+            
+            var ft = new FileTransfer();
+            ft.upload(fileUri, &quot;http://localhost:3000/uploadpic&quot;, function(r) {
+
+                //async call to Node, which calls Watson, which gives us an array of crap
+                $scope.$apply(function() {
+                    $scope.results = JSON.parse(r.response);
+                });
+                
+                $ionicLoading.hide();
+                
+
+            }, function(err) {
+                console.log('err from node', err);
+            }, options);
+            
+        };
+            
+        var camErr = function(e) {
+            console.log(&quot;Error&quot;, e);  
+        }
+        
+        navigator.camera.getPicture(gotPic, camErr, {
+            sourceType:Camera.PictureSourceType.PHOTOLIBRARY,
+            destinationType:Camera.DestinationType.FILE_URI 
+        });
+            
+    };
+    
+})
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova &amp;&amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})</code></pre>
+
+<p>Alright - let&rsquo;s look at this. The core logic begins with the <code>selectPicture</code> function. As I mentioned, we&rsquo;re only using the photo library, but you could switch to the camera or use both if you would like. When the camera has a selected picture, then the fun begins. We use an instance of the FileTransfer object to send the image to our server. Make a note of this line: <code>ft.upload(fileUri, &ldquo;<a href="http://localhost:3000/uploadpic&quot;">http://localhost:3000/uploadpic&quot;</a>, function&reg; {</code>. This URL assumes you are testing in the simulator on your computer. You need to change this to either a real IP of your machine if testing on a device or the address of your Bluemix server. And that&rsquo;s it. Node.js and Watson handle the crunching. We get back an array of results we can then just add to the scope.</p>
+
+<h2>Wrap Up</h2>
+
+<p>I hope that you have found this a simple, if not necessarily tiny, example of using IBM Bluemix, Node.js, Apache Cordova, and Ionic in a real application. Remember that you can get all of the code here (<a href="https://github.com/cfjedimaster/IonicBluemixDemo">https://github.com/cfjedimaster/IonicBluemixDemo</a>). I&rsquo;ll be updating the readme of the repo tomorrow to be a bit more verbose. If you have any questions, comments, or suggests, just leave me a note below!</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/08\/05\/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic'; 
+this.page.identifier = '/?p=6587'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="A real world app with IBM Bluemix, Node, Cordova, and Ionic" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="A real world app with IBM Bluemix, Node, Cordova, and Ionic" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

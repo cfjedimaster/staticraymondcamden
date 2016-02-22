@@ -1,0 +1,2089 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jquery on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/jquery/</link>
+    <description>Recent content in Jquery on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 20 Oct 2015 11:16:06 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/jquery/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Building my own iPhone Availability Web App</title>
+      <link>http://www.raymondcamden.com/2015/10/20/building-my-own-iphone-availability-web-app</link>
+      <pubDate>Tue, 20 Oct 2015 11:16:06 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/20/building-my-own-iphone-availability-web-app</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Before I begin, a quick disclaimer. What I&amp;rsquo;m building here is completely for fun and because I thought it might be interesting. I&amp;rsquo;m critiquing and improving a form that was built by people smarter than me and more than adequate for 99.99% of users. Basically, I saw something I wanted to build and I did it.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m currently the owner of an HTC M8 phone - my foray back into Android after using an iPhone for a couple of versions. I like the HTC UI, and in general, the phone was pretty incredible, but after the most recent Android OS update, my phone began to get more and more sluggish. It got to a point where just opening up the phone to take a picture would take 30-60 seconds for it to respond. Phone calls, which I don&amp;rsquo;t get many of, were even worse. When I missed a call because my phone&amp;rsquo;s basic UI wouldn&amp;rsquo;t respond I nearly threw the thing in the pool. I tried many things but eventually wiped the phone and restored from a back up. It &amp;ldquo;helped&amp;rdquo;, but the phone is still chunky. I decided it was time to switch back to iOS and I figured the iPhone 6S+ would be a great phone to pick up. I also decided that the new &lt;a href=&#34;http://www.apple.com/shop/iphone/iphone-upgrade-program&#34;&gt;iPhone upgrade program&lt;/a&gt; would be a good fit. From what I&amp;rsquo;ve read it is better than ATT&amp;rsquo;s Next program. The only problem is that you must go to an Apple store to sign up for the program. My nearest Apple store is in Baton Rouge, about an hour away. Worth a drive, but only if I know I&amp;rsquo;ll have a device there to pick up.&lt;/p&gt;
+
+&lt;p&gt;Luckily, Apple has a cool &lt;a href=&#34;https://reserve.cdn-apple.com/US/en_US/reserve/iPhone/availability?returnURL=http%3A%2F%2Fwww.apple.com%2Fshop%2Fbuy-iphone%2Fiphone6s&amp;channel=1&amp;iPP=Y&#34;&gt;form&lt;/a&gt; you can use to see if your desired phone is available. You select your state, your store, your model, and then your carrier:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot16.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;708&#34; class=&#34;aligncenter size-full wp-image-6961 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, none are available. (Sigh.) You can switch to SIM-free of course (and I checked, my HTC and the 6S+ use the same type of SIM). What bothered me about this form were a couple of issues.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First off - you can&#39;t use it before 8AM. No, wait, stop laughing, I&#39;m serious. It&#39;s a web based system with &#34;open&#34; hours like a retail store. There&#39;s probably a data reason for that. I spoke with an Apple rep last week and they mentioned they get new inventory data at 8. I&#39;d like to imagine that Apple stores have some sophisticated real time hook into inventory but that&#39;s probably not the case. Still, it is kind of shocking to see a &#34;closed&#34; sign at a web site.
+&lt;li&gt;When I was in CA last week, I tried to search around me. Every time you switch stores, the form rebuilds. So if I&#39;ve selected 6S+ and ATT, I lose those selections. Now, the reason for this makes sense. It is possible that the other store doesn&#39;t have 6S+ or ATT available, but it still annoying. That&#39;s the kind of problem that intelligent front-end code could handle gracefully. There were 5-6 stores around me in South San Francisco and I checked every day there and those damn drop downs annoyed me every day. (As I said on top though, I&#39;m probably not the target user here.)
+&lt;li&gt;Finally, it would have been &lt;i&gt;really&lt;/i&gt; nice if I could have simply said, &#34;Tell me when a 6S+ for ATT or SIM-free is available in gray or silver that has 64 GB since 16 is just plain stupid.&#34; But apparently Apple isn&#39;t having any difficulty selling iPhones so such a system probably isn&#39;t a high priority for them. (And to be clear, this is &lt;strong&gt;just&lt;/strong&gt; for the upgrade program. Obviously the &#39;regular&#39; store lets you buy right now.)
+&lt;/ul&gt;
+
+&lt;p&gt;So - bored this weekend - I did what any self-respecting web dev does - I opened up dev tools while using the form. First thing I noticed was that the app was hitting JSON files to drive the drop downs:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot26.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;264&#34; class=&#34;aligncenter size-full wp-image-6962 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I then opened each of those files and took a look at the JSON. &lt;code&gt;stores.json&lt;/code&gt; was a literal listing of all the stores with availability. Here is a snippet:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&#34;stores&#34; : [ {
+    &#34;storeNumber&#34; : &#34;R414&#34;,
+    &#34;storeName&#34; : &#34;4th Street&#34;,
+    &#34;storeEnabled&#34; : false,
+    &#34;storeState&#34; : &#34;California&#34;,
+    &#34;sellEdition&#34; : false,
+    &#34;storeCity&#34; : &#34;Berkeley&#34;
+  }, {
+    &#34;storeNumber&#34; : &#34;R177&#34;,
+    &#34;storeName&#34; : &#34;ABQ Uptown&#34;,
+    &#34;storeEnabled&#34; : true,
+    &#34;storeState&#34; : &#34;New Mexico&#34;,
+    &#34;sellEdition&#34; : false,
+    &#34;storeCity&#34; : &#34;Albuquerque&#34;
+  }, {&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;availability.json&lt;/code&gt; was availability data of course. Here is a snippet from it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;  &#34;R327&#34; : {
+    &#34;MKVJ2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQA2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT62LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKQX2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKR92LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKVV2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKW72LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKRQ2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKTM2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQ62LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKTA2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT72LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKRR2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKV32LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKVW2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKW82LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKTN2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKRE2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKR82LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKWD2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQ72LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKRC2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKVX2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKW92LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKVU2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKW62LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKRF2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKUQ2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKV22LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQY2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKTY2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKV52LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT92LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT32LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKQ82LL/A&#34; : &#34;ALL&#34;,
+    &#34;timeSlot&#34; : {
+      &#34;en_US&#34; : {
+        &#34;timeslotTime&#34; : &#34;11:00 AM&#34;,
+        &#34;contractTimeslotTime&#34; : &#34;11:00 AM&#34;
+      }
+    },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The key there is the store and each line item (except for timeSlot) represents a model/color/carrier/size line item. So given that I could get the data (right click in dev tools and open them in a new tab, then save as), I began work on a web app that would let me parse the data my own way. Specifically I wanted a few things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Let me specify a store, and then multiple stores.&lt;/li&gt;
+&lt;li&gt;Let me specify any model I want.&lt;/li&gt;
+&lt;li&gt;Let me specify multiple carriers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I also wanted to ignore 16GB, but at the end decided against that. I began working on my own code that would suck in the JSON files (my local copy) and let me parse it myself. I&amp;rsquo;ll show the result first and then talk about the code. And yes - mine is far less pretty than Apple&amp;rsquo;s.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot33.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;361&#34; class=&#34;aligncenter size-full wp-image-6963 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;On top you can see a state drop down and store selector. As I said, my initial plan was to provide for adding multiple stores, but I never got around to that.&lt;/p&gt;
+
+&lt;p&gt;Below it you can see the carrier and model selections. Below it is the grid of options. I used CSS (woot) to gray/blur options that weren&amp;rsquo;t available. How did I get the Apple iPhone colors? Did you know Firefox has a color picker builtin to their dev tools?&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot43.png&#34; alt=&#34;shot4&#34; width=&#34;272&#34; height=&#34;73&#34; class=&#34;aligncenter size-full wp-image-6964 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The circles on the Apple store actually have nice gradients as you move from the center of the circle to the outside. I just clicked &amp;ldquo;in the middle-ish&amp;rdquo; to get a value that looked good to me.&lt;/p&gt;
+
+&lt;p&gt;Ok, so let&amp;rsquo;s now get into the code. I began with a simple setup routine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$(document).ready(function() {
+    console.log(&#34;Make it so.&#34;);
+    
+    //load json files
+    var storeReq = $.getJSON(&#34;data/stores.json&#34;);
+    var availReq = $.getJSON(&#34;data/availability.json&#34;);
+    $.when(storeReq,availReq).then(function(stores, avail) {
+        storeList = stores[0].stores;
+        availabilityData = avail[0];
+        doStoresForStates();
+        doStateDropDowns();
+        startUp();      
+    });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;ll skip &lt;code&gt;doStoresForStates&lt;/code&gt;, that simply gives me a root variable keyed by state that includes an array of stores. doStateDropDowns populates the state drop down. As I mentioned, the idea was to make it so you could add multiple stores, but I never got to that.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function doStateDropDowns() {
+    var dds = $(&#34;.stateDD&#34;);
+    //generate the option HTML list, but only once
+    if(stateOptionHTML === &#34;&#34;) {
+        var states = [];
+        for(var i=0;i&amp;lt;storeList.length;i++) {
+            if(states.indexOf(storeList[i].storeState) === -1) states.push(storeList[i].storeState);
+        }
+        states.sort();
+        var s = &#34;&lt;option value=\&#34;\&#34;&gt;-- State --&lt;/option&gt;&#34;;
+        for(var i=0;i&amp;lt;states.length;i++) {
+            s += &#34;&lt;option&gt;&#34; + states[i] + &#34;&lt;/option&gt;&#34;;
+        }
+        stateOptionHTML = s;
+    }
+    dds.each(function(index) {
+        console.log(&#34;doing &#34;+index);
+        var options = $(&#34;option&#34;, this);
+        if(options.length === 0) {
+            $(this).html(stateOptionHTML);
+        }
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The state drop down has an event listener to respond to changes. The only thing kinda nice here is the use of &lt;code&gt;next(&amp;ldquo;select&amp;rdquo;)&lt;/code&gt; to get the drop down next to it.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function doStores() {
+    var selected = $(this).val();
+    if(selected === &#34;&#34;) return;
+    var storeHTML = &#34;&lt;option value=\&#34;\&#34;&gt;-- Location --&lt;/option&gt;&#34;;
+    for(var i=0;i&lt;storeData[selected].length;i++) {
+        storeHTML += &#34;&lt;option value=\&#34;&#34; + storeData[selected][i].number + &#34;\&#34;&gt;&#34; + storeData[selected][i].city + &#34;, &#34; + storeData[selected][i].name + &#34;&lt;/option&gt;&#34;;   
+    }
+    $(this).next(&#34;select&#34;).html(storeHTML);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so now came the scary part - building the actual &amp;ldquo;based on what you select, filter results&amp;rdquo; stuff. The first issue I ran into was model data. As I said, every model/capacity/color/carrier had a unique ID. I could have typed this all by hand, but instead, I used dev tools:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var ray = [];$(&#34;.form-choice-selector&#34;).each(function(idx) { ray.push($(this).val()); }); copy(JSON.stringify(ray));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What you are seeing is code I ran in the browser console. It fetched each &amp;ldquo;cell&amp;rdquo; of the display, got the value (which was the product id), and then used &lt;code&gt;copy&lt;/code&gt; to put it in my clipboard. I could then paste into my code. There are 5 carriers and 2 models, so I had to do this 10 times, but it took all of 1 or 2 minutes so it wasn&amp;rsquo;t a big deal.&lt;/p&gt;
+
+&lt;p&gt;The filtering code is a big hot mess. Like, seriously. It seems to work, but I put no warranty on it. Here it is - don&amp;rsquo;t laugh too hard at me.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function doFilter() {
+    //get all locations
+    var locations = [];
+    var selectedModels = [];
+    var selectedCarriers = [];
+    
+    $(&amp;quot;.locationDD&amp;quot;).each(function(idx) {
+        if($(this).val() != &#39;&#39;) locations.push($(this).val());
+    });
+    
+    //if no locations, do nothing
+    if(locations.length === 0) return;
+    
+    $(&amp;quot;.modelCB&amp;quot;).each(function(idx) {
+        if($(this).is(&#39;:checked&#39;)) {
+            selectedModels.push($(this).val());
+        };  
+    });
+
+    $(&amp;quot;.carrierCB&amp;quot;).each(function(idx) {
+        if($(this).is(&#39;:checked&#39;)) {
+            selectedCarriers.push($(this).val());
+        };  
+    });
+    
+    console.log(&amp;quot;Begin to filter. &amp;quot;+JSON.stringify(locations)+&amp;quot; &amp;quot;+JSON.stringify(selectedModels)+&amp;quot; &amp;quot;+JSON.stringify(selectedCarriers));
+            
+    /*
+    logic is: for each color/capacity, determine if ON/OFF
+    */
+    for(var i=0;i&amp;lt;capacityData.length;i++) {
+        var capacity = capacityData[i];
+        for(var j=0;j&amp;lt;colorData.length;j++) {
+            var color = colorData[j];
+            var models = getModels(capacity, color, selectedCarriers, selectedModels);
+            
+            console.log(&amp;quot;check &amp;quot;+capacity+&amp;quot; &amp;quot;+color+&amp;quot; models=&amp;quot;+JSON.stringify(models));
+            
+            var enabled = false;
+            
+            //did we filter by location?
+            if(locations.length &amp;gt; 0) {
+                for(var z = 0;z&amp;lt;locations.length;z++) {
+                    var location = locations[z];
+                    for(var k=0;k&amp;lt;models.length;k++) {
+                        //console.log(availabilityData[location][models[k]]);
+                        if(availabilityData[location][models[k]] === &amp;quot;ALL&amp;quot;) {
+                            enabled=true;
+                            break;
+                        }
+                    }
+                }       
+            }
+            console.log(&amp;quot;ENABLED&amp;quot;,enabled);
+            var cell = $(&amp;quot;.&amp;quot; + color + &amp;quot;.cap&amp;quot; + capacity);
+            if(!enabled) {
+                cell.addClass(&amp;quot;outofstock&amp;quot;);
+            } else {
+                cell.removeClass(&amp;quot;outofstock&amp;quot;);               
+            }
+        }   
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Basically - I loop over a capacity and color array and then check the availability at each location. (Again, remember I was going to support multiple locations.) &lt;code&gt;getModels&lt;/code&gt; is a utility function that parses the model data I gleaned from dev tools. I then simply add in/remove a CSS class to add the nice gray/blur affect.&lt;/p&gt;
+
+&lt;p&gt;That was the front end. In order to keep the application up to date I wrapped the whole thing up in a Node.js app running on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. All I needed was the ability to suck down the JSON files from Apple on a scheduled basis, and for that I used a cron library I used over at &lt;a href=&#34;http://www.coldfusionbloggers.org&#34;&gt;ColdFusion Bloggers&lt;/a&gt;. Here is the entirety of the app:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/*eslint-env node*/
+
+var https = require(&#39;https&#39;);
+var fs = require(&#39;fs&#39;);
+
+// This application uses express as its web server
+// for more info, see: http://expressjs.com
+var express = require(&#39;express&#39;);
+
+// cfenv provides access to your Cloud Foundry environment
+// for more info, see: https://www.npmjs.com/package/cfenv
+var cfenv = require(&#39;cfenv&#39;);
+
+// create a new express server
+var app = express();
+
+// serve the files out of ./public as our main files
+app.use(express.static(__dirname + &#39;/public&#39;));
+
+// get the app environment from Cloud Foundry
+var appEnv = cfenv.getAppEnv();
+
+
+//fire and forget sync method
+var sync = function() {
+    var writeStream1 = fs.createWriteStream(&#39;./public/data/availability.json&#39;);
+    https.request(&#39;https://reserve.cdn-apple.com/US/en_US/reserve/iPhone/availability.json&#39;, function(res) {
+        res.pipe(writeStream1);
+    }).end();
+
+    var writeStream2 = fs.createWriteStream(&#39;./public/data/stores.json&#39;);
+    https.request(&#39;https://reserve.cdn-apple.com/US/en_US/reserve/iPhone/stores.json&#39;, function(res) {
+        res.pipe(writeStream2);
+    }).end();
+}
+
+var cron = require(&#39;cron&#39;);
+var cronJob = cron.job(&#39;* */2 * * *&#39;, function() {
+    sync();
+    console.log(&#39;cron job complete&#39;);
+});
+cronJob.start();
+
+// start server on the specified port and binding host
+app.listen(appEnv.port, function() {
+    // print a message when the server starts listening
+    console.log(&#34;server starting on &#34; + appEnv.url);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I don&amp;rsquo;t have any error handling on the sync function so it is brittle as heck, but it gets the job down. I also set it up to hit Apple once ever 2 hours. I figured that was gentle and wouldn&amp;rsquo;t over tax Apple.com. I also built in a route I could use for manual testing, but I removed that when I deployed it up to Bluemix.&lt;/p&gt;
+
+&lt;p&gt;You can see it yourself here: &lt;a href=&#34;http://applestorechecker.mybluemix.net/&#34;&gt;http://applestorechecker.mybluemix.net/&lt;/a&gt;. As I said, it is somewhat brittle. I could also add a simple &amp;lsquo;data files last updated at X&amp;rsquo; to the header so you know how fresh the data is. If I weren&amp;rsquo;t being lazy, I could also add the ability for you to register when your desired model/color/carrier/store has product available, but, alas, I&amp;rsquo;m lazy today.&lt;/p&gt;
+
+&lt;p&gt;Any way, check it out, and let me know if you have any questions!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Processing multiple simultaneous uploads with Cordova</title>
+      <link>http://www.raymondcamden.com/2015/08/10/processing-multiple-simultaneous-uploads-with-cordova</link>
+      <pubDate>Mon, 10 Aug 2015 17:29:30 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/10/processing-multiple-simultaneous-uploads-with-cordova</guid>
+      <description>&lt;p&gt;I forget where, but a user on one of my posts recently asked about handling multiple uploads with Cordova, so I thought I&amp;rsquo;d whip up a quick demo. As always, the code below is all on GitHub (link will be at the bottom), so you can skip my post completely and just grab the bits if you want.&lt;/p&gt;
+
+&lt;p&gt;First off, the only reason this is even a little bit complex is because the upload method of the &lt;a href=&#34;https://www.npmjs.com/package/cordova-plugin-file-transfer&#34;&gt;File Transfer&lt;/a&gt; plugin is asynchronous. Luckily there is an easy (heh, ok, kinda easy) way to handle multiple asynchronous responses - Promises. If you are using &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;, then I&amp;rsquo;d strongly suggest using &lt;a href=&#34;http://ngcordova.com/&#34;&gt;ngCordova&lt;/a&gt;. It includes a &amp;ldquo;Promise-fied&amp;rdquo; version of the File Transfer plugin already. But I didn&amp;rsquo;t want to assume Angular so I decided to skip ngCordova and instead simply use the promise support from jQuery. (Reminder, I&amp;rsquo;ve got 2.5 hours of jQuery training, including promises, here: &lt;a href=&#34;https://www.youtube.com/playlist?list=PL_z-rqJYNijrtVAc5qQbkzHnDELANGiOn&#34;&gt;https://www.youtube.com/playlist?list=PL_z-rqJYNijrtVAc5qQbkzHnDELANGiOn&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;For my demo, I simply used the Camera plugin to let you select multiple images from the device. Each image is added to the DOM. Here is that code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var images = [];
+var $imagesDiv;
+
+document.addEventListener(&#34;deviceready&#34;, init, false);
+function init() {
+    
+    $(&#34;#addPicture&#34;).on(&#34;touchend&#34;, selPic);
+    $imagesDiv = $(&#34;#images&#34;);  
+    $(&#34;#uploadPictures&#34;).on(&#34;touchend&#34;, uploadPics);
+}
+
+function selPic() {
+    navigator.camera.getPicture(function(f) {
+        var newHtml = &#34;&amp;lt;img src=&#39;&#34;+f+&#34;&#39;&amp;gt;&#34;;
+        $imagesDiv.append(newHtml);
+        images.push(f);
+        if(images.length === 1) {
+            $(&#34;#uploadPictures&#34;).removeAttr(&#34;disabled&#34;);
+        }
+    }, function(e) {
+        alert(&#34;Error, check console.&#34;);
+        console.dir(e);
+    }, { 
+        quality: 50,
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+        destinationType: Camera.DestinationType.FILE_URI
+    });
+    
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I assume this stuff is rather simple, but if not, just let me know in the comments below. Here is a screen shot of the app in action.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/iOS-Simulator-Screen-Shot-Aug-10-2015-5.23.33-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Aug 10, 2015, 5.23.33 PM&#34; width=&#34;546&#34; height=&#34;700&#34; class=&#34;aligncenter size-full wp-image-6620 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can guess, the upload button at the bottom there will begin the process. For my testing, I set up a ColdFusion script to simply save the uploads to a temporary directory. To add a bit of randonmness though, it will randomly reject images by outputting 0. On successful uploads, it will output 1.&lt;/p&gt;
+
+&lt;p&gt;Here is the remainder of the code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function uploadPics() {
+    console.log(&#34;Ok, going to upload &#34;+images.length+&#34; images.&#34;);
+    var defs = [];
+
+    images.forEach(function(i) {
+        console.log(&#39;processing &#39;+i);
+        var def = $.Deferred();
+
+        function win(r) {
+            console.log(&#34;thing done&#34;);
+            if($.trim(r.response) === &#34;0&#34;) {
+                console.log(&#34;this one failed&#34;);
+                def.resolve(0);
+            } else {
+                console.log(&#34;this one passed&#34;);
+                def.resolve(1);
+            }
+        }
+
+        function fail(error) {
+            console.log(&#34;upload error source &#34; + error.source);
+            console.log(&#34;upload error target &#34; + error.target);
+            def.resolve(0);
+        }
+
+        var uri = encodeURI(&#34;http://localhost/testingzone/test.cfm&#34;);
+
+        var options = new FileUploadOptions();
+        options.fileKey=&#34;file&#34;;
+        options.fileName=i.substr(i.lastIndexOf(&#39;/&#39;)+1);
+        options.mimeType=&#34;image/jpeg&#34;;
+
+        var ft = new FileTransfer();
+        ft.upload(i, uri, win, fail, options);
+        defs.push(def.promise());
+        
+    });
+
+    $.when.apply($, defs).then(function() {
+        console.log(&#34;all things done&#34;);
+        console.dir(arguments);
+    });
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So from top to bottom, what I&amp;rsquo;m doing is creating an array of promise objects. Or more specifically, the jQuery version of them. I then run an upload call for each image selected by the user. I check the result from the server and either resolve the promise with 0 or 1 based on what the server said.&lt;/p&gt;
+
+&lt;p&gt;Finally, I&amp;rsquo;ve got a call to $.when to handle waiting for all these asynch processes to finish. I don&amp;rsquo;t actually show anything, I just console.dir, but you could imagine checking the results and doing - well - whatever makes sense.&lt;/p&gt;
+
+&lt;p&gt;I hope this is useful for folks, and as always, let me know if you have any questions. You can find the complete source here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/multiupload&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/multiupload&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Google Analytics and RSS Report</title>
+      <link>http://www.raymondcamden.com/2015/06/08/google-analytics-and-rss-report</link>
+      <pubDate>Mon, 08 Jun 2015 09:07:09 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/06/08/google-analytics-and-rss-report</guid>
+      <description>&lt;p&gt;&lt;strong&gt;(As just an FYI, while working on this demo I discovered the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/embed/v1/&#34;&gt;Analytics Embed API&lt;/a&gt;. It looks like a powerful way to create Google Analytics mashups and I plan on looking at it deeper in the next week or so. Note that the code I use here could be much simpler with the Embed API.)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This past fall I switched from a custom blog engine I had written to Wordpress. While in general I&amp;rsquo;m really happy with the move, there&amp;rsquo;s one thing my old blog had that I really miss. Whenever I logged into the admin, I&amp;rsquo;d see my last five blog posts and how many views they had received so far. For me, this was a great way to gauge how my current articles were doing. I obviously checked my Google Analytics often as well, but the report of my &lt;i&gt;current&lt;/i&gt; entries was a great way to see how my most recent articles were being received.&lt;/p&gt;
+
+&lt;p&gt;A year ago I worked on a &lt;a href=&#34;http://www.raymondcamden.com/2014/01/24/Proof-of-Concept-Dashboard-for-Google-Analytics&#34;&gt;Google Analytics dashboard&lt;/a&gt; that made use of their client-side API. This dashboard simply gave me a birds-eye view of all my properties and how well they are doing. This demo gave me the basics of working with both authentication and the Analytics API, so I began working on a new mashup. The idea was simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Authenticate the user to Google.
+&lt;li&gt;Let them select a property.
+&lt;li&gt;Let them enter a RSS URL that matched the property.
+&lt;li&gt;Use the RSS entries as queries against the Analytics API and report the stats.
+&lt;/ul&gt;
+
+&lt;p&gt;In order to make this work, I needed the &lt;a href=&#34;https://developers.google.com/analytics/devguides/reporting/core/v3/&#34;&gt;Core Reporting API&lt;/a&gt; and the &lt;a href=&#34;https://developers.google.com/feed/&#34;&gt;Feed API&lt;/a&gt;. The Feed API actually supports a method of searching for a RSS feed, but it oddly didn&amp;rsquo;t return the RSS feed itself - just matched entries. Because of this my tool needs to ask you for the RSS URL. Before digging into the code, let me share some screen shots so you get an idea of how it looks.&lt;/p&gt;
+
+&lt;p&gt;First - the application recognizes if you&amp;rsquo;ve recently authenticated with Google. If you have not, it will prompt you to:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;800&#34; height=&#34;162&#34; class=&#34;aligncenter size-full wp-image-6263 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking that button pops open a new window where you&amp;rsquo;ll begin the authentication/authorization process with Google. I&amp;rsquo;ve set up a project for this demo and specified what scopes my demo needs. This is what controls the list of requests seen here.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot2.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;495&#34; class=&#34;aligncenter size-full wp-image-6264 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After you&amp;rsquo;ve authenticated, the code then uses the Analytics API to fetch the web sites you have access to for that account:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot3.png&#34; alt=&#34;shot3&#34; width=&#34;800&#34; height=&#34;334&#34; class=&#34;aligncenter size-full wp-image-6265 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice how the RSS field is empty. I added code so that once you enter a value here it will remember it. Next time you load the tool and select your property, you won&amp;rsquo;t need to fill in the values again.&lt;/p&gt;
+
+&lt;p&gt;Anyway, once you do enter the value, the Feed API takes over. It parses the RSS and gets your most recent entries.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot4.png&#34; alt=&#34;shot4&#34; width=&#34;800&#34; height=&#34;684&#34; class=&#34;aligncenter size-full wp-image-6266 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And then magically - the stats show up in the table:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot5.png&#34; alt=&#34;shot5&#34; width=&#34;800&#34; height=&#34;455&#34; class=&#34;aligncenter size-full wp-image-6267 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so how does it work? I won&amp;rsquo;t go over the authentication part as I used the same code from my &lt;a href=&#34;http://www.raymondcamden.com/2014/01/24/Proof-of-Concept-Dashboard-for-Google-Analytics&#34;&gt;previous demo&lt;/a&gt;. The analytics part was a bit different. I moved it into a module pattern and exposed two APIs - getProperties and getStatsForPropertyURL. getProperties returns a promise which makes using it somewhat simple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;analyticsModule.getProperties().then(function(props) {
+//boring DOM crap here
+});
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Behind that simple call though was some complex rejiggering of the previous demo. I make use of LocalStorage to cache values and the Analytics stuff is multi-step, so it took me a few iterations to get it right. Getting stats for a URL was pretty simple. Given you know the property ID and the URL path (you don&amp;rsquo;t include the full URL), here is the call:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function getStatsForPropertyURL(propId, url) {
+    var adef = $.Deferred();
+    
+    gapi.client.analytics.data.ga.get({
+    &#39;ids&#39;: &#39;ga:&#39; + propId,
+    &#39;start-date&#39;: &#39;2005-01-01&#39;,
+    &#39;end-date&#39;: &#39;today&#39;,
+    &#39;metrics&#39;: &#39;ga:pageviews&#39;,
+    &#39;filters&#39;:&#39;ga:pagePath==&#39;+encodeURI(url),
+    &#39;dimensions1&#39;:&#39;ga:date&#39;
+    }).execute(function(results) {
+        console.dir(results);
+        adef.resolve(results.totalsForAllResults[&#34;ga:pageviews&#34;]);
+    });
+    
+    return adef;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note the use of 2005-01-01 as the start date. This is the earliest date that the API supports.&lt;/p&gt;
+
+&lt;p&gt;So, want to check it out? Remember - you must have a Google Analytics account and the property you want to test must use a RSS feed. I tested in Chrome, Firefox, and Safari and it seemed to work well, but obviously you can let me know (via an issue or comment) how it works for you:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://static.raymondcamden.com/rssanalytics/&#34;&gt;http://static.raymondcamden.com/rssanalytics/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Want to see all the code, or report an issue? I created a Github repo: &lt;a href=&#34;https://github.com/cfjedimaster/Google-Analytics-RSS-Parsing&#34;&gt;https://github.com/cfjedimaster/Google-Analytics-RSS-Parsing&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Strategies for dealing with multiple Ajax calls</title>
+      <link>http://www.raymondcamden.com/2015/04/03/strategies-for-dealing-with-multiple-ajax-calls</link>
+      <pubDate>Fri, 03 Apr 2015 09:21:32 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/04/03/strategies-for-dealing-with-multiple-ajax-calls</guid>
+      <description>&lt;p&gt;Let&amp;rsquo;s consider a fairly trivial, but probably typical, Ajax-based application. I&amp;rsquo;ve got a series of buttons:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/shot1.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;418&#34; height=&#34;404&#34; class=&#34;alignnone size-full wp-image-5950&#34; style=&#34;border: solid black 1px&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Each button, when clicked, hits a service on my application server and fetches some data. In my case, just a simple name:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/shot2.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/shot2.png&#34; alt=&#34;shot2&#34; width=&#34;418&#34; height=&#34;404&#34; class=&#34;alignnone size-full wp-image-5951&#34; style=&#34;border: solid black 1px&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The code for this is rather simple. (And note - for the purposes of this blog entry I&amp;rsquo;m keeping things very simple and including my JavaScript in the HTML page. Please keep your HTML and JavaScript in different files!)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+&amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+&amp;lt;&amp;#x2F;head&amp;gt;
+&amp;lt;body&amp;gt;
+
+&amp;lt;button data-prodid=&amp;quot;1&amp;quot; class=&amp;quot;loadButton&amp;quot;&amp;gt;Load One&amp;lt;&amp;#x2F;button&amp;gt;
+&amp;lt;button data-prodid=&amp;quot;2&amp;quot; class=&amp;quot;loadButton&amp;quot;&amp;gt;Load Two&amp;lt;&amp;#x2F;button&amp;gt;
+
+&amp;lt;div id=&amp;quot;resultDiv&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+
+&amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;ajax.googleapis.com&amp;#x2F;ajax&amp;#x2F;libs&amp;#x2F;jquery&amp;#x2F;2.1.0&amp;#x2F;jquery.min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;script&amp;gt;
+$(document).ready(function() {
+    $result = $(&amp;quot;#resultDiv&amp;quot;);
+    
+    $(&amp;quot;.loadButton&amp;quot;).on(&amp;quot;click&amp;quot;, function(e) {
+        var thisId = $(this).data(&amp;quot;prodid&amp;quot;);
+        console.log(&amp;quot;going to load product id &amp;quot;+thisId);
+        $result.text(&amp;quot;&amp;quot;);
+        $.getJSON(&amp;quot;service.cfc?method=getData&amp;quot;,{id:thisId}, function(res) {
+            console.log(&amp;quot;back with &amp;quot;+JSON.stringify(res));
+            $result.text(&amp;quot;Product &amp;quot;+res.name);
+        });
+    });
+});
+&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I assume this makes sense to everyone as it is pretty boiler-plate Ajax with jQuery, but if it doesn&amp;rsquo;t, just chime in below in a comment. Ok, so this &lt;i&gt;works&lt;/i&gt;, but we have a small problem. What happens in the user clicks both buttons at nearly the same time? Well, you would probably say the last one wins, right? But are you sure? What if something goes wrong (database gremlin - always blame the database) and the last hit is the &lt;i&gt;first&lt;/i&gt; one to return?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/Untitled2.gif&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/Untitled2.gif&#34; alt=&#34;Untitled2&#34; width=&#34;443&#34; height=&#34;438&#34; class=&#34;alignnone size-full wp-image-5952&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;What you can see (hopefully - still kinda new at making animated gifs) is that the user clicks the first button, then the second, and sees first the result from the second button and then the first one flashes in.&lt;/p&gt;
+
+&lt;p&gt;Now to be fair, you could just blame the user. I&amp;rsquo;m &lt;i&gt;all&lt;/i&gt; for blaming the user. But what are some ways we can prevent this from happening?&lt;/p&gt;
+
+&lt;p&gt;One strategy is to disable all the buttons that call this particular Ajax request until the request has completed. Let&amp;rsquo;s look at that version.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+&amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+&amp;lt;&amp;#x2F;head&amp;gt;
+&amp;lt;body&amp;gt;
+
+&amp;lt;button data-prodid=&amp;quot;1&amp;quot; class=&amp;quot;loadButton&amp;quot;&amp;gt;Load One&amp;lt;&amp;#x2F;button&amp;gt;
+&amp;lt;button data-prodid=&amp;quot;2&amp;quot; class=&amp;quot;loadButton&amp;quot;&amp;gt;Load Two&amp;lt;&amp;#x2F;button&amp;gt;
+
+&amp;lt;div id=&amp;quot;resultDiv&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+
+&amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;ajax.googleapis.com&amp;#x2F;ajax&amp;#x2F;libs&amp;#x2F;jquery&amp;#x2F;2.1.0&amp;#x2F;jquery.min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;script&amp;gt;
+$(document).ready(function() {
+    $result = $(&amp;quot;#resultDiv&amp;quot;);
+    
+    $(&amp;quot;.loadButton&amp;quot;).on(&amp;quot;click&amp;quot;, function(e) {
+        &amp;#x2F;&amp;#x2F;disable the rest
+        $(&amp;quot;.loadButton&amp;quot;).attr(&amp;quot;disabled&amp;quot;,&amp;quot;disabled&amp;quot;);
+        var thisId = $(this).data(&amp;quot;prodid&amp;quot;);
+        console.log(&amp;quot;going to load product id &amp;quot;+thisId);
+        $result.text(&amp;quot;Loading info...&amp;quot;);
+        $.getJSON(&amp;quot;service.cfc?method=getData&amp;quot;,{id:thisId}, function(res) {
+            console.log(&amp;quot;back with &amp;quot;+JSON.stringify(res));
+            $(&amp;quot;.loadButton&amp;quot;).removeAttr(&amp;quot;disabled&amp;quot;);
+            $result.text(&amp;quot;Product &amp;quot;+res.name);
+        });
+    });
+});
+&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;ve added a simple call to disable all the buttons based on class. I then simple remove that attribute when the Ajax request is done. Furthermore, I also include some text to let the user know that - yes - something is happening - and maybe you should just calm the heck down and wait for it. The result makes it more obvious that something is happening and actively prevents the user from clicking the other buttons.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/Untitled3.gif&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/Untitled3.gif&#34; alt=&#34;Untitled3&#34; width=&#34;443&#34; height=&#34;438&#34; class=&#34;alignnone size-full wp-image-5953&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Another strategy would be to actually kill the existing Ajax request. This is rather simple. The native XHR object has an abort method that will kill it, and jQuery&amp;rsquo;s Ajax methods returns a wrapped XHR object that gives us access to the same method.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+&amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+&amp;lt;&amp;#x2F;head&amp;gt;
+&amp;lt;body&amp;gt;
+
+&amp;lt;button data-prodid=&amp;quot;1&amp;quot; class=&amp;quot;loadButton&amp;quot;&amp;gt;Load One&amp;lt;&amp;#x2F;button&amp;gt;
+&amp;lt;button data-prodid=&amp;quot;2&amp;quot; class=&amp;quot;loadButton&amp;quot;&amp;gt;Load Two&amp;lt;&amp;#x2F;button&amp;gt;
+
+&amp;lt;div id=&amp;quot;resultDiv&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+
+&amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;ajax.googleapis.com&amp;#x2F;ajax&amp;#x2F;libs&amp;#x2F;jquery&amp;#x2F;2.1.0&amp;#x2F;jquery.min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;script&amp;gt;
+
+$(document).ready(function() {
+    $result = $(&amp;quot;#resultDiv&amp;quot;);
+
+    var xhr;
+    var active=false;
+
+    $(&amp;quot;.loadButton&amp;quot;).on(&amp;quot;click&amp;quot;, function(e) {
+        var thisId = $(this).data(&amp;quot;prodid&amp;quot;);
+        console.log(&amp;quot;going to load product id &amp;quot;+thisId);
+        $result.text(&amp;quot;Loading info...&amp;quot;);
+        
+        if(active) { console.log(&amp;quot;killing active&amp;quot;); xhr.abort(); }
+        active=true;
+        xhr = $.getJSON(&amp;quot;service.cfc?method=getData&amp;quot;,{id:thisId}, function(res) {
+            console.log(&amp;quot;back with &amp;quot;+JSON.stringify(res));
+            $result.text(&amp;quot;Product &amp;quot;+res.name);
+            active=false;
+        });
+    });
+});
+&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I use two variables, xhr and active, so that I can track active xhr requests. There are other ways to track the status of the XHR object - for example, via readyState - but a simple flag seemed to work best. Obviously you could do it differently but the main idea (&amp;ldquo;If active, kill it&amp;rdquo;), provides an alternative to the first method.&lt;/p&gt;
+
+&lt;p&gt;When using this, you can actually see the requests killed in dev tools:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/Untitled4.gif&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/Untitled4.gif&#34; alt=&#34;Untitled4&#34; width=&#34;750&#34; height=&#34;567&#34; class=&#34;alignnone size-full wp-image-5954&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Any comments on this? How are you handling this yourself in your Ajax-based applications?&lt;/p&gt;
+
+&lt;p&gt;p.s. As a quick aside, &lt;a href=&#34;http://remotesynthesis.com/&#34;&gt;Brian Rinaldi&lt;/a&gt; shared with me a cool little UI library that turns buttons themselves into loading indicators: &lt;a href=&#34;http://lab.hakim.se/ladda/&#34;&gt;Ladda&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>PhoneGap Online/Offline Tip (2)</title>
+      <link>http://www.raymondcamden.com/2015/01/13/phonegap-onlineoffline-tip-2</link>
+      <pubDate>Tue, 13 Jan 2015 09:32:16 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/13/phonegap-onlineoffline-tip-2</guid>
+      <description>&lt;p&gt;A while ago I posted an article discussing how to handle offline and online events in Cordova/PhoneGap (&lt;a href=&#34;http://www.raymondcamden.com/2013/05/24/PhoneGap-OnlineOffline-Tip&#34;&gt;PhoneGap Offline/Online Tip&lt;/a&gt;). While working on my &lt;a href=&#34;http://manning.com/camden/&#34;&gt;book&lt;/a&gt; I came across some differences to this behavior that I wanted to document.&lt;/p&gt;
+
+&lt;p&gt;As a reminder, the idea is simple. Your PhoneGap/Cordova app should be network aware if it makes any use of remote resources. While the &lt;a href=&#34;http://plugins.cordova.io/#/package/org.apache.cordova.network-information&#34;&gt;Network Information&lt;/a&gt; plugin isn&amp;rsquo;t perfect (and I&amp;rsquo;ll be showing an example of that in a second), there really is no excuse to not add &lt;i&gt;some&lt;/i&gt; type of support for this in your application. Having an application that just silently fails is unprofessional - especially considering how easy it is to fix.&lt;/p&gt;
+
+&lt;p&gt;Read the &lt;a href=&#34;http://www.raymondcamden.com/2013/05/24/PhoneGap-OnlineOffline-Tip&#34;&gt;earlier entry&lt;/a&gt; first - I&amp;rsquo;ll wait.&lt;/p&gt;
+
+&lt;p&gt;Now that you&amp;rsquo;ve seen an example, there are a few changes you should be aware of.&lt;/p&gt;
+
+&lt;p&gt;At the time I wrote the entry, I recommended putting the event listeners in the document ready block if you were using jQuery. Now the recommendation (and this is documented) is to place them in the deviceready listener.&lt;/p&gt;
+
+&lt;p&gt;The good news is that the handlers still works as my other blog entry says. They will fire automatically on application startup. The bad news though is that your code needs to be a bit more intelligent about any warnings it may use. What do I mean? My sample code alerted the user when they went offline and online. It makes sense to warn the user immediately if the application starts up offline. It does not make sense to do the same if the application is online. So you need a work around for that. The good news is that the workaround also meshes nicely with a bug.&lt;/p&gt;
+
+&lt;p&gt;Cordova &lt;a href=&#34;https://issues.apache.org/jira/browse/CB-7787&#34;&gt;issues 7787&lt;/a&gt; describes a bug where in Android, the event listeners may fire multiple times. What that means is that when you test putting your device offline, the event may fire twice or more. If you are using an alert, then that&amp;rsquo;s a problem.&lt;/p&gt;
+
+&lt;p&gt;To get around this I used a simple hack. It is harmless on iOS and actually addresses the &amp;ldquo;starting up online&amp;rdquo; issue as well. Consider this pseudo-code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+document.addEventListener(&#34;deviceready&#34;, init, false);
+var lastStatus = &#34;&#34;;
+
+function init() {
+
+  //listen for changes
+  document.addEventListener(&#34;offline&#34;, disableForm, false);
+  document.addEventListener(&#34;online&#34;, enableForm, false);
+
+}
+
+// stuff
+
+function disableForm() {
+  $(&#34;#searchButton&#34;).attr(&#34;disabled&#34;, &#34;disabled&#34;);
+  if(lastStatus != &#39;disconnected&#39;) {
+    lastStatus = &#39;disconnected&#39;;
+    navigator.notification.alert(
+      &#34;Search is disabled while you are offline.&#34;, 
+      null, 
+      &#34;Offline!&#34;);
+  }
+}
+
+function enableForm() {
+  $(&#34;#searchButton&#34;).removeAttr(&#34;disabled&#34;);
+  if(lastStatus != &#39;connected&#39; &amp;&amp; lastStatus != &#39;&#39;) {
+    lastStatus = &#39;connected&#39;;
+    navigator.notification.alert(
+      &#34;Search is now enabled.&#34;, 
+      null, 
+      &#34;Online!&#34;);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Basically, I set a global variable to see if I&amp;rsquo;ve switched from one state to another. That handles the Android issue and like I said is harmless on iOS. Notice the enableForm method called in online. This will fire if the application starts online, but we add a check (&lt;code&gt;lastStatus != &amp;ldquo;&lt;/code&gt;) that handles the good startup case and suppresses the alert. (The line removing disabled is harmless too.)&lt;/p&gt;
+
+&lt;p&gt;Anyway, I hope this helps!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Dropdown to Ajax call to ColdFusion example</title>
+      <link>http://www.raymondcamden.com/2015/01/09/dropdown-to-ajax-call-to-coldfusion-example</link>
+      <pubDate>Fri, 09 Jan 2015 10:22:44 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/09/dropdown-to-ajax-call-to-coldfusion-example</guid>
+      <description>&lt;p&gt;A reader pinged me last night with a relatively simple request:&lt;/p&gt;
+
+&lt;blockquote&gt;
+I want a dropdown and when the user changes the value, I want to use Ajax to hit a CFC and do something with the result.
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is incredibly trivial, but I thought it might be kind of fun to share the code &lt;i&gt;as&lt;/i&gt; I write it. Normally I make a demo and share the final bits, but perhaps it would useful to folks to see how I build things like this.&lt;/p&gt;
+
+&lt;p&gt;As I said, this is super trivial, but even when I&amp;rsquo;m doing simple stuff, I&amp;rsquo;ll build up the bits in steps and check in the browser to ensure I&amp;rsquo;m not making any stupid mistakes. With that in mind, let&amp;rsquo;s get started.&lt;/p&gt;
+
+&lt;p&gt;First, I built an HTML template.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;/title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+            &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+            &amp;lt;script&amp;gt;            
+            $(document).ready(function() {            
+            
+            })            
+            &amp;lt;/script&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+        &amp;lt;form&amp;gt;
+            &amp;lt;select id=&amp;quot;options&amp;quot;&amp;gt;
+                &amp;lt;option&amp;gt;--&amp;lt;/option&amp;gt;
+                &amp;lt;option value=&amp;quot;1&amp;quot;&amp;gt;One&amp;lt;/option&amp;gt;
+                &amp;lt;option value=&amp;quot;2&amp;quot;&amp;gt;Two&amp;lt;/option&amp;gt;
+            &amp;lt;/select&amp;gt;
+        &amp;lt;/form&amp;gt;
+        
+        &amp;lt;div id=&amp;quot;result&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+        
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The important bits are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I chose jQuery for my Ajax, DOM manipulation library and put in an empty ready block. As I said, I take things in steps, so there isn&#39;t any JavaScript code written yet.
+&lt;li&gt;I added a dropdown. I know I&#39;m going to be listening for changes to the dropdown so I gave it an ID. There are 3 values, but the first one simply reflects a null state.
+&lt;li&gt;The reader wants to display the result so I&#39;ve added a blank div. Again though, I&#39;m sure to include an ID value so I can access it from jQuery.
+&lt;/ul&gt;
+
+&lt;p&gt;Next - I&amp;rsquo;m going to add code to listen for the dropdown change. This code block, and the rest, are within the document ready block and I won&amp;rsquo;t be showing the entire file. At the very end I&amp;rsquo;ll share the template.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$(&#34;#options&#34;).change(function(e) {
+    var selected = $(this).val();
+    console.log(&#39;change:&#39;, selected);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing scary here - just listen for the change, get the selected value, and log it to the console. This is all jQuery 101 stuff, but yes, I do stuff like this and run it in the browser just to be sure. I code fast, and I can alt-tab/alt-r quickly, so this doesn&amp;rsquo;t take me long, but as I tend to screw things up quite a bit I like to build out in steps.&lt;/p&gt;
+
+&lt;p&gt;Ok, so the next part involves taking the value and sending it to ColdFusion to do something. The actual server-side logic isn&amp;rsquo;t important here. For now the logic will be to take the value passed and return it preprended with, &amp;ldquo;I was sent: &amp;ldquo;.&lt;/p&gt;
+
+&lt;p&gt;Here is the component for that logic. I wrote this in script form but you could use tags. But don&amp;rsquo;t. Seriously.&lt;/p&gt;
+
+&lt;pre&lt;code class=&#34;language language-javascript&#34;&gt;
+component {
+
+    url.returnformat=&#34;json&#34;;
+    
+    remote function doStuff(required string input) {
+        return &#34;I was sent: #arguments.input#&#34;; 
+    }   
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;m assuming this is self-explanatory, except for perhaps the url.returnformat line. That lets me skip passing JSON as a returnformat to the query string when using the API. What we really need (and I&amp;rsquo;ll go file a bug report) is a way to specify a default returnformat at the application level. WDDX was cool ten years ago but there is no reason it should be the default now - backwards compat or not. You can do a default returnformat per method, but that gets messy. To confirm it worked, I opened it up in my browser directly: &lt;a href=&#34;http://localhost:8501/testingzone/ddajax/api.cfc?method=dostuff&amp;amp;input=foo&#34;&gt;http://localhost:8501/testingzone/ddajax/api.cfc?method=dostuff&amp;amp;input=foo&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so now back to the JavaScript. All we need to do is run an XHR against the CFC and put the response in the div:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$result = $(&#34;#result&#34;);
+                    
+$(&#34;#options&#34;).change(function(e) {
+    var selected = $(this).val();
+    console.log(&#39;change:&#39;, selected);
+    if(selected === &#39;--&#39;) return;
+    $.get(&#34;api.cfc?method=dostuff&#34;, {input:selected}, function(res) {
+        $result.html(res);
+    },&#34;JSON&#34;);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first change is to cache the result div selector. Since I&amp;rsquo;ll be updating it multiple times (well, if the user makes multiple changes) it makes sense to grab it once. The next change is to use $.get to fetch the data. We could have use $.getJSON too. Finally, we take the result and place it in the div. (Note - we are using JSON to wrap a string which is overkill. We could have used the &amp;lsquo;plain&amp;rsquo; returnformat value as well. I expect that for most folks they will be returning &amp;lsquo;data&amp;rsquo; not just strings so I kept the code as you see to better reflect a real use case.)&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. Not exactly rocket science, but there you go. Here is the complete HTML file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;/title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+            &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+            &amp;lt;script&amp;gt;            
+            $(document).ready(function() {            
+            
+                    $result = $(&amp;quot;#result&amp;quot;);
+                    
+                    $(&amp;quot;#options&amp;quot;).change(function(e) {
+                        var selected = $(this).val();
+                        console.log(&#39;change:&#39;, selected);
+                        if(selected === &#39;--&#39;) return;
+                        $.get(&amp;quot;api.cfc?method=dostuff&amp;quot;, {input:selected}, function(res) {
+                            $result.html(res);
+                        },&amp;quot;JSON&amp;quot;);
+                    });
+            })
+            &amp;lt;/script&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+        &amp;lt;form&amp;gt;
+            &amp;lt;select id=&amp;quot;options&amp;quot;&amp;gt;
+                &amp;lt;option&amp;gt;--&amp;lt;/option&amp;gt;
+                &amp;lt;option value=&amp;quot;1&amp;quot;&amp;gt;One&amp;lt;/option&amp;gt;
+                &amp;lt;option value=&amp;quot;2&amp;quot;&amp;gt;Two&amp;lt;/option&amp;gt;
+            &amp;lt;/select&amp;gt;
+        &amp;lt;/form&amp;gt;
+        
+        &amp;lt;div id=&amp;quot;result&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+        
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Introduction to jQuery</title>
+      <link>http://www.raymondcamden.com/2014/12/19/introduction-to-jquery</link>
+      <pubDate>Fri, 19 Dec 2014 12:06:21 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/12/19/introduction-to-jquery</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m happy to announce that today I&amp;rsquo;m releasing a new video series, &lt;a href=&#34;https://www.youtube.com/playlist?list=PL_z-rqJYNijrtVAc5qQbkzHnDELANGiOn&#34;&gt;Introduction to jQuery&lt;/a&gt;. It may seem a bit odd to be introducing something that most people already know, but in my day to day conversations (ok, emails) with folks and my experience helping people on Stack Overflow, it seems like it is a topic that folks still need help on. I used to present on this topic quite a bit a few years ago, but I started thinking a few months ago about how I&amp;rsquo;d present it now.&lt;/p&gt;
+
+&lt;p&gt;I began working on a video series back in September. It was originally going to be released with a major publisher, but things fell through with them (not anyone&amp;rsquo;s fault though) so I decided to simply put it up on YouTube.&lt;/p&gt;
+
+&lt;p&gt;The series is almost exactly 2.5 hours long and covers DOM modification, AJAX, effects, and even deferreds (which still feel like black magic to me). If you already know jQuery, I don&amp;rsquo;t think you&amp;rsquo;ll discover anything new in this series, but if you are looking to learn jQuery, or perhaps get a more formal introduction, I hope this series will help.&lt;/p&gt;
+
+&lt;p&gt;All of the code for the series as well as the slide decks and an errata document may be found here: &lt;a href=&#34;https://github.com/cfjedimaster/introduction-to-jquery&#34;&gt;https://github.com/cfjedimaster/introduction-to-jquery&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Finally, this series is presented 100% free of charge. If you find it worthwhile, please consider visiting my &lt;a href=&#34;http://www.amazon.com/wishlist/2TCL1D08EZEYE&#34;&gt;Amazon Wishlist&lt;/a&gt; and making a donation.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;//www.youtube.com/embed/videoseries?list=PL_z-rqJYNijrtVAc5qQbkzHnDELANGiOn&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Get jQuery Mobile Web Development Essentials for Five Dollars!</title>
+      <link>http://www.raymondcamden.com/2014/12/19/get-jquery-mobile-web-development-essentials-for-five-dollars</link>
+      <pubDate>Fri, 19 Dec 2014 05:52:52 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/12/19/get-jquery-mobile-web-development-essentials-for-five-dollars</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2014/12/5-dollar-promo.jpg&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2014/12/5-dollar-promo.jpg&#34; alt=&#34;5-dollar-promo&#34; width=&#34;600&#34; height=&#34;475&#34; class=&#34;alignnone size-full wp-image-5469&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;From now until January 6th, you can pick up my jQuery Mobile book, &lt;a href=&#34;https://www.packtpub.com/web-development/jquery-mobile-web-development-essentials-second-edition&#34;&gt;&amp;ldquo;jQuery Mobile Web Development Essentials&amp;rdquo;&lt;/a&gt; for the grand total of five dollars. That&amp;rsquo;s less than the price of a good beer at a hotel bar. Heck, that&amp;rsquo;s less than the price of a &lt;i&gt;bad&lt;/i&gt; beer at a hotel bar. There are a bunch of other books on sale as well. This sale only applies to the electronic book, but it is still a great deal.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Really useful Chrome Dev Tools tip</title>
+      <link>http://www.raymondcamden.com/2014/12/10/really-useful-chrome-dev-tools-tip</link>
+      <pubDate>Wed, 10 Dec 2014 09:18:58 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/12/10/really-useful-chrome-dev-tools-tip</guid>
+      <description>&lt;p&gt;This is not necessarily a new feature, but one that really helped me yesterday so I thought I&amp;rsquo;d share it. I do not believe this exists in Firefox now (I&amp;rsquo;m using Firefox as my primary browser now), and I did not check IE, so it may be a Chrome-only feature at the moment. Yesterday I was trying to help a friend debug an incredibly weird problem with an incredibly simple bit of jQuery.&lt;/p&gt;
+
+&lt;p&gt;His page had a form with a submit handler. On submit he serialized the code, sent it to a service, and put the response in a div. That is about as simple as you can get. But oddly it was doing different things in different browsers. When it worked right, it was fine, but sometimes it would display the &lt;i&gt;current&lt;/i&gt; page inside the div that was meant to display the service result.&lt;/p&gt;
+
+&lt;p&gt;To make this even more crazy, when I commented out that part of the code, it &lt;strong&gt;still&lt;/strong&gt; did that. I was going crazy trying to figure it out. I then decided to try something. I went to the div in question, right clicked, and used a Chrome Dev Tools feature. Within the Elements panel, you can right click on any DOM element and tell the browser to pause when something messes with it.&lt;/p&gt;
+
+&lt;p&gt;Here is an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2014/12/Screen-Shot-2014-12-10-at-9.07.23-AM.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2014/12/Screen-Shot-2014-12-10-at-9.07.23-AM.png&#34; alt=&#34;Screen Shot 2014-12-10 at 9.07.23 AM&#34; width=&#34;593&#34; height=&#34;466&#34; class=&#34;alignnone size-full wp-image-5429&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I reloaded his page, submitted the form, and as expected, the browser paused. Here is a sample of what that looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2014/12/Screen_Shot_2014-12-10_at_9_08_04_AMmod.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2014/12/Screen_Shot_2014-12-10_at_9_08_04_AMmod.png&#34; alt=&#34;Screen_Shot_2014-12-10_at_9_08_04_AMmod&#34; width=&#34;840&#34; height=&#34;334&#34; class=&#34;alignnone size-full wp-image-5430&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve added a few callouts to the screen shot to make it a bit more obvious. The lowest callout is just a nice message from the Dev Tools saying why it fired. It may be obvious, but I dug that. The second call out is the crucial one. It is telling me exactly what script/code modified my DOM. In his code (the screen shots above are just from a local sample), it was actually &lt;i&gt;another&lt;/i&gt; piece of code loaded by the template. It was a generic forms handler plugin that had &lt;i&gt;also&lt;/i&gt; listened in for the form submit and was modifying the DOM. I had no idea this was even being used on the site until I tried this particular type of debugging.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using the autodivider feature in jQuery Mobile (take two)</title>
+      <link>http://www.raymondcamden.com/2014/11/18/Using-the-autodivider-feature-in-jQuery-Mobile-take-two</link>
+      <pubDate>Tue, 18 Nov 2014 16:11:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/11/18/Using-the-autodivider-feature-in-jQuery-Mobile-take-two</guid>
+      <description>&lt;p&gt;
+Almost a year ago I &lt;a href=&#34;http://www.raymondcamden.com/2013/12/17/Using-the-autodivider-feature-in-jQuery-Mobile&#34;&gt;blogged&lt;/a&gt; about using the autodivider feature in jQuery Mobile. This is a simple feature that enhances list views with dividers. It makes content a bit easier to parse when working with a large list. 
+&lt;/p&gt;
+
+&lt;p&gt;
+One of my readers, Fher (who has a cool name - I kind of imagine her/him as a fire-breathing wolf), asked if there was a way to add a bubble count to the dividers. You can see an example of this on the &lt;a href=&#34;http://api.jquerymobile.com/listview/&#34;&gt;docs for listview&lt;/a&gt;, but this is what the feature looks like:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/shot20.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+So, the short answer is no, you can&#39;t do this with autodividers. Why? While the feature allows you to build a function to create dynamic dividers, it only lets you specify the &lt;i&gt;text&lt;/i&gt; for the divider, not random HTML. However, if you are willing to give up having the &#34;pretty bubble&#34; effect, you can simply use it as part of the label. To make that work, I modified my code a bit from the previous demo (and again, you can read that &lt;a href=&#34;http://www.raymondcamden.com/2013/12/17/Using-the-autodivider-feature-in-jQuery-Mobile&#34;&gt;here&lt;/a&gt;, I&#39;d suggest checking it out just so you can see the context). Here is the complete JavaScript code. (The HTML didn&#39;t change.)
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$(document).ready(function() {
+
+    var dates = [
+        &amp;quot;12&amp;#x2F;16&amp;#x2F;2013 12:00:00&amp;quot;,
+        &amp;quot;12&amp;#x2F;16&amp;#x2F;2013 14:00:00&amp;quot;,      
+        &amp;quot;12&amp;#x2F;17&amp;#x2F;2013 12:00:00&amp;quot;,
+        &amp;quot;12&amp;#x2F;18&amp;#x2F;2013 12:00:00&amp;quot;,
+        &amp;quot;12&amp;#x2F;19&amp;#x2F;2013 12:00:00&amp;quot;,
+        &amp;quot;12&amp;#x2F;19&amp;#x2F;2013 16:00:00&amp;quot;
+    ];
+
+    var dateList = $(&amp;quot;#dates&amp;quot;);
+    for(var i=0, len=dates.length; i&amp;lt;len; i++) {
+        dateList.append(&amp;quot;&amp;lt;li&amp;gt;&amp;quot;+dates[i]+&amp;quot;&amp;lt;&amp;#x2F;li&amp;gt;&amp;quot;);  
+    }
+
+    &amp;#x2F;*
+    Create a generic func to return the label
+    *&amp;#x2F;
+    var getLabel = function(d) {
+        return (d.getMonth()+1)+ &amp;quot;&amp;#x2F;&amp;quot; + d.getDate() + &amp;quot;&amp;#x2F;&amp;quot; + d.getFullYear();
+    }
+            
+    &amp;#x2F;*
+    Now that we have a func, use it to generate a label to count hash
+    *&amp;#x2F;
+    var dateCount = {};
+    for(var i=0, len=dates.length; i&amp;lt;len; i++) {
+        var l = getLabel(new Date(dates[i]));
+        if(dateCount.hasOwnProperty(l)) {
+            dateCount[l]++;
+        } else {
+            dateCount[l] = 1;
+        }
+    }
+            
+    dateList.listview({
+        autodividers:true,
+        autodividersSelector: function ( li ) {
+            var d = new Date(li.text());
+            var label = getLabel(d);
+            
+            return label + &amp;quot; (&amp;quot; +dateCount[label] +&amp;quot;)&amp;quot;;
+        }
+    }).listview(&amp;quot;refresh&amp;quot;);
+
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+The first change was to abstract out the code used to generate the divider - basically turning the date value into a label. Once I have that, I iterate over my data to figure out how many unique date labels I have. This is done with a simple object and a counter. Finally, my autodividersSelector function is modified to make use of this count. Here is the result.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/shot213.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+There you go. Not exactly rocket science, but hopefully helpful. It &lt;i&gt;is&lt;/i&gt; possible to create dividers with list bubbles, just not quite as simply as this entry demonstrates. I&#39;ll show that tomorrow.
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ColdFusion Example: Using jQuery UI Accordion with a ColdFusion query</title>
+      <link>http://www.raymondcamden.com/2014/11/12/ColdFusion-Example-Using-jQuery-UI-Accordion-with-a-ColdFusion-query</link>
+      <pubDate>Wed, 12 Nov 2014 09:11:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/11/12/ColdFusion-Example-Using-jQuery-UI-Accordion-with-a-ColdFusion-query</guid>
+      <description>&lt;p&gt;
+A reader pinged me yesterday with a simple problem that I thought would be good to share on the blog. He had a query of events that he wanted to use with jQuery UI&#39;s &lt;a href=&#34;http://jqueryui.com/accordion/&#34;&gt;Accordion&lt;/a&gt; control. The Accordion control simply takes content and splits into various &#34;panes&#34; with one visible at a time. For his data, he wanted to split his content into panes designated by a unique month and year. Here is a quick demo of that in action.
+&lt;/p&gt;
+
+&lt;p&gt;
+I began by creating a query to store my data. I created a query with a date and title property and then add up to three &#34;events&#34; over the next twelve months. I specifically wanted to support 0 to ensure my demo handled noticing months without any data.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!---
+Create some fake data with dates
+---&amp;gt;
+&amp;lt;cfscript&amp;gt;
+q = queryNew(&amp;quot;date,title&amp;quot;);
+for(i=1; i&amp;lt;12; i++) {
+    //for each month, we add 0-3 events (some months may not have data)
+    toAdd = randRange(0, 3);
+    
+    for(k=0; k&amp;lt;toAdd; k++) {
+        newDate = dateAdd(&amp;quot;m&amp;quot;, i, now());
+        queryAddRow(q, {date:newDate, title:&amp;quot;Item #i##k#&amp;quot;});  
+    }
+}
+&amp;lt;/cfscript&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+To handle creating the accordion, I had to follow the rules jQuery UI set up for the control. Basically - wrap the entire set of data in a div, and separate each &#34;pane&#34; with an h3 and inner div. To handle this, I have to know when a new unique month/year &#34;block&#34; starts. I store this in a variable, lastDateStr, and just check it in every iteration over the query. I also need to ensure that on the last row I close the div.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;jQuery UI Accordion - Default functionality&amp;lt;/title&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css&amp;quot;&amp;gt;
+    &amp;lt;script src=&amp;quot;//code.jquery.com/jquery-1.10.2.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;//code.jquery.com/ui/1.11.2/jquery-ui.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script&amp;gt;
+    $(function() {
+    $( &amp;quot;#accordion&amp;quot; ).accordion();
+    });
+    &amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+    &amp;lt;div id=&amp;quot;accordion&amp;quot;&amp;gt;
+
+        &amp;lt;cfset lastDateStr = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfloop query=&amp;quot;q&amp;quot;&amp;gt;
+            &amp;lt;cfset thisDateStr = month(date) &amp;amp; &amp;quot;/&amp;quot; &amp;amp; year(date)&amp;gt;
+            
+            &amp;lt;!--- Is this datestr different? ---&amp;gt;
+            &amp;lt;cfif thisDateStr neq lastDateStr&amp;gt;
+                &amp;lt;!--- We only &#39;close&#39; a div if not on the first iteration ---&amp;gt;
+                &amp;lt;cfif currentRow neq 1&amp;gt;
+                    &amp;lt;/div&amp;gt;
+                &amp;lt;/cfif&amp;gt;
+                &amp;lt;cfoutput&amp;gt;
+                &amp;lt;h3&amp;gt;#thisDateStr#&amp;lt;/h3&amp;gt;
+                &amp;lt;/cfoutput&amp;gt;
+                &amp;lt;div&amp;gt;
+                &amp;lt;cfset lastDateStr = thisDateStr&amp;gt;
+            &amp;lt;/cfif&amp;gt;
+            
+            &amp;lt;cfoutput&amp;gt;
+            #title#&amp;lt;br/&amp;gt;
+            &amp;lt;/cfoutput&amp;gt;
+            
+            &amp;lt;cfif currentRow is recordCount&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/cfif&amp;gt;
+            
+        &amp;lt;/cfloop&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+And the end result:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/ss7.png&#34; class=&#34;bthumb&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+So, not rocket science, but hopefully helpful to someone. Here is the entire template if you want to try it yourself.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!---
+Create some fake data with dates
+---&amp;gt;
+&amp;lt;cfscript&amp;gt;
+q = queryNew(&amp;quot;date,title&amp;quot;);
+for(i=1; i&amp;lt;12; i++) {
+    //for each month, we add 0-3 events (some months may not have data)
+    toAdd = randRange(0, 3);
+    
+    for(k=0; k&amp;lt;toAdd; k++) {
+        newDate = dateAdd(&amp;quot;m&amp;quot;, i, now());
+        queryAddRow(q, {date:newDate, title:&amp;quot;Item #i##k#&amp;quot;});  
+    }
+}
+&amp;lt;/cfscript&amp;gt;
+
+&amp;lt;!doctype html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;jQuery UI Accordion - Default functionality&amp;lt;/title&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css&amp;quot;&amp;gt;
+    &amp;lt;script src=&amp;quot;//code.jquery.com/jquery-1.10.2.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;//code.jquery.com/ui/1.11.2/jquery-ui.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script&amp;gt;
+    $(function() {
+    $( &amp;quot;#accordion&amp;quot; ).accordion();
+    });
+    &amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+    &amp;lt;div id=&amp;quot;accordion&amp;quot;&amp;gt;
+
+        &amp;lt;cfset lastDateStr = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfloop query=&amp;quot;q&amp;quot;&amp;gt;
+            &amp;lt;cfset thisDateStr = month(date) &amp;amp; &amp;quot;/&amp;quot; &amp;amp; year(date)&amp;gt;
+            
+            &amp;lt;!--- Is this datestr different? ---&amp;gt;
+            &amp;lt;cfif thisDateStr neq lastDateStr&amp;gt;
+                &amp;lt;!--- We only &#39;close&#39; a div if not on the first iteration ---&amp;gt;
+                &amp;lt;cfif currentRow neq 1&amp;gt;
+                    &amp;lt;/div&amp;gt;
+                &amp;lt;/cfif&amp;gt;
+                &amp;lt;cfoutput&amp;gt;
+                &amp;lt;h3&amp;gt;#thisDateStr#&amp;lt;/h3&amp;gt;
+                &amp;lt;/cfoutput&amp;gt;
+                &amp;lt;div&amp;gt;
+                &amp;lt;cfset lastDateStr = thisDateStr&amp;gt;
+            &amp;lt;/cfif&amp;gt;
+            
+            &amp;lt;cfoutput&amp;gt;
+            #title#&amp;lt;br/&amp;gt;
+            &amp;lt;/cfoutput&amp;gt;
+            
+            &amp;lt;cfif currentRow is recordCount&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/cfif&amp;gt;
+            
+        &amp;lt;/cfloop&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;   &lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Delaying an Edge Animate asset until visible - Part 6</title>
+      <link>http://www.raymondcamden.com/2014/10/14/Delaying-an-Edge-Animate-asset-until-visible-Part-6</link>
+      <pubDate>Tue, 14 Oct 2014 17:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/10/14/Delaying-an-Edge-Animate-asset-until-visible-Part-6</guid>
+      <description>&lt;p&gt;
+Welcome back to the thread that won&#39;t die. I&#39;ve blogged (see related links below) about this topic six times now. It started off as something simple - making an Edge Animate animation wait to run until visible - but it has turned into a pretty complex set of entries discussing not only how to do it but alternatives and other modifications. Today&#39;s entry is rather simple though as it just covers updates for the October 2014 release of Edge Animate.
+&lt;/p&gt;
+
+&lt;p&gt;
+Reader @jdesi posted a &lt;a href=&#34;http://www.raymondcamden.com/2013/4/3/Delaying-an-Edge-Animate-asset-until-visible#c9FBA8DC2-F548-DC59-EDC16C433355BF07&#34;&gt;comment&lt;/a&gt; this morning about an issue he was having with my code in the latest release of Edge Animate. (You can read details about that update here: &lt;a href=&#34;http://blogs.adobe.com/edge/2014/10/06/the-new-edge-animate-is-here/&#34;&gt;Edge Animate reduces runtime size by 55%, &#34;Save to Custom Folders&#34; feature, new Preloader options, and more!&lt;/a&gt;) I did some digging and discovered a few different issues with my code.
+&lt;/p&gt;
+
+&lt;div class=&#34;alert alert-success&#34;&gt;
+Before I go any further, please note that I worked on a modified form of the &lt;strong&gt;first&lt;/strong&gt; demo I built for this feature. My later entries in this thread made the behavior a bit more complex. I&#39;m assuming people can apply the updates I describe below to those versions as well.
+&lt;/div&gt;
+
+&lt;p&gt;
+The first thing I discovered is that jQuery is no longer included by default in the HTML template. This is discussed in the blog entry I linked to above and while I could have certainly worked around needing jQuery, it was simpler to just add it back in. I did so in the index.html file and included it &lt;strong&gt;before&lt;/strong&gt; the Edge JavaScript include.
+&lt;/p&gt;
+
+&lt;p&gt;
+The next thing I noticed was that &lt;code&gt;sym.element&lt;/code&gt; wasn&#39;t available. I checked the (updated) &lt;a href=&#34;http://www.adobe.com/devnet-docs/edgeanimate/api/current/index.html#Use_symbol_elements&#34;&gt;JavaScript API&lt;/a&gt; and saw that a new API existed: &lt;code&gt;sym.getSymbolElement&lt;/code&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+The next change was a bit more subtle (but still documented!) - the element will now be wrapped in jQuery, &lt;strong&gt;if&lt;/strong&gt; you have included it. From the docs:
+&lt;/p&gt;
+
+&lt;p&gt;
+&#34;Note: If you have added jQuery as an external dependency in the Edge Composition, then sym.getSymbolElement() will return a jQuery wrapper, as AdobeEdge.$ gets redefined to jQuery in such cases. You can use any of the jQuery APIs on the result in this case.&#34;
+&lt;/p&gt;
+
+&lt;p&gt;
+So with that being the case, the method I wrote to check if the element was in view was able to remove the $ wrappers. Here is the updated version of the code.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;      Symbol.bindSymbolAction(compId, symbolName, &amp;quot;creationComplete&amp;quot;, function(sym, e) {
+
+        function isScrolledIntoView(elem) {
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+
+            var elemTop = elem.offset().top;
+            var elemBottom = elemTop + elem.height();
+        
+            return ((elemBottom &amp;gt;= docViewTop) &amp;amp;&amp;amp; (elemTop &amp;lt;= docViewBottom)
+              &amp;amp;&amp;amp; (elemBottom &amp;lt;= docViewBottom) &amp;amp;&amp;amp;  (elemTop &amp;gt;= docViewTop) );
+        }         
+
+        var element = sym.getSymbolElement();
+        if(isScrolledIntoView(element)) {
+            sym.play(0) 
+        } else {
+            $(window).on(&amp;quot;scroll&amp;quot;, function(e) {
+                if(isScrolledIntoView(element)) {
+                    console.log(&amp;#x27;Start me up&amp;#x27;);   
+                    sym.play(0);
+                    $(window).off(&amp;quot;scroll&amp;quot;);
+                }
+            });
+            
+        }
+          
+          
+      });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+You can test this version here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2014/oct/14/test.html&#34;&gt;http://www.raymondcamden.com/demos/2014/oct/14/test.html&lt;/a&gt;. As a reminder, this one won&#39;t pause if you scroll out and won&#39;t restart if you scroll back in. That&#39;s covered by later versions of my demo and can be used if you simply apply the fixes described here to them. Enjoy!
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Eventbrite API Demos</title>
+      <link>http://www.raymondcamden.com/2014/08/15/Eventbrite-API-Demos</link>
+      <pubDate>Fri, 15 Aug 2014 07:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/08/15/Eventbrite-API-Demos</guid>
+      <description>&lt;p&gt;
+A few days ago a client of mine, Rich Swier of &lt;a href=&#34;http://hubsarasota.com/&#34;&gt;HuB&lt;/a&gt;, asked if I could build him two quick demos that made use of the &lt;a href=&#34;http://developer.eventbrite.com/&#34;&gt;Eventbrite API&lt;/a&gt;. I whipped up the two demos for him and once done, he graciously allowed me to share it on my blog. (Thank you Rich!) I will warn you that this code was written for ColdFusion 8 so it is entirely tag based. At the very end a mod was made for ColdFusion 9. Obviously it could be converted to script and perhaps improved in other ways as well, but I hope this is useful for folks who want to play with the Eventbrite API in the future.
+&lt;/p&gt;
+
+&lt;p&gt;
+Before making use of these demos yourself, you will want to get yourself an authorization token for your account. After going to developer.eventbrite.com, click Get Started. Note the green button on the right.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s118.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+When I tested this a few days ago, it worked fine for me, but failed for Rich as he wasn&#39;t the primary account owner for his organization. Unfortunately the &#34;failure&#34; was a blank white screen. I got a response from Eventbrite on their forums (&lt;a href=&#34;https://groups.google.com/forum/#!forum/eventbrite-api&#34;&gt;https://groups.google.com/forum/#!forum/eventbrite-api&lt;/a&gt;) about this within a day, but I&#39;m not sure if it is fixed yet. If you do get a &#34;white screen of death&#34; error though check to see if there are other people in your group using Eventbrite.
+&lt;/p&gt;
+
+&lt;p&gt;
+Once logged in, add a new app, and when done, make note of the OAuth token. My API makes use of this to make authenticated calls for your organization. Finding the ID of your organization can be a bit weird too. Unfortunately I can&#39;t find the tip that helped me with this before (I believe it was an Eventbrite staff member), but in order to get your organization ID, login, go to your profile page, and find your organizer page URL:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s215.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+The organizer ID is the numeric part at the end of your URL. I&#39;ve highlighted it in the screen shot above. It is a bit silly that the value isn&#39;t called out specifically either on the developer page or on your profile, but, there it is. 
+&lt;/p&gt;
+
+&lt;p&gt;
+Ok, so finally, with your token and organizer ID, you can perform some basic searches against the API. For Rich, I only needed Search, but their API supports pretty much everything imaginable as far as I can tell. I created a simple CFC that is initialized with the auth token. First, the Application.cfc used to set up the CFC.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;cfcomponent output=&amp;quot;false&amp;quot;&amp;gt;
+    
+    &amp;lt;cfset this.name = &amp;quot;RichSwierEventBrite&amp;quot;&amp;gt;
+    
+    &amp;lt;cffunction name=&amp;quot;onApplicationStart&amp;quot; access=&amp;quot;public&amp;quot; returntype=&amp;quot;boolean&amp;quot; output=&amp;quot;false&amp;quot;&amp;gt;
+    
+        &amp;lt;cfset application.eventBrite = {}&amp;gt;
+        &amp;lt;cfset application.eventBrite.token = &amp;quot;secret&amp;quot;&amp;gt;
+        &amp;lt;cfset application.eventBrite.orgid = &amp;quot;3983270067&amp;quot;&amp;gt;
+        
+        &amp;lt;cfset application.eventBriteApi = createObject(&amp;quot;component&amp;quot;, &amp;quot;eventbrite&amp;quot;).init(application.eventBrite.token)&amp;gt;
+        
+        &amp;lt;cfreturn true&amp;gt;
+    &amp;lt;&amp;#x2F;cffunction&amp;gt;
+    
+    &amp;lt;cffunction name=&amp;quot;onRequestStart&amp;quot; access=&amp;quot;public&amp;quot; returntype=&amp;quot;boolean&amp;quot; output=&amp;quot;false&amp;quot;&amp;gt;
+
+        &amp;lt;!--- TODO: remove 1 ---&amp;gt;
+        &amp;lt;cfif structKeyExists(url, &amp;quot;init&amp;quot;) or 1&amp;gt;
+            &amp;lt;cfset onApplicationStart()&amp;gt;  
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        
+        &amp;lt;cfreturn true&amp;gt;
+    &amp;lt;&amp;#x2F;cffunction&amp;gt;
+    
+&amp;lt;&amp;#x2F;cfcomponent&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+And here is the CFC itself. Again, this was written for ColdFusion 8, so pardon all the darn tags. I could have used script I suppose, but I ran into some issues with even script-based UDFs on his server so I went the safe route. Also note I ran into cfhttp issues with the https server Eventbrite used. This is why I used a &lt;a href=&#34;http://www.raymondcamden.com/2011/1/12/Diagnosing-a-CFHTTP-issue--peer-not-authenticated&#34;&gt;workaround&lt;/a&gt; described a few years ago on my blog. On ColdFusion 10 I didn&#39;t have the issue at all.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;cfcomponent output=&amp;quot;false&amp;quot;&amp;gt;
+
+    &amp;lt;cffunction name=&amp;quot;init&amp;quot; access=&amp;quot;public&amp;quot; returnType=&amp;quot;eventbrite&amp;quot; output=&amp;quot;false&amp;quot;&amp;gt;
+        &amp;lt;cfargument name=&amp;quot;token&amp;quot; type=&amp;quot;string&amp;quot; required=&amp;quot;true&amp;quot;&amp;gt;
+        &amp;lt;cfset variables.token = arguments.token&amp;gt;     
+        &amp;lt;cfreturn this&amp;gt;
+    &amp;lt;&amp;#x2F;cffunction&amp;gt;
+    
+    &amp;lt;cffunction name=&amp;quot;getEvents&amp;quot; access=&amp;quot;public&amp;quot; returnType=&amp;quot;struct&amp;quot; output=&amp;quot;false&amp;quot;&amp;gt;
+        &amp;lt;cfargument name=&amp;quot;organizationid&amp;quot; type=&amp;quot;string&amp;quot; required=&amp;quot;true&amp;quot;&amp;gt;
+        &amp;lt;cfargument name=&amp;quot;startdate&amp;quot; type=&amp;quot;date&amp;quot; required=&amp;quot;false&amp;quot;&amp;gt;
+        &amp;lt;cfargument name=&amp;quot;enddate&amp;quot; type=&amp;quot;date&amp;quot; required=&amp;quot;false&amp;quot;&amp;gt;
+
+        &amp;lt;cfset var result = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfset var content = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfset var apiurl = &amp;quot;https:&amp;#x2F;&amp;#x2F;www.eventbriteapi.com&amp;#x2F;v3&amp;#x2F;events&amp;#x2F;search?organizer.id=#arguments.organizationid#&amp;quot;&amp;gt;
+        &amp;lt;cfset var startUTC = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfset var endUTC = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfset var objSecurity = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfset var storeProvider = &amp;quot;&amp;quot;&amp;gt;
+        
+        &amp;lt;cfif structKeyexists(arguments, &amp;quot;startdate&amp;quot;)&amp;gt;
+            &amp;lt;cfset startUTC = getIsoTimeString(arguments.startdate, true)&amp;gt;
+            &amp;lt;cfset apiurl &amp;amp;= &amp;quot;&amp;amp;start_date.range_start=#startUTC#&amp;quot;&amp;gt;
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        &amp;lt;cfif structKeyexists(arguments, &amp;quot;enddate&amp;quot;)&amp;gt;
+            &amp;lt;cfset endUTC = getIsoTimeString(arguments.enddate, true)&amp;gt;
+            &amp;lt;cfset apiurl &amp;amp;= &amp;quot;&amp;amp;start_date.range_end=#endUTC#&amp;quot;&amp;gt;
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        
+        &amp;lt;cfset apiurl &amp;amp;= &amp;quot;&amp;amp;token=#variables.token#&amp;quot;&amp;gt;
+
+        &amp;lt;cfset objSecurity = createObject(&amp;quot;java&amp;quot;, &amp;quot;java.security.Security&amp;quot;) &amp;#x2F;&amp;gt;
+        &amp;lt;cfset storeProvider = objSecurity.getProvider(&amp;quot;JsafeJCE&amp;quot;) &amp;#x2F;&amp;gt;
+        &amp;lt;cfset objSecurity.removeProvider(&amp;quot;JsafeJCE&amp;quot;) &amp;#x2F;&amp;gt;
+        
+        &amp;lt;cfhttp url=&amp;quot;#apiurl#&amp;quot; result=&amp;quot;result&amp;quot;&amp;gt;
+
+        &amp;lt;cfset objSecurity.insertProviderAt(storeProvider, 1) &amp;#x2F;&amp;gt;
+        
+        &amp;lt;cfset content = deserializeJSON(result.filecontent)&amp;gt;
+        &amp;lt;cfreturn content&amp;gt;
+
+    &amp;lt;&amp;#x2F;cffunction&amp;gt;
+    
+    &amp;lt;cfscript&amp;gt; 
+    &amp;#x2F;&amp;#x2F; I take the given date&amp;#x2F;time object and return the string that
+    &amp;#x2F;&amp;#x2F; reprsents the date&amp;#x2F;time using the ISO 8601 format standard.
+    &amp;#x2F;&amp;#x2F; The returned value is always in the context of UTC and therefore
+    &amp;#x2F;&amp;#x2F; uses the special UTC designator (&amp;quot;Z&amp;quot;). The function will
+    &amp;#x2F;&amp;#x2F; implicitly convert your date&amp;#x2F;time object to UTC (as part of
+    &amp;#x2F;&amp;#x2F; the formatting) unless you explicitly ask it not to.
+    function getIsoTimeString(datetime) {
+     
+        if(!structKeyExists(arguments, &amp;quot;convertToUTC&amp;quot;)) {
+            convertToUTC = true;    
+        }
+        
+        if ( convertToUTC ) {
+            datetime = dateConvert( &amp;quot;local2utc&amp;quot;, datetime );
+        }
+     
+        &amp;#x2F;&amp;#x2F; When formatting the time, make sure to use &amp;quot;HH&amp;quot; so that the
+        &amp;#x2F;&amp;#x2F; time is formatted using 24-hour time.
+        return(dateFormat( datetime, &amp;quot;yyyy-mm-dd&amp;quot; ) &amp;amp;
+            &amp;quot;T&amp;quot; &amp;amp;
+            timeFormat( datetime, &amp;quot;HH:mm:ss&amp;quot; ) &amp;amp;
+            &amp;quot;Z&amp;quot;
+            );
+     
+    }
+    &amp;lt;&amp;#x2F;cfscript&amp;gt;
+    
+&amp;lt;&amp;#x2F;cfcomponent&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Nothing special really. I just construct the URL and fire off the call. That UDF at the end may be found on CFLib: &lt;a href=&#34;http://cflib.org/udf/getIsoTimeString&#34;&gt;getIsoTimeString&lt;/a&gt;. As I said, I built a grand total of &lt;i&gt;one&lt;/i&gt; function for the API because that&#39;s all he needed. Now let&#39;s look at the actual demos. The first demo makes use of Google Maps. I perform a search for future events, get their locations, and display them on a map.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s3.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+For the most part, this was simple, but the issue I ran into (and this is a reported issue with the API), is the location information for the venue wasn&#39;t including the full address. There is a venue API that returns the proper information, but that would mean adding N more calls over http to fetch the data. I simply warned Rich that the address won&#39;t be working properly until they fix the API. To be clear, I&#39;m talking about the textual part of the address. The longitude and latitude work just fine. Right now when you click you get some detail and the ability to click for the Eventbrite URL.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s41.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Now let&#39;s look at the code that generates the map.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!--- only events today and onwards ---&amp;gt;
+&amp;lt;cfset dtNow = now()&amp;gt;
+
+&amp;lt;cfif structKeyExists(url, &amp;quot;clearcache&amp;quot;)&amp;gt;
+    &amp;lt;cfset cacheRemove(&amp;quot;eventbrite.futureEvents&amp;quot;)&amp;gt;
+&amp;lt;&amp;#x2F;cfif&amp;gt;
+
+&amp;lt;cfset events = cacheGet(&amp;quot;eventbrite.futureEvents&amp;quot;)&amp;gt;
+&amp;lt;cfif isNull(events)&amp;gt;
+    &amp;lt;cfset eventData = application.eventBriteApi.getEvents(application.eventBrite.orgid,dtNow)&amp;gt;
+
+    &amp;lt;cfset cachePut(&amp;quot;eventbrite.futureEvents&amp;quot;, eventData.events,0.5)&amp;gt;
+    &amp;lt;cfset events = eventData.events&amp;gt;
+&amp;lt;&amp;#x2F;cfif&amp;gt;
+
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+
+&amp;lt;head&amp;gt;
+&amp;lt;style type=&amp;quot;text&amp;#x2F;css&amp;quot;&amp;gt;
+#map_canvas { width: 500px; height: 500px; }
+&amp;lt;&amp;#x2F;style&amp;gt;
+&amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;maps.google.com&amp;#x2F;maps&amp;#x2F;api&amp;#x2F;js?sensor=false&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot;&amp;gt;
+function initialize() {
+    
+    var latlng = new google.maps.LatLng(41.5, -98);
+    var myOptions = {
+        zoom: 3,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById(&amp;quot;map_canvas&amp;quot;),myOptions);
+
+    &amp;lt;cfloop index=&amp;quot;x&amp;quot; from=&amp;quot;1&amp;quot; to=&amp;quot;#arrayLen(events)#&amp;quot;&amp;gt;
+        &amp;lt;cfset event = events[x]&amp;gt;
+        &amp;lt;!--- conditionally format address ---&amp;gt;
+        &amp;lt;cfset address = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfif structKeyExists(event.venue, &amp;quot;name&amp;quot;) and event.venue.name is not &amp;quot;undefined&amp;quot;&amp;gt;
+            &amp;lt;cfset address &amp;amp;= event.venue.name&amp;gt;
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        &amp;lt;cfif structKeyExists(event.venue, &amp;quot;address_1&amp;quot;) and event.venue.address_1 is not &amp;quot;undefined&amp;quot;&amp;gt;
+            &amp;lt;cfset address &amp;amp;= &amp;quot;&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot; &amp;amp; event.venue.address_1&amp;gt;
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        &amp;lt;cfif structKeyExists(event.venue, &amp;quot;address_2&amp;quot;) and event.venue.address_2 is not &amp;quot;undefined&amp;quot;&amp;gt;
+            &amp;lt;cfset address &amp;amp;= &amp;quot;&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot; &amp;amp; event.venue.address_2&amp;gt;
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        &amp;lt;cfif structKeyExists(event.venue, &amp;quot;city&amp;quot;) and event.venue.city is not &amp;quot;undefined&amp;quot;&amp;gt;
+            &amp;lt;cfset address &amp;amp;= &amp;quot;&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot; &amp;amp; event.venue.city&amp;gt;
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        &amp;lt;cfif structKeyExists(event.venue, &amp;quot;state&amp;quot;) and event.venue.state is not &amp;quot;undefined&amp;quot;&amp;gt;
+            &amp;lt;cfset address &amp;amp;= &amp;quot;, &amp;quot; &amp;amp; event.venue.state&amp;gt;
+        &amp;lt;&amp;#x2F;cfif&amp;gt;
+        &amp;lt;!--- format times ---&amp;gt;
+        &amp;lt;cfset startDate = listFirst(event.start.local, &amp;quot;T&amp;quot;)&amp;gt;
+        &amp;lt;cfset startDate = dateFormat(startDate, &amp;quot;mm&amp;#x2F;dd&amp;#x2F;yy&amp;quot;)&amp;gt;
+        &amp;lt;cfset startTime = listLast(event.start.local, &amp;quot;T&amp;quot;)&amp;gt;
+        &amp;lt;!--- strips off seconds, which is silly ---&amp;gt;
+        &amp;lt;cfset startTime = mid(startTime, 1, len(startTime)-3)&amp;gt;
+        &amp;lt;cfset startTime = timeFormat(startTime, &amp;quot;h:mm tt&amp;quot;)&amp;gt;
+        
+        &amp;lt;cfset endDate = listFirst(event.end.local, &amp;quot;T&amp;quot;)&amp;gt;
+        &amp;lt;cfset endTime = listLast(event.end.local, &amp;quot;T&amp;quot;)&amp;gt;
+        &amp;lt;!--- strips off seconds, which is silly ---&amp;gt;
+        &amp;lt;cfset endTime = mid(endTime, 1, len(endTime)-3)&amp;gt;
+        &amp;lt;cfset endTime = timeFormat(endTime, &amp;quot;h:mm tt&amp;quot;)&amp;gt;
+        
+        &amp;lt;!--- currently assumes same date ---&amp;gt;
+        &amp;lt;cfset dateStr = startDate &amp;amp; &amp;quot; at &amp;quot; &amp;amp; startTime &amp;amp; &amp;quot; to &amp;quot; &amp;amp; endTime&amp;gt;
+        &amp;lt;cfoutput&amp;gt;
+        var pos = new google.maps.LatLng(#event.venue.latitude#,#event.venue.longitude#);
+        var marker#x# = new google.maps.Marker({
+            map: map, 
+            position: pos,
+            title: &amp;quot;#jsStringFormat(event.name.text)#&amp;quot;
+        });
+
+        var infowindow#x# = new google.maps.InfoWindow({
+            content: &amp;#x27;&amp;lt;b&amp;gt;#jsStringFormat(event.name.text)#&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;p&amp;#x2F;&amp;gt;#jsStringFormat(address)#&amp;lt;br&amp;#x2F;&amp;gt;#jsStringFormat(dateStr)#&amp;lt;br&amp;#x2F;&amp;gt;&amp;lt;a href=&amp;quot;#event.url#&amp;quot;&amp;gt;Details&amp;lt;&amp;#x2F;a&amp;gt;&amp;#x27;,
+            maxWidth: 250
+        });
+        
+        google.maps.event.addListener(marker#x#, &amp;#x27;click&amp;#x27;, function() {
+            infowindow#x#.open(map,marker#x#);
+        });
+        &amp;lt;&amp;#x2F;cfoutput&amp;gt;
+    &amp;lt;&amp;#x2F;cfloop&amp;gt;
+}
+&amp;lt;&amp;#x2F;script&amp;gt;
+&amp;lt;&amp;#x2F;head&amp;gt;
+
+&amp;lt;body onload=&amp;quot;initialize()&amp;quot;&amp;gt;
+
+&amp;lt;div id=&amp;quot;map_canvas&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+
+&amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Again - pretty simple. Get the events and then just iterate over them to create map markers using the Google API. I don&#39;t like the ColdFusion code inside the JavaScript block there and I&#39;d probably consider moving that outside. That way when I create the markers the code would be simpler. (And obviously, if this were a production application I&#39;d use something like FW/1 and do most of that work in the controller/service layer anyway.)
+&lt;/p&gt;
+
+&lt;p&gt;
+So that&#39;s maps. The next demo he requested was a calendar. I decided to use the &lt;a href=&#34;http://arshaw.com/fullcalendar/&#34;&gt;FullCalendar&lt;/a&gt; jQuery plugin as it worked well for me before. (See my &lt;a href=&#34;http://www.raymondcamden.com/2011/6/17/FullCalendar-jQuery-Plugin&#34;&gt;blog post&lt;/a&gt; from a few years back.) In order to work with the client-side code, I wrote a quick CFC to handle calls to my application scoped Eventbrite API. It also handles shaping the data so it makes the FullCalendar happy. I could have added some RAM-based caching here, but I found that the API was fast enough for month based searches where it didn&#39;t feel necessary. Then again - I&#39;d probably consider adding it anyway just to ensure you don&#39;t hit any rate limits.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!---
+Main wrapper to calls to the EB api. Handles the caching so EB can be a bit simpler.
+Also handles converting EB events for FullCalendar
+---&amp;gt;
+&amp;lt;cfcomponent output=&amp;quot;false&amp;quot;&amp;gt;
+    
+    &amp;lt;cffunction name=&amp;quot;getEvents&amp;quot; access=&amp;quot;remote&amp;quot; output=&amp;quot;false&amp;quot; returnformat=&amp;quot;json&amp;quot;&amp;gt;
+        &amp;lt;cfargument name=&amp;quot;start&amp;quot; type=&amp;quot;string&amp;quot; required=&amp;quot;true&amp;quot;&amp;gt;
+        &amp;lt;cfargument name=&amp;quot;end&amp;quot; type=&amp;quot;string&amp;quot; required=&amp;quot;true&amp;quot;&amp;gt;
+        
+        &amp;lt;cfset var eventData = application.eventBriteApi.getEvents(application.eventbrite.orgid,parseDateTime(arguments.start), parseDateTime(arguments.end))&amp;gt;
+        &amp;lt;cfset var result = []&amp;gt;
+        &amp;lt;cfset var x = &amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;cfset var event = &amp;quot;&amp;quot;&amp;gt;
+        
+        &amp;lt;cfloop index=&amp;quot;x&amp;quot; from=&amp;quot;1&amp;quot; to=&amp;quot;#arrayLen(eventData.events)#&amp;quot;&amp;gt;
+            &amp;lt;cfset event = {}&amp;gt;
+            &amp;lt;cfset event[&amp;quot;title&amp;quot;] = eventData.events[x].name.text&amp;gt;
+            &amp;lt;cfset event[&amp;quot;start&amp;quot;] = eventData.events[x].start.local&amp;gt;
+            &amp;lt;cfset event[&amp;quot;end&amp;quot;] = eventData.events[x].end.local&amp;gt;
+            &amp;lt;cfset event[&amp;quot;url&amp;quot;] = eventData.events[x].url&amp;gt;
+            &amp;lt;cfset arrayAppend(result, event)&amp;gt;    
+        &amp;lt;&amp;#x2F;cfloop&amp;gt;
+        
+        &amp;lt;cfreturn result&amp;gt;
+    &amp;lt;&amp;#x2F;cffunction&amp;gt;
+    
+&amp;lt;&amp;#x2F;cfcomponent&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Finally, here is the front end using FullCalendar. It is a page with just the calendar and a DOM element used to handle the loading of remote data. I could have designed that a bit better but I assumed the client would have their own ideas about that.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+        &amp;lt;link rel=&amp;#x27;stylesheet&amp;#x27; href=&amp;#x27;fullcalendar&amp;#x2F;fullcalendar.css&amp;#x27; &amp;#x2F;&amp;gt;
+        &amp;lt;script src=&amp;#x27;fullcalendar&amp;#x2F;lib&amp;#x2F;jquery.min.js&amp;#x27;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script src=&amp;#x27;fullcalendar&amp;#x2F;lib&amp;#x2F;moment.min.js&amp;#x27;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script src=&amp;#x27;fullcalendar&amp;#x2F;fullcalendar.min.js&amp;#x27;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script&amp;gt;
+        $(document).ready(function() {
+
+            $(&amp;#x27;#calendar&amp;#x27;).fullCalendar({
+                eventSources: [
+                    {
+                        url:&amp;#x27;api.cfc?method=getevents&amp;#x27;
+                    }
+                ],
+                loading:function(isLoading, view) {
+                    if(isLoading) {
+                        $(&amp;quot;#loading&amp;quot;).html(&amp;quot;&amp;lt;i&amp;gt;Loading data...&amp;lt;&amp;#x2F;i&amp;gt;&amp;quot;);
+                    } else {
+                        $(&amp;quot;#loading&amp;quot;).html(&amp;quot;&amp;quot;);
+                    }
+                }
+            });
+
+        });     
+        &amp;lt;&amp;#x2F;script&amp;gt;
+
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+        
+        &amp;lt;div id=&amp;quot;loading&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+        &amp;lt;div id=&amp;#x27;calendar&amp;#x27;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+I have attached the code as a zip to this blog entry. Note that the token and organization ID are not in the Application.cfc file so you will need to set them yourself. 
+&lt;/p&gt;&lt;p&gt;&lt;a href=&#39;enclosures/C%3A%5Chosts%5C2013%2Eraymondcamden%2Ecom%5Cenclosures%2Feb%2Ezip&#39;&gt;Download attached file.&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Keep your DOM from shifting around...</title>
+      <link>http://www.raymondcamden.com/2014/08/05/Keep-your-DOM-from-shifting-around</link>
+      <pubDate>Tue, 05 Aug 2014 10:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/08/05/Keep-your-DOM-from-shifting-around</guid>
+      <description>&lt;p&gt;
+I&#39;ve been meaning to write this up for a while now, but I never got around to it till today when a meeting got cancelled suddenly. It was this or get on the treadmill, and unfortunately, the treadmill lost. Lately I&#39;ve noticed a common problem with both web apps and native apps. The problem is this: The application renders some sort of dynamic content. In that content are various UI elements you can click. At the same time, the app is fetching additional content asynchronously. When that content comes in, it is displayed then and the layout of the content is adjusted as the new stuff comes in. The problem is that the user may have been just about to click on a button, link, or whatever, and now finds that their click action has done nothing. Or worse - has activated &lt;i&gt;another&lt;/i&gt; action that they didn&#39;t want. TweetDeck is &lt;b&gt;especially&lt;/b&gt; bad about this. Facebook, surprisingly, is actually pretty darn good about this. Let&#39;s look at a simple example in case I&#39;m not making sense.
+&lt;/p&gt;
+
+&lt;p&gt;
+I&#39;ve built a simple application that lets you view, and like, pictures of cats. Let me be clear, this is just a proof of concept, but if someone builds this site I&#39;ll be hitting that every five minutes or so. When the application loads, you get a picture of the cat, and some, but not all, of the UI.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s12.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+As you move your mouse, or finger, over the Like button, all of sudden the UI updates to show stats about the picture. The original developer thought it would be cool to load this &lt;i&gt;after&lt;/i&gt; the rest of the page. Not a terribly bad idea, right? If the main focus is to show pictures of cats then loading the stats later makes a bit of sense. But see how the DOM changes after the stats were loaded:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s22.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+As you can see, the Like button was shifted down. In this case the worst you get is a click event that didn&#39;t trigger anything, but it is still annoying. You can demo this yourself here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2014/aug/5/test1.html&#34;&gt;http://www.raymondcamden.com/demos/2014/aug/5/test1.html&lt;/a&gt;. Let&#39;s quickly look at the code so you can see how the original version was built. First, the HTML.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge,chrome=1&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+        &amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;ajax.googleapis.com&amp;#x2F;ajax&amp;#x2F;libs&amp;#x2F;jquery&amp;#x2F;2.1.0&amp;#x2F;jquery.min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script src=&amp;quot;app1.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+        &amp;lt;div id=&amp;quot;content&amp;quot;&amp;gt;
+            &amp;lt;img src=&amp;quot;http:&amp;#x2F;&amp;#x2F;placekitten.com&amp;#x2F;300&amp;#x2F;300&amp;quot;&amp;gt;
+            &amp;lt;div id=&amp;quot;stats&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+            &amp;lt;button&amp;gt;Like!&amp;lt;&amp;#x2F;button&amp;gt;
+        &amp;lt;&amp;#x2F;div&amp;gt;
+        
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+And here is the JavaScript. I used a simple setTimeout to fake a slow AJAX request.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$(document).ready(function() {
+
+    &amp;#x2F;&amp;#x2F;fake a delayed update
+    window.setTimeout(function() {
+        $(&amp;quot;#stats&amp;quot;).html(&amp;quot;&amp;lt;b&amp;gt;Likes:&amp;lt;&amp;#x2F;b&amp;gt; 912&amp;quot;);
+    },2000);
+    
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Ok, so how can we fix this? One approach may be to simply specify a set height for the DOM item we are updating. That way there won&#39;t be a &#34;shift&#34; when the content is uploaded. For example:
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge,chrome=1&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+        &amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;ajax.googleapis.com&amp;#x2F;ajax&amp;#x2F;libs&amp;#x2F;jquery&amp;#x2F;2.1.0&amp;#x2F;jquery.min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script src=&amp;quot;app2.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;style&amp;gt;
+            #stats {
+                height: 30px;
+                background-color: #c0c0c0;
+            }
+        &amp;lt;&amp;#x2F;style&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+        &amp;lt;div id=&amp;quot;content&amp;quot;&amp;gt;
+            &amp;lt;img src=&amp;quot;http:&amp;#x2F;&amp;#x2F;placekitten.com&amp;#x2F;300&amp;#x2F;300&amp;quot;&amp;gt;
+            &amp;lt;div id=&amp;quot;stats&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+            &amp;lt;button&amp;gt;Like!&amp;lt;&amp;#x2F;button&amp;gt;
+        &amp;lt;&amp;#x2F;div&amp;gt;
+        
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Notice I added both a height and a background-color. The color change was simply to ensure that my height was working right. It also gives the user a bit of a clue that &lt;i&gt;something&lt;/i&gt; is going to be there. (I won&#39;t pretend this is pretty, but hopefully you get the idea.) You can try this version here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2014/aug/5/test2.html&#34;&gt;http://www.raymondcamden.com/demos/2014/aug/5/test2.html&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+But we can do even better, right? I don&#39;t like the big empty box. Let&#39;s modify the stats area to include the labels for our stats (well, our stat), so that the update is a bit less jarring. While we&#39;re at it, our image service (in this case, the epic &lt;a href=&#34;http://placekitten.com/&#34;&gt;placekitten.com&lt;/a&gt;) can also be a source of DOM shifting as the image loads. I should have added specific height and width to the image.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge,chrome=1&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+        &amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;ajax.googleapis.com&amp;#x2F;ajax&amp;#x2F;libs&amp;#x2F;jquery&amp;#x2F;2.1.0&amp;#x2F;jquery.min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;script src=&amp;quot;app3.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+        &amp;lt;style&amp;gt;
+            #stats {
+                height: 30px;
+            }
+        &amp;lt;&amp;#x2F;style&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+        &amp;lt;div id=&amp;quot;content&amp;quot;&amp;gt;
+            &amp;lt;img src=&amp;quot;http:&amp;#x2F;&amp;#x2F;placekitten.com&amp;#x2F;300&amp;#x2F;300&amp;quot; width=&amp;quot;300&amp;quot; height=&amp;quot;300&amp;quot;&amp;gt;
+            &amp;lt;div id=&amp;quot;stats&amp;quot;&amp;gt;Likes: &amp;lt;span id=&amp;quot;likes&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+            &amp;lt;button&amp;gt;Like!&amp;lt;&amp;#x2F;button&amp;gt;
+        &amp;lt;&amp;#x2F;div&amp;gt;
+        
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+I modified the JavaScript now to both add a loading message and to just change the span.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$(document).ready(function() {
+
+    $(&amp;quot;#likes&amp;quot;).html(&amp;quot;&amp;lt;i&amp;gt;Fetching&amp;lt;&amp;#x2F;i&amp;gt;&amp;quot;);
+
+    &amp;#x2F;&amp;#x2F;fake a delayed update
+    window.setTimeout(function() {
+        $(&amp;quot;#likes&amp;quot;).html(&amp;quot;912&amp;quot;);
+    },2000);
+    
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+You can run this version here: &lt;a href=&#34;http://www.raymondcamden.com/demos/2014/aug/5/test3.html&#34;&gt;http://www.raymondcamden.com/demos/2014/aug/5/test3.html&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+This isn&#39;t rocket science, but as I said in the beginning, I find myself surprised by how many sites and apps seem to have this problem. Keep it in mind when working on your next project.
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Building a Car Safety Inspection Finder (the good, ugly, and more ugly)</title>
+      <link>http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly</link>
+      <pubDate>Tue, 17 Jun 2014 20:06:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly</guid>
+      <description>&lt;p&gt;
+Earlier this week I came across a person looking to find a local (to Louisiana) car safety inspection location. I think most states require this but they differ on schedules. Louisiana recently moved to letting you pay more for a two-year sticker which is nice, but it is still a bit of a hassle if you don&#39;t know where an inspection location can be found. Turns out - there is a web page for it: &lt;a href=&#34;http://www.dps.state.la.us/safetydirections.nsf/f3f91999370ccaed862574a20074b158?OpenView&#34;&gt;http://www.dps.state.la.us/safetydirections.nsf/f3f91999370ccaed862574a20074b158?OpenView&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+I looked at this and thought - wouldn&#39;t it be cool if we could find the &lt;i&gt;nearest&lt;/i&gt; station based on your current location. Turns out it was possible - just not very pretty. I&#39;ve split this blog entry into two parts - getting the data - and using the data. If you don&#39;t care how I scraped the site, feel free to scroll down to the next part.
+&lt;/p&gt;
+
+&lt;h2&gt;Scraping the Data&lt;/h2&gt;
+
+&lt;p&gt;
+I had &lt;i&gt;hoped&lt;/i&gt; the site was using fancy Ajax Ninja stuff with cool JSON-based data sources, but I quickly discovered that it was not. It was pure HTML. Lots, and lots, and, oh my god, lots of HTML. I began by figuring out how the site was set up. The home page contains a list of all the parishes:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s115.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Clicking a triangle (but oddly, not the parish name) opens a list of places where you can get your car inspected.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s213.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+This gives you the location name and address. But to get hours of operation you need to click for details.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s36.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+All in all, this gave me two things to scrape. First was a list of the locations, which can only be found by first getting all the parishes. Then for each location we needed to get the detail page for the hours of operation. Finally, I could take all those addresses and do a geocode on them to get precise locations.
+&lt;/p&gt;
+
+&lt;p&gt;
+What follows is a set of ColdFusion scripts I wrote to perform this task. These files are ugly. The HTML used on these pages were messy as hell. The phone numbers had multiple spans/font tags etc. It was a mess. I also took the opportunity to try some fancy ColdFusion 11 updates as well. All in all, this code is quite disgusting, but I&#39;ll share it so you can use it to scare away monsters.
+&lt;/p&gt;
+
+&lt;p&gt;
+First, open up all the parishes and save the location data.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;cfscript&amp;gt;
+
+rootUrl = &amp;quot;http:&amp;#x2F;&amp;#x2F;www.dps.state.la.us&amp;#x2F;safetydirections.nsf&amp;#x2F;f3f91999370ccaed862574a20074b158?OpenView&amp;amp;Start=1&amp;amp;Count=1200&amp;quot;;
+
+&amp;#x2F;&amp;#x2F;&amp;lt;cfset links = rematch(&amp;quot;&amp;#x2F;safetydirections.nsf&amp;#x2F;.*?Expand=.*?&amp;quot;&amp;quot;&amp;quot;,cfhttp.fileContent)&amp;gt;
+&amp;#x2F;&amp;#x2F;&amp;lt;cfdump var=&amp;quot;#links#&amp;quot;&amp;gt;
+&amp;#x2F;&amp;#x2F;&amp;#x2F;safetydirections.nsf&amp;#x2F;f3f91999370ccaed862574a20074b158?OpenView&amp;amp;amp;Start=1&amp;amp;amp;Count=1200&amp;amp;amp;Expand=2#2&amp;quot; target=&amp;quot;_self&amp;quot;&amp;gt;
+
+&amp;#x2F;&amp;#x2F;number of parishes but I call it pages, because.
+totalPages = 62;
+&amp;#x2F;&amp;#x2F;totalPages = 3;
+locations = [];
+for(i=1; i&amp;lt;= totalPages; i++) {
+    theUrl = rootUrl &amp;amp; &amp;quot;&amp;amp;Expand=#i#&amp;quot;;
+    writeoutput(theUrl &amp;amp; &amp;quot;&amp;lt;br&amp;#x2F;&amp;gt;&amp;lt;hr&amp;gt;&amp;quot;);
+    cfhttp(url=theUrl);
+&amp;#x2F;&amp;#x2F;writeoutput(&amp;quot;&amp;lt;pre&amp;gt;#htmlEditFormat(cfhttp.filecontent)#&amp;lt;&amp;#x2F;pre&amp;gt;&amp;quot;);
+    matches = reMatch(&amp;quot;&amp;lt;font color=&amp;quot;&amp;quot;##0000ff&amp;quot;&amp;quot;&amp;gt;.*?&amp;lt;&amp;#x2F;tr&amp;gt;&amp;quot;,cfhttp.fileContent);
+
+    matches.each(function(m) {
+        var location = {};
+        var linkre = reFind(&amp;quot;&amp;lt;a href=&amp;quot;&amp;quot;(.*?)&amp;quot;&amp;quot;&amp;gt;&amp;quot;, m, 1, true);
+        location[&amp;quot;link&amp;quot;] = m.mid(linkre.pos[2], linkre.len[2]);
+        var namere = reFind(&amp;quot;&amp;lt;a href=&amp;quot;&amp;quot;.*?&amp;quot;&amp;quot;&amp;gt;(.*?)&amp;lt;&amp;#x2F;a&amp;gt;&amp;quot;, m, 1, true);
+        location[&amp;quot;name&amp;quot;] = m.mid(namere.pos[2], namere.len[2]);
+        var tds = reMatch(&amp;quot;&amp;lt;td&amp;gt;(.*?)&amp;lt;&amp;#x2F;td&amp;gt;&amp;quot;, m);
+        var address = rereplace(tds[1], &amp;quot;&amp;lt;td&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font color=&amp;quot;&amp;quot;##0000ff&amp;quot;&amp;quot;&amp;gt;(.*?)&amp;lt;&amp;#x2F;font&amp;gt;&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;&amp;#x2F;td&amp;gt;&amp;quot;, &amp;quot;\1&amp;quot;);
+        address = address.replace(&amp;quot;&amp;lt;br&amp;gt;&amp;quot;,&amp;quot;&amp;quot;);
+        location[&amp;quot;address&amp;quot;] = address;
+
+        location[&amp;quot;types&amp;quot;] = [];
+        var typeList = rereplace(tds[3], &amp;quot;&amp;lt;td&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font color=&amp;quot;&amp;quot;##0000ff&amp;quot;&amp;quot;&amp;gt;(.*?)&amp;lt;&amp;#x2F;font&amp;gt;&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;&amp;#x2F;td&amp;gt;&amp;quot;,&amp;quot;\1&amp;quot;);
+        typeList = typeList.replace(&amp;quot;&amp;lt;br&amp;gt;&amp;quot;, &amp;quot;,&amp;quot;, &amp;quot;all&amp;quot;);
+        typeList.each(function(t) {
+            t = trim(t);
+            location[&amp;quot;types&amp;quot;].append(t);          
+        });
+&amp;#x2F;&amp;#x2F;writedump(location);
+&amp;#x2F;&amp;#x2F;        writedump(m);
+        locations.append(location);
+    });
+&amp;#x2F;&amp;#x2F;    writedump(matches);
+}
+
+writedump(locations.len());
+fileWrite(expandPath(&amp;quot;.&amp;#x2F;data1.json&amp;quot;), serializeJSON(locations));
+&amp;lt;&amp;#x2F;cfscript&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Next, get the details. This includes the hours of operation I mentioned earlier, as well as the phone number.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;cfscript&amp;gt;
+rootUrl = &amp;quot;http:&amp;#x2F;&amp;#x2F;www.dps.state.la.us&amp;#x2F;&amp;quot;;
+
+data = deserializeJSON(fileRead(expandPath(&amp;quot;data1.json&amp;quot;)));
+&amp;#x2F;&amp;#x2F;filter by items w&amp;#x2F;o a phone number
+writeoutput(&amp;quot;There are #data.len()# items.&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;);
+
+&amp;#x2F;*
+filtered = data.filter(function(x) {
+    return !structKeyExists(x, &amp;quot;phoneNumber&amp;quot;);
+});
+
+writeoutput(&amp;quot;There are #data.len()# items to process.&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;);
+*&amp;#x2F;
+
+counter=0;
+data.each(function(l) {
+    counter++;
+
+    if(counter mod 100 is 0) {
+        writeoutput(&amp;quot;#counter#&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;);
+        cfflush();
+    }
+
+    &amp;#x2F;&amp;#x2F;Only get if we don&amp;#x27;t have the data already
+    if(structKeyExists(l, &amp;quot;phoneNumber&amp;quot;)) continue;
+
+    cfhttp(url=&amp;quot;#rootUrl#&amp;#x2F;#l.link#&amp;quot;);
+    var content = cfhttp.fileContent;
+
+    var found = reMatch(&amp;#x27;Area Code&amp;lt;&amp;#x2F;font&amp;gt;&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font color=&amp;quot;##0000FF&amp;quot; face=&amp;quot;HandelGotDLig&amp;quot;&amp;gt; &amp;lt;&amp;#x2F;font&amp;gt;&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font color=&amp;quot;##ff0000&amp;quot; face=&amp;quot;HandelGotDLig&amp;quot;&amp;gt;.*?&amp;lt;&amp;#x2F;font&amp;gt;&amp;#x27;, content);
+    var areaCode = found[1].rereplace(&amp;quot;.*&amp;gt;([0-9]{3})&amp;lt;&amp;#x2F;font&amp;gt;&amp;quot;, &amp;quot;\1&amp;quot;);
+    
+    found = reMatch(&amp;#x27;Phone Number&amp;lt;&amp;#x2F;font&amp;gt;&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font color=&amp;quot;##FF0000&amp;quot; face=&amp;quot;HandelGotDLig&amp;quot;&amp;gt; &amp;lt;&amp;#x2F;font&amp;gt;&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font color=&amp;quot;##ff0000&amp;quot; face=&amp;quot;HandelGotDLig&amp;quot;&amp;gt;.*?&amp;lt;&amp;#x2F;td&amp;gt;&amp;#x27;, content);
+    var phoneFirst = found[1].rereplace(&amp;quot;.*&amp;gt;([0-9]{3})&amp;lt;&amp;#x2F;font&amp;gt;.*&amp;quot;, &amp;quot;\1&amp;quot;);
+    var phoneSecond = found[1].rereplace(&amp;quot;.*&amp;gt;([0-9]{4})&amp;lt;&amp;#x2F;font&amp;gt;.*&amp;quot;, &amp;quot;\1&amp;quot;);
+    var phoneNumber = &amp;quot;(&amp;quot; &amp;amp; areaCode &amp;amp; &amp;quot;) &amp;quot; &amp;amp; phoneFirst &amp;amp; &amp;quot;-&amp;quot; &amp;amp; phoneSecond;
+
+&amp;#x2F;&amp;#x2F;    writeoutput(&amp;quot;&amp;lt;b&amp;gt;#phoneNumber#&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;p&amp;gt;&amp;quot;);
+
+    found = content.reMatch(&amp;#x27;Hours of Operation.*?&amp;lt;&amp;#x2F;tr&amp;gt;&amp;#x27;);
+    var hoo = found[1].rereplace(&amp;quot;.*?&amp;lt;&amp;#x2F;td&amp;gt;&amp;lt;td width=&amp;quot;&amp;quot;536&amp;quot;&amp;quot;&amp;gt;(.*?)&amp;lt;&amp;#x2F;td&amp;gt;&amp;lt;&amp;#x2F;tr&amp;gt;&amp;quot;, &amp;quot;\1&amp;quot;);
+    hoo = hoo.rereplace(&amp;quot;&amp;lt;.*?&amp;gt;&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;all&amp;quot;);
+    hoo = hoo.rereplace(&amp;quot;[[:space:]]{2,}&amp;quot;, &amp;quot; &amp;quot;);
+
+&amp;#x2F;&amp;#x2F;    writedump(found);
+&amp;#x2F;&amp;#x2F;    writeOutput(&amp;quot;&amp;lt;pre&amp;gt;&amp;quot;&amp;amp;htmlEditFormat(cfhttp.fileContent)&amp;amp;&amp;quot;&amp;lt;&amp;#x2F;pre&amp;gt;&amp;quot;);
+&amp;#x2F;&amp;#x2F;    abort;
+    l[&amp;quot;phoneNumber&amp;quot;] = phoneNumber;
+    l[&amp;quot;hours&amp;quot;] = hoo;
+    fileWrite(expandPath(&amp;quot;data1.json&amp;quot;), serializeJSON(data));
+});
+
+writeoutput(&amp;quot;&amp;lt;p&amp;gt;Done!&amp;lt;&amp;#x2F;p&amp;gt;&amp;quot;);
+&amp;lt;&amp;#x2F;cfscript&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Finally, do the geocoding.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;cfscript&amp;gt;
+geo = new googlegeocoder3();
+
+data = deserializeJSON(fileRead(expandPath(&amp;quot;data1.json&amp;quot;)));
+writeoutput(&amp;quot;There are #data.len()# items.&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;);
+
+counter=0;
+data.each(function(l) {
+    counter++;
+
+    if(counter mod 100 is 0) {
+        writeoutput(&amp;quot;#counter#&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;);
+        cfflush();
+    }
+
+    &amp;#x2F;&amp;#x2F;Only get if we don&amp;#x27;t have the data already
+    if(structKeyExists(l, &amp;quot;long&amp;quot;)) continue;
+
+    var res = geo.googlegeocoder3(address = l.address);
+    l[&amp;quot;long&amp;quot;] = res.longitude[1];
+    l[&amp;quot;lat&amp;quot;] = res.latitude[1];
+    
+    fileWrite(expandPath(&amp;quot;data1.json&amp;quot;), serializeJSON(data));
+});
+
+writeoutput(&amp;quot;&amp;lt;p&amp;gt;Done!&amp;lt;&amp;#x2F;p&amp;gt;&amp;quot;);
+
+
+&amp;lt;&amp;#x2F;cfscript&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+Note - I used one more script to remove the link property from my data file to make it a bit smaller. So at this point, I had a data.json file containing every location in Louisiana where you can get your car inspected. I also had their phone numbers, hours of operation, and longitude and latitude. Woot! Now for the fun stuff - the front end!
+&lt;/p&gt;
+
+&lt;h2&gt;Using the Data&lt;/h2&gt;
+
+&lt;p&gt;
+For my front end, I decided to go simple. No bootstrap. No UI framework at all. Just a simple div to display dynamic data. I could make this pretty, but why bother?
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+        &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge,chrome=1&amp;quot;&amp;gt;
+        &amp;lt;title&amp;gt;&amp;lt;&amp;#x2F;title&amp;gt;
+        &amp;lt;meta name=&amp;quot;description&amp;quot; content=&amp;quot;&amp;quot;&amp;gt;
+        &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width&amp;quot;&amp;gt;
+    &amp;lt;&amp;#x2F;head&amp;gt;
+    &amp;lt;body&amp;gt;
+
+    &amp;lt;div id=&amp;quot;status&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;div&amp;gt;
+
+    &amp;lt;script type=&amp;quot;text&amp;#x2F;javascript&amp;quot; src=&amp;quot;http:&amp;#x2F;&amp;#x2F;ajax.googleapis.com&amp;#x2F;ajax&amp;#x2F;libs&amp;#x2F;jquery&amp;#x2F;2.1.1&amp;#x2F;jquery.min.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;script src=&amp;quot;app.js&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;script&amp;gt;
+    &amp;lt;&amp;#x2F;body&amp;gt;
+&amp;lt;&amp;#x2F;html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+The real fun happens in app.js. I&#39;ll share the entire file, then describe what each part does.
+&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var $status;
+var geoData;
+var myLong;
+var myLat;
+
+$(document).ready(function() {
+
+    $status = $(&amp;quot;#status&amp;quot;);
+
+    &amp;#x2F;&amp;#x2F;Do we have the data locally?
+    geoData = localStorage[&amp;quot;geocache&amp;quot;];
+    if(!geoData) {
+        $status.html(&amp;quot;&amp;lt;i&amp;gt;Fetching initial data set. Please stand by. This data will be cached for future operations.&amp;lt;&amp;#x2F;i&amp;gt;&amp;quot;);
+        $.getJSON(&amp;quot;data1.json&amp;quot;).done(function(res) {
+            console.log(&amp;quot;Done&amp;quot;);
+            localStorage[&amp;quot;geocache&amp;quot;] = JSON.stringify(res);
+            geoData = res;
+            $status.html(&amp;quot;&amp;quot;);
+            getLocation();
+        });
+    } else {
+        geoData = JSON.parse(geoData);
+        getLocation();
+    }
+});
+
+function getLocation() {
+    $status.html(&amp;quot;&amp;lt;i&amp;gt;Getting your location.&amp;lt;&amp;#x2F;i&amp;gt;&amp;quot;);
+    navigator.geolocation.getCurrentPosition(gotLocation, failedLocation);
+}
+
+function failedLocation() {
+    $status.html(&amp;quot;&amp;lt;b&amp;gt;Sorry, but we were unable to get your location.&amp;lt;&amp;#x2F;b&amp;gt;&amp;quot;);
+}
+
+function gotLocation(l) {
+    myLong = l.coords.longitude;
+    myLat = l.coords.latitude;
+    appReady();
+}
+
+function appReady() {
+    $status.html(&amp;quot;&amp;lt;i&amp;gt;Now searching for nearby locations.&amp;lt;&amp;#x2F;i&amp;gt;&amp;quot;);
+    for(var i=0;i&amp;lt;geoData.length;i++) {
+        var dist = getDistanceFromLatLonInKm(myLat, myLong, geoData[i].lat, geoData[i].long);
+        geoData[i].dist = dist;
+    }
+
+    geoData.sort(function(x,y) {
+        if(x.dist &amp;gt; y.dist) return 1;
+        if(x.dist &amp;lt; y.dist) return -1;
+        return 0;
+    });
+
+
+    var s = &amp;quot;&amp;lt;h2&amp;gt;Nearby Locations&amp;lt;&amp;#x2F;h2&amp;gt;&amp;quot;;
+    for(var i=0;i&amp;lt;Math.min(9, geoData.length); i++) {
+        s+= &amp;quot;&amp;lt;p&amp;gt;&amp;lt;b&amp;gt;&amp;quot;+geoData[i].name+&amp;quot;&amp;lt;&amp;#x2F;b&amp;gt;&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;;
+        s+= geoData[i].address+&amp;quot; &amp;quot;+Math.round(geoData[i].dist)+&amp;quot; km away&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;;
+        s+= &amp;quot;&amp;lt;a href=&amp;#x27;tel:&amp;quot;+geoData[i].phoneNumber+&amp;quot;&amp;#x27;&amp;gt;&amp;quot;+geoData[i].phoneNumber+&amp;quot;&amp;lt;&amp;#x2F;a&amp;gt;&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;;
+        s+= &amp;quot;Hours: &amp;quot;+geoData[i].hours+&amp;quot;&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;;
+        s+= &amp;quot;Types: &amp;quot;+geoData[i].types.join(&amp;quot;, &amp;quot;)+&amp;quot;&amp;lt;br&amp;#x2F;&amp;gt;&amp;quot;;
+        s+= &amp;quot;&amp;lt;&amp;#x2F;p&amp;gt;&amp;quot;;
+    }
+
+    $status.html(s);
+
+}
+
+&amp;#x2F;&amp;#x2F;Credit: http:&amp;#x2F;&amp;#x2F;stackoverflow.com&amp;#x2F;a&amp;#x2F;27943&amp;#x2F;52160
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; &amp;#x2F;&amp;#x2F; Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  &amp;#x2F;&amp;#x2F; deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat&amp;#x2F;2) * Math.sin(dLat&amp;#x2F;2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon&amp;#x2F;2) * Math.sin(dLon&amp;#x2F;2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; &amp;#x2F;&amp;#x2F; Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI&amp;#x2F;180)
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+So, the first thing I wondered was - how do I handle the data? It was 700K, which isn&#39;t &lt;i&gt;too&lt;/i&gt; big, but isn&#39;t tiny either. I decided to simply store the data in LocalStorage. I could also store an &#34;update date&#34; key so I knew when to refresh the data, but for now, what I have is sufficient. Get it - store it - and carry on. 
+&lt;/p&gt;
+
+&lt;p&gt;
+Once we have the data file, we then simply detect where you are. This is boilerplate geolocation stuff so it isn&#39;t terribly fancy.
+&lt;/p&gt;
+
+&lt;p&gt;
+Next - we need to determine the distance between you and each location. There were quite a few locations (1,916) so I was concerned about the timing, but this portion ran &lt;i&gt;very&lt;/i&gt; quickly as well. Then it was simply a matter of a sort operation. I display the closest 10 locations and that&#39;s it. Of course, these numbers are a bit high as I&#39;m in San Francisco. ;)
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/s5.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+If you want to try this yourself, just hit the demo link below. Enjoy!
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://raymondcamden.com/demos/2014/jun/17/report.html&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/icon_128.png&#34; title=&#34;Demo, Baby&#34; border=&#34;0&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>ColdFusion as a Service Examples - Images &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="ColdFusion as a Service Examples - Images" />
+<meta property="og:description" content="I promised a few weeks ago that I&rsquo;d eventually get around to posting some of the code from my RIAUnleashed presentation. This morning I&rsquo;m going to share two of them - both related to the Image service. The first one is really simple. It allows you to enter a URL to an image. CFaaS is then used to perform a gray scale on the image and return the result to the user. The code behind this demo could be a bit cleaner perhaps, but let&rsquo;s take a look at it.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/12/05/ColdFusion-as-a-Service-Examples-Images" />
+
+
+<meta property="og:updated_time" content="2009-12-05T10:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="ColdFusion as a Service Examples - Images">
+<meta itemprop="description" content="I promised a few weeks ago that I&rsquo;d eventually get around to posting some of the code from my RIAUnleashed presentation. This morning I&rsquo;m going to share two of them - both related to the Image service. The first one is really simple. It allows you to enter a URL to an image. CFaaS is then used to perform a gray scale on the image and return the result to the user. The code behind this demo could be a bit cleaner perhaps, but let&rsquo;s take a look at it.
+">
+
+
+<meta itemprop="dateModified" content="2009-12-05T10:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="1028">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ColdFusion as a Service Examples - Images"/>
+<meta name="twitter:description" content="I promised a few weeks ago that I&rsquo;d eventually get around to posting some of the code from my RIAUnleashed presentation. This morning I&rsquo;m going to share two of them - both related to the Image service. The first one is really simple. It allows you to enter a URL to an image. CFaaS is then used to perform a gray scale on the image and return the result to the user. The code behind this demo could be a bit cleaner perhaps, but let&rsquo;s take a look at it.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/12/05/ColdFusion-as-a-Service-Examples-Images">
+    <h1 class="article-title" itemprop="name">
+        ColdFusion as a Service Examples - Images
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-12-05 10:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-12-05</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/flex">Flex</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I promised a few weeks ago that I&rsquo;d eventually get around to posting some of the code from my RIAUnleashed presentation. This morning I&rsquo;m going to share two of them - both related to the Image service. The first one is really simple. It allows you to enter a URL to an image. CFaaS is then used to perform a gray scale on the image and return the result to the user. The code behind this demo could be a bit cleaner perhaps, but let&rsquo;s take a look at it.</p>
+
+<p><code>
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?&gt;
+&lt;mx:WindowedApplication xmlns:mx=&ldquo;<a href="http://www.adobe.com/2006/mxml&quot;">http://www.adobe.com/2006/mxml&quot;</a> layout=&ldquo;vertical&rdquo; xmlns:cf=&ldquo;coldfusion.service.mxml.*&rdquo; backgroundColor=&ldquo;0xFFFFFF&rdquo;&gt;</p>
+
+<p>&lt;mx:Script&gt;
+&lt;![CDATA[
+import mx.controls.Alert
+import mx.rpc.events.ResultEvent</p>
+
+<p>private function doGray():void {
+    imageService.execute()
+}</p>
+
+<p>private function handleResult(event:ResultEvent):void {
+    image.source=event.result.toString()
+}</p>
+
+<p>private function handleError(event:Event):void {
+    mx.controls.Alert.show(event.toString())
+}</p>
+
+<p>]]&gt;
+&lt;/mx:Script&gt;</p>
+
+<p>&lt;cf:Config id=&ldquo;conf&rdquo; cfServer=&ldquo;127.0.0.1&rdquo; cfPort=&ldquo;80&rdquo; serviceUserName=&ldquo;cfremoteuser1&rdquo; servicePassword=&ldquo;password&rdquo; /&gt;</p>
+
+<p>&lt;cf:Image id=&ldquo;imageService&rdquo; action=&ldquo;GrayScale&rdquo; source=&ldquo;{sourceurl.text}&rdquo; result=&ldquo;handleResult(event)&rdquo; fault=&ldquo;handleError(event)&rdquo; /&gt;</p>
+
+<p>&lt;mx:HBox width=&ldquo;100%&rdquo;&gt;
+    &lt;mx:Label text=&ldquo;Enter source url: &ldquo; /&gt; &lt;mx:TextInput id=&ldquo;sourceurl&rdquo; width=&ldquo;100%&rdquo; /&gt; &lt;mx:Button label=&ldquo;Render&rdquo; click=&ldquo;doGray()&rdquo; /&gt;<br />
+&lt;/mx:HBox&gt;</p>
+
+<p>&lt;mx:Image width=&ldquo;100%&rdquo; height=&ldquo;100%&rdquo; id=&ldquo;image&rdquo; /&gt;</p>
+
+<p>&lt;/mx:WindowedApplication&gt;
+</code></p>
+
+<p>I want go over every line, but let&rsquo;s look at the CFaaS specific portions. First note the import of the namespace:</p>
+
+<p><code>
+xmlns:cf=&ldquo;coldfusion.service.mxml.*&rdquo;
+</code></p>
+
+<p>This works because my project imported the cfservices SWC that ships with ColdFusion. This gives me access to the Flex components that make use of CFaaS. This demo only uses two of them. The first is the config block:</p>
+
+<p><code>
+&lt;cf:Config id=&ldquo;conf&rdquo; cfServer=&ldquo;127.0.0.1&rdquo; cfPort=&ldquo;80&rdquo; serviceUserName=&ldquo;cfremoteuser1&rdquo; servicePassword=&ldquo;password&rdquo; /&gt;
+</code></p>
+
+<p>This is obviously hard coded for my server. You would need to edit this as well as ensuring you actually create a user for CFaaS in your administrator. A better application would abstract that out as well. The next component is for the image service:</p>
+
+<p><code>
+&lt;cf:Image id=&ldquo;imageService&rdquo; action=&ldquo;GrayScale&rdquo; source=&ldquo;{sourceurl.text}&rdquo; result=&ldquo;handleResult(event)&rdquo; fault=&ldquo;handleError(event)&rdquo; /&gt;
+</code></p>
+
+<p>Now one thing that confused me about CFaaS was why they used components with actions in them. In a way, it&rsquo;s like saying you only want to use one particular action (in this case, GrayScale) for images. What I realized later is that you certainly do not need to hard code in the action. You can easily change the action at run time with ActionScript. The flip side to this though is that we can provide specific event handlers for our operation. We probably want to react differently if a gray scale fails compared to some other call. Any way, the real magic is within the click handler for the button:</p>
+
+<p><code>
+private function doGray():void {
+    imageService.execute()
+}
+</code></p>
+
+<p>All CFaaS components (except for config) have an execute() method which - as you can probably guess - will execute the desired action. The result of this is plopped with a simple image component. Altogether you get this kick butt AIR application that I plan on selling for $9.99:</p>
+
+<p><img src="http://www.raymondcamden.com/images/Picture 263.png" /></p>
+
+<p>Pretty trivial, right? The second example is a bit more full featured. Along with providing hooks to various ColdFusion services, CFaaS also provides simple file upload support. This allows you to send files to the ColdFusion server so that they can be processed. Before working on my CFaaS presentation I had never done any file uploads with Flex before, so forgive me if the code below is a bit off.</p>
+
+<p><code>
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?&gt;
+&lt;mx:WindowedApplication xmlns:mx=&ldquo;<a href="http://www.adobe.com/2006/mxml&quot;">http://www.adobe.com/2006/mxml&quot;</a> layout=&ldquo;vertical&rdquo; xmlns:cf=&ldquo;coldfusion.service.mxml.*&rdquo; creationComplete=&ldquo;init()&rdquo; paddingTop=&ldquo;0&rdquo; paddingLeft=&ldquo;5&rdquo; paddingRight=&ldquo;5&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;mx:Script&amp;gt;
+&amp;lt;![CDATA[
+import mx.rpc.events.ResultEvent
+import coldfusion.service.Util
+
+private var uploadURL:URLRequest
+private var fileref:FileReference = new FileReference()
+private var fileTypes:Array = new Array()
+private var imageTypes:FileFilter = new FileFilter(&quot;Images (*.jpg; *.jpeg; *.gif; *.png)&quot; ,&quot;*.jpg; *.jpeg; *.gif; *.png&quot;);  
+
+[Bindable] private var imageSrc:String
+
+private function init():void {
+    imageSrc = ''
+
+    //Set up the uploader
+    uploadURL = new URLRequest()        
+    uploadURL.url = &quot;http://&quot;+conf.cfServer+&quot;:&quot;+conf.cfPort+conf.cfContextRoot+&quot;/&quot;+Util.UPLOAD_URL; 
+    var variables:URLVariables = new URLVariables();
+    variables.serviceusername = conf.serviceUserName; 
+    variables.servicepassword = conf.servicePassword; 
+    uploadURL.data = variables; 
+    uploadURL.method=&quot;POST&quot;;        
+    trace(uploadURL.url)
+
+    //add the image types to the fileTYpes array
+    fileTypes.push(imageTypes)
+
+    //listen for the button click
+    btnFilePicker.addEventListener(MouseEvent.CLICK, browseFiles);
+
+    //listen for picking a file
+    fileref.addEventListener(Event.SELECT, selectHandler);
+
+}           
+
+private function browseFiles(event:Event):void {
+    fileref.browse(fileTypes);
+}
+
+private function selectHandler(event:Event):void {
+    var fileRef:FileReference = event.currentTarget as FileReference
+    fileRef.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, dataHandler)
+    fileRef.addEventListener(IOErrorEvent.IO_ERROR, uploadErrorHandler)
+    fileRef.upload(uploadURL)
+}   
+
+private function dataHandler(event:DataEvent):void {
+    //Util.extractURLFromUploadResponse(event.data.toString())}; 
+    imageSrc = Util.extractURLFromUploadResponse(event.data.toString())
+    trace('dataHandler')
+    trace(Util.extractURLFromUploadResponse(event.data.toString()))
+}
+
+private function uploadErrorHandler(event:Event):void {
+    trace(&quot;OH CRAP&quot;)
+}
+
+private function handleResult(event:ResultEvent):void {
+    trace('result url='+event.result.toString())
+    imageSrc = event.result.toString()
+}
+
+private function handleDownload():void {
+    var request:URLRequest = new URLRequest();
+    request.url = imageSrc;
+    request.method = URLRequestMethod.GET;
+    var fileToDownload:FileReference = new FileReference();
+    try {
+        fileToDownload.download(request);
+    } catch (error:Error) {
+        trace(&quot;Unable to download file.&quot;);
+    }
+
+}
+
+private function doBatch():void {
+    //Note to audience - bug with Flip via batchoperation requires us to pass transpose
+    var attributes:Array = [
+    {GrayScale:{}},
+    {Blur:{}},
+    {Flip:{transpose:&quot;180&quot;}}
+    ]
+    batchImageService.attributes = attributes
+    batchImageService.execute()
+}
+]]&amp;gt;
+&amp;lt;/mx:Script&amp;gt;
+
+&amp;lt;cf:Config id=&quot;conf&quot; cfServer=&quot;127.0.0.1&quot; cfPort=&quot;80&quot; cfContextRoot=&quot;&quot; serviceUserName=&quot;cfremoteuser1&quot; servicePassword=&quot;password&quot; /&amp;gt;
+
+&amp;lt;cf:Image id=&quot;gsImageService&quot; action=&quot;GrayScale&quot; source=&quot;{imageSrc}&quot; result=&quot;handleResult(event)&quot; /&amp;gt;
+&amp;lt;cf:Image id=&quot;blurImageService&quot; action=&quot;Blur&quot; source=&quot;{imageSrc}&quot; result=&quot;handleResult(event)&quot; /&amp;gt;
+&amp;lt;cf:Image id=&quot;flipImageService&quot; action=&quot;Flip&quot; source=&quot;{imageSrc}&quot; result=&quot;handleResult(event)&quot; /&amp;gt;
+&amp;lt;cf:Image id=&quot;batchImageService&quot; action=&quot;batchoperation&quot; source=&quot;{imageSrc}&quot; result=&quot;handleResult(event)&quot; /&amp;gt;
+
+
+&amp;lt;mx:ControlBar width=&quot;100%&quot;&amp;gt;      
+&amp;lt;mx:Button id=&quot;btnFilePicker&quot; label=&quot;Select a Picture&quot; /&amp;gt;
+&amp;lt;mx:Spacer width=&quot;100%&quot; /&amp;gt;
+&amp;lt;mx:Button label=&quot;Gray&quot; click=&quot;gsImageService.execute()&quot; enabled=&quot;{imageSrc!=''}&quot; /&amp;gt;
+&amp;lt;mx:Button label=&quot;Blur&quot; click=&quot;blurImageService.execute()&quot; enabled=&quot;{imageSrc!=''}&quot; /&amp;gt;    
+&amp;lt;mx:Button label=&quot;Flip&quot; click=&quot;flipImageService.execute()&quot; enabled=&quot;{imageSrc!=''}&quot; /&amp;gt;
+&amp;lt;mx:Button label=&quot;Do all&quot; click=&quot;doBatch()&quot; enabled=&quot;{imageSrc!=''}&quot; /&amp;gt;   
+&amp;lt;mx:Button label=&quot;Download&quot; click=&quot;handleDownload()&quot; enabled=&quot;{imageSrc!=''}&quot; /&amp;gt;  
+
+&amp;lt;/mx:ControlBar&amp;gt;
+
+&amp;lt;mx:Image width=&quot;100%&quot; height=&quot;100%&quot; id=&quot;image&quot; source=&quot;{imageSrc} &quot;/&amp;gt;
+</code></pre>
+
+<p>&lt;/mx:WindowedApplication&gt;
+</code></p>
+
+<p>So there is a lot more going on in this one, but it&rsquo;s really just a minor update to the previous version. Going from the top to the bottom, the first big change is support for handling the file uploads. You can see that the URL is built dynamically based off both the config objects as well as a UPLOAD_URL constant returned by our ColdFusion server. When the user selects a file and uploads it, we display it in an image component below and turn on our buttons. Each button makes use of a different image operation. For the most part these are simple, but note the batch operation. This one, as you can guess, allows us to perform multiple operations at once. (And make note - GrayScale is buggy within a batch operation. You must pass an empty value for it&rsquo;s arguments if you want to use the default operation.) Each button/service will simply do it&rsquo;s thing and then update the image below.</p>
+
+<p>The last part of the application is the download button. As you can guess, this will let us download our modified image after we&rsquo;ve played with it. We now have a mini-Photoshop if you will. I plan on selling this application for 19.99.
+<img src="http://www.coldfusionjedi.com/images/Picture 341.png" /><p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fimagedemos%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/12\/05\/ColdFusion-as-a-Service-Examples-Images'; 
+this.page.identifier = '/?p=3632'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/05/ColdFusion-as-a-Service-Examples-Images" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="ColdFusion as a Service Examples - Images" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/05/ColdFusion-as-a-Service-Examples-Images" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/05/ColdFusion-as-a-Service-Examples-Images" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="ColdFusion as a Service Examples - Images" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/05/ColdFusion-as-a-Service-Examples-Images" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/05/ColdFusion-as-a-Service-Examples-Images" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

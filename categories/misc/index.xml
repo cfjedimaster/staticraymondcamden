@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Misc on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/misc/</link>
+    <description>Recent content in Misc on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 15 Feb 2016 14:44:00 -0700</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/misc/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Missing DevNexus</title>
+      <link>http://www.raymondcamden.com/2016/02/15/missing-devnexus</link>
+      <pubDate>Mon, 15 Feb 2016 14:44:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/15/missing-devnexus</guid>
+      <description>&lt;p&gt;So yeah, the title says it all. Due to a family issue, I had to cancel my speaking engagement at
+&lt;a href=&#34;http://www.devnexus.com&#34;&gt;DevNexus&lt;/a&gt; this year. The good news is that my session on Ionic Services
+is being covered by a member of the Ionic team, Mike Hartington. That&amp;rsquo;s about the best kind of replacement
+you can get.&lt;/p&gt;
+
+&lt;p&gt;For folks who want to learn more about Ionic services, I&amp;rsquo;d be happy to give a Google Hangout presentation online sometime next week. If I can get at least two people to comment and say they would attend, that&amp;rsquo;s enough for me to take an hour out of my day and stream a quick presentation.&lt;/p&gt;
+
+&lt;p&gt;As an aside, the &amp;lsquo;family issue&amp;rsquo; is a &lt;em&gt;good&lt;/em&gt; one and isn&amp;rsquo;t anything to be concerned about. (And no, it doesn&amp;rsquo;t involve me flying to China again.)&lt;/p&gt;
+
+&lt;p&gt;My next presentation will be at FluentConf where I&amp;rsquo;ll be &lt;a href=&#34;http://conferences.oreilly.com/fluent/javascript-html-us&#34;&gt;speaking&lt;/a&gt; on StrongLoop.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Welcome to RaymondCamden.com 2016</title>
+      <link>http://www.raymondcamden.com/2016/01/20/welcome-to-raymondcamden-2016</link>
+      <pubDate>Wed, 20 Jan 2016 14:46:54 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/20/welcome-to-raymondcamden-2016</guid>
+      <description>&lt;p&gt;Well, I&amp;rsquo;ve been alluding to this now for a few months, but I&amp;rsquo;ve finally pulled the plug on the old site and migrated everything over to a set of flat files with &lt;a href=&#34;http://gohugo.io&#34;&gt;Hugo&lt;/a&gt; powering the generation. I&amp;rsquo;m using &lt;a href=&#34;http://surge.sh&#34;&gt;Surge&lt;/a&gt; for hosting and will be upgrading to the paid plan (all of 10 bucks) as soon as possible.&lt;/p&gt;
+
+&lt;p&gt;I already &lt;a href=&#34;http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com&#34;&gt;blogged&lt;/a&gt; about the process a few days ago, so I don&amp;rsquo;t have anything to add to it, but I can say that - as always - my concern is to ensure that folks can come here to learn new things, talk about technology (and kittens!), and find value in this site as a whole.&lt;/p&gt;
+
+&lt;p&gt;As far as I know, everything should have migrated over except for my old blog attachments. I had about 800 megs, yes, 800 megs, of attachments associated with blog posts, and frankly, most of those were a minimum of two years old or older. So for now, I&amp;rsquo;m not shipping any of them, but on a case by case basis will restore them - most likely to my Amazon S3 bucket.&lt;/p&gt;
+
+&lt;p&gt;I want to be clear that I think WordPress is a damn fine platform, but I don&amp;rsquo;t want to worry about my server going down due to some misconfiguration or XML-RPC hack. I&amp;rsquo;m also &lt;em&gt;extremely&lt;/em&gt; impressed with Google&amp;rsquo;s Cloud Platform technology. I found it easier than Amazon&amp;rsquo;s and in general, it just plain worked well. My costs were never too high (around 20-25 bucks per month or so) and everything pretty much worked as it should.&lt;/p&gt;
+
+&lt;p&gt;If you do run into anything weird, just drop me a comment below.&lt;/p&gt;
+
+&lt;p&gt;And in case you&amp;rsquo;re curious, my first site, before even the blog, looked like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/Raymond_Camden.png&#34; alt=&#34;www.deathclock.com/morpheus&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Don&amp;rsquo;t even ask me what I was thinking about when I chose those colors.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Another year, another Wordpress issue</title>
+      <link>http://www.raymondcamden.com/2016/01/02/another-year-another-wordpress-issue</link>
+      <pubDate>Sat, 02 Jan 2016 16:28:28 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/02/another-year-another-wordpress-issue</guid>
+      <description>&lt;p&gt;Thanks to a reader (thanks Theo!) I&amp;rsquo;ve discovered that there is a problem with the latest Wordpress install and my blog. If you try to access a URL and get an infinite redirection loop, please let me know. At the end - this is my fault. When I switched from my custom blog to Wordpress, the &amp;ldquo;pretty urls&amp;rdquo; were in a slightly different format than my old site. To fix this, I hacked up Wordpress itself, which I &lt;i&gt;know&lt;/i&gt; was dumb, but I somehow managed to survive for a year and multiple WP updates without it ever coming to bite me in the ass - until 4.4 was released a few weeks ago. I didn&amp;rsquo;t even know, but some URLs began infinitely redirecting on themselves. As far as I can tell, the issue is related to the hack I did, but oddly I can&amp;rsquo;t find a consistent way to recreate it. I can fix it for one URL at a time by editing the post, which makes no sense to me.&lt;/p&gt;
+
+&lt;p&gt;For now - my plan is to check my access log for URLs returning 301 and then fix them one by one - while also looking real hard at moving to a completely static solution so I can finally remove PHP/MySQL/NGINX from the equation and go to simple flat files.&lt;/p&gt;
+
+&lt;p&gt;Sigh.&lt;/p&gt;
+
+&lt;p&gt;Programming would be a lot easier without all the darn programs.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My Year</title>
+      <link>http://www.raymondcamden.com/2015/12/22/my-year</link>
+      <pubDate>Tue, 22 Dec 2015 11:51:01 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/22/my-year</guid>
+      <description>&lt;p&gt;Ok, so technically the year isn&amp;rsquo;t done yet, but I was inspired by Nic Raboy&amp;rsquo;s post (&lt;a href=&#34;https://blog.nraboy.com/2015/12/activity-report-2015/&#34;&gt;My Activity Report for 2015&lt;/a&gt;) to go ahead and post a summary. I figure posts like these really aren&amp;rsquo;t that popular, but it gives me a chance to look at and think about what I did and try to benchmark where I want to be next year. I&amp;rsquo;m also planning a &amp;lsquo;favorite music of 2015&amp;rsquo; and &amp;lsquo;books read in 2015&amp;rsquo; post as well, so if it isn&amp;rsquo;t terribly obvious, I&amp;rsquo;m enjoying the end of the year by slowing down quite a bit. I actually did write a good 2000 words yesterday on a technical topic, but that post is going to be delayed till next year (which is like 2 weeks away). Ok, so with all of that out of the way, here&amp;rsquo;s a rough summary of what I got this past year and what I hope to improve on. As always, I appreciate comments (both positive and critical). My goal is to make raymondcamden.com useful to my readers while still maintaining my own personal brand. I assume people come here not just to learn X but also to hear how I specifically would teach something. I&amp;rsquo;m not the smartest tool in the shed, but I think I&amp;rsquo;ve got a knack for figuring stuff out and breaking down complex processes into something even an idiot (specifically me) can handle.&lt;/p&gt;
+
+&lt;h2&gt;The Blog&lt;/h2&gt;
+
+&lt;p&gt;The year started off a bit rough. Late last year I made the crazy decision to completely move away from ColdFusion for my blog and switch to WordPress. I wanted to focus on blogging and not maintaining the code base for my blog. I was incredibly impressed by WordPress and was happy to change, however the server itself suffered quite a few issues. In the end, I migrated from Apache to NGINX and that seemed to help. I also had to cache quite a bit. Frankly, that was a bit disappointing. My blog gets &amp;ldquo;ok&amp;rdquo; traffic, but not anything that I think would require a lot of horsepower. I truly expected WordPress to work fine &amp;ldquo;out of the box&amp;rdquo; for a site of my nature, but I guess that&amp;rsquo;s just not the case. Once I got caching setup right things seemed ok for the most part. Most recently I got hit by a xmlrpc DOS style attack and it took me a while to figure out how to correctly block it with NGINX. As soon as I did I had smooth sailing. I&amp;rsquo;m still not convinced things are perfect and I&amp;rsquo;m still considering a completely static solution, but the &lt;i&gt;process&lt;/i&gt; of writing in WordPress is so darn nice. I don&amp;rsquo;t want to lose that. I&amp;rsquo;m toying with the idea of a desktop based app built in Electron that would give me a nice editing experience while supporting a static solution. We&amp;rsquo;ll see.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s talk stats.&lt;/p&gt;
+
+&lt;p&gt;This year I wrote 252 entries which is a pretty good pace I think. Obviously quality trumps quantity but I want the blog to be active. My best month was March with 30 entries (how in the hell&amp;hellip;) and my worst was June with 13. (I think that&amp;rsquo;s when I took a 10 day vacation.)&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m currently sitting at 5,619 blog entries total of which probably 50% have silly cat pictures of Star Wars references. Let&amp;rsquo;s be honest - that&amp;rsquo;s why you come, right?&lt;/p&gt;
+
+&lt;p&gt;My page views for the year are 1,523,380. For the same time period last year the count was 1,682,475. That&amp;rsquo;s a drop, but it seems pretty small and hopefully not a trend. Ok, so I was curious - in 2013 it was 1,713,716 but in 2012 it was 1,116,842. So I probably need to just not worry about it.&lt;/p&gt;
+
+&lt;p&gt;In terms of engagement, I&amp;rsquo;m right over 2000 comments for the year. I&amp;rsquo;d like that number to be a lot higher, but frankly I&amp;rsquo;ve yet to find the &amp;ldquo;magical formula&amp;rdquo; for getting people to comment. Typically a post I think is important will get fewer comments than a post I think is frivolous, so, yeah, I&amp;rsquo;ll just keep going. (I do try to specifically call out people to comment to help encourage them. Not sure if that helps though.)&lt;/p&gt;
+
+&lt;p&gt;My most popular posts &lt;i&gt;written&lt;/i&gt; this year were:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/04/03/strategies-for-dealing-with-multiple-ajax-calls&#34;&gt;Strategies for dealing with multiple Ajax calls&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/03/12/selecting-multiple-images-in-a-phonegapcordova-app&#34;&gt;Selecting multiple images in a PhoneGap/Cordova app&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/04/14/blowing-up-localstorage-or-what-happens-when-you-exceed-quota&#34;&gt;Blowing up LocalStorage (or what happens when you exceed quota)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/03/24/having-trouble-with-splash-screens-cordova-and-android&#34;&gt;Having trouble with splash screens, Cordova, and Android?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/07/23/some-initial-thoughts-on-building-desktop-apps-with-ionic-and-electron&#34;&gt;Some initial thoughts on building desktop apps with Ionic and Electron&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/03/31/an-early-look-at-ionic-push&#34;&gt;An early look at Ionic Push&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/05/18/tracking-and-notifying-geolocation-status-with-ionic&#34;&gt;Tracking and notifying geolocation status with Ionic&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/05/25/important-information-about-cordova-5&#34;&gt;Important information about Cordova 5&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/05/19/working-with-the-new-phonegapcordova-contentsync-plugin&#34;&gt;Working with the new PhoneGap/Cordova ContentSync Plugin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/09/16/ionic-example-ion-slide-box&#34;&gt;Ionic Example: ion-slide-box&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Every single article here is web related, with 70% being mobile specific. Four of the top ten are &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic related&lt;/a&gt; which should come as a surprise to absolutely no one.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, not one of the &amp;lsquo;real&amp;rsquo; top viewed posts for 2015 were actually written in 2015. My number one post for the year
+was my 2011 post on &lt;a href=&#34;http://www.raymondcamden.com/2011/11/10/Example-of-serverbased-login-with-PhoneGap&#34;&gt;logging into a server with PhoneGap&lt;/a&gt;. I may need to write an updated version of that uses Ionic instead of jQuery Mobile.&lt;/p&gt;
+
+&lt;h2&gt;Writing&lt;/h2&gt;
+
+&lt;p&gt;This was a really good year for my writing. I published 6 articles for the &lt;a href=&#34;http://developer.telerik.com&#34;&gt;Telerik Developer Network&lt;/a&gt;. They have been a great outlet for me to reach other developers and I want to give them a big thank you.  I keep a list of all my articles on my &lt;a href=&#34;http://www.raymondcamden.com/about-me&#34;&gt;About Me&lt;/a&gt; page if you want to peruse that list.&lt;/p&gt;
+
+&lt;p&gt;Speaking of &amp;ldquo;other audiences&amp;rdquo; - DZone reprints some of my articles as well and the traffic there is pretty good. You can see a &lt;a href=&#34;https://dzone.com/users/201258/cfjedimaster.html?sort=articles&#34;&gt;list&lt;/a&gt; of them and the view count is pretty impressive, especially when I compare it to my own stats.&lt;/p&gt;
+
+&lt;p&gt;I published one book (&lt;a href=&#34;http://www.amazon.com/Apache-Cordova-Action-Raymond-Camden/dp/1633430065/ref=as_sl_pc_qf_sp_asin_til?tag=raymondcamden-20&amp;linkCode=w00&amp;linkId=FOJFKR7OPMALMZUB&amp;creativeASIN=1633430065&#34;&gt;Apache Cordova in Action&lt;/a&gt;) and I have a second one (&lt;a href=&#34;http://shop.oreilly.com/product/0636920043676.do&#34;&gt;Client-Side Data Storage&lt;/a&gt;) that is a few days away from publication. I&amp;rsquo;m also working on a third update to my &lt;a href=&#34;http://www.amazon.com/dp/1782167897/ref=as_sl_pc_tf_lc?tag=raymondcamden-20&amp;camp=14573&amp;creative=327641&amp;linkCode=as1&amp;creativeASIN=1782167897&amp;adid=1SPN78Z1P5CXJM72EZ70&amp;&amp;ref-refURL=http%3A%2F%2Fwww.raymondcamden.com%2Fabout-me&#34;&gt;jQuery Mobile book&lt;/a&gt; that should be out early next year.&lt;/p&gt;
+
+&lt;p&gt;I completely failed at my attempt to do creative writing. I wrote one page of a story and did research into the basic idea, but, yeah, I failed at that. Maybe next year?&lt;/p&gt;
+
+&lt;h2&gt;Videos&lt;/h2&gt;
+
+&lt;p&gt;My video work was in two areas - Youtube and OReilly. At the beginning of the year I had wanted to do a &lt;i&gt;lot&lt;/i&gt; of Youtubing. (That really can&amp;rsquo;t be a word. I hope not.) I worked on my &lt;a href=&#34;http://www.youtube.com/theraymondcamden&#34;&gt;channel&lt;/a&gt; a bit and tried to record as much as possible. I recorded 19 videos which isn&amp;rsquo;t too bad, but I would have liked to have done more. Views were a bit over 53 thousand and minutes watched just over 100 thousand. I think I could do a lot better there. However - part of the reason I wanted to push Youtube so hard this year was because I assumed I would not be traveling. I began the year as a glorified technical writer for Adobe with little to no chance of being able to attend any conferences. Luckily that situation changed when I joined IBM as a developer advocate in February. How much did I travel?&lt;/p&gt;
+
+&lt;p&gt;I flew 65,083 miles to 26 cities and 7 different countries. That&amp;rsquo;s one way to get status on an airline.&lt;/p&gt;
+
+&lt;p&gt;Outside of YouTube, I also began recording courses for OReilly. Most recently a course on &lt;a href=&#34;http://shop.oreilly.com/product/0636920043638.do&#34;&gt;client-side storage&lt;/a&gt; and before that, one on &lt;a href=&#34;http://shop.oreilly.com/product/0636920034971.do&#34;&gt;JavaScript templating&lt;/a&gt;. I&amp;rsquo;m working on one now for dev tools. I&amp;rsquo;ve really enjoyed working for OReilly. They are a great publisher to do business with and I feel like I&amp;rsquo;m treated like a rock star.&lt;/p&gt;
+
+&lt;h2&gt;Conferences/Presentations&lt;/h2&gt;
+
+&lt;p&gt;I started tracking my &lt;a href=&#34;http://www.raymondcamden.com/upcoming-speaking-engagements&#34;&gt;speaking engagements&lt;/a&gt; a bit earlier this year. This year I did:&lt;/p&gt;
+
+&lt;p&gt;NCDevCon&lt;br/&gt;
+Ionic SF&lt;br/&gt;
+Ionic Dallas&lt;br/&gt;
+Mountains of Code&lt;br/&gt;
+Meetup in Melbourne&lt;br/&gt;
+Meetup in Sydney&lt;br/&gt;
+Meetup in Kuala Lumpur&lt;br/&gt;
+Another meetup in Kuala Lumpur&lt;br/&gt;
+Meetup in Singapore&lt;br/&gt;
+Another meetup Singapore&lt;br/&gt;
+Meetup in Manila&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;My hope for next year is that I can finally speak at one of the top JavaScript-only conferences. The web dev community still feels like a bit of an insider&amp;rsquo;s club sometimes in terms of &amp;ldquo;breaking in&amp;rdquo; to get a speaking slot. Anyone else feel that way?&lt;/p&gt;
+
+&lt;h2&gt;Onward to 2016&lt;/h2&gt;
+
+&lt;p&gt;I think I say this every year, but I truly hope next year I can continue to provide value to my readers. I love sharing my pain (I mean joy) of development and I hope my time spent struggling to get stuff working helps you get things done quicker. If you&amp;rsquo;ve gotten something from this site and can bill a boss-type person, please consider visiting my &lt;a href=&#34;http://www.amazon.com/wishlist/2TCL1D08EZEYE&#34;&gt;Amazon wishlist&lt;/a&gt; and drop me a line when you do. (Amazon does a bad job of letting me know who got me a gift.) That Special Forces TIE fighter would look great in my office! ;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Vacation Notice</title>
+      <link>http://www.raymondcamden.com/2015/06/10/vacation-notice</link>
+      <pubDate>Wed, 10 Jun 2015 20:32:17 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/06/10/vacation-notice</guid>
+      <description>&lt;p&gt;Blogging and responding to email will be somewhat slow over the next ten days as my family and I will be on a well deserved vacation. See you on the flip side!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/kitten-kittenwavinglookingverysadby.jpg&#34; alt=&#34;kitten-kittenwavinglookingverysadby&#34; width=&#34;500&#34; height=&#34;375&#34; class=&#34;aligncenter size-full wp-image-6293&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Best Voice Recognition Fail(?) Ever...</title>
+      <link>http://www.raymondcamden.com/2015/05/27/best-voice-recognition-fail-ever</link>
+      <pubDate>Wed, 27 May 2015 06:15:05 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/27/best-voice-recognition-fail-ever</guid>
+      <description>&lt;p&gt;So yesterday I flew, or, rather, attempted to fly, since apparently the weather forecast was apocalypse and I didn&amp;rsquo;t now it. I actually made it to Texas, but my flight to Madison was canceled there. American Airlines rang me with a robo call to my Google Voice number, and Google helpfully parsed their audio into text for me:&lt;/p&gt;
+
+&lt;blockquote&gt;
+Calling with the flight update this call. Maybe reported. Bye. Yeah unfortunately. Bye. Yeah like 3376. Bye yo operated by lawyers, american eagle, bye Dallas Fort Worth to Madison, is experiencing a delay and is now expected to depart at. Bye, yeah 9:20 PM, you within arrival. Love, bye yo 11:42 PM, bye yo line updates can be obtained by calling our automated flight system at 1(800) 242-4444 to hear the message again say repeat 8. Bye. Yeah. Otherwise, feel free to hang up. Yanks for choosing American Airlines. Bye bye.
+&lt;/blockquote&gt;
+
+&lt;p&gt;I especially appreciate the &amp;ldquo;love, bye&amp;rdquo; part.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My speaker&#39;s self post-mortem</title>
+      <link>http://www.raymondcamden.com/2015/05/14/my-speakers-self-post-mortem</link>
+      <pubDate>Thu, 14 May 2015 08:56:45 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/14/my-speakers-self-post-mortem</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve got a good hour and a half before I board (yes, I&amp;rsquo;m one of those people who arrive early at the airport still), and while driving to the airport I was thinking about the presentations I gave yesterday. I spend a &lt;i&gt;lot&lt;/i&gt; of time thinking about my presentation and trying to see how I can make them better. I thought it might be interesting for me to share some specific thoughts I had about my most recent presentations and demonstrate the kind of thinking that goes behind updating a presentation. Obviously this will be very specific to what I just gave, but I&amp;rsquo;m hoping the &amp;ldquo;inside look&amp;rdquo; may help others who are new to presenting or are just looking to improve their game. (And honestly, I could be completely wrong about what I need to improve, so part of hope behind this post is that other more experienced speakers may help me out as well!)&lt;/p&gt;
+
+&lt;h4&gt;Session One - Ionic&lt;/h4&gt;
+
+&lt;p&gt;The first of the presentations I gave yesterday was an introduction to &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;. This is a session I&amp;rsquo;ve given about five times now. It is one I don&amp;rsquo;t have to prepare too much for as I&amp;rsquo;ve got the basic gist of it down pretty well. But Ionic is a fast moving product. This week it released 1.0. A few days before that they released a new feature (the playground). In general, they move quickly. As a speaker, I need to weigh my desire to let the audience know about all the cool crap they do versus being aware of how much stuff I&amp;rsquo;m throwing at them.&lt;/p&gt;
+
+&lt;p&gt;For example, I currently mention &lt;a href=&#34;http://ionicons.com/&#34;&gt;http://ionicons.com&lt;/a&gt;, which is a nice part of the global Ionic product line, but seems like something I could possibly cut. I also discuss &lt;a href=&#34;http://ngcordova.com&#34;&gt;ngcordova&lt;/a&gt;, which is very cool and useful, but, every time I bring it up in a presentation it feels like a misstep. It feels awkward. So here is something that I think is a good feature, but contextually, it bothers me tone wise and I&amp;rsquo;m going to remove it from the presentation. I&amp;rsquo;ve got five slides in this section. One just bullet points the feature and then I have 2 pairs of before and after slides showing regular Cordova code versus the ngcordova version. The idea being to show how much better (for some) the ngcordova version may be, but it is a lot of code and frankly - if you aren&amp;rsquo;t using promises then it kinda goes right over the head.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/slide1.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/slide1.png&#34; alt=&#34;slide1&#34; width=&#34;800&#34; height=&#34;571&#34; class=&#34;aligncenter size-full wp-image-6143&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This leaves me with some space to fill. I had recently taken out a demo I did demonstrating some of the CSS stuff. Why? I feel like most people &amp;ldquo;get&amp;rdquo; what CSS frameworks do. Most folks have seen Bootstrap and know that adding class=&amp;ldquo;so and so&amp;rdquo; makes a pretty bar. Ionic does the same, and me showing this in an editor and browser feels like overkill. I switched to using a slide that shows the code and a screen shot of the result. This kinda minimizes the coolness of it but at the same time, folks &lt;i&gt;expect&lt;/i&gt; Ionic to be pretty. When I show them this I don&amp;rsquo;t need to spend a lot of time on it because it is assumed.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/slide.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/slide.png&#34; alt=&#34;slide&#34; width=&#34;800&#34; height=&#34;571&#34; class=&#34;aligncenter size-full wp-image-6142&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In general though I don&amp;rsquo;t spend a lot of time in the code base. I demonstrate pull to refresh, which works well I think, but I&amp;rsquo;d like to spend a bit more time with a proper, but simple, Ionic demo. At the end of the presentation, I discuss an app I built with Ionic that is tailored for people adopting in China. Now, I&amp;rsquo;m biased, but I think this works &lt;i&gt;damn&lt;/i&gt; well. It&amp;rsquo;s got an emotional tag (my wife and I adopted from China), it has some funny jokes (yes, I plan my jokes ahead of time), and it just &amp;ldquo;feels&amp;rdquo; like a great way to show Ionic while discussing a topic I&amp;rsquo;m passionate about. I don&amp;rsquo;t normally spend a lot of time in the code, but now I&amp;rsquo;m going to expand that section a bit.&lt;/p&gt;
+
+&lt;h4&gt;Session Two - Static Sites&lt;/h4&gt;
+
+&lt;p&gt;My second session was a brand new one. I know some folks recommend it, but I don&amp;rsquo;t do a practice session by myself before giving a presentation. I mentally go through the slides &lt;i&gt;many&lt;/i&gt; times, but I don&amp;rsquo;t give the talk in front of a mirror or to an empty room. That may work for others, but frankly, I&amp;rsquo;d feel stupid doing that. So I went into this session not exactly sure how well it was going to work. I felt pretty safe timing wise - I&amp;rsquo;ve given enough presentations over the past ten years to have a good gut feeling for how much material is necessary. What I wasn&amp;rsquo;t sure of was how well the content would work.&lt;/p&gt;
+
+&lt;p&gt;For me, the goal of this presentation was to introduce people to the idea of why using a static site generator may work well for them. I divided the session into the following sections:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Why
+&lt;li&gt;How - Generally
+&lt;li&gt;How - Specifically
+&lt;li&gt;Bringing Dynamic Aspects Back
+&lt;li&gt;Hosting options
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/slide2.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/slide2.png&#34; alt=&#34;slide2&#34; width=&#34;800&#34; height=&#34;571&#34; class=&#34;aligncenter size-full wp-image-6144&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The two &amp;ldquo;How&amp;rdquo; sections are where I was most concerned. The first How is basically stating that there are editors (like Dreamweaver) that can help build static sites and then there are generators - the main point of the talk. I then go into how generators work generally. I spent a lot of time in this section because my audience in this case were primarily people doing back end work. Like me, I think they had been used to a mindset of needing an app server to solve most problems. In my experience, when I first used a static site generator it was mind opening. I suddenly saw how I could switch from using app servers and databases and switch to simple files and keep my life easier. In this particular case, in this particular conference, I felt that was important so I really stressed it. However, in another conference, one that was perhaps 100% front-end, I&amp;rsquo;d probably go a bit quicker in that regard. For folks used to things like Grunt/Gulp/preprocessing in general, this is less of a mind shift for them. So to be clear, it isn&amp;rsquo;t that I did that wrong in my presentation (imo), but I recognize it as something I need to adjust based on my audience.&lt;/p&gt;
+
+&lt;p&gt;The second &amp;ldquo;How&amp;rdquo; section is me looking at two different products, Harp and Jekyll. I like them both, with a preference for Jekyll. I thought it was useful for the audience to see two examples of generators in action and see how different tools approach the problem. The issue I ran into though was that I think I may have gotten just deep enough to confuse people versus giving them the &amp;ldquo;taste&amp;rdquo; I wanted. So now my question is - do I drop one? That may makes things simpler. I think most people understand that different tools will give different ways of doing things so there isn&amp;rsquo;t necessarily value in &amp;ldquo;proving&amp;rdquo; that to the audience. I just need to figure out which of the two I&amp;rsquo;ll select. As I said, I prefer Jekyll, but this isn&amp;rsquo;t about me. So I&amp;rsquo;ll probably select Harp and mention, if it makes sense, issues I ran into Harp that are better in Jekyll. As it stands, I think I want to whip up a presentation for Jekyll by itself. Why? I want to learn it more and there is no better way to do that then making myself build a good presentation for it.&lt;/p&gt;
+
+&lt;p&gt;Outside of that - I&amp;rsquo;m pretty darn satisfied with this presentation and I&amp;rsquo;m hoping to give it online soon to share with folks.&lt;/p&gt;
+
+&lt;h4&gt;Wrap Up&lt;/h4&gt;
+
+&lt;p&gt;For those of you who don&amp;rsquo;t do presentations, I hope this gives yo an inside look at some of the thinking/preparation/evolution that takes place as part of the process. For those who do present, I&amp;rsquo;d love to hear your own stories and strategies. Leave a comment below!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sorry for not responding...</title>
+      <link>http://www.raymondcamden.com/2015/05/14/sorry-for-not-responding</link>
+      <pubDate>Thu, 14 May 2015 06:51:46 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/14/sorry-for-not-responding</guid>
+      <description>&lt;p&gt;So apparently, &lt;a href=&#34;http://formkeep.com&#34;&gt;FormKeep&lt;/a&gt; had a bug where on the free tier, I was sent emails for every form response on my contact form. It was supposed to be limited to 10. About 1.5 months ago they &amp;ldquo;fixed&amp;rdquo; this bug, and, yeah, I didn&amp;rsquo;t know. I&amp;rsquo;m not too pleased with that, but, at least I&amp;rsquo;ve got my data in a CSV file. If you used my contact form and wondered why I never got back - that&amp;rsquo;s why. Going to start responding to items over the next week or so. I&amp;rsquo;m also going to see if I can get SendGrid integration working here.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/sorry_kitten.jpg&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/sorry_kitten.jpg&#34; alt=&#34;sorry_kitten&#34; width=&#34;385&#34; height=&#34;500&#34; class=&#34;aligncenter size-full wp-image-6139&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>OS X Yosemite Tip - Maximizing Windows</title>
+      <link>http://www.raymondcamden.com/2015/03/22/osx-yosemite-tip-maximizing-windows</link>
+      <pubDate>Sun, 22 Mar 2015 08:17:10 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/03/22/osx-yosemite-tip-maximizing-windows</guid>
+      <description>&lt;p&gt;For the most part, upgrading to OS X Yosemite didn&amp;rsquo;t cause any issues for me, but the one change that bugged the heck out of me (and made me question what in the heck Apple was thinking), was switching the action of clicking the green icon in app windows. Previously, this would maximize the window on your screen. Now, it takes you full screen. (And this is where I question Apple. In all my time watching developers, I rarely see them use full screen. Heck, I used it for the first time last week for a video, but in my day to day work, never.)&lt;/p&gt;
+
+&lt;p&gt;If you Google for this, you&amp;rsquo;ll see lots of people recommending holding alt-shift before clicking the green button. This works, but I&amp;rsquo;ve got the memory of a goldfish. Plus, in the same time I got my fingers set up to do this, I probably could have expanded the window manually.&lt;/p&gt;
+
+&lt;p&gt;Earlier this week I was attending a user group, and the guy next to me (unfortunately I don&amp;rsquo;t remember his name), suggested simply double clicking the title of the app. It works! And it is easy enough to remember, at least for me. As a test, this morning I googled with that particular phrase, and sure enough, you can see this documented here at Apple: &lt;a href=&#34;https://support.apple.com/kb/PH18744?locale=en_US&#34;&gt;OS X Yosemite: Take apps full screen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Anyway, I hope this helps others. As a quick note - Chrome seems to not widen in some of my tests (although I swear it did earlier). Holding shift makes it maximize that way too. That I think I can remember (maybe).&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Reminder - Get this blog via email</title>
+      <link>http://www.raymondcamden.com/2015/02/17/reminder-get-this-blog-via-email</link>
+      <pubDate>Tue, 17 Feb 2015 11:09:24 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/17/reminder-get-this-blog-via-email</guid>
+      <description>&lt;p&gt;Just a quick reminder that if you previously subscribed to my blog to get new posts by email, that feature went away when I changed to Wordpress. I&amp;rsquo;m using Feedburner for my RSS feed now and they allow you to subscribe. Just follow this &lt;a href=&#34;https://feedburner.google.com/fb/a/mailverify?uri=RaymondCamdensBlog&amp;loc=en_US&#34;&gt;link&lt;/a&gt; and you&amp;rsquo;re good to go.&lt;/p&gt;
+
+&lt;p&gt;And as another aside - if you like what you read here, consider visiting my &lt;a href=&#34;http://www.amazon.com/wishlist/2TCL1D08EZEYE&#34;&gt;Amazon Wishlist&lt;/a&gt;, and if you do, &lt;strong&gt;let me know&lt;/strong&gt;! I just got &amp;ldquo;Sleeping Dogs&amp;rdquo; for the PS4 and Amazon included no information about who got it for me. If it is you, dear reader, thank you!&lt;/p&gt;
+
+&lt;p&gt;p.s. I played &amp;ldquo;Sleeping Dogs&amp;rdquo; already on the XBox, it was one of the free games you get as part of XBox Live Gold, which is a &lt;i&gt;damn&lt;/i&gt; nice perk and easily worth the cost of Gold. The game is fun as heck - kind of an Asian Gran Theft Auto. I&amp;rsquo;m looking forward to playing it again.&lt;/p&gt;
+
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;OneJS=1&amp;Operation=GetAdHtml&amp;MarketPlace=US&amp;source=ac&amp;ref=qf_sp_asin_til&amp;ad_type=product_link&amp;tracking_id=raymondcamden-20&amp;marketplace=amazon&amp;region=US&amp;placement=B00MA5TSFQ&amp;asins=B00MA5TSFQ&amp;linkId=AYV3GF3IGDZMEXYJ&amp;show_border=true&amp;link_opens_in_new_window=false&#34;&gt;
+&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Missing orders, Prime membership, Cloud music, etc with Amazon?</title>
+      <link>http://www.raymondcamden.com/2015/02/02/missing-orders-prime-membership-cloud-music-etc-with-amazon</link>
+      <pubDate>Mon, 02 Feb 2015 16:18:10 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/02/missing-orders-prime-membership-cloud-music-etc-with-amazon</guid>
+      <description>&lt;p&gt;So, here&amp;rsquo;s a scary incident. I logged into Amazon to access my Cloud Music library (big fan of the service) and noticed it was empty. I checked my profile and noticed that my past orders were also empty. Even more scary, I had somehow lost Prime membership. I saw this for the first time a few weeks back but never figured out how I fixed it. Not knowing what to do, I contacted Amazon via their email support, and, kudos to them, got a response in less than five minutes. But the response&amp;hellip; oh my god:&lt;/p&gt;
+
+&lt;blockquote&gt;
+I&#39;m sorry to hear about the trouble you had accessing your accounts. After some research, I&#39;ve confirmed that you have four (4) Amazon.com accounts with the same e-mail address and different passwords. 
+
+This can happen if you&#39;ve visited Amazon.com in the past and mistakenly indicated that you&#39;re a new customer when signing in. A new account with the same e-mail address and a different password would be created. 
+
+etc
+&lt;/blockquote&gt;
+
+&lt;p&gt;So just to be clear: Amazon lets you register the &lt;strong&gt;same email with another password&lt;/strong&gt;. For the life of me I cannot imagine in what universe allowing this makes sense. Perhaps they want to make it as easy as possible for users to buy stuff, but it seems like this would bite people in the ass later on - as it did me.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Thank you, Jack Wilber</title>
+      <link>http://www.raymondcamden.com/2015/01/30/thank-you-jack-wilber</link>
+      <pubDate>Fri, 30 Jan 2015 14:30:59 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/30/thank-you-jack-wilber</guid>
+      <description>&lt;p&gt;As I prepare to leave Adobe, I want to acknowledge the enormous amount of help I had from Jack Wilber. One of the Adobe benefits I had was the use of an editor, and Jack has been helping improve my blog posts over the past few years. He never once complained about my constant misuse of its and it&amp;rsquo;s or than and then. I&amp;rsquo;m double checking this post as well to ensure I didn&amp;rsquo;t miss anything, but most likely, I did.&lt;/p&gt;
+
+&lt;p&gt;Thanks Jack, you&amp;rsquo;re awesome.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/58644785.jpg&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/58644785.jpg&#34; alt=&#34;58644785&#34; width=&#34;400&#34; height=&#34;400&#34; class=&#34;alignnone size-full wp-image-5627&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Alt-History on TV - The Man in the High Castle</title>
+      <link>http://www.raymondcamden.com/2015/01/18/alt-history-on-tv-the-man-in-the-high-castle</link>
+      <pubDate>Sun, 18 Jan 2015 10:14:13 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/18/alt-history-on-tv-the-man-in-the-high-castle</guid>
+      <description>&lt;p&gt;As readers know, I am a &lt;i&gt;huge&lt;/i&gt; fan of alt-history. It has been a while since we&amp;rsquo;ve had any on TV (earlier seasons of Fringe), but I was stoked to discover this week that Amazon Prime has created a new adaptation of Philip K Dick&amp;rsquo;s famous story, &amp;ldquo;The Man in the High Castle.&amp;rdquo; While one of the more common alt-history types (Nazi Germany wins WWII), the story is quite fascinating and well worth a read. If you have Amazon Prime, you can watch the &lt;a href=&#34;http://www.amazon.com/2015-Amazon-Pilots-Preview/dp/B00RSGFRY8/ref=sr_1_1?ie=UTF8&amp;qid=1421596938&amp;sr=8-1&amp;keywords=the+man+in+the+high+castle+pilot&#34;&gt;premier&lt;/a&gt; now.&lt;/p&gt;
+
+&lt;p&gt;From the beginning, I loved it. The title sequence (and sorry, this was the best quality I could find) is both eerie and cool at the same time.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;//www.youtube.com/embed/UIDKPydxAFM?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;The story takes place in a America that is split between Japan and Germany with a neutral zone between them. The world-building is done &lt;strong&gt;very&lt;/strong&gt; well.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/highcastle.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/highcastle.png&#34; alt=&#34;highcastle&#34; width=&#34;750&#34; height=&#34;442&#34; class=&#34;alignnone size-full wp-image-5567&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I found myself pausing multiple times just so I could see all the peculiarities of Nazi/Japanese America.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/highcastle2.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/highcastle2.png&#34; alt=&#34;highcastle2&#34; width=&#34;750&#34; height=&#34;414&#34; class=&#34;alignnone size-full wp-image-5568&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Some of the best parts though were more subtle. As one of the main characters crosses the country, you get snippets of this America that are chilling.&lt;/p&gt;
+
+&lt;p&gt;Right now it is just a pilot and I&amp;rsquo;m not sure if Amazon will pick it up for a series but I sure hope they do. (And hey, maybe we can do a Kickstarter for a new Sliders while we&amp;rsquo;re at it?)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New Year, New Job</title>
+      <link>http://www.raymondcamden.com/2015/01/16/new-year-new-job</link>
+      <pubDate>Fri, 16 Jan 2015 14:16:47 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/16/new-year-new-job</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been leaving hints the last few weeks that this was coming, but today I can finally share with all of you. When January ends I will be leaving Adobe. I joined Adobe a few years back as an evangelist, something that had been a dream of mine for nearly a decade. I joined a team of &lt;i&gt;really&lt;/i&gt; smart and talented people. I had no problem considering myself the worst person there. That wasn&amp;rsquo;t a slight on me at all but merely how damn good the team was. I joined Adobe at an interesting time. Not long after they begun a serious push into web standards. I saw some amazing tools get created (Brackets, Edge Animate, Inspect) and something I never thought I&amp;rsquo;d see - folks mentioning Adobe at web conferences. Sure it may have been, &amp;ldquo;Can you believe &lt;em&gt;Adobe&lt;/em&gt; is doing this?&amp;rdquo; but that was perfectly fine with me.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, things change, and developer evangelism ceased to exist. I&amp;rsquo;ve got my opinions about that but, at the end of the day, it is what it is. I hopped around to a few different groups, each time being surprised - again - by how friendly and smart the people at Adobe were - but my heart wasn&amp;rsquo;t in it.&lt;/p&gt;
+
+&lt;p&gt;I like to teach. I like to share. As shy as I am in most situations, I love to be in front of a group of developers showing them cool crap. To this day I remember the joy of my very first program running (after an hour or so of it failing) and when I present I feel like I get to share some of that joy with others.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/ibm_200x200.jpg&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/01/ibm_200x200.jpg&#34; alt=&#34;ibm_200x200&#34; width=&#34;200&#34; height=&#34;200&#34; class=&#34;alignnone size-full wp-image-5561&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m happy to announce that - starting in February - I&amp;rsquo;ll be joining IBM as a MobileFirst Developer Evangelist, the same team my buddy, and former coworker, &lt;a href=&#34;http://www.tricedesigns.com&#34;&gt;Andy Trice&lt;/a&gt; is on. The platform makes use of Apache Cordova so you can expect me to still blog quite heavily on it. Once I google how to tie a tie, I expect to be on the road as I was before with Adobe so hopefully I can meet more of my readers this year.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m excited, scared, and anxious to start this new adventure. Wish me luck!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Know WordPress? Need some advice.</title>
+      <link>http://www.raymondcamden.com/2015/01/14/know-wordpress-need-some-advice</link>
+      <pubDate>Wed, 14 Jan 2015 05:50:53 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/01/14/know-wordpress-need-some-advice</guid>
+      <description>&lt;p&gt;Ok, time to throw in the towel and ask for help. ;) After upgrading the virtual server this blog runs on to a better level of hardware (1.7 gigs of RAM versus 0.6), my uptime improved quite a bit. But I still get - a few times a week - the infamous &amp;ldquo;Error Establishing Database Connection&amp;rdquo; issue. I&amp;rsquo;ve got a monitor set up for it now so I can reboot quickly, but last night it happened about an hour and a half after I went to bed so it was down for hours.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve Googled quite a bit but most of what I&amp;rsquo;ve found focuses on the issue happening immediately and focus on your authentication values for MySQL. Obviously that isn&amp;rsquo;t the problem. Other items I found focus on using caching plugins to help with performance. I&amp;rsquo;m using WP Super Cache so I&amp;rsquo;ve already done that.&lt;/p&gt;
+
+&lt;p&gt;So - any ideas? All I can think of is to try to find out if MySQL isn&amp;rsquo;t using as much RAM as it can. Maybe there is a setting where I can tweak that higher.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

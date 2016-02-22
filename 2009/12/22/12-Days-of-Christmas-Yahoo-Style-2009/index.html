@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>12 Days of Christmas - Yahoo Style - 2009 &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="12 Days of Christmas - Yahoo Style - 2009" />
+<meta property="og:description" content="Two years ago I whipped up a quick blog entry demonstrating how to make use of the CFYahoo ColdFusion library to retrieve images related to the 12 Days of Christmas. I was thinking of this entry and thought it would be nice to repost the code and use more current results. So nothing new here, nothing serious, just something a bit cute (imho). The code:
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/12/22/12-Days-of-Christmas-Yahoo-Style-2009" />
+
+
+<meta property="og:updated_time" content="2009-12-22T11:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="12 Days of Christmas - Yahoo Style - 2009">
+<meta itemprop="description" content="Two years ago I whipped up a quick blog entry demonstrating how to make use of the CFYahoo ColdFusion library to retrieve images related to the 12 Days of Christmas. I was thinking of this entry and thought it would be nice to repost the code and use more current results. So nothing new here, nothing serious, just something a bit cute (imho). The code:
+">
+
+
+<meta itemprop="dateModified" content="2009-12-22T11:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="1663">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="12 Days of Christmas - Yahoo Style - 2009"/>
+<meta name="twitter:description" content="Two years ago I whipped up a quick blog entry demonstrating how to make use of the CFYahoo ColdFusion library to retrieve images related to the 12 Days of Christmas. I was thinking of this entry and thought it would be nice to repost the code and use more current results. So nothing new here, nothing serious, just something a bit cute (imho). The code:
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/12/22/12-Days-of-Christmas-Yahoo-Style-2009">
+    <h1 class="article-title" itemprop="name">
+        12 Days of Christmas - Yahoo Style - 2009
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-12-22 11:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-12-22</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Two years ago I whipped up a <a href="http://www.raymondcamden.com/index.cfm/2007/12/14/12-Days-of-Christmas--Yahoo-Style">quick blog entry</a> demonstrating how to make use of the <a href="http://cfyahoo.riaforge.org">CFYahoo</a> ColdFusion library to retrieve images related to the 12 Days of Christmas. I was thinking of this entry and thought it would be nice to repost the code and use more current results. So nothing new here, nothing serious, just something a bit cute (imho). The code:</p>
+
+<p><code>
+&lt;cfset imageAPI = createObject(&ldquo;component&rdquo;, &ldquo;CFYahoo.org.camden.yahoo.image&rdquo;)&gt;</p>
+
+<p>&lt;cfset gifts = [&ldquo;A partridge in a pear tree&rdquo;,&ldquo;Two turtle doves&rdquo;,&ldquo;Three French hens&rdquo;,&ldquo;Four calling birds&rdquo;,&ldquo;Five golden rings&rdquo;,&ldquo;Six geese a-laying&rdquo;,
+        &ldquo;Seven swans a-swimming&rdquo;,&ldquo;Eight maids a-milking&rdquo;,&ldquo;Nine ladies dancing&rdquo;,&ldquo;Ten lords a-leaping&rdquo;,&ldquo;Eleven pipers piping&rdquo;,&ldquo;Twelve drummers drumming&rdquo;]&gt;</p>
+
+<p>&lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#arrayLen(gifts)#&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfinvoke component=&quot;#imageAPI#&quot; method=&quot;search&quot; returnVariable=&quot;result&quot;&amp;gt;
+    &amp;lt;cfinvokeargument name=&quot;query&quot; value=&quot;#gifts[x]#&quot;&amp;gt;
+    &amp;lt;cfinvokeargument name=&quot;results&quot; value=&quot;3&quot;&amp;gt;
+&amp;lt;/cfinvoke&amp;gt;
+
+&amp;lt;cfoutput&amp;gt;
+&amp;lt;h2&amp;gt;Image search for #gifts[x]#&amp;lt;/h2&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+
+&amp;lt;cfoutput query=&quot;result&quot;&amp;gt;
+&amp;lt;cfif len(thumbnail)&amp;gt;
+&amp;lt;img src=&quot;#thumbnail#&quot; width=&quot;#thumbnailwidth#&quot; height=&quot;#thumbnailheight#&quot; alt=&quot;#title#&quot; style=&quot;align:left&quot;&amp;gt;
+&amp;lt;/cfif&amp;gt;
+&amp;lt;h3&amp;gt;#title#&amp;lt;/h3&amp;gt;
+URL: &amp;lt;a href=&quot;#clickurl#&quot;&amp;gt;#result.url#&amp;lt;/a&amp;gt;&amp;lt;br /&amp;gt;    
+Summary: #summary#
+&amp;lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&amp;gt;
+
+&amp;lt;p&amp;gt;
+&amp;lt;hr&amp;gt;
+&amp;lt;/p&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+&amp;lt;cfflush&amp;gt;
+</code></pre>
+
+<p>&lt;/cfloop&gt;
+</code></p>
+
+<p>Nothing fancy there - just looping over the array and performing the search. I did have to get anal with the BR/clear tag as Chrome did not support br clear=left when I used align=&ldquo;left&rdquo; in the image. Outside of that though the code worked perfectly well. And here is the result. Enjoy.</p>
+
+<p>Also let me take this opportunity to wish everyone a Merry Christmas!</p>
+
+<p><h2>Image search for A partridge in a pear tree</h2></p>
+
+<pre><code>&lt;img src=&quot;http://thm-a01.yimg.com/image/74b5c82f5c5f0a8a&quot; width=&quot;111&quot; height=&quot;140&quot; alt=&quot;Partridge in a Pear Tree jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;Partridge in a Pear Tree jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.julesavenuegraphics.com/Partridge_in_a_Pear_Tree.jpg&quot;&gt;http://www.julesavenuegraphics.com/Partridge_in_a_Pear_Tree.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Partridge in a pear tree card
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/56b72eb0a212640c&quot; width=&quot;94&quot; height=&quot;135&quot; alt=&quot;12 days partridge pear tree jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;12 days partridge pear tree jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.msgr.ca/msgr-2/12%20days%20partridge%20pear%20tree.jpg&quot;&gt;http://www.msgr.ca/msgr-2/12%20days%20partridge%20pear%20tree.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: My true love gave to me A Partridge in a Pear Tree
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/7013fc5fae372af0&quot; width=&quot;125&quot; height=&quot;119&quot; alt=&quot;Partridge In A Pear Tree Pin JPG&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;Partridge In A Pear Tree Pin JPG&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.distinctgiftshop.com/media/Partridge_In_A_Pear_Tree_Pin.JPG&quot;&gt;http://www.distinctgiftshop.com/media/Partridge_In_A_Pear_Tree_Pin.JPG&lt;/a&gt;&lt;br /&gt;    
+Summary: Partridge In A Pear Tree Pin
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Two turtle doves&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/31acbfe593131320&quot; width=&quot;136&quot; height=&quot;150&quot; alt=&quot;12daysofxmas 2 turtle doves jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;12daysofxmas 2 turtle doves jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.deanperry.co.uk/images/seasonalextras/12days/12daysofxmas-2-turtle-doves.jpg&quot;&gt;http://www.deanperry.co.uk/images/seasonalextras/12days/12daysofxmas-2-turtle-doves.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Three French Hens Two Turtle Doves A Partridge in a Pear Tree
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/1d00578b24effe04&quot; width=&quot;130&quot; height=&quot;107&quot; alt=&quot;2turtledoves jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;2turtledoves jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.fashion-era.com/images/xmas/xmas_traditions/2turtledoves.jpg&quot;&gt;http://www.fashion-era.com/images/xmas/xmas_traditions/2turtledoves.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: On the second day of Christmas  my true love gave to me Two Turtle Doves and a partridge in a pear tree
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/716530596d304856&quot; width=&quot;130&quot; height=&quot;130&quot; alt=&quot;dove jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;dove jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.bevo.co.uk/blog/dove.jpg&quot;&gt;http://www.bevo.co.uk/blog/dove.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 5 58 pm | General Chatter My day has been random       Woke up in a strange house fully cloathed scared to death coz I didn t know where I was  Went for a walk through the Wellington in a short sleeved shirt saw
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Three French hens&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/af25c66d294a5878&quot; width=&quot;101&quot; height=&quot;130&quot; alt=&quot;three french hens 2 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;three french hens 2 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://quidnimis.squarespace.com/storage/three_french_hens_2.jpg&quot;&gt;http://quidnimis.squarespace.com/storage/three_french_hens_2.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: And what about those three hens    Help is on the way
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/f67aa9c771964de8&quot; width=&quot;135&quot; height=&quot;131&quot; alt=&quot;3 french hens jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;3 french hens jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.ashmolean.org/assets/images/Shop/larger/3_french_hens.jpg&quot;&gt;http://www.ashmolean.org/assets/images/Shop/larger/3_french_hens.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/bf9219cff30c4e26&quot; width=&quot;109&quot; height=&quot;140&quot; alt=&quot;22 threefrenchhens72 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;22 threefrenchhens72 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.porterfieldsfineart.com/JohnnyKarwan/images/22-threefrenchhens72.jpg&quot;&gt;http://www.porterfieldsfineart.com/JohnnyKarwan/images/22-threefrenchhens72.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Four calling birds&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/ff0af7e3df11a75e&quot; width=&quot;125&quot; height=&quot;82&quot; alt=&quot;1217 day four copy jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;1217 day four copy jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.in-forum.com/gfx/photos/thumbs/1217%20day%20four%20copy.jpg&quot;&gt;http://www.in-forum.com/gfx/photos/thumbs/1217%20day%20four%20copy.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/e74405bbe5a2d952&quot; width=&quot;125&quot; height=&quot;118&quot; alt=&quot;4callingbirds 200 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;4callingbirds 200 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://shopping.originpublishing.com/chart_images/4callingbirds_200.jpg&quot;&gt;http://shopping.originpublishing.com/chart_images/4callingbirds_200.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/77041180632ea214&quot; width=&quot;109&quot; height=&quot;140&quot; alt=&quot;20 fourcallingbirds72 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;20 fourcallingbirds72 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.porterfieldsfineart.com/JohnnyKarwan/images/20-fourcallingbirds72.jpg&quot;&gt;http://www.porterfieldsfineart.com/JohnnyKarwan/images/20-fourcallingbirds72.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Five golden rings&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/eadde6248c1ce184&quot; width=&quot;125&quot; height=&quot;125&quot; alt=&quot;3905 JPG&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;3905 JPG&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.rembrandtcharms.com/charm_img/3905.JPG&quot;&gt;http://www.rembrandtcharms.com/charm_img/3905.JPG&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/2c3e67c3533a240a&quot; width=&quot;135&quot; height=&quot;36&quot; alt=&quot;5rings jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;5rings jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.cashbarn.com/gif/5rings.jpg&quot;&gt;http://www.cashbarn.com/gif/5rings.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: PLUS    5 SECOND PLACE PRIZES RETAIL  $180 00 EACH FIVE  5  GOLDEN RINGS This diamond band is beautifully crafted in 14K Yellow Gold and includes 13 round diamonds of equal size  The shared prong setting allows the maximum amount of light to
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/1635a02245f8acf8&quot; width=&quot;127&quot; height=&quot;135&quot; alt=&quot;5goldrings jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;5goldrings jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://guy-sports.com/fun_pictures/christmas/5goldrings.jpg&quot;&gt;http://guy-sports.com/fun_pictures/christmas/5goldrings.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: my true love gave to me Six Geese a laying  five golden rings  four calling birds  three French hens  two turtle doves  and a partridge in a pear tree
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Six geese a-laying&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/566577de3329bee0&quot; width=&quot;136&quot; height=&quot;150&quot; alt=&quot;6 geese a laying jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;6 geese a laying jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.deanperry.co.uk/images/seasonalextras/12days/6-geese-a-laying.jpg&quot;&gt;http://www.deanperry.co.uk/images/seasonalextras/12days/6-geese-a-laying.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Eight Maids A Milking Seven Swans A Swimming Six Geese A Laying Five Gold Rings
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/ab7bf54bbb964514&quot; width=&quot;145&quot; height=&quot;110&quot; alt=&quot;Six Geese a  laying1 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;Six Geese a  laying1 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.shanart.com/images%20/Six-Geese-a--laying1.jpg&quot;&gt;http://www.shanart.com/images%20/Six-Geese-a--laying1.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Six Geese a Laying
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/9bbbb80bcb89860c&quot; width=&quot;102&quot; height=&quot;135&quot; alt=&quot;36972 reg jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;36972 reg jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.giftcorral.com/giftcorral/images/items/36972_reg.jpg&quot;&gt;http://www.giftcorral.com/giftcorral/images/items/36972_reg.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Our Price  $7 00  Big Sky Carvers Six Geese A Laying Ornament
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Seven swans a-swimming&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/701110778efe8d34&quot; width=&quot;145&quot; height=&quot;138&quot; alt=&quot;seven swans a swimming jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;seven swans a swimming jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.artshole.co.uk/arts/artists/anna%20charity/seven-swans-a-swimming.jpg&quot;&gt;http://www.artshole.co.uk/arts/artists/anna%20charity/seven-swans-a-swimming.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: seven swans a swimming
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/8f86cdf63e59c71e&quot; width=&quot;125&quot; height=&quot;119&quot; alt=&quot;TN seven swans a swimming JPG&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;TN seven swans a swimming JPG&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.artshole.co.uk/arts/artists/anna%20charity/TN_seven-swans-a-swimming.JPG&quot;&gt;http://www.artshole.co.uk/arts/artists/anna%20charity/TN_seven-swans-a-swimming.JPG&lt;/a&gt;&lt;br /&gt;    
+Summary: seven swans a swimming
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/617e022ccb45376e&quot; width=&quot;135&quot; height=&quot;96&quot; alt=&quot;X7 Seven swans a swimming l GIF&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;X7 Seven swans a swimming l GIF&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.papersharks.com/lrgxmasImages/X7%20Seven%20swans%20a%20swimming%20l.GIF&quot;&gt;http://www.papersharks.com/lrgxmasImages/X7%20Seven%20swans%20a%20swimming%20l.GIF&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Eight maids a-milking&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/bd44484d4ba198ec&quot; width=&quot;135&quot; height=&quot;135&quot; alt=&quot;Eight Maids a Milking jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;Eight Maids a Milking jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.artshole.co.uk/arts/artists/April%2006/Jay%20Taylor/Eight-Maids-a-Milking.jpg&quot;&gt;http://www.artshole.co.uk/arts/artists/April%2006/Jay%20Taylor/Eight-Maids-a-Milking.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Eight Maids a Milking
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/b6994a8d69ef573c&quot; width=&quot;125&quot; height=&quot;125&quot; alt=&quot;TN Eight Maids a Milking JPG&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;TN Eight Maids a Milking JPG&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.artshole.co.uk/arts/artists/April%2006/Jay%20Taylor/TN_Eight-Maids-a-Milking.JPG&quot;&gt;http://www.artshole.co.uk/arts/artists/April%2006/Jay%20Taylor/TN_Eight-Maids-a-Milking.JPG&lt;/a&gt;&lt;br /&gt;    
+Summary: Eight Maids a Milking
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/ce9243c27b735b96&quot; width=&quot;136&quot; height=&quot;150&quot; alt=&quot;8 maids a milking jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;8 maids a milking jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.deanperry.co.uk/images/seasonalextras/12days/8-maids-a-milking.jpg&quot;&gt;http://www.deanperry.co.uk/images/seasonalextras/12days/8-maids-a-milking.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: and previously    Nine Ladies Dancing Eight Maids A Milking Seven Swans A Swimming
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Nine ladies dancing&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/820c4622187f25c6&quot; width=&quot;145&quot; height=&quot;24&quot; alt=&quot;9ladies jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;9ladies jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.fashion-era.com/images/xmas/xmas_traditions/9ladies.jpg&quot;&gt;http://www.fashion-era.com/images/xmas/xmas_traditions/9ladies.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: On the ninth day of Christmas  my true love gave to me Nine Ladies Dancing   eight maids a milking  seven swans a swimming  six geese a laying  Five golden rings  Four calling birds  three French hens  two
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/f0f6fff6df74ef12&quot; width=&quot;136&quot; height=&quot;150&quot; alt=&quot;9 ladies dancing jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;9 ladies dancing jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.deanperry.co.uk/images/seasonalextras/12days/9-ladies-dancing.jpg&quot;&gt;http://www.deanperry.co.uk/images/seasonalextras/12days/9-ladies-dancing.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 10 Lords A Leaping  click for bigger  and previously    Nine Ladies Dancing Eight Maids A Milking
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/544cfea19da74a4a&quot; width=&quot;83&quot; height=&quot;100&quot; alt=&quot;thumb 9ladies small jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;thumb 9ladies small jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.jonquathor.co.uk/albums/userpics/10001/thumb_9ladies-small.jpg&quot;&gt;http://www.jonquathor.co.uk/albums/userpics/10001/thumb_9ladies-small.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Nine Ladies Dancing   72 viewsFiller art for the Twelve Day of Christmas at The Wotch
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Ten lords a-leaping&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/713b7d38304d4d2e&quot; width=&quot;95&quot; height=&quot;125&quot; alt=&quot;Ten Lords A Leaping Thumb jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;Ten Lords A Leaping Thumb jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.coloursdownunder.com.au/shop/images/product_images/Ten-Lords-A-Leaping-Thumb.jpg&quot;&gt;http://www.coloursdownunder.com.au/shop/images/product_images/Ten-Lords-A-Leaping-Thumb.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: 
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/a4a4f191a78b3ba4&quot; width=&quot;128&quot; height=&quot;130&quot; alt=&quot;1993 Ten Lords A Leaping JPG&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;1993 Ten Lords A Leaping JPG&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.thepartyshop.com/Commerce/images/1993%20Ten%20Lords%20A-Leaping.JPG&quot;&gt;http://www.thepartyshop.com/Commerce/images/1993%20Ten%20Lords%20A-Leaping.JPG&lt;/a&gt;&lt;br /&gt;    
+Summary: 1993 Springtime Bonn  &gt; 27 Apr 2005 21 40 57K 1993 TURTLE jpg 14 Jul 2005 08 37 33K 1993 Ten Lords A Lea  &gt; 26 May 2005 14 53 28K 1993 Time for Easter  &gt; 27 Apr 2005 21 54 100K
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/781699d6537ca35e&quot; width=&quot;110&quot; height=&quot;135&quot; alt=&quot;36976 reg jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;36976 reg jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.giftcorral.com/giftcorral/images/items/36976_reg.jpg&quot;&gt;http://www.giftcorral.com/giftcorral/images/items/36976_reg.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Our Price  $5 25  Big Sky Carvers Ten Lords A Leaping Ornament
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Eleven pipers piping&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/80770d65f9669e52&quot; width=&quot;108&quot; height=&quot;135&quot; alt=&quot;xmas11 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;xmas11 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://streamers.com/ideas/xmas11.jpg&quot;&gt;http://streamers.com/ideas/xmas11.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Eleven Pipers piping
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/4e82408b1e9bbe60&quot; width=&quot;136&quot; height=&quot;150&quot; alt=&quot;11 pipers piping jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;11 pipers piping jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.deanperry.co.uk/images/seasonalextras/12days/11-pipers-piping.jpg&quot;&gt;http://www.deanperry.co.uk/images/seasonalextras/12days/11-pipers-piping.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: It s the Penultimate Day of Christmas  Woohoo  so here s    Eleven Pipers Piping   click on the image for a full size version  The Eleven Pipers represent the eleven Faithful Apostles  1  Simon Peter  2  Andrew  3  James  4  John  5  Philip  6  Bartholomew  7  Matthew  8  Thomas  9  James bar Alphaeus  10  Simon
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/de35c9b1f0920300&quot; width=&quot;119&quot; height=&quot;170&quot; alt=&quot;pipers piping 12 days jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;pipers piping 12 days jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.msgr.ca/msgr-2/pipers%20piping%2012%20days.jpg&quot;&gt;http://www.msgr.ca/msgr-2/pipers%20piping%2012%20days.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: My true love gave to me
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;h2&gt;Image search for Twelve drummers drumming&lt;/h2&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/d51a2d60927342e0&quot; width=&quot;130&quot; height=&quot;94&quot; alt=&quot;Twelve Drummers Drumming300 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;Twelve Drummers Drumming300 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://www.creativedisplays.com/siteresources/modules/webstore/ProdImages/Twelve%20Drummers%20Drumming300.jpg&quot;&gt;http://www.creativedisplays.com/siteresources/modules/webstore/ProdImages/Twelve%20Drummers%20Drumming300.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: Twelve Drummers Drumming  Six Feet Tall  TDD6  Twelve Drummers Drumming   Six Feet Tall  animated   Large Drums
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/c724b6c7cf2ff946&quot; width=&quot;135&quot; height=&quot;86&quot; alt=&quot;find the twelve days of christmas 10 jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;find the twelve days of christmas 10 jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://static.howstuffworks.com/gif/find-the-twelve-days-of-christmas-10.jpg&quot;&gt;http://static.howstuffworks.com/gif/find-the-twelve-days-of-christmas-10.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: View Enlarged Image Find twelve drummers drumming and lots more in this Christmas game
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt; 
+
+&lt;p&gt; 
+&lt;hr&gt; 
+&lt;/p&gt; 
+
+&lt;img src=&quot;http://thm-a01.yimg.com/image/b2e30b934a546b74&quot; width=&quot;150&quot; height=&quot;112&quot; alt=&quot;12 drummers drumming jpg&quot; style=&quot;align:left&quot;&gt; 
+
+&lt;h3&gt;12 drummers drumming jpg&lt;/h3&gt; 
+URL: &lt;a href=&quot;http://christiannewwave.files.wordpress.com/2007/04/12-drummers-drumming.jpg&quot;&gt;http://christiannewwave.files.wordpress.com/2007/04/12-drummers-drumming.jpg&lt;/a&gt;&lt;br /&gt;    
+Summary: German band Twelve Drummers Drumming started in the autumn of 1983  Seizing their name from an English Christmas carol  The 12 Days OF Christmas   The line up consisted of Rudi Edgar
+&lt;br clear=&quot;both&quot; style=&quot;clear:both&quot;&gt;
+</code></pre>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/12\/22\/12-Days-of-Christmas-Yahoo-Style-2009'; 
+this.page.identifier = '/?p=3661'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/22/12-Days-of-Christmas-Yahoo-Style-2009" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="12 Days of Christmas - Yahoo Style - 2009" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/22/12-Days-of-Christmas-Yahoo-Style-2009" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/22/12-Days-of-Christmas-Yahoo-Style-2009" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="12 Days of Christmas - Yahoo Style - 2009" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/22/12-Days-of-Christmas-Yahoo-Style-2009" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/22/12-Days-of-Christmas-Yahoo-Style-2009" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using Cloud Code, Mobile Application Security, Node.js and Bluemix &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using Cloud Code, Mobile Application Security, Node.js and Bluemix" />
+<meta property="og:description" content="So, first off, forgive the somewhat long, rambly title. I&rsquo;m working on a new project that involves quite a few moving parts - many of which are new to me. I ran into some trouble along the way (well, a lot of trouble), and this morning I finally broke through and got things working. I want to give huge thanks to my coworker David Cariello for helping me out and not losing patience with me.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix" />
+
+
+<meta property="og:updated_time" content="2015-06-09T13:35:13&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using Cloud Code, Mobile Application Security, Node.js and Bluemix">
+<meta itemprop="description" content="So, first off, forgive the somewhat long, rambly title. I&rsquo;m working on a new project that involves quite a few moving parts - many of which are new to me. I ran into some trouble along the way (well, a lot of trouble), and this morning I finally broke through and got things working. I want to give huge thanks to my coworker David Cariello for helping me out and not losing patience with me.
+">
+
+
+<meta itemprop="dateModified" content="2015-06-09T13:35:13&#43;06:00" />
+<meta itemprop="wordCount" content="1092">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using Cloud Code, Mobile Application Security, Node.js and Bluemix"/>
+<meta name="twitter:description" content="So, first off, forgive the somewhat long, rambly title. I&rsquo;m working on a new project that involves quite a few moving parts - many of which are new to me. I ran into some trouble along the way (well, a lot of trouble), and this morning I finally broke through and got things working. I want to give huge thanks to my coworker David Cariello for helping me out and not losing patience with me.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix">
+    <h1 class="article-title" itemprop="name">
+        Using Cloud Code, Mobile Application Security, Node.js and Bluemix
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-06-09 13:35:13 &#43;0600 &#43;0600" itemprop="datePublished">2015-06-09</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/bluemix">bluemix</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/cordova">cordova</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/mobilefirst">mobilefirst</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>So, first off, forgive the somewhat long, rambly title. I&rsquo;m working on a new project that involves quite a few moving parts - many of which are new to me. I ran into some trouble along the way (well, a lot of trouble), and this morning I finally broke through and got things working. I want to give huge thanks to my coworker David Cariello for helping me out and not losing patience with me.</p>
+
+<p>My application is a hybrid mobile application that makes use of a Node.js app running on <a href="http://www.bluemix.net?cm_mmc=IBM-MobileFirst-_-DevAdvocacy-_-Digital-_-MF">Bluemix</a>. My Node.js app is going to make use of <a href="https://cloudant.com/">Cloudant</a> for data storage and here is where the wrinkle came in. I wanted to make use of a specific feature of Node.js running on Bluemix, <a href="https://www.ng.bluemix.net/docs/#services/mas/index.html#gettingstarted">Mobile Application Security</a> (MAS).</p>
+
+<p>MAS provides a basic framework for locking down resources in your server application. The docs seem to imply it only works with the Mobile Data and Push services, neither of which I&rsquo;m using. Turns out though you can also secure ad hoc routes in your Node.js application. What&rsquo;s cool is that it isn&rsquo;t an all or nothing solution. You can have some routes open and some closed, depending on whatever your app needs are. So how do you use this?</p>
+
+<p>Let&rsquo;s start on the client side. You can find all the documentation for working with Bluemix services <a href="http://mbaas-gettingstarted.ng.bluemix.net/javascript">here</a>. It begins by asking you to add a core library using bower:</p>
+
+<p><code>bower install <a href="https://hub.jazz.net/git/bluemixmobilesdk/ibmbluemix-javascript/.git">https://hub.jazz.net/git/bluemixmobilesdk/ibmbluemix-javascript/.git</a></code></p>
+
+<p>You then have to add the libraries you&rsquo;ll use. I already said I wasn&rsquo;t using Mobile Application Data and Push. There&rsquo;s another feature though that I will use, <a href="http://mbaas-gettingstarted.ng.bluemix.net/javascript#cloud-code">Cloud Code</a>. You can think of Cloud Code as a quick way of &ldquo;speaking&rdquo; to your Node.js application. So while normally you may do something like so:</p>
+
+<p><code>$.get(&ldquo;the location of my server/my route&rdquo;, etc etc</code></p>
+
+<p>Cloud Code simplifies this down to calls that look like this:</p>
+
+<p><code>cc.get(&ldquo;/my route&rdquo;)</code></p>
+
+<p>So not a <i>big</i> savings, but you then get to add security to your calls automatically and toggle between development and production as well. All in all, it&rsquo;s a nice library. You would add it with bower as well:</p>
+
+<p><code>bower install <a href="https://hub.jazz.net/git/bluemixmobilesdk/ibmcloudcode-javascript/.git">https://hub.jazz.net/git/bluemixmobilesdk/ibmcloudcode-javascript/.git</a></code></p>
+
+<p>And once you&rsquo;ve got both libraries installed, simply address them in your code:</p>
+
+<pre><code class="language-javascript">&lt;script src="lib/ibmbluemix/js/IBMBluemix.js"&gt;&lt;/script&gt;
+&lt;script src='lib/ibmcloudcode/js/IBMCloudCode.js'&gt;&lt;/script&gt;</code></pre>
+
+<p>Ok, so now comes the question of using CC. If you aren&rsquo;t using security, or have an unsecured route you want to run, the code looks like this:</p>
+
+<pre><code class="language-javascript">var config = {
+  applicationId:"ApplicationID",
+  applicationRoute:"ApplicationRoute",
+  applicationSecret:"ApplicationSecret"
+};
+
+IBMBluemix.initialize(config);
+var cc = IBMCloudCode.initializeService();
+cc.get("/allfree").then(function(data){
+    console.log(data);
+},function(err){
+    console.log('err',err);
+});</code></pre>
+
+<p>The initial block configures your use of Bluemix. All three values can be found by clicking the Mobile Options link on your Bluemix app dashboard:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/06/shot12.png" alt="shot1" width="800" height="327" class="aligncenter size-full wp-image-6282" /></p>
+
+<p>You can keep the instance variable around obviously. Also, you get methods for each HTTP type as well, so cc.post, cc.delete, etc. During testing when your Node.js app is running locally, you can switch to hitting your local instance:</p>
+
+<pre><code class="language-javascript">IBMBluemix.initialize(config);
+var cc = IBMCloudCode.initializeService();
+cc.setBaseUrl('http://localhost:3000');
+cc.get("/allfree").then(function(data){
+    console.log(data);
+},function(err){
+    console.log('err',err);
+});</code></pre>
+
+<p>That&rsquo;s calling unsecured routes, but what about routes you want locked down? Mobile Application Security supports two types of authentication - Google and Worklight. Google will be easier to use in my mobile application so I selected that. To use Google, you need to use OAuth to log clients in. Nic Raboy has a <strong>very simple</strong> Cordova plugin for this, <a href="https://github.com/nraboy/ng-cordova-oauth">ng-cordova-oauth</a>. His library supports a butt load of different OAuth providers, including Google. To add Google authentication to my app, I added his plugin, and then used this simple code. Note that I do <strong>not</strong> store the result from authentication in this code block. That&rsquo;s something I&rsquo;ll be adding later.</p>
+
+<pre><code class="language-javascript">$cordovaOauth.google("619574182936-8csqdjp25j29ml3l63g985lnqo1p9bnr.apps.googleusercontent.com", ["email"]).then(function(result) {
+    console.log('good result');
+    console.dir(result)
+    $scope.token = result.access_token;
+    //more stuff here
+}, function(error) {
+    // error from oath
+    console.log('err '+error);
+});</code></pre>
+
+<p>That big value up front there is my Google project client ID. Believe it or not - that&rsquo;s the entirety of the code. The plugin handles popping open a window and running the entire OAuth flow:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/06/iOS-Simulator-Screen-Shot-Jun-9-2015-1.10.42-PM.png" alt="iOS Simulator Screen Shot Jun 9, 2015, 1.10.42 PM" width="450" height="800" class="aligncenter size-full wp-image-6278 imgborder" /></p>
+
+<p>Once OAuth is done, we can use the access token returned by that process to &ldquo;sign&rdquo; our calls to Cloud Code:</p>
+
+<pre><code class="language-javascript">IBMBluemix.setSecurityToken($scope.token, IBMBluemix.SecurityProvider.GOOGLE).done(function(user) {
+//stuff here
+}, function(err) { 
+    console.log('something was bad w/ the token');
+}</code></pre>
+
+<p>Now whenever I use Cloud Code calls, they will pass along the token value to the Node.js app.</p>
+
+<p>That&rsquo;s it for the client-side code. Obviously there&rsquo;s a lot more in the details, and when I get the application I&rsquo;m <i>really</i> building ready to share, I&rsquo;ll be sharing the complete code base then. Now let&rsquo;s turn our attention to the server-side.</p>
+
+<p>Node.js will require two different packages - first a generic Bluemix library and then the security one. You can install both to your package.json by doing:</p>
+
+<p><code>
+npm install ibmbluemix &ndash;save
+npm install ibmsecurity &ndash;save
+</code></p>
+
+<p>You then configure your application at startup. Here is an example from the boilerplate:</p>
+
+<pre><code class="language-javascript">var express = require('express'),
+    app         = express(),
+    ibmbluemix  = require('ibmbluemix'),
+    config      = {
+        // change to real application route assigned for your application
+        applicationRoute : 'saucedb.mybluemix.net',
+        // change to real application ID generated by Bluemix for your application
+        applicationId : '38a0a550-b018-4a10-b879-aec68868c249'
+    };
+</code></pre>
+
+<p>Now - let&rsquo;s discuss the routes I mentioned earlier using Cloud Code. In the first example, you saw me run a route called <code>/allfree</code>. In order for Cloud Code to access this route, you <strong>must</strong> modify the route path to include an IBM Bluemix context root. This is fairly simple though:</p>
+
+<pre><code class="language-javascript">var ibmconfig = ibmbluemix.getConfig();
+app.get(ibmconfig.getContextRoot()+'/allfree', function(req, res) {
+    res.send("Pretend I'm doing stuff here.");
+});</code></pre>
+
+<p>If you forget this, then you&rsquo;ll get errors running Cloud Code calls from your mobile application. To be clear, a regular HTTP call to /allfree would work, but not the &ldquo;wrapped&rdquo; call using Cloud Code.</p>
+
+<p>So the next question is - how do you enable security for routes? To do this, you first physically separate your routes that need security from those that do not. Your core app.js (or whatever file you use to run your Node.js app) should put the unsecured routes first, and then use this block to begin requiring secured calls:</p>
+
+<pre><code class="language-javascript">var mas = require('ibmsecurity')();
+app.use(mas);
+</code></pre>
+
+<p>Simple, right? Any routes after this call will then require a security token to execute. There&rsquo;s one more part to this that I forgot to mention. When selecting what types of authentication you want to allow, you will want to select the Mobile Application Security service in your dashboard and click the checkbox to enable it, as I&rsquo;ve done here:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/06/shot21.png" alt="shot2" width="800" height="662" class="aligncenter size-full wp-image-6279" /></p>
+
+<p>I hope this makes sense - if not - just add a comment below.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/06\/09\/using-cloud-code-mobile-application-security-node-js-and-bluemix'; 
+this.page.identifier = '/?p=6275'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using Cloud Code, Mobile Application Security, Node.js and Bluemix" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using Cloud Code, Mobile Application Security, Node.js and Bluemix" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

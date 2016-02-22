@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Building your first Model-Glue application (part 5) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Building your first Model-Glue application (part 5)" />
+<meta property="og:description" content="In the last entry, I finally showed you how to hook up model information (in this case the model handled our User data) to the Model-Glue controller. This let you logon to the system. Now I need to modify things a bit to let you actually register for the site. Most sites will have features like &ldquo;Request a Password&rdquo;, but in keeping with things simple, I&rsquo;m only building a logon form and a register form. If you forget your password, your out of luck. (Although I am planning some entries that take place place after the application is done, so this may be one of the improvements I add.)
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2006/03/20/Building-your-first-ModelGlue-application-part-5" />
+
+
+<meta property="og:updated_time" content="2006-03-20T15:03:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Building your first Model-Glue application (part 5)">
+<meta itemprop="description" content="In the last entry, I finally showed you how to hook up model information (in this case the model handled our User data) to the Model-Glue controller. This let you logon to the system. Now I need to modify things a bit to let you actually register for the site. Most sites will have features like &ldquo;Request a Password&rdquo;, but in keeping with things simple, I&rsquo;m only building a logon form and a register form. If you forget your password, your out of luck. (Although I am planning some entries that take place place after the application is done, so this may be one of the improvements I add.)
+">
+
+
+<meta itemprop="dateModified" content="2006-03-20T15:03:00&#43;06:00" />
+<meta itemprop="wordCount" content="1308">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Building your first Model-Glue application (part 5)"/>
+<meta name="twitter:description" content="In the last entry, I finally showed you how to hook up model information (in this case the model handled our User data) to the Model-Glue controller. This let you logon to the system. Now I need to modify things a bit to let you actually register for the site. Most sites will have features like &ldquo;Request a Password&rdquo;, but in keeping with things simple, I&rsquo;m only building a logon form and a register form. If you forget your password, your out of luck. (Although I am planning some entries that take place place after the application is done, so this may be one of the improvements I add.)
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2006/03/20/Building-your-first-ModelGlue-application-part-5">
+    <h1 class="article-title" itemprop="name">
+        Building your first Model-Glue application (part 5)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2006-03-20 15:03:00 &#43;0600 &#43;0600" itemprop="datePublished">2006-03-20</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>In the <a href="http://ray.camdenfamily.com/index.cfm/2006/3/16/Building-your-first-ModelGlue-application-part-4">last entry</a>, I finally showed you how to hook up model information (in this case the model handled our User data) to the Model-Glue controller. This let you logon to the system. Now I need to modify things a bit to let you actually register for the site. Most sites will have features like &ldquo;Request a Password&rdquo;, but in keeping with things simple, I&rsquo;m only building a logon form and a register form. If you forget your password, your out of luck. (Although I am planning some entries that take place place <i>after</i> the application is done, so this may be one of the improvements I add.)</p>
+
+<p>The first thing to do is to add a &ldquo;Register&rdquo; link to the logon form. This can be found in dspLogon.cfm. I&rsquo;m not going to show the entire template, but just the actual Register link.</p>
+
+<p><code>
+&lt;a href=&ldquo;#viewstate.getvalue(&ldquo;myself&rdquo;)#register&rdquo;&gt;Register&lt;/a&gt;
+</code></p>
+
+<p>I talked about this style of code earlier, and in fact, you can see it in use in the same template in the logon form. The &ldquo;myself&rdquo; value from the view state is simply a built-in value that points back to the application itself. All I need to do is append the event name at the end. Let&rsquo;s now add the register event to our ModelGlue.xml file:</p>
+
+<p><code>
+    &lt;event-handler name=&ldquo;Register&rdquo;&gt;
+      &lt;broadcasts /&gt;
+      &lt;views&gt;
+        &lt;include name=&ldquo;body&rdquo; template=&ldquo;dspRegister.cfm&rdquo; /&gt;
+      &lt;/views&gt;
+      &lt;results /&gt;
+    &lt;/event-handler&gt;
+</code></p>
+
+<p>Nothing too fancy here, in fact, I just cut and pasted the Logon event and renamed it along with the view. Just like the Logon event, and unlike the Home event, we don&rsquo;t need to check for your authentication status, obviously, as you won&rsquo;t be logged in at this point. Now let&rsquo;s build the register form:</p>
+
+<p><code>
+&lt;!&mdash; grab potential errors &mdash;&gt;
+&lt;cfset errors = viewState.getValue(&ldquo;errors&rdquo;)&gt;</p>
+
+<p>&lt;cfparam name=&ldquo;form.name&rdquo; default=&ldquo;&rdquo;&gt;
+&lt;cfparam name=&ldquo;form.username&rdquo; default=&ldquo;&rdquo;&gt;</p>
+
+<p>&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;title&gt;PhotoGallery Register&lt;/title&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body&gt;</p>
+
+<p>&lt;cfoutput&gt;
+&lt;p&gt;
+&lt;h2&gt;Register&lt;/h2&gt;</p>
+
+<p>&lt;cfif isArray(errors) and arrayLen(errors)&gt;
+    &lt;cfoutput&gt;
+    &lt;ul&gt;
+    &lt;b&gt;
+    Please correct the following errors:&lt;br&gt;
+    &lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#arrayLen(errors)#&rdquo;&gt;
+    &lt;li&gt;#errors[x]#&lt;/li&gt;
+    &lt;/cfloop&gt;
+    &lt;/b&gt;
+    &lt;/ul&gt;
+    &lt;/cfoutput&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;form action=&ldquo;#viewstate.getValue(&ldquo;myself&rdquo;)#registerattempt&rdquo; method=&ldquo;post&rdquo;&gt;
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td&gt;name:&lt;/td&gt;
+        &lt;td&gt;&lt;input type=&ldquo;text&rdquo; name=&ldquo;name&rdquo; value=&ldquo;#form.name#&rdquo;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;username:&lt;/td&gt;
+        &lt;td&gt;&lt;input type=&ldquo;text&rdquo; name=&ldquo;username&rdquo; value=&ldquo;#form.username#&rdquo;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;password:&lt;/td&gt;
+        &lt;td&gt;&lt;input type=&ldquo;password&rdquo; name=&ldquo;password&rdquo;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;confirm password:&lt;/td&gt;
+        &lt;td&gt;&lt;input type=&ldquo;password&rdquo; name=&ldquo;password2&rdquo;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;&nbsp;&lt;/td&gt;
+        &lt;td&gt;&lt;input type=&ldquo;submit&rdquo; name=&ldquo;logon&rdquo; value=&ldquo;Register&rdquo;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+&lt;/p&gt;
+&lt;/cfoutput&gt;
+</code></p>
+
+<p>There is a lot going on here, but lets focus on the Model-Glue portions. The very first thing I do is examine the view state for errors. I haven&rsquo;t built this logic yet, but I know that when I do the form checking, I&rsquo;m going to return the errors in a variable called errors. I do this for all my forms so it makes it easy to remember. The errors will be an array of messages, so you can see that I loop over them later on to display the issues. Outside of that, everything else here is just a simple form. The only thing special is the use of &ldquo;myself&rdquo; again for the link and the event name, registerattempt.</p>
+
+<p>So now I need to return back to my ModelGlue.xml file. Let&rsquo;s take a second here and think about it. I think you see a pattern here. As I build out this application, I&rsquo;m going back and forth between my model, my controller, and my view. What I find powerful about this setup is the level of separation between each piece, and how it makes things simpler for me. There have been a lot of discussion lately about frameworks and whether or not they are good or not. Personally I think this is something every developer, or company, needs to decide for themselves. For me, I really like the fact that with Model-Glue, everything has a place and there is a place for everything. I don&rsquo;t want to spend time worrying about where to put files. I don&rsquo;t want to spend time worrying about how my application will operate. I want to spend time worrying the bits of code that are not trivial. The business logic. The things that really require my time - not simple stuff like where each file should go. Anyway, sorry for the mini sermon there. Let&rsquo;s add our registerattempt event.</p>
+
+<p><code>
+    &lt;event-handler name=&ldquo;RegisterAttempt&rdquo;&gt;
+      &lt;broadcasts&gt;
+        &lt;message name=&ldquo;register&rdquo; /&gt;
+      &lt;/broadcasts&gt;
+      &lt;results&gt;
+        &lt;result name=&ldquo;goodregister&rdquo; do=&ldquo;Home&rdquo; /&gt;
+        &lt;result name=&ldquo;badregister&rdquo; do=&ldquo;Register&rdquo; /&gt;
+      &lt;/results&gt;
+    &lt;/event-handler&gt;
+</code></p>
+
+<p>This acts much like our LogonAttempt event. The only difference here is the broadcast and result handlers. Also, some sites will probably want to send you to a page when you register. Again, to keep things simple, we will simply send the user to the home page. Now we need to add the register message to the controller section:</p>
+
+<p><code>
+&lt;message-listener message=&ldquo;register&rdquo; function=&ldquo;register&rdquo; /&gt;
+</code></p>
+
+<p>Then we follow this up by actually adding the register logic to our controller component:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;register&rdquo; access=&ldquo;public&rdquo; returntype=&ldquo;void&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;I register a user.&rdquo;&gt;
+    &lt;cfargument name=&ldquo;event&rdquo; type=&ldquo;ModelGlue.Core.Event&rdquo; required=&ldquo;true&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfset var bean = arguments.event.makeEventBean(&quot;model.UserBean&quot;) /&amp;gt;
+&amp;lt;cfset var errors = &quot;&quot;&amp;gt;
+
+&amp;lt;cfset errors = bean.validate()&amp;gt;  
+
+&amp;lt;cfif arguments.event.getValue(&quot;password&quot;) neq arguments.event.getValue(&quot;password2&quot;)&amp;gt;
+    &amp;lt;cfset arrayAppend(errors, &quot;Your confirmation password did not match.&quot;)&amp;gt;
+&amp;lt;/cfif&amp;gt;
+
+&amp;lt;cfif not arrayLen(errors)&amp;gt;
+    &amp;lt;cftry&amp;gt;
+        &amp;lt;cfset userDAO.create(bean)&amp;gt;
+        &amp;lt;!--- send email ---&amp;gt;
+        &amp;lt;cfmail to=&quot;#getModelGlue().getConfigSetting(&quot;adminemail&quot;)#&quot; from=&quot;#getModelGlue().getConfigSetting(&quot;adminemail&quot;)#&quot;
+                subject=&quot;PhotoGallery Registration&quot;&amp;gt;
+</code></pre>
+
+<p>New User @ PhotoGallery:</p>
+
+<p>Username:   #bean.getusername()#
+Password:   #bean.getpassword()#
+Name:       #bean.getname()#
+            &lt;/cfmail&gt;</p>
+
+<pre><code>        &amp;lt;!--- log them in ---&amp;gt;
+        &amp;lt;cfset session.loggedIn = true&amp;gt;
+        &amp;lt;cfset session.userBean = bean&amp;gt;
+
+        &amp;lt;cfset arguments.event.addResult(&quot;goodregister&quot;)&amp;gt;
+        &amp;lt;cfcatch&amp;gt;
+            &amp;lt;cfset errors[1] = &quot;This username already exists.&quot;&amp;gt;
+            &amp;lt;cfset arguments.event.setValue(&quot;errors&quot;, errors) /&amp;gt;
+            &amp;lt;cfset arguments.event.addResult(&quot;badregister&quot;)&amp;gt;
+        &amp;lt;/cfcatch&amp;gt;
+    &amp;lt;/cftry&amp;gt;  
+&amp;lt;cfelse&amp;gt;
+    &amp;lt;cfset arguments.event.setValue(&quot;errors&quot;, errors) /&amp;gt;
+    &amp;lt;cfset arguments.event.addResult(&quot;badregister&quot;)&amp;gt;
+&amp;lt;/cfif&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>Ok, a lot going on here, so let&rsquo;s cover this line by line. First off, we create an instance of the User bean. One cool thing about Model-Glue is that it has some code to handle automatically wiring event data to a bean. What does that mean in English? My register form had form fields with the same name as the &ldquo;set&rdquo; methods in my user bean. So for example, there was a name field and there is a setName method. By using the makeEventBean function, Model-Glue just passes in all event data to methods in the bean that maps up. That&rsquo;s a lot of work saved in one little function.</p>
+
+<p>Next I call my validate method. This simply checks to see if name, username, and password exist. This logic was written in my bean and can be updated later if my User model changes. One thing the bean doesn&rsquo;t do is check to see if my password and password confirmation match, so I do that by hand. Last but not least, I attempt to create the new user account. The userDAO CFC will throw an error if a user with the same name exists, hence the use of try/catch.</p>
+
+<p>Notice the email. As an ego-booster, I want to know whenever someone registers for the application. So I&rsquo;ve added a new setting, adminemail, to my ModelGlue.xml file, and I send an email to that account when someone registers. Next I log the user on in the same way my authenticate method does.</p>
+
+<p>Lastly, look at how I handle the various event results. I either return a goodregister or badregister result. The ModelGlue.xml file will use that result to figure out how to route the user.</p>
+
+<p>That&rsquo;s it for this session! As always, you can play with the live application here: <a href="http://pg1.camdenfamily.com"> <a href="http://pg1.camdenfamily.com">http://pg1.camdenfamily.com</a></a>. You can also download the application by clicking the &ldquo;Download&rdquo; link at the end of this article.</p>
+
+<p><b>Summary:</b>
+<ul>
+<li>In this entry we focused on the registration logic. We modified the logon form to provide a link to a new register event.
+<li>This register event was a simple form, but it handled errors nicely.
+<li>Where did the errors come from? Our controller was updated to handle the registration event, and use the event model to save error information so that our view, the register page, could also pick up on it.
+<li>We also added a simple configuration setting, adminemail, to the ModelGlue.xml file. This wasn&rsquo;t displayed, but can be seen in the zip attached to this entry.
+</ul><p><a href='enclosures/D%3A%5Cwebsites%5Ccamdenfamily%5Csource%5Cmorpheus%5Cblog%5Cenclosures%2Fwwwroot4%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2006\/03\/20\/Building-your-first-ModelGlue-application-part-5'; 
+this.page.identifier = '/?p=1158'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/20/Building-your-first-ModelGlue-application-part-5" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Building your first Model-Glue application (part 5)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/20/Building-your-first-ModelGlue-application-part-5" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/20/Building-your-first-ModelGlue-application-part-5" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Building your first Model-Glue application (part 5)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/20/Building-your-first-ModelGlue-application-part-5" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/20/Building-your-first-ModelGlue-application-part-5" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Working with IBM MobileFirst and the Ionic Framework &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Working with IBM MobileFirst and the Ionic Framework" />
+<meta property="og:description" content="Edit on March 30, 2015: Please see my follow up here for a few small tweaks: Working with IBM Mobile First and Ionic – a follow up
+
+A few weeks ago I blogged about using hybrid mobile applications and MobileFirst. Today I&rsquo;m going to demonstrate how to work with Ionic and MobileFirst. What follows is a combination of the steps necessary for bringing any existing Cordova application into MobileFirst along with things necessary for Ionic specifically. As before, credit goes to my coworker Carlos Santana for figuring these steps out. I&rsquo;ve also recorded a video of the process you can watch at the end of this blog post.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/03/23/working-with-ibm-mobilefirst-and-the-ionic-framework" />
+
+
+<meta property="og:updated_time" content="2015-03-23T09:42:58&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Working with IBM MobileFirst and the Ionic Framework">
+<meta itemprop="description" content="Edit on March 30, 2015: Please see my follow up here for a few small tweaks: Working with IBM Mobile First and Ionic – a follow up
+
+A few weeks ago I blogged about using hybrid mobile applications and MobileFirst. Today I&rsquo;m going to demonstrate how to work with Ionic and MobileFirst. What follows is a combination of the steps necessary for bringing any existing Cordova application into MobileFirst along with things necessary for Ionic specifically. As before, credit goes to my coworker Carlos Santana for figuring these steps out. I&rsquo;ve also recorded a video of the process you can watch at the end of this blog post.
+">
+
+
+<meta itemprop="dateModified" content="2015-03-23T09:42:58&#43;06:00" />
+<meta itemprop="wordCount" content="1341">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Working with IBM MobileFirst and the Ionic Framework"/>
+<meta name="twitter:description" content="Edit on March 30, 2015: Please see my follow up here for a few small tweaks: Working with IBM Mobile First and Ionic – a follow up
+
+A few weeks ago I blogged about using hybrid mobile applications and MobileFirst. Today I&rsquo;m going to demonstrate how to work with Ionic and MobileFirst. What follows is a combination of the steps necessary for bringing any existing Cordova application into MobileFirst along with things necessary for Ionic specifically. As before, credit goes to my coworker Carlos Santana for figuring these steps out. I&rsquo;ve also recorded a video of the process you can watch at the end of this blog post.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/03/23/working-with-ibm-mobilefirst-and-the-ionic-framework">
+    <h1 class="article-title" itemprop="name">
+        Working with IBM MobileFirst and the Ionic Framework
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-03-23 09:42:58 &#43;0600 &#43;0600" itemprop="datePublished">2015-03-23</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/ionic">ionic</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/mobilefirst">mobilefirst</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p><strong>Edit on March 30, 2015: Please see my follow up here for a few small tweaks: <a href="http://www.raymondcamden.com/2015/03/30/working-with-ibm-mobile-first-and-ionic-a-follow-up">Working with IBM Mobile First and Ionic – a follow up</a></strong></p>
+
+<p>A few weeks ago I <a href="http://www.raymondcamden.com/2015/02/16/working-with-hybrid-applications-and-ibm-mobilefirst">blogged</a> about using hybrid mobile applications and <a href="http://www.ibm.com/mobilefirst/us/en/">MobileFirst</a>. Today I&rsquo;m going to demonstrate how to work with <a href="http://www.ionicframework.com">Ionic</a> and MobileFirst. What follows is a combination of the steps necessary for bringing any existing Cordova application into MobileFirst along with things necessary for Ionic specifically. As before, credit goes to my coworker <a href="https://twitter.com/csantanapr">Carlos Santana</a> for figuring these steps out. I&rsquo;ve also recorded a video of the process you can watch at the end of this blog post.</p>
+
+<h2>Create, and Start, your MF Server</h2>
+To begin, I'm assuming you've got a MobileFirst server up and running already with a hybrid application. If you don't remember how to do that, please read my <a href="http://www.raymondcamden.com/2015/02/16/working-with-hybrid-applications-and-ibm-mobilefirst">earlier blog post</a> where I walk you through the commands you have to enter at the command line. 
+
+I always take baby steps, so once you have your server running, confirm everything is kosher by opening up the console and running your app in the Mobile Browser Simulator.
+
+<a href="http://www.raymondcamden.com/wp-content/uploads/2015/02/mf4.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/02/mf4.png" alt="mf4" width="800" height="412" class="alignnone size-full wp-image-5677"></a>
+
+<h2>Set up the Bits</h2>
+Ok, at the command line, or in Explorer/Finder, move the common folder elsewhere. Remember that the common folder is where your web assets live. You're going to want to copy some bits from this folder so for now don't delete it. 
+
+Next, grab a copy of Ionic. I'm assuming you've already installed Ionic, but if not, follow the <a href="http://ionicframework.com/getting-started/">installation instructions</a>. Ionic's CLI will normally create a new project as a Cordova project, but all we want are the web assets. The CLI has a flag for that, --no-cordova. You can create a new application without a full Cordova project like so:
+
+<pre><code>
+ionic start --no-cordova ioniccode blank
+</code></pre>
+
+Notice I used the blank template and a folder called ioniccode. Open that folder up and you will see the following assets:
+
+<a href="http://www.raymondcamden.com/wp-content/uploads/2015/03/shot13.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/03/shot13.png" alt="shot1" width="238" height="170" class="alignnone size-full wp-image-5859" /></a>
+
+Copy that www folder into the root of your app folder and rename it common. Your app folder should then look something like this:
+
+<a href="http://www.raymondcamden.com/wp-content/uploads/2015/03/shot22.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/03/shot22.png" alt="shot2" width="269" height="220" class="alignnone size-full wp-image-5860" /></a>
+
+Again, both my original common folder (common-orig in the screen shot above) and the Ionic folder (ioniccode) can be removed later. As I said, I'm keeping them in so I can copy some bits over.
+
+<h2>Update the Code</h2>
+
+<p>Ok, now you need to update the code a bit. Your common folder is a copy of the Ionic &ldquo;Blank&rdquo; starter, but what I describe here would apply to the other templates as well.</p>
+
+<p>First, we need to make some modifications to the index.html file:</p>
+
+<ul>
+<li>You need to comment out (or just remove) cordova.js. This is necessary because MobileFirst will inject the script tag automatically.
+<pre><code class="language-javascript">&lt;!--
+&lt;script src=&quot;cordova.js&quot;&gt;&lt;&#x2F;script&gt;
+--&gt;</code></pre></li>
+<li>You need to copy in MobileFirst's jQuery alias.
+<pre><code class="language-javascript">&lt;script&gt;window.$ = window.jQuery = WLJQ;&lt;&#x2F;script&gt;</code></pre></li>
+<li>You need to add a new file to include the MobileFirst initialization stuff. Technically you don't need to add a new file, you could modify the existing app.js, but I think it makes sense to break this out into a new file. The default MobileFirst template uses three files, but we can combine them into one. I'm calling mine wlInit.js. MobileFirst used to be called Worklight, and a lot of the code uses "WL" as an acronym, so I used it in my file as well.
+<pre><code class="language-javascript">&lt;script src=&quot;js&#x2F;wlInit.js&quot;&gt;&lt;&#x2F;script&gt;</code></pre>
+</li>
+</ul>
+
+<p>Here is the completely updated index.html file.</p>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width&quot;&gt;
+    &lt;title&gt;&lt;&#x2F;title&gt;
+
+    &lt;link href=&quot;lib&#x2F;ionic&#x2F;css&#x2F;ionic.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;link href=&quot;css&#x2F;style.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;script&gt;window.$ = window.jQuery = WLJQ;&lt;&#x2F;script&gt;
+
+    &lt;!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    &lt;link href=&quot;css&#x2F;ionic.app.css&quot; rel=&quot;stylesheet&quot;&gt;
+    --&gt;
+
+    &lt;!-- ionic&#x2F;angularjs js --&gt;
+    &lt;script src=&quot;lib&#x2F;ionic&#x2F;js&#x2F;ionic.bundle.js&quot;&gt;&lt;&#x2F;script&gt;
+
+    &lt;!-- cordova script (this will be a 404 during development) --&gt;
+      &lt;!--
+    &lt;script src=&quot;cordova.js&quot;&gt;&lt;&#x2F;script&gt;
+        --&gt;
+    &lt;!-- your app&#x27;s js --&gt;
+    &lt;script src=&quot;js&#x2F;app.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;script src=&quot;js&#x2F;wlInit.js&quot;&gt;&lt;&#x2F;script&gt;
+  &lt;&#x2F;head&gt;
+  &lt;body ng-app=&quot;starter&quot;&gt;
+
+    &lt;ion-pane&gt;
+      &lt;ion-header-bar class=&quot;bar-stable&quot;&gt;
+        &lt;h1 class=&quot;title&quot;&gt;Ionic Blank Starter&lt;&#x2F;h1&gt;
+      &lt;&#x2F;ion-header-bar&gt;
+      &lt;ion-content&gt;
+      &lt;&#x2F;ion-content&gt;
+    &lt;&#x2F;ion-pane&gt;
+  &lt;&#x2F;body&gt;
+&lt;&#x2F;html&gt;</code></pre>
+
+<p>Next, open up style.css. This is blank (except for a comment) in the Ionic template, but we need to add the following style declaration:</p>
+
+<pre><code class="language-css">html, body {
+    height: 100%;
+}</code></pre>
+
+<p>This is required because the application ends up with a 0% height when run under MobileFirst. Odd - but just go with it.</p>
+
+<p>Now open app.js. In the run() portion there is code that works with the Ionic keyword plugin. For now, we&rsquo;re going to simply disable it. In a later blog post I&rsquo;ll talk about working with plugins and MobileFirst, but for now, you can safely comment it out.</p>
+
+<pre><code class="language-javascript">// Ionic Starter App
+
+// angular.module is a global place for creating, registering and retrieving Angular modules
+// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
+// the 2nd parameter is an array of 'requires'
+angular.module('starter', ['ionic'])
+
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+      /*
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    */
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})</code></pre>
+
+<p>Ok, so for the last part, we need to create wlInit.js. As I said, this is code that handles initializing MobileFirst stuff. In later blog posts, I&rsquo;ll demonstrate some of those cool features with Ionic, but for now, we&rsquo;re going to keep the file pretty simple. You can copy and paste the contents of initOptions.js and main.js directly into your new file. (And again, this is a personal preference. If you want to keep them in two separate files, that&rsquo;s fine too, just be sure to include them both back in index.html.)</p>
+
+<p>We need to do one more small tweak. When using Ionic and a &ldquo;regular&rdquo; Cordova project, there is a hook that applies a style for Android and iOS. We don&rsquo;t have those hooks under MobileFirst, so we have to do it by hand, but that&rsquo;s easy enough. The MobileFirst JavaScript API has a <a href="http://www-01.ibm.com/support/knowledgecenter/SSHS8R_6.3.0/com.ibm.worklight.apiref.doc/html/refjavascript-client/html/WL.Client.html%23getEnvironment">getEnvironment</a> function that returns information about the running environment. We can use that to sniff iPhone and iPad versus Android. (And again, credit for this goes to Carlos.) Here is the entire file with that modification within wlCommonInit.</p>
+
+<pre><code class="language-javascript">&#x2F;&#x2F; Uncomment the initialization options as required. For advanced initialization options please refer to IBM MobileFirst Platform Foundation Knowledge Center 
+ 
+ var wlInitOptions = {
+    
+    &#x2F;&#x2F; # To disable automatic hiding of the splash screen uncomment this property and use WL.App.hideSplashScreen() API
+    &#x2F;&#x2F;autoHideSplash: false,
+         
+    &#x2F;&#x2F; # The callback function to invoke in case application fails to connect to MobileFirst Server
+    &#x2F;&#x2F;onConnectionFailure: function (){},
+    
+    &#x2F;&#x2F; # MobileFirst Server connection timeout
+    &#x2F;&#x2F;timeout: 30000,
+    
+    &#x2F;&#x2F; # How often heartbeat request will be sent to MobileFirst Server
+    &#x2F;&#x2F;heartBeatIntervalInSecs: 20 * 60,
+    
+    &#x2F;&#x2F; # Enable FIPS 140-2 for data-in-motion (network) and data-at-rest (JSONStore) on iOS or Android.
+    &#x2F;&#x2F;   Requires the FIPS 140-2 optional feature to be enabled also.
+    &#x2F;&#x2F;enableFIPS : false,
+    
+    &#x2F;&#x2F; # The options of busy indicator used during application start up
+    &#x2F;&#x2F;busyOptions: {text: &quot;Loading...&quot;}
+};
+
+if (window.addEventListener) {
+    window.addEventListener(&#x27;load&#x27;, function() { WL.Client.init(wlInitOptions); }, false);
+} else if (window.attachEvent) {
+    window.attachEvent(&#x27;onload&#x27;,  function() { WL.Client.init(wlInitOptions); });
+}
+
+function wlCommonInit(){
+    &#x2F;*
+     * Use of WL.Client.connect() API before any connectivity to a MobileFirst Server is required. 
+     * This API should be called only once, before any other WL.Client methods that communicate with the MobileFirst Server.
+     * Don&#x27;t forget to specify and implement onSuccess and onFailure callback functions for WL.Client.connect(), e.g:
+     *    
+     *    WL.Client.connect({
+     *          onSuccess: onConnectSuccess,
+     *          onFailure: onConnectFailure
+     *    });
+     *     
+     *&#x2F;
+    
+    &#x2F;&#x2F; Common initialization code goes here
+    var env = WL.Client.getEnvironment();
+    if(env === WL.Environment.IPHONE || env === WL.Environment.IPAD){
+        document.body.classList.add(&#x27;platform-ios&#x27;); 
+    } else if(env === WL.Environment.ANDROID){
+        document.body.classList.add(&#x27;platform-android&#x27;); 
+    }
+}</code></pre>
+
+<p>And that&rsquo;s it. Once you build/deploy (and don&rsquo;t forget you can do that with <code>mfp bd</code>), you should then see your MobileFirst application using the awesome power of Ionic!</p>
+
+<p><a href="http://www.raymondcamden.com/wp-content/uploads/2015/03/shot32.png"><img src="http://www.raymondcamden.com/wp-content/uploads/2015/03/shot32.png" alt="shot3" width="835" height="580" class="alignnone size-full wp-image-5864" /></a></p>
+
+<p>I&rsquo;ve attached my copy of the common folder to this blog entry. Also, Carlos created a GitHub repo with modified versions of all the Ionic templates here: <a href="https://github.com/csantanapr/mfp-ionic-templates">https://github.com/csantanapr/mfp-ionic-templates</a>.</p>
+
+<p>Finally, you can watch a video of this entire process here. Sit back and enjoy the silky sounds of my caffeine-fueled voice.</p>
+
+<iframe width="853" height="480" src="https://www.youtube.com/embed/_VQ7IeUARS8?rel=0" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="http://www.raymondcamden.com/demos/2015/mar/23/mobilefirst-ionic-common.zip">Download Zip</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/03\/23\/working-with-ibm-mobilefirst-and-the-ionic-framework'; 
+this.page.identifier = '/?p=5857'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/23/working-with-ibm-mobilefirst-and-the-ionic-framework" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Working with IBM MobileFirst and the Ionic Framework" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/23/working-with-ibm-mobilefirst-and-the-ionic-framework" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/23/working-with-ibm-mobilefirst-and-the-ionic-framework" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Working with IBM MobileFirst and the Ionic Framework" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/23/working-with-ibm-mobilefirst-and-the-ionic-framework" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/03/23/working-with-ibm-mobilefirst-and-the-ionic-framework" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

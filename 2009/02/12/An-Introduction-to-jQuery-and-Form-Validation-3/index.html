@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>An Introduction to jQuery and Form Validation (3) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="An Introduction to jQuery and Form Validation (3)" />
+<meta property="og:description" content="For my final (well, for now) post on jQuery and forms validation, I thought I&rsquo;d actually create a real form with actual back end processing. I&rsquo;m going to demonstrate with a form that makes use of both client-side and server-side validation, and also demonstrate one of the cooler features of the jQuery Validation library - remote validation.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/02/12/An-Introduction-to-jQuery-and-Form-Validation-3" />
+
+
+<meta property="og:updated_time" content="2009-02-12T09:02:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="An Introduction to jQuery and Form Validation (3)">
+<meta itemprop="description" content="For my final (well, for now) post on jQuery and forms validation, I thought I&rsquo;d actually create a real form with actual back end processing. I&rsquo;m going to demonstrate with a form that makes use of both client-side and server-side validation, and also demonstrate one of the cooler features of the jQuery Validation library - remote validation.
+">
+
+
+<meta itemprop="dateModified" content="2009-02-12T09:02:00&#43;06:00" />
+<meta itemprop="wordCount" content="1042">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="An Introduction to jQuery and Form Validation (3)"/>
+<meta name="twitter:description" content="For my final (well, for now) post on jQuery and forms validation, I thought I&rsquo;d actually create a real form with actual back end processing. I&rsquo;m going to demonstrate with a form that makes use of both client-side and server-side validation, and also demonstrate one of the cooler features of the jQuery Validation library - remote validation.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/02/12/An-Introduction-to-jQuery-and-Form-Validation-3">
+    <h1 class="article-title" itemprop="name">
+        An Introduction to jQuery and Form Validation (3)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-02-12 09:02:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-02-12</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>For my final (well, for now) post on jQuery and forms validation, I thought I&rsquo;d actually create a real form with actual back end processing. I&rsquo;m going to demonstrate with a form that makes use of both client-side and server-side validation, and also demonstrate one of the cooler features of the jQuery <a href="http://docs.jquery.com/Plugins/Validation">Validation</a> library - remote validation.</p>
+
+<p>Let&rsquo;s get started by describing our form and building it for entirely server-side validation. Imagine that I run a blog aggregator (oh wait, I <a href="http://www.coldfusionbloggers.org">do</a>) and I want to make it easy for folks to send me information on their blogs so I can add it to the database. I&rsquo;d need a form that asks for their blog name, URL, and RSS URL. (To be anal, I also use a description field at CFBloggers, but I&rsquo;ll keep it simple for now.) When not working within a framework like Model-Glue, I&rsquo;ll typically build a self-posting form (pseudo-code):</p>
+
+<p><code>
+default form value</p>
+
+<p>notice a form submission:
+  create a list of errors
+  if no errors, email, save to db, etc, and push to thank you page</p>
+
+<p>display form:
+  optionally display errors
+</code></p>
+
+<p>Here is the initial version of the form with ColdFusion performing the validation server side. I assume none of this is unusual and since and the focus here is on jQuery I won&rsquo;t go over the code.</p>
+
+<p><code>
+&lt;cfparam name=&ldquo;form.blogname&rdquo; default=&ldquo;&rdquo;&gt;
+&lt;cfparam name=&ldquo;form.blogurl&rdquo; default=&ldquo;&rdquo;&gt;
+&lt;cfparam name=&ldquo;form.rssurl&rdquo; default=&ldquo;&rdquo;&gt;</p>
+
+<p>&lt;cfif structKeyExists(form, &ldquo;save&rdquo;)&gt;
+    &lt;cfset errors = []&gt;
+    &lt;cfif not len(trim(form.blogname))&gt;
+        &lt;cfset arrayAppend(errors, &ldquo;You must include a blog name.&rdquo;)&gt;
+    &lt;/cfif&gt;
+    &lt;cfif not len(trim(form.blogurl)) or not isValid(&ldquo;url&rdquo;, form.blogurl)&gt;
+        &lt;cfset arrayAppend(errors, &ldquo;You must include a blog url.&rdquo;)&gt;
+    &lt;/cfif&gt;
+    &lt;cfif not len(trim(form.rssurl)) or not isValid(&ldquo;url&rdquo;, form.rssurl)&gt;
+        &lt;cfset arrayAppend(errors, &ldquo;You must include a rss url.&rdquo;)&gt;
+    &lt;/cfif&gt;
+    &lt;cfif arrayLen(errors) is 0&gt;
+        &lt;cfmail to=&ldquo;ray@camdenfamily.com&rdquo; from=&ldquo;ray@camdenfamily.com&rdquo; subject=&ldquo;RSS Submission&rdquo;&gt;
+Blog Name:  #form.blogname#
+Blog URL:   #form.blogurl#
+RSS URL:    #form.rssurl#
+        &lt;/cfmail&gt;
+        &lt;cflocation url=&ldquo;rssaddthanks.cfm&rdquo; addToken=&ldquo;false&rdquo; /&gt;
+    &lt;/cfif&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;!DOCTYPE html PUBLIC &ldquo;-//W3C//DTD XHTML 1.0 Transitional//EN&rdquo; &ldquo;<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a>
+&lt;html xmlns=&ldquo;<a href="http://www.w3.org/1999/xhtml&quot;&gt;">http://www.w3.org/1999/xhtml&quot;&gt;</a>
+&lt;head&gt;
+&lt;meta http-equiv=&ldquo;Content-Type&rdquo; content=&ldquo;text/html; charset=UTF-8&rdquo; /&gt;
+&lt;title&gt;Untitled Document&lt;/title&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body&gt;</p>
+
+<p>&lt;h2&gt;Add RSS Feed&lt;/h2&gt;
+&lt;form id=&ldquo;mainform&rdquo; action=&ldquo;rssadd.cfm&rdquo; method=&ldquo;post&rdquo;&gt;
+&lt;fieldset&gt;</p>
+
+<p>&lt;cfif structKeyExists(variables,&ldquo;errors&rdquo;)&gt;
+    &lt;b&gt;Please correct the following error(s):&lt;/b&gt;&lt;br/&gt;
+    &lt;ul&gt;
+    &lt;cfloop index=&ldquo;e&rdquo; array=&ldquo;#errors#&rdquo;&gt;
+    &lt;li&gt;&lt;cfoutput&gt;#e#&lt;/cfoutput&gt;&lt;/li&gt;
+    &lt;/cfloop&gt;
+    &lt;/ul&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;legend&gt;Fill out the details of you blow below.&lt;/legend&gt;
+&lt;cfoutput&gt;
+&lt;p&gt;
+&lt;label for=&ldquo;blogname&rdquo;&gt;Blog Name&lt;/label&gt;
+&lt;em&gt;<em>&lt;/em&gt;&lt;input id=&ldquo;blogname&rdquo; name=&ldquo;blogname&rdquo; size=&ldquo;25&rdquo; value=&ldquo;#form.blogname#&rdquo; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;label for=&ldquo;blogurl&rdquo;&gt;Blog URL&lt;/label&gt;
+&lt;em&gt;</em>&lt;/em&gt;&lt;input id=&ldquo;blogurl&rdquo; name=&ldquo;blogurl&rdquo; size=&ldquo;25&rdquo; value=&ldquo;#form.blogurl#&rdquo; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;label for=&ldquo;rssurl&rdquo;&gt;RSS URL&lt;/label&gt;
+&lt;em&gt;*&lt;/em&gt;&lt;input id=&ldquo;rssurl&rdquo; name=&ldquo;rssurl&rdquo; size=&ldquo;25&rdquo; value=&ldquo;#form.rssurl#&rdquo; /&gt;
+&lt;/p&gt;
+&lt;/cfoutput&gt;
+&lt;p&gt;
+&lt;input class=&ldquo;submit&rdquo; type=&ldquo;submit&rdquo; name=&ldquo;save&rdquo; value=&ldquo;Submit&rdquo;/&gt;
+&lt;/p&gt;
+&lt;/fieldset&gt;
+&lt;/form&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p>Alright, so nothing too scary in there, right? You can demo this online <a href="http://www.raymondcamden.com/demos/jqueryvalidation/rssadd.cfm">here</a>.</p>
+
+<p>Let&rsquo;s add some jQuery love to the page. I&rsquo;ll begin by including my libraries of course:</p>
+
+<p><code>
+&lt;script src=&ldquo;/jquery/jquery.js&rdquo;&gt;&lt;/script&gt;
+&lt;script src=&ldquo;/jquery/jquery.validate.js&rdquo;&gt;&lt;/script&gt;
+</code></p>
+
+<p>Next I&rsquo;ll set up my validation and rules:</p>
+
+<p><code>
+$(document).ready(function(){
+    $(&ldquo;#mainform&rdquo;).validate({
+    rules: {
+        blogname: &ldquo;required&rdquo;
+       ,blogurl: &ldquo;required url&rdquo;
+       ,rssurl: &ldquo;required url&rdquo;
+    }</p>
+
+<pre><code>});
+</code></pre>
+
+<p>});
+</code></p>
+
+<p>The details of how this works are described in my <a href="http://www.coldfusionjedi.com/index.cfm/2009/2/10/An-Introduction-to-jQuery-and-Form-Validation-2">last entry</a>, but basically I&rsquo;m saying that all 3 fields are required and blogurl and rssurl also need url validation. (Hey IE folks, did I do my commas right?)</p>
+
+<p>Again, this just plain works. You can demo this <a href="http://www.coldfusionjedi.com/demos/jqueryvalidation/rssadd2.cfm">here</a>. If you disable JavaScript, you still get the server side validation. It took me about 30 seconds to add in the JS validation though so I don&rsquo;t mind writing it twice.</p>
+
+<p>Alright, but now it&rsquo;s time to get sexy. jQuery&rsquo;s validation plugin comes in with a number of default rules you can use. I also demonstrated how you can write your own rules. Sometimes though there are things you want to do that are impossible with JavaScript. jQuery Validation supports a style of validation simply called &lsquo;remote&rsquo;. By specifying a URL for a validation rule, the plugin will automatically run your URL (passing the field name and field value). Your server-side code does what it needs to and outputs either true or false. Let me demonstrate. First, I&rsquo;ll modify my rules declaration:</p>
+
+<p><code>
+rules: {
+  blogname: &ldquo;required&rdquo;
+  ,blogurl: {
+    required:true
+    ,url:true
+    ,remote:&ldquo;rssprocess.cfm&rdquo;
+  }
+  ,rssurl: {
+    required:true
+    ,url:true
+    ,remote:&ldquo;rssprocess.cfm&rdquo;
+  }
+}
+</code></p>
+
+<p>So, in English, this means that:</p>
+
+<p>The name value will be required.<br/>
+The blogurl value will be required, must be a URL, and the value will be passed to rssprocess.cfm and it must return true.<br/>
+The rssurl value will be required, must be a URL, and the value will be passed to rssprocess.cfm and it must return true.<br/></p>
+
+<p>I&rsquo;m using the same file to process both requests. I can do this because the plugin will send the name of the field as well. I could have used two different CFMs, or even two different CFC methods. Let&rsquo;s look at rssprocess.cfm:</p>
+
+<p><code>
+&lt;cfsetting enablecfoutputonly=&ldquo;true&rdquo;&gt;</p>
+
+<p>&lt;cfif structKeyExists(url, &ldquo;blogurl&rdquo;)&gt;</p>
+
+<pre><code>&amp;lt;!--- if blogurl, just do a check for status code 200 ---&amp;gt;
+&amp;lt;cfhttp url=&quot;#url.blogurl#&quot; result=&quot;result&quot;&amp;gt;
+&amp;lt;cfif structKeyExists(result.responseheader,&quot;status_code&quot;) and result.responseheader.status_code is 200&amp;gt;
+    &amp;lt;cfoutput&amp;gt;true&amp;lt;/cfoutput&amp;gt;
+&amp;lt;cfelse&amp;gt;
+    &amp;lt;cfoutput&amp;gt;false&amp;lt;/cfoutput&amp;gt;
+&amp;lt;/cfif&amp;gt;
+</code></pre>
+
+<p>&lt;cfelseif structKeyExists(url, &ldquo;rssurl&rdquo;)&gt;</p>
+
+<pre><code>&amp;lt;!--- if blogurl, just do a check for status code 200 ---&amp;gt;
+&amp;lt;cftry&amp;gt;
+    &amp;lt;cffeed source=&quot;#url.rssurl#&quot; query=&quot;foo&quot;&amp;gt;
+    &amp;lt;cfoutput&amp;gt;true&amp;lt;/cfoutput&amp;gt;
+    &amp;lt;cfcatch&amp;gt;
+        &amp;lt;cfoutput&amp;gt;false&amp;lt;/cfoutput&amp;gt;
+    &amp;lt;/cfcatch&amp;gt;
+&amp;lt;/cftry&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;
+    &lt;cfoutput&gt;false&lt;/cfoutput&gt;
+&lt;/cfif&gt;
+</code></p>
+
+<p>I begin by turning on cfoutputonly. I&rsquo;m not sure how well the plugin will handle values with whitespace around so it so I&rsquo;m going to be anal about my output. I then check my URL scope. If blogurl was sent, I just do a HTTP check to ensure the URL exists. If rssurl was sent, I try to read it with cffeed and return true if the RSS feed can be parsed by CF. Notice that I return false in all error conditions, and if no value was passed at all. (Because people like me will run your site with Firebug, notice the Ajax requests, and try to run the file manually.)</p>
+
+<p>You can demo this <a href="http://www.coldfusionjedi.com/demos/jqueryvalidation/rssadd3.cfm">here</a>. I also added custom messages. You can view source on the demo to see that. That&rsquo;s it. I don&rsquo;t think I&rsquo;ll write another form without jQuery validation in it!</p>
+
+<p><b>Edit at 9:36AM CST</b> Epic fail on my part. Thank you to Esmeralda for reminding me. I forgot to htmlEditFormat the form data to help prevent XSS type attacks. I normally do something like this in all my form checks:</p>
+
+<p><code>
+&lt;cfif not len(trim(form.blogname))&gt;
+    &lt;cfset arrayAppend(errors, &ldquo;You must include a blog name.&rdquo;)&gt;
+&lt;cfelse&gt;
+    &lt;cfset form.blogname = htmlEditFormat(trim(form.blogname))&gt;
+&lt;/cfif&gt;
+</code></p>
+
+<p>Note the use of both trim and htmlEditFormat. Anyway, I&rsquo;ve added it to all 3 dems, and thank you again Esmeralda for the reminder!</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/02\/12\/An-Introduction-to-jQuery-and-Form-Validation-3'; 
+this.page.identifier = '/?p=3235'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/12/An-Introduction-to-jQuery-and-Form-Validation-3" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="An Introduction to jQuery and Form Validation (3)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/12/An-Introduction-to-jQuery-and-Form-Validation-3" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/12/An-Introduction-to-jQuery-and-Form-Validation-3" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="An Introduction to jQuery and Form Validation (3)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/12/An-Introduction-to-jQuery-and-Form-Validation-3" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/02/12/An-Introduction-to-jQuery-and-Form-Validation-3" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

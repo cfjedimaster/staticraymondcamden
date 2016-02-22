@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Games on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/games/</link>
+    <description>Recent content in Games on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 19 Jul 2015 16:22:10 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/games/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Review: \&#34;Build an HTML5 Game\&#34;</title>
+      <link>http://www.raymondcamden.com/2015/07/19/review-build-an-html5-game</link>
+      <pubDate>Sun, 19 Jul 2015 16:22:10 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/19/review-build-an-html5-game</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/book.jpg&#34; alt=&#34;book&#34; width=&#34;226&#34; height=&#34;300&#34; class=&#34;alignleft size-full wp-image-6425&#34; /&gt; I&amp;rsquo;ve said on more than one occasion that it was gaming that initially got me into programming. Initially just cheating at games (I hacked my Bard&amp;rsquo;s Tale save and I modified the source code in Lemonade Stand), but what I really wanted to do was create my own games. That dream pretty much went away when I left the computer science program in college and discovered the web, but I&amp;rsquo;ve toyed with the idea of building my own web-based games from time to time. A while back, I was lucky enough to get a copy of &amp;ldquo;Build an HTML5 Game&amp;rdquo; by Karl Bunyan.&lt;/p&gt;
+
+&lt;p&gt;As you can imagine, the book walks you through the process of building a game using web standards. The game, a simple bubble shooter you can play &lt;a href=&#34;http://buildanhtml5game.com/?page_id=20&#34;&gt;here&lt;/a&gt;, is built iteratively throughout the chapters. You start building each piece one at a time, gradually adding more features and logic to the game. It felt like a good pace to me and I only really struggled during some of the mathematical parts. (I&amp;rsquo;m a bit ashamed to say that, actually. I was pretty good at math growing up but since I haven&amp;rsquo;t really used complex math since my early college career it&amp;rsquo;s all wasted away.)&lt;/p&gt;
+
+&lt;p&gt;Even cooler, the author actually has you create the game with multiple different approaches. You get to experience using JavaScript to animate the DOM and then compare this to working with Canvas. I liked how the author compared and contrasted these approaches in a very practical manner.&lt;/p&gt;
+
+&lt;p&gt;Finally, the book wraps up by talking a bit about more advanced topics, like performance tuning, WebGL and deployment issues. This is a good section, but pretty slim. I think in the next edition this could be expanded significantly. The book&amp;rsquo;s definitely packed with information now, but making this last portion even larger could make a great book even better.&lt;/p&gt;
+
+&lt;p&gt;If you have any interest at all in learning how to build games with web standards, then I definitely recommend checking it out. You can find out more about the book, including seeing the table of contents, at the book&amp;rsquo;s web site: &lt;a href=&#34;http://buildanhtml5game.com/&#34;&gt;http://buildanhtml5game.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;p.s. As a slightly off topic aside, this was my first introduction to &lt;a href=&#34;http://modernizr.com/&#34;&gt;Modernizr&lt;/a&gt;. While I had certainly heard of it before, I had never actually used it. The game you develop in the book makes heavy use of it and I&amp;rsquo;m happy I had a chance to actually use it. I didn&amp;rsquo;t know it had a loader feature with fallback support. That was pretty darn neat.&lt;/p&gt;
+
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;OneJS=1&amp;Operation=GetAdHtml&amp;MarketPlace=US&amp;source=ac&amp;ref=tf_til&amp;ad_type=product_link&amp;tracking_id=raymondcamden-20&amp;marketplace=amazon&amp;region=US&amp;placement=1593275757&amp;asins=1593275757&amp;linkId=CZW66LERCBO724WG&amp;show_border=true&amp;link_opens_in_new_window=false&#34;&gt;
+&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sunday OT: Rise of the Runelords</title>
+      <link>http://www.raymondcamden.com/2015/03/01/sunday-ot-rise-of-the-runelords</link>
+      <pubDate>Sun, 01 Mar 2015 08:44:36 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/03/01/sunday-ot-rise-of-the-runelords</guid>
+      <description>&lt;p&gt;&lt;iframe style=&#34;width:120px;height:240px;float:left;margin-right:10px&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;OneJS=1&amp;Operation=GetAdHtml&amp;MarketPlace=US&amp;source=ac&amp;ref=qf_sp_asin_til&amp;ad_type=product_link&amp;tracking_id=raymondcamden-20&amp;marketplace=amazon&amp;region=US&amp;placement=1601255500&amp;asins=1601255500&amp;linkId=DLA5R4D6RXHB5ELF&amp;show_border=true&amp;link_opens_in_new_window=false&#34;&gt;
+&lt;/iframe&gt;  It has been a while since I&amp;rsquo;ve posted a game review, but it&amp;rsquo;s also been a while since I&amp;rsquo;ve been able to play one. Yesterday one of my boys and I played a round of &amp;ldquo;Rise of the Runelords&amp;rdquo;, a fairly complex card game by Paizo Publishing. Rise of the Runelords (RoR) is a deck building game which is easily my favorite type of game now. I got into Magic back in college, but couldn&amp;rsquo;t afford, and simply didn&amp;rsquo;t &lt;i&gt;want to&lt;/i&gt;, spend a lot of money on deck packs. That&amp;rsquo;s why I really dig games that have a similar experience without requiring a constant stream of purchases. Technically RoR also has purchases, but from what I see they act more like DLC in a video game - adding additional adventures.&lt;/p&gt;
+
+&lt;p&gt;Setup is a fairly lengthy process. I&amp;rsquo;d say our first game took almost an hour to get prepared. That time will be significantly smaller in future games, but it was definitely a bit daunting. Gameplay was right on the edge of what I&amp;rsquo;d call too complex to be fun. As an example, when you get rid of a card during game play, there&amp;rsquo;s something like four different things that can happen to it. Some easy to understand (discard), some vague (banish, recharge, and some other option too). Every particular encounter (combat, traps, getting an item, etc) is also pretty complex. I&amp;rsquo;d guess that sometimes there&amp;rsquo;s something like 5-7 options for how to resolve an encounter. But once I got into it, I really dug that. It makes you think about how best to accomplish something and really plan your strategy.&lt;/p&gt;
+
+&lt;p&gt;The biggest thing missing from the game is a good reference sheet I think. My son and I both read the rules fairly closely, but sometimes an important detail (like combat!) is buried in with other text that&amp;rsquo;s easy to miss. My plan is actually write up my own little reference sheet during play sessions.&lt;/p&gt;
+
+&lt;p&gt;Probably the coolest aspect of the game is that it is persistent across play stations. One play session is a &amp;ldquo;scenario&amp;rdquo;, which is part of an &amp;ldquo;adventure path&amp;rdquo;, which is then part of one &amp;ldquo;adventure.&amp;rdquo; As you finish each scenario you get a bonus that can improve your character. You also get to improve your deck for the next scenario.&lt;/p&gt;
+
+&lt;p&gt;Given how busy life is, I&amp;rsquo;m a bit afraid about how long it will take to actually &amp;ldquo;finish&amp;rdquo; the game. I could see this taking a year, but, I&amp;rsquo;m OK with that. For the price of the game, that&amp;rsquo;s an incredible amount of play time. To be clear, this isn&amp;rsquo;t a one time thing, you can replay scenarios too and restart characters. And as I mentioned above, there are expansion sets that add new adventures.&lt;/p&gt;
+
+&lt;p&gt;The artwork in the game is beautiful. The company didn&amp;rsquo;t have any promotional artwork on the site itself, so I&amp;rsquo;m copying a bit from the PDF ruleset.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/03/shot.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/03/shot.png&#34; alt=&#34;shot&#34; width=&#34;780&#34; height=&#34;610&#34; class=&#34;alignnone size-full wp-image-5744&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see more, and the complete rule set, by downloading the rules &lt;a href=&#34;http://paizo.com/download/pathfinder/PZO6000-Rulebook.zip&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I definitely recommend picking it up, just be prepared for a lengthy initial setup and somewhat of a commitment if you want to play through the entire story. Oh, and I died during my first game play but my son and I just pretended that didn&amp;rsquo;t happen. There&amp;rsquo;s no point in playing games where you can&amp;rsquo;t bend the rules from time to time. ;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using the Gamepad API</title>
+      <link>http://www.raymondcamden.com/2014/06/20/Using-the-Gamepad-API</link>
+      <pubDate>Fri, 20 Jun 2014 16:06:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/06/20/Using-the-Gamepad-API</guid>
+      <description>&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/html5-gamepad-api.png&#34; style=&#34;float:left;margin-right:10px;&#34; /&gt; My latest article for Tuts (this time &lt;a href=&#34;http://gamedevelopment.tutsplus.com&#34;&gt;Game Tuts&lt;/a&gt;) is now live. In this article I take a deep look at the gamepad API. I blogged about this a while ago but it has finally become (somewhat) more available to modern browsers. And yes, before someone says it, &#39;more available&#39; doesn&#39;t mean 100%. Anyway, I hope you enjoy it: &lt;a href=&#34;http://gamedevelopment.tutsplus.com/tutorials/using-the-html5-gamepad-api-to-add-controller-support-to-browser-games--cms-21345&#34;&gt;Using the HTML5 Gamepad API to Add Controller Support to Browser Games&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;br clear=&#34;left&#34;&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sunday OT - New Games</title>
+      <link>http://www.raymondcamden.com/2014/05/18/Sunday-OT-New-Games</link>
+      <pubDate>Sun, 18 May 2014 16:05:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2014/05/18/Sunday-OT-New-Games</guid>
+      <description>&lt;p&gt;
+One of the most fun parts of going to cfObjective is hanging out with my game-playing friends. While there I got to play three new games (and quite a few hands of Epic Spell Wars in which I &lt;strong&gt;never lost - honest!&lt;/strong&gt;). Here they are (and yes, these are affiliate links so if you click to buy, I get a few pennies):
+&lt;/p&gt;
+
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;OneJS=1&amp;Operation=GetAdHtml&amp;MarketPlace=US&amp;source=ac&amp;ref=qf_sp_asin_til&amp;ad_type=product_link&amp;tracking_id=raymondcamden-20&amp;marketplace=amazon&amp;region=US&amp;placement=B004U5R5BI&amp;asins=B004U5R5BI&amp;linkId=TUW5FOHMWYKUQGIT&amp;show_border=true&amp;link_opens_in_new_window=false&#34;&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;
+&lt;strong&gt;King of Tokyo&lt;/strong&gt; involves giant monsters and Tokyo. Do I need to say more? I was a rabbit in a giant robot... of a rabbit. All in all probably the simplest of the games I played at cfObjective. As an FYI, this is by Richard Garfield, who created Magic the Gathering. 
+&lt;/p&gt;
+
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;OneJS=1&amp;Operation=GetAdHtml&amp;MarketPlace=US&amp;source=ac&amp;ref=tf_til&amp;ad_type=product_link&amp;tracking_id=raymondcamden-20&amp;marketplace=amazon&amp;region=US&amp;placement=192978001X&amp;asins=192978001X&amp;linkId=HJKI76CQ5QHMOHUK&amp;show_border=true&amp;link_opens_in_new_window=false&#34;&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;
+&lt;strong&gt;Fluxx&lt;/strong&gt; is pretty interesting. As you play the game, the core rules can change with each hand, including how to win. There are many variations of the game (we played a Monty Python one). This was fun, if a bit confusing at times. 
+&lt;/p&gt;
+
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;OneJS=1&amp;Operation=GetAdHtml&amp;MarketPlace=US&amp;source=ac&amp;ref=tf_til&amp;ad_type=product_link&amp;tracking_id=raymondcamden-20&amp;marketplace=amazon&amp;region=US&amp;placement=B001DY2EJM&amp;asins=B001DY2EJM&amp;linkId=2VBCMVKM6OR634U3&amp;show_border=true&amp;link_opens_in_new_window=false&#34;&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;
+&lt;strong&gt;Shadow Hunters&lt;/strong&gt; was the most unique of the new games I played. At a high level, the basic idea is that each player&#39;s character is one of three types, a Shadow (baddie), a Hunter (goodie), or Neutral (um, yeah, neutral). No one knows who is what and every character has slightly different rules on how they can win. I ended up as a werewolf who won the game with a final blow that took out all the rest of the players... with a machine gun. Yeah, it was cool. (Well, to me anyway. ;) 
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sunday OT: Review of Epic Spell Wars</title>
+      <link>http://www.raymondcamden.com/2013/09/29/Sunday-OT-Review-of-Epic-Spell-Wars</link>
+      <pubDate>Sun, 29 Sep 2013 08:09:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2013/09/29/Sunday-OT-Review-of-Epic-Spell-Wars</guid>
+      <description>&lt;p&gt;
+Technically what I&#39;m reviewing today is &lt;a href=&#34;http://www.cryptozoic.com/games/epic-spell-wars-battle-wizards-duel-mt-skullzfyre&#34;&gt;EPIC SPELL WARS OF THE BATTLE WIZARDS: DUEL AT MT. SKULLZFYRE&lt;/a&gt; (and yes, the caps &lt;i&gt;are&lt;/i&gt; required), but Epic Spell Wars is somewhat shorter and easier to remember.
+&lt;/p&gt;
+
+&lt;p&gt;
+Growing up, I was exposed to some pretty cool board games (I remember Axis and Allies as well as at least one Avalon Hill war game), but it is something I had not really had the time to play with since then. Now that my kids are finally old enough to enjoy more complex games, I&#39;ve begun picking up various different games to try out. I&#39;ve had better luck with the games that are more card based than board games, so I&#39;ve got a slight preference for those, but in general, I&#39;m really enjoying this new hobby.
+&lt;/p&gt;
+
+&lt;p&gt;
+Today I want to talk about Epic Sell Wars. I was introduced to this before NCDevCon by &lt;a href=&#34;http://www.12robots.com/&#34;&gt;Jason Dean&lt;/a&gt;. Over the weekend of the conference I ended up playing this game for probably close to six hours. It has a great play system that is simple enough to pick up in a few minutes. It&#39;s also somewhat simple to set up piece-wise. As an example, here is the complete game laid out:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/Everything.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Everything fits into a small box that can easily be stuffed into your carry on (especially if you are like me and have a laptop bag heavier than your carry on) and as I said, setup is done in a few minutes. The core mechanics of the game revolves around wizard duels. You are a wizard. You want to kill the other wizards. That&#39;s it. In some ways you may be reminded of Magic, but unlike Magic, this game is 100% complete as is. You don&#39;t have to worry about spending a few thousand dollars on decks or managing your own deck outside of the game. 
+&lt;/p&gt;
+
+&lt;p&gt;
+Wizard selection is simply picking a game representing the character you want to play. As everyone has the same amount of HP, it doesn&#39;t really matter. But right away you can see the silly nature of the game. 
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/Wizards2.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Gameplay revolves around the creation of spells. For the most part, every spell is an attack spell, but there are healing variations as well. Spell crafting is &lt;i&gt;insanely&lt;/i&gt; fun. You have three components to a spell, a source, quality, and a delivery. This is clearly marked on your cards:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/CardType.png&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+You craft a combination of cards that makes use of up to one each of those types. How you mix your spells together and how many components you use is part of the strategy. How a spell is crafted determines how quickly you will attack and could mean the difference between life and death. 
+&lt;/p&gt;
+
+&lt;p&gt;
+Along with strategy, spell crafting is freaking hilarious. Here are two examples to give you an idea of what I&#39;m talking about:
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/Spell1.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/Spell2.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+As you can see, this isn&#39;t a game that takes itself too seriously, which just makes it all the more fun. In fact, this is one of the few games where I was excited to see my enemies play not just because I was worried about surviving, but because it was just plain fun. I think that&#39;s a huge win for the game right there.
+&lt;/p&gt;
+
+&lt;p&gt;
+Another example of this is that when you die, the game doesn&#39;t end for you. Upon your untimely demise, you immediately get a &#34;Dead Wizard&#34; card. This card gives you a bonus (most of the time) for the next game. In fact, on every round where you are dead and the other players are slugging it out, you get &lt;i&gt;another&lt;/i&gt; bonus. During my many hours of playing with my friends at NCDevCon I spent quite a bit of time dead (I suck) and I was totally OK with that. 
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/DeadWizards.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+This is a &lt;strong&gt;great&lt;/strong&gt; game. If I had to include one warning, I&#39;d say that it may be a bit inappropriate for young kids. There is some gore in the cards, but as you can tell by the pictures above it isn&#39;t anything realistic. There is also a bit of mature content in the game. As an example, here is a shot of some treasure cards (another mechanic to the game):
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;img src=&#34;http://www.raymondcamden.com/images/Treasures.jpg&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Speaking for myself, I&#39;m not that concerned about my kids seeing a wand with a bit of poo on it. There is one other card that has something slightly sexual on it. I was considering just removing it from the deck, but honestly I don&#39;t think my younger boy will understand it and my older boy will giggle and that will be the end of it. The game markets itself as being for 15 and older, but I feel comfortable with my 11 year old playing. Obviously you need to make that decision yourself. (And hey, at least it isn&#39;t GTAV.) 
+&lt;/p&gt;
+
+&lt;p&gt;
+Now for the bad news. Actually getting this game may be somewhat difficult. (And as I get into games more I&#39;m discovering this is a &#39;thing&#39; with this hobby.) I can&#39;t include an Amazon link as it isn&#39;t even listed, and if you follow the link up top to the manufacturer&#39;s page, you can&#39;t buy it there either. The best I can suggest is to hit up your local comic book shop and see if you can find it there. 
+&lt;/p&gt;
+
+&lt;p&gt;
+Finally, big thanks to Jason Dean for the pictures, although if you play against him you should make it your number one priority to kill him the quickest!
+&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

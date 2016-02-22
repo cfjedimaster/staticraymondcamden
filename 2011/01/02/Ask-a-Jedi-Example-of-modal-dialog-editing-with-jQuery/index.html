@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Ask a Jedi: Example of modal dialog editing with jQuery &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Ask a Jedi: Example of modal dialog editing with jQuery" />
+<meta property="og:description" content="Steve asks:
+
+
+I&rsquo;m getting onto the jquery / CF integration a bit late.  When I get some time I really want to go through all of your tutorials. What I was trying to find was a simple &ldquo;edit&rdquo; type form that would be a modal pop up window from a page of items.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/01/02/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery" />
+
+
+<meta property="og:updated_time" content="2011-01-02T14:01:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Ask a Jedi: Example of modal dialog editing with jQuery">
+<meta itemprop="description" content="Steve asks:
+
+
+I&rsquo;m getting onto the jquery / CF integration a bit late.  When I get some time I really want to go through all of your tutorials. What I was trying to find was a simple &ldquo;edit&rdquo; type form that would be a modal pop up window from a page of items.
+">
+
+
+<meta itemprop="dateModified" content="2011-01-02T14:01:00&#43;06:00" />
+<meta itemprop="wordCount" content="1319">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Ask a Jedi: Example of modal dialog editing with jQuery"/>
+<meta name="twitter:description" content="Steve asks:
+
+
+I&rsquo;m getting onto the jquery / CF integration a bit late.  When I get some time I really want to go through all of your tutorials. What I was trying to find was a simple &ldquo;edit&rdquo; type form that would be a modal pop up window from a page of items.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/01/02/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery">
+    <h1 class="article-title" itemprop="name">
+        Ask a Jedi: Example of modal dialog editing with jQuery
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-01-02 14:01:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-01-02</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Steve asks:
+<p/>
+<blockquote>
+I&rsquo;m getting onto the jquery / CF integration a bit late.  When I get some time I really want to go through all of your tutorials. What I was trying to find was a simple &ldquo;edit&rdquo; type form that would be a modal pop up window from a page of items.
+<br/<br/>
+For example, say you have a product listing of widgets - and next to each widget is an &ldquo;edit&rdquo; link that would open a modal jquery window with some form fields on it - populated by a CFC from a db query and then updated via a CFC from the modal window which then closes on update.
+<br><br/>
+This seems like a pretty good &ldquo;real world&rdquo; tutorial but in just browsing through your stuff, and plenty of other sites, I&rsquo;m not seeing one that really explains this concept.
+</blockquote>
+<p></p>
+
+<p>So - there are obviously a thousand different ways we could implement something like this. Here is an example I came up with. I began by creating a simple, static ColdFusion script that did nothing (nothing Ajax-y anyway) at all.</p>
+
+<p>
+
+<code>
+&lt;cfquery name="getart"&gt;
+select  artid, artname, description, price
+from    art
+&lt;/cfquery&gt;
+
+&lt;style&gt;
+.artdiv {
+    padding: 5px;
+    margin: 5px;
+    background-color: #80ff80;
+}
+&lt;/style&gt;
+
+&lt;cfoutput query="getart"&gt;
+    
+    &lt;div class="artdiv"&gt;
+        &lt;h2&gt;#artname#&lt;/h2&gt;
+        &lt;p&gt;
+        Price: #dollarFormat(price)#
+        &lt;/p&gt;
+        &lt;p&gt;
+        #description#
+        &lt;/p&gt;
+    &lt;/div&gt;
+    
+&lt;/cfoutput&gt;
+</code>
+
+<p>
+
+I run a quick query against the cfartgallery database and display each piece of art. I display the name, price, and description for each one. Here is a quick screen shot so you can see what I mean.
+
+<p>
+
+
+<img src="http://www.raymondcamden.com/images/ScreenClip6.png" />
+
+<p>
+
+Admit it - you love my design, don't you? I call this the "Sickly Green" theme. Anyway, I always try to start simple and then progressively add to it. So let's look at the first iteration of my solution.
+
+<p>
+
+<code>
+&lt;cfquery name="getart" maxrows="10"&gt;
+select  artid, artname, description, price
+from    art
+&lt;/cfquery&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+&lt;script src="jquery-ui-1.8.7.custom/js/jquery-1.4.4.min.js"&gt;&lt;/script&gt;
+&lt;script src="jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="jquery-ui-1.8.7.custom/css/overcast/jquery-ui-1.8.7.custom.css" /&gt;
+&lt;script&gt;
+$(document).ready(function() {
+
+    $(".artdiv").click(function() {
+        //based on which we click, get the current values
+        //first, the name
+        var name = $("h2", this).text();
+        var price = $("p:first", this).data("price");
+        var desc = $("p:last", this).text();
+        desc = $.trim(desc);
+        
+        $("#namefield").val(name);
+        $("#pricefield").val(price);
+        $("#descriptionfield").val(desc);
+        
+        $("#editForm").dialog({
+            buttons: {
+                "Save": function(){
+                    console.log('save clicked');
+                }
+            }
+        });
+    });
+    
+});
+&lt;/script&gt;
+&lt;style&gt;
+.artdiv {
+    padding: 5px;
+    margin: 5px;
+    background-color: #80ff80;
+}
+#editForm {
+    display:none;   
+}
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;cfoutput query="getart"&gt;
+    
+    &lt;div class="artdiv"&gt;
+        &lt;h2&gt;#artname#&lt;/h2&gt;
+        &lt;p data-price="#price#"&gt;
+        Price: #dollarFormat(price)#
+        &lt;/p&gt;
+        &lt;p class="description"&gt;
+        #description#
+        &lt;/p&gt;
+    &lt;/div&gt;
+    
+&lt;/cfoutput&gt;
+
+&lt;div id="editForm" title="Edit Art"&gt;
+    &lt;p&gt;
+    &lt;b&gt;Name:&lt;/b&gt;&lt;br/&gt;
+    &lt;input type="text" id="namefield"&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+    &lt;b&gt;Price:&lt;/b&gt;&lt;br/&gt;
+    &lt;input type="text" id="pricefield"&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+    &lt;b&gt;Description:&lt;/b&gt;&lt;br/&gt;
+    &lt;textarea id="descriptionfield"&gt;&lt;/textarea&gt;
+    &lt;/p&gt;
+    
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p>
+
+Ok, we've got a lot going on here new so let's tackle it from the top. You will notice that I've added both jQuery and jQuery UI. jQuery UI will be used for the dialog control. 
+
+<p>
+
+Now look at th JavaScript. We want "click to edit" and I decided on simply listening to the click handler for the entire div of the art piece. This is probably not the way I'd do it normally. I'd probably add a simple Edit link to the lower right corner, or perhaps upper right corner. Point is - you can do this anyway you like. At minimum I should add some CSS to make it obvious you <i>can</i> click to edit. 
+
+<p>
+
+So the next thing we need to do is create a dialog. This will hold the form that we will use to edit the art piece. Now stay with me here as we are going to to back and forth a bit. I need a way to get the data, right?  Well I can use jQuery selectors filtered by the current selector (the div you clicked on) to get the information. The name is in my h2 tag. That's easy enough to get. My price is a bit more tricky. Did you notice how I used dollarFormat? I don't want the "pretty" value but the original value. So I added a data-price attribute to my paragraph tab and fetch it out using jQuery's data function. Finally the description is fetched via the last paragraph. Three different examples and again - you could do this any number of other ways as well. 
+
+<p>
+
+So once we have the values, we can then launch the dialog. If you scroll to the bottom of the page you will see a hidden div there with the form. I set the form field values and than use the dialog() function to show it. I love how easy jQuery UI makes things for me. Note I also added a Save button. It isn't doing anything yet but I can confirm it is firing with a console message. Ok - hopefully you are with me so far. Here is another screen show.
+
+<p>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip7.png" />
+
+<p>
+
+Alright - now let's kick it up to 11. So far we've gotten a dialog form working. It's dynamic so that the values you see in the dialog are dependent on the piece of art you click on. We've got a save button but it isn't doing anything. To complete the application we need to send the form data to the server and update the display. Here is my third and final iteration.
+
+<p>
+
+<code>
+&lt;cfset getArt = new artservice().getArt()&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+&lt;script src="jquery-ui-1.8.7.custom/js/jquery-1.4.4.min.js"&gt;&lt;/script&gt;
+&lt;script src="jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="jquery-ui-1.8.7.custom/css/overcast/jquery-ui-1.8.7.custom.css" /&gt;
+&lt;script&gt;
+//credit: http://www.mredkj.com/javascript/numberFormat.html
+function dollarFormat(nStr){
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length &gt; 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return "$" + x1 + x2;   
+}
+
+$(document).ready(function() {
+
+    $(".artdiv").click(function() {
+        var initialDiv = this;
+
+        //based on which we click, get the current values
+        var artid = $(this).data("artid");
+        var name = $("h2", this).text();
+        var price = $("p:first", this).data("price");
+        var desc = $("p:last", this).text();
+        desc = $.trim(desc);
+
+        $("#artid").val(artid);     
+        $("#namefield").val(name);
+        $("#pricefield").val(price);
+        $("#descriptionfield").val(desc);
+        
+        $("#editForm").dialog({
+            buttons: {
+                "Save": function() {
+                    var thisDialog = $(this);
+                    $.post("artservice.cfc?method=saveart", 
+                    {
+                        id:$("#artid").val(),
+                        name:$("#namefield").val(),
+                        price:$("#pricefield").val(),
+                        description:$("#descriptionfield").val()
+                    }, 
+                    function() {
+                        //update the initial div
+                        $("h2", initialDiv).text($("#namefield").val());
+                        var price = $("#pricefield").val();
+                        $("p:first", initialDiv).data("price", price);
+                        price = parseInt(price).toFixed(2);
+                        $("p:first", initialDiv).text("Price: "+dollarFormat(price));
+                        $("p:last", initialDiv).text($("#descriptionfield").val());
+                        $(thisDialog).dialog("close");
+                    });
+                }
+            }
+        });
+    });
+    
+});
+&lt;/script&gt;
+&lt;style&gt;
+.artdiv {
+    padding: 5px;
+    margin: 5px;
+    background-color: #80ff80;
+}
+#editForm {
+    display:none;   
+}
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;cfoutput query="getart"&gt;
+    
+    &lt;div class="artdiv" data-artid="#artid#"&gt;
+        &lt;h2&gt;#artname#&lt;/h2&gt;
+        &lt;p data-price="#price#"&gt;
+        Price: #dollarFormat(price)#
+        &lt;/p&gt;
+        &lt;p class="description"&gt;
+        #description#
+        &lt;/p&gt;
+    &lt;/div&gt;
+    
+&lt;/cfoutput&gt;
+
+&lt;div id="editForm" title="Edit Art"&gt;
+    &lt;input type="hidden" id="artid"&gt;
+    &lt;p&gt;
+    &lt;b&gt;Name:&lt;/b&gt;&lt;br/&gt;
+    &lt;input type="text" id="namefield"&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+    &lt;b&gt;Price:&lt;/b&gt;&lt;br/&gt;
+    &lt;input type="text" id="pricefield"&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+    &lt;b&gt;Description:&lt;/b&gt;&lt;br/&gt;
+    &lt;textarea id="descriptionfield"&gt;&lt;/textarea&gt;
+    &lt;/p&gt;
+    
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p>
+
+There's a few changes here and there so let me try to address them one by one. First off - note that I've removed the initial query and replaced it with a CFC call. Going into the JavaScript, ignore that new function for now, and go on down to the artdiv click area. I added a new call to the get ID. (Once again using the data feature.) The save now runs a CFC method called saveart, sending the data from my form. The result for now is a bit simple. I assume everything worked ok and don't worry about validation. I write my values back into the initial div (note I made a variable out of it) and for the most part this is simple. Price isn't quite so easy though. I've got two places where price is used. First in a non-formatted way in the data portion and secondly in a nice formatted version. While there are many plugins out there for number formatting (and currency formatting too), I went with a simple function I found via Google. All in all though the end result is to simply copy the form values from the dialog back into the view.
+
+<p>
+
+And that's it. I'd put up a live example of this but I'd have to worry about spammers hitting the edit field. I did zip up all the files (including the CFC if you want to see it) and attached it to this blog entry. Enjoy!<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fmultiedit%2Ezip'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/01\/02\/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery'; 
+this.page.identifier = '/?p=4069'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/01/02/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Ask a Jedi: Example of modal dialog editing with jQuery" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/01/02/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/01/02/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Ask a Jedi: Example of modal dialog editing with jQuery" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/01/02/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/01/02/Ask-a-Jedi-Example-of-modal-dialog-editing-with-jQuery" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>A look at JavaScript Form Validation &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="A look at JavaScript Form Validation" />
+<meta property="og:description" content="Validating forms with JavaScript has been possible since the very beginning of time&hellip; or at least the introduction of LiveScript (the original name before the marketing drones got ahold of it). While it&rsquo;s not particular new or as exciting as Canvas based games, JavaScript form validation is one of the best uses of the language (imo) and something that can dramatically improve your user&rsquo;s experience. I recently had a reader ask how to do JavaScript form validation so I thought it might be nice to write up a simple tutorial. This is not meant to cover every possible way, of course, and will be a very manual approach (no frameworks or plugins!) to the problem. As always, I welcome folks comments and suggestions below.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2012/01/27/A-look-at-JavaScript-Form-Validation" />
+
+
+<meta property="og:updated_time" content="2012-01-27T10:01:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="A look at JavaScript Form Validation">
+<meta itemprop="description" content="Validating forms with JavaScript has been possible since the very beginning of time&hellip; or at least the introduction of LiveScript (the original name before the marketing drones got ahold of it). While it&rsquo;s not particular new or as exciting as Canvas based games, JavaScript form validation is one of the best uses of the language (imo) and something that can dramatically improve your user&rsquo;s experience. I recently had a reader ask how to do JavaScript form validation so I thought it might be nice to write up a simple tutorial. This is not meant to cover every possible way, of course, and will be a very manual approach (no frameworks or plugins!) to the problem. As always, I welcome folks comments and suggestions below.
+">
+
+
+<meta itemprop="dateModified" content="2012-01-27T10:01:00&#43;06:00" />
+<meta itemprop="wordCount" content="2446">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="A look at JavaScript Form Validation"/>
+<meta name="twitter:description" content="Validating forms with JavaScript has been possible since the very beginning of time&hellip; or at least the introduction of LiveScript (the original name before the marketing drones got ahold of it). While it&rsquo;s not particular new or as exciting as Canvas based games, JavaScript form validation is one of the best uses of the language (imo) and something that can dramatically improve your user&rsquo;s experience. I recently had a reader ask how to do JavaScript form validation so I thought it might be nice to write up a simple tutorial. This is not meant to cover every possible way, of course, and will be a very manual approach (no frameworks or plugins!) to the problem. As always, I welcome folks comments and suggestions below.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2012/01/27/A-look-at-JavaScript-Form-Validation">
+    <h1 class="article-title" itemprop="name">
+        A look at JavaScript Form Validation
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2012-01-27 10:01:00 &#43;0600 &#43;0600" itemprop="datePublished">2012-01-27</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Validating forms with JavaScript has been possible since the very beginning of time&hellip; or at least the introduction of LiveScript (the original name before the marketing drones got ahold of it). While it&rsquo;s not particular new or as exciting as Canvas based games, JavaScript form validation is one of the best uses of the language (imo) and something that can dramatically improve your user&rsquo;s experience. I recently had a reader ask how to do JavaScript form validation so I thought it might be nice to write up a simple tutorial. This is not meant to cover every possible way, of course, and will be a very manual approach (no frameworks or plugins!) to the problem. As always, I welcome folks comments and suggestions below.</p>
+
+<p><p/></p>
+
+<p>Before we write a lick of code, let&rsquo;s look at this topic at a high level. JavaScript form validation comes down to four basic steps:</p>
+
+<p><p/></p>
+
+<p>The first thing you must do is prevent your forms from doing their default behavior - submitting. There are a few ways of doing this but our method will focus on simply listening for the submit event for the form. One tricky thing here to watch out for is ensuring our code doesn&rsquo;t have any errors. Yeah, sure, we should <i>always</i> do that, right? Well one thing that may trip you up is that if an error occurs in your code then the browser will go ahead and submit the form as if nothing happened. This is probably a good thing for the web at large, but during development it can be a bit of a pain. See my random tips at the end for a workaround for this.</p>
+
+<p><p/></p>
+
+<p>The next thing is to introspect the form and figure out what needs to be checked for what. So that&rsquo;s part technical (&ldquo;how do I know what form field X is set to?&rdquo;) and part business (&ldquo;what fields do I care about?&rdquo;). Obviously this guide can&rsquo;t cover every detail, but hopefully it will give you enough to go on to build more complex form validation routines.</p>
+
+<p><p/></p>
+
+<p>The third concern will be reporting the error back to the user. Again, there are a couple of options here. You can use the old Alert prompt, which is ugly, but direct, or simply update the DOM with nice error messages. These can be on top of the form, to the side, underneath, or even next to the particular fields that are incorrect. Again, you&rsquo;ve got options, but obviously you need to let the user know what in the heck is wrong.</p>
+
+<p><p/></p>
+
+<p>And lastly, you <b>must absolutely 100% no excuses test your form with JavaScript turned off</b>. While the amount of people without JavaScript is pretty minuscule, there are far too many sites that react badly when you submit a form with JavaScript turned off. I think it&rsquo;s perfectly reasonable to require JavaScript and simply return nothing, or a blunt error, to a user with JavaScript turned off, but you want to ensure bad things don&rsquo;t happen. Assume users will not send the right form fields, will send more data then you expect, less data, etc. Your form submission page is the exhaust port of the Death Star. It&rsquo;s dangerous.</p>
+
+<p><p/></p>
+
+<p>Ok, enough blather. Let&rsquo;s begin with a simple example. I&rsquo;ve got a form with two simple fields that I will want to validate. Let&rsquo;s look at the code before any JavaScript code is added.</p>
+
+<p><p/></p>
+
+<p><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;title&gt;Form Validation&lt;/title&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body&gt;</p>
+
+<p>&lt;form action=&ldquo;something.php&rdquo; method=&ldquo;post&rdquo;&gt;
+    username: &lt;input type=&ldquo;text&rdquo; name=&ldquo;username&rdquo; value=&ldquo;&rdquo;&gt;&lt;br/&gt;
+    password: &lt;input type=&ldquo;password&rdquo; name=&ldquo;password&rdquo; value=&ldquo;&rdquo;&gt;&lt;br/&gt;
+    &lt;input type=&ldquo;submit&rdquo; value=&ldquo;Login&rdquo;&gt;
+&lt;/form&gt;</p>
+
+<p>&lt;/body&gt;<br />
+&lt;/html&gt;
+</code></p>
+
+<p><p/></p>
+
+<p>If for some reason you want to run this as is, you can view it here: <a href="http://www.raymondcamden.com/demos/2012/jan/27/test1.html">http://www.raymondcamden.com/demos/2012/jan/27/test1.html</a>.</p>
+
+<p><p/></p>
+
+<p>So - let&rsquo;s begin. I mentioned that our first task is to listen for, and take over, the form submission. We want to prevent the form from doing what it normally does - submit.</p>
+
+<p><p/></p>
+
+<p><code>
+//get a handle to my form
+var myform = document.getElementById(&ldquo;myform&rdquo;);</p>
+
+<p>//listen for submit
+myform.addEventListener(&ldquo;submit&rdquo;, function(e) {
+</code></p>
+
+<p><p></p>
+
+<p>In order for this to work, we had to add an ID to the form. We could get the form object other ways, but IDs are the most direct, simple way:</p>
+
+<p><p/></p>
+
+<p><code>
+&lt;form action=&ldquo;something.php&rdquo; method=&ldquo;post&rdquo; id=&ldquo;myform&rdquo;&gt;
+</code></p>
+
+<p><p/></p>
+
+<p>Now let&rsquo;s dig into the event handler I started earlier:</p>
+
+<p><p/></p>
+
+<p><code>
+myform.addEventListener(&ldquo;submit&rdquo;, function(e) {
+     console.log(&ldquo;submit&rdquo;);</p>
+
+<pre><code> var username = document.getElementById(&quot;username&quot;).value;
+ var password = document.getElementById(&quot;password&quot;).value;
+ var errors = '';
+
+ if(username == '') errors += 'Please specify a username.\n';
+ if(password == '') errors += 'Please specify a password.\n';
+
+
+ if(errors != '') {
+     alert(errors);
+     e.preventDefault();
+ }
+</code></pre>
+
+<p>});
+</code></p>
+
+<p><p></p>
+
+<p>For our form, we want to check the values of the username and password field and ensure they have something in them. My first two lines grab the fields and their values using getElementById. Those of you used to jQuery know that the framework makes this call a bit simpler, but as I said in the beginning I&rsquo;m intentionally ignoring frameworks for now. I also create a simple errors string variable. This will store the text I&rsquo;ll show to the user in case an error.</p>
+
+<p><p></p>
+
+<p>The next block begins my simple validation. In my case, I&rsquo;m just comparing both values to empty strings. Not the most complex validation, but it works. (For extra credit, I could have trimmed the space from my inputs. I&rsquo;ve been to many forms that let me bypass their validation by just hitting the space bar.) Note how for each &ldquo;rule&rdquo; I simply append to the errors string. This then let&rsquo;s me check if the string is blank. If it isn&rsquo;t, it means something went wrong. I use the alert feature to tell the user.</p>
+
+<p><p></p>
+
+<p>Here&rsquo;s a critical part. I want to ensure the form does <b>not</b> proceed as normal. Without this one line, it would: e.preventDefault(). e is the name of the variable that the browser will pass the Event object in. Think of it as the actual form submission event. It&rsquo;s not the form, it&rsquo;s the action of me clicking submit.</p>
+
+<p><p></p>
+
+<p>If you want to test this, use the URL here. Note that I did NOT bother building a file to accept the form input. something.php doesn&rsquo;t exist. If that confuses people, I&rsquo;ll put in a handler, but for now, expect a 404 when the form submits: <a href="http://www.raymondcamden.com/demos/2012/jan/27/test2.html">http://www.raymondcamden.com/demos/2012/jan/27/test2.html</a></p>
+
+<p><p></p>
+
+<p>And here is the complete page:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;title&gt;Form Validation&lt;/title&gt;
+&lt;script&gt;
+function init() {
+    console.log(&ldquo;init&rdquo;);</p>
+
+<pre><code>//get a handle to my form
+var myform = document.getElementById(&quot;myform&quot;);
+
+//listen for submit
+myform.addEventListener(&quot;submit&quot;, function(e) {
+    console.log(&quot;submit&quot;);
+
+    var username = document.getElementById(&quot;username&quot;).value;
+    var password = document.getElementById(&quot;password&quot;).value;
+    var errors = '';
+
+    if(username == '') errors += 'Please specify a username.\n';
+    if(password == '') errors += 'Please specify a password.\n';
+
+
+    if(errors != '') {
+        alert(errors);
+        e.preventDefault();
+    }
+
+});
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body onload=&ldquo;init()&rdquo;&gt;</p>
+
+<p>&lt;form action=&ldquo;something.php&rdquo; method=&ldquo;post&rdquo; id=&ldquo;myform&rdquo;&gt;
+    username: &lt;input type=&ldquo;text&rdquo; name=&ldquo;username&rdquo; id=&ldquo;username&rdquo; value=&ldquo;&rdquo;&gt;&lt;br/&gt;
+    password: &lt;input type=&ldquo;password&rdquo; name=&ldquo;password&rdquo; id=&ldquo;password&rdquo; value=&ldquo;&rdquo;&gt;&lt;br/&gt;
+    &lt;input type=&ldquo;submit&rdquo; value=&ldquo;Login&rdquo;&gt;
+&lt;/form&gt;</p>
+
+<p>&lt;/body&gt;<br />
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>So, that works, but is a bit ugly. Let&rsquo;s get rid of the alert. It smells of 1997. How about inserting some text into the page instead? I added a new div, and relevant style, to my page:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;style&gt;
+#errorDiv {
+    color: red;
+    font-weight: bold;
+}
+&lt;/style&gt;
+&hellip;</p>
+
+<p>&lt;div id=&ldquo;errorDiv&rdquo;&gt;&lt;/div&gt;
+</code></p>
+
+<p><p></p>
+
+<p>The div is empty for now which means the user won&rsquo;t see it until I actually put something in it. Now instead of creating an alert, I&rsquo;m going to just inject HTML into the div. I modified my error messages to use BR tags. (In case it wasn&rsquo;t clear, the alert uses line breaks, \n, to create the breaks.)</p>
+
+<p><p></p>
+
+<p><code>
+if(username == &ldquo;) errors += &lsquo;Please specify a username.&lt;br/&gt;&rsquo;;
+if(password == &ldquo;) errors += &lsquo;Please specify a password.&lt;br/&gt;&rsquo;;
+</code></p>
+
+<p><p></p>
+
+<p>And to inject it, I modify the div&rsquo;s innerHTML property:</p>
+
+<p><p></p>
+
+<p><code>
+var errorDiv = document.getElementById(&ldquo;errorDiv&rdquo;);
+if(errors != &ldquo;) {
+     errorDiv.innerHTML=errors;
+     e.preventDefault();
+} else errorDiv.innerHTML=&ldquo;;
+</code></p>
+
+<p><p></p>
+
+<p>So - what&rsquo;s up with the else there? When the user hits the form, it&rsquo;s possible that they will make some type of mistake. When they do, a message is added into the div. When they correct the mistake and hit submit, the form submission will go along as normal. But if the form processor is slow, then the user will continue to see the error message. By clearing it, we remove any doubt in the user&rsquo;s mind that their form is being processed.</p>
+
+<p><p></p>
+
+<p>You can demo this here: <a href="http://www.raymondcamden.com/demos/2012/jan/27/test3.html">http://www.raymondcamden.com/demos/2012/jan/27/test3.html</a> The full code is below:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;title&gt;Form Validation&lt;/title&gt;
+&lt;script&gt;
+function init() {
+    console.log(&ldquo;init&rdquo;);</p>
+
+<pre><code>//get a handle to my form
+var myform = document.getElementById(&quot;myform&quot;);
+
+//listen for submit
+myform.addEventListener(&quot;submit&quot;, function(e) {
+    console.log(&quot;submit&quot;);
+
+    var username = document.getElementById(&quot;username&quot;).value;
+    var password = document.getElementById(&quot;password&quot;).value;
+    var errors = '';
+
+    if(username == '') errors += 'Please specify a username.&amp;lt;br/&amp;gt;';
+    if(password == '') errors += 'Please specify a password.&amp;lt;br/&amp;gt;';
+
+    var errorDiv = document.getElementById(&quot;errorDiv&quot;);
+    if(errors != '') {
+        errorDiv.innerHTML=errors;
+        e.preventDefault();
+    } else errorDiv.innerHTML='';
+
+});
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+&lt;style&gt;
+#errorDiv {
+    color: red;
+    font-weight: bold;
+}
+&lt;/style&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body onload=&ldquo;init()&rdquo;&gt;</p>
+
+<p>&lt;div id=&ldquo;errorDiv&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;form action=&ldquo;something.php&rdquo; method=&ldquo;post&rdquo; id=&ldquo;myform&rdquo;&gt;
+    username: &lt;input type=&ldquo;text&rdquo; name=&ldquo;username&rdquo; id=&ldquo;username&rdquo; value=&ldquo;&rdquo;&gt;&lt;br/&gt;
+    password: &lt;input type=&ldquo;password&rdquo; name=&ldquo;password&rdquo; id=&ldquo;password&rdquo; value=&ldquo;&rdquo;&gt;&lt;br/&gt;
+    &lt;input type=&ldquo;submit&rdquo; value=&ldquo;Login&rdquo;&gt;
+&lt;/form&gt;</p>
+
+<p>&lt;/body&gt;<br />
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Alrighty&hellip; now that we&rsquo;ve got the basics down, it&rsquo;s time to kick it up a notch. Let&rsquo;s begin by looking at a slightly more complex form:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;form action=&ldquo;something.php&rdquo; method=&ldquo;post&rdquo; id=&ldquo;myform&rdquo;&gt;
+    &lt;p&gt;
+    name: &lt;input type=&ldquo;text&rdquo; name=&ldquo;name&rdquo; id=&ldquo;name&rdquo; value=&ldquo;&rdquo;&gt;
+    &lt;/p&gt;</p>
+
+<pre><code>&amp;lt;p&amp;gt;
+bio: &amp;lt;textarea name=&quot;bio&quot; id=&quot;bio&quot;&amp;gt;&amp;lt;/textarea&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;
+gender: &amp;lt;select name=&quot;gender&quot; id=&quot;gender&quot;&amp;gt;
+&amp;lt;option value=&quot;&quot;&amp;gt;Pick One&amp;lt;/option&amp;gt;
+&amp;lt;option value=&quot;female&quot;&amp;gt;Female&amp;lt;/option&amp;gt;
+&amp;lt;option value=&quot;male&quot;&amp;gt;Male&amp;lt;/option&amp;gt;
+&amp;lt;/select&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;
+favorite colors:&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;checkbox&quot; name=&quot;favcolor&quot; id=&quot;favcolor-red&quot; value=&quot;red&quot;&amp;gt; &amp;lt;label for=&quot;favcolor-red&quot;&amp;gt;Red&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;checkbox&quot; name=&quot;favcolor&quot; id=&quot;favcolor-blue&quot; value=&quot;blue&quot;&amp;gt; &amp;lt;label for=&quot;favcolor-blue&quot;&amp;gt;Blue&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;checkbox&quot; name=&quot;favcolor&quot; id=&quot;favcolor-green&quot; value=&quot;green&quot;&amp;gt; &amp;lt;label for=&quot;favcolor-green&quot;&amp;gt;Green&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;
+favorite food:&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;radio&quot; name=&quot;favfood&quot; id=&quot;favfood-pizza&quot; value=&quot;pizza&quot;&amp;gt; &amp;lt;label for=&quot;favfood-pizza&quot;&amp;gt;Pizza&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;radio&quot; name=&quot;favfood&quot; id=&quot;favfood-beer&quot; value=&quot;beer&quot;&amp;gt; &amp;lt;label for=&quot;favfood-beer&quot;&amp;gt;Beer&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;radio&quot; name=&quot;favfood&quot; id=&quot;favfood-cookie&quot; value=&quot;cookie&quot;&amp;gt; &amp;lt;label for=&quot;favfood-cookie&quot;&amp;gt;Cookies&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&amp;gt;
+</code></pre>
+
+<p>&lt;/form&gt;
+</code></p>
+
+<p><p></p>
+
+<p>We&rsquo;ve now got a text field, a textarea, a select box, a set of checkboxes, and a radio group. The code we used earlier to grab form values will need to be updated a bit. So for example, we can&rsquo;t just get the value of a set of checkboxes.</p>
+
+<p><p></p>
+
+<p>In order to simplify things a bit, we&rsquo;re going to upgrade our code a bit to something more modern - the <a href="http://www.w3.org/TR/selectors-api2/">Selectors API</a>. Roughly, this gives us jQuery-style APIs to the DOm and simplifies things for us quite a bit, especially in terms of our radio/checkbox groups. The API comes down to two main method: querySelector and querySelectorAll. I recommend this blog entry for a good introduction: <a href="http://webdirections.org/blog/html5-selectors-api-its-like-a-swiss-army-knife-for-the-dom/">HTML5 selectors API &ndash; It&rsquo;s like a Swiss Army Knife for the DOM</a>. This is - yet again - one more cool aspect of HTML5 that seems to be passed over for demos of Canvas apps and kittens. Sigh. That being said, the support for this is actually rather good. When we talk about support and HTML features, typically the bugaboo is IE. In this case, IE8 and above supports the feature. Good enough for me. Let&rsquo;s look at one change:</p>
+
+<p><p></p>
+
+<p><code>
+var myform = document.getElementById(&ldquo;myform&rdquo;);
+</code></p>
+
+<p><p></p>
+
+<p>versus:</p>
+
+<p><p>
+var myform = document.querySelector(&ldquo;#myform&rdquo;);
+</code></p>
+
+<p><p></p>
+
+<p>Not too terribly different, right? And if you are used to jQuery then this is familiar. You aren&rsquo;t saving a lot of keystrokes here, but wait, it gets better. Let&rsquo;s take a look at how we grab some of these form fields:</p>
+
+<p><p></p>
+
+<p><code>
+var name = document.querySelector(&ldquo;#name&rdquo;).value;
+var bio = document.querySelector(&ldquo;#bio&rdquo;).value;
+</code></p>
+
+<p><p></p>
+
+<p>Ok - not too different. Basically we just get to the DOM via the newer API versus the older one. How about the select? Well, select fields have a selectedIndex. Our business rule will be to simply ensure the first item isn&rsquo;t picked, so all we care about is the index.</p>
+
+<p><p></p>
+
+<p><code>
+var gender = document.querySelector(&ldquo;#gender&rdquo;).selectedIndex;
+</code></p>
+
+<p><p></p>
+
+<p>Ok, now it&rsquo;s time to get fancy. How do we ensure our users pick at least one from the checkbox group? We could use document.getElementById for all four fields and ensure at least one has their checked property set to true. That&rsquo;s not horrible per se, but it&rsquo;s a lot of typing I would hope we can skip. Our radio group has same validation rule. How can we do this nice and easy?</p>
+
+<p><p></p>
+
+<p><code>
+var colorcbs = document.querySelectorAll(&ldquo;input[name=&lsquo;favcolor&rsquo;]:checked&rdquo;);
+var foodcbs = document.querySelectorAll(&ldquo;input[name=&lsquo;favfood&rsquo;]:checked&rdquo;);
+</code></p>
+
+<p><p></p>
+
+<p>Let&rsquo;s look at the first one since the second example is the same ignoring the name. Our selector is: input[name=&lsquo;favcolor&rsquo;]:checked. Reading left to right we have: Give me input fields that have an attribute name with the value favcolor, and filter to those that are checked. Or in English - what did I check in the favcolor group? These two calls both return an array of DOM items for any checked field. What&rsquo;s cool is that I can then just check the length of this array. This would also let me support things like, &ldquo;Pick at least one favorite food but no more than three.&rdquo; Let&rsquo;s take a look now at the validation code:</p>
+
+<p><p></p>
+
+<p><code>
+if(name == &ldquo;) errors += &lsquo;Enter a name.&lt;br/&gt;&rsquo;;
+//bio not required
+if(gender == 0) errors += &lsquo;Select a gender.&lt;br/&gt;&lsquo;
+if(colorcbs.length == 0) errors += &lsquo;Select a favorite color.&lt;br&gt;&rsquo;;
+if(foodcbs.length == 0) errors += &lsquo;Select a favorite food.&lt;br&gt;&rsquo;;
+</code></p>
+
+<p><p></p>
+
+<p>Not too difficult, right? You can view the full demo here: <a href="http://www.raymondcamden.com/demos/2012/jan/27/test4.html">http://www.raymondcamden.com/demos/2012/jan/27/test4.html</a></p>
+
+<p><p></p>
+
+<p>And here is the complete template:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;title&gt;Form Validation&lt;/title&gt;
+&lt;script&gt;
+function init() {
+    console.log(&ldquo;init&rdquo;);</p>
+
+<pre><code>//get a handle to my form
+var myform = document.querySelector(&quot;#myform&quot;);
+
+//listen for submit
+myform.addEventListener(&quot;submit&quot;, function(e) {
+    console.log(&quot;submit&quot;);
+
+    var errors = '';
+    var errorDiv = document.querySelector(&quot;#errorDiv&quot;);
+
+    var name = document.querySelector(&quot;#name&quot;).value;
+    var bio = document.querySelector(&quot;#bio&quot;).value;
+    var gender = document.querySelector(&quot;#gender&quot;).selectedIndex;
+
+    var colorcbs = document.querySelectorAll(&quot;input[name='favcolor']:checked&quot;);
+    var foodcbs = document.querySelectorAll(&quot;input[name='favfood']:checked&quot;);
+
+    if(name == '') errors += 'Enter a name.&amp;lt;br/&amp;gt;';
+    //bio not required
+    if(gender == 0) errors += 'Select a gender.&amp;lt;br/&amp;gt;'
+    if(colorcbs.length == 0) errors += 'Select a favorite color.&amp;lt;br&amp;gt;';
+    if(foodcbs.length == 0) errors += 'Select a favorite food.&amp;lt;br&amp;gt;';
+
+    if(errors != '') {
+        errorDiv.innerHTML=errors;
+        e.preventDefault();
+    } else errorDiv.innerHTML='';
+
+
+});
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+&lt;style&gt;
+#errorDiv {
+    color: red;
+    font-weight: bold;
+}
+&lt;/style&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body onload=&ldquo;init()&rdquo;&gt;</p>
+
+<p>&lt;div id=&ldquo;errorDiv&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;form action=&ldquo;something.php&rdquo; method=&ldquo;post&rdquo; id=&ldquo;myform&rdquo;&gt;
+    &lt;p&gt;
+    name: &lt;input type=&ldquo;text&rdquo; name=&ldquo;name&rdquo; id=&ldquo;name&rdquo; value=&ldquo;&rdquo;&gt;
+    &lt;/p&gt;</p>
+
+<pre><code>&amp;lt;p&amp;gt;
+bio: &amp;lt;textarea name=&quot;bio&quot; id=&quot;bio&quot;&amp;gt;&amp;lt;/textarea&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;
+gender: &amp;lt;select name=&quot;gender&quot; id=&quot;gender&quot;&amp;gt;
+&amp;lt;option value=&quot;&quot;&amp;gt;Pick One&amp;lt;/option&amp;gt;
+&amp;lt;option value=&quot;female&quot;&amp;gt;Female&amp;lt;/option&amp;gt;
+&amp;lt;option value=&quot;male&quot;&amp;gt;Male&amp;lt;/option&amp;gt;
+&amp;lt;/select&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;
+favorite colors:&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;checkbox&quot; name=&quot;favcolor&quot; id=&quot;favcolor-red&quot; value=&quot;red&quot;&amp;gt; &amp;lt;label for=&quot;favcolor-red&quot;&amp;gt;Red&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;checkbox&quot; name=&quot;favcolor&quot; id=&quot;favcolor-blue&quot; value=&quot;blue&quot;&amp;gt; &amp;lt;label for=&quot;favcolor-blue&quot;&amp;gt;Blue&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;checkbox&quot; name=&quot;favcolor&quot; id=&quot;favcolor-green&quot; value=&quot;green&quot;&amp;gt; &amp;lt;label for=&quot;favcolor-green&quot;&amp;gt;Green&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;
+favorite food:&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;radio&quot; name=&quot;favfood&quot; id=&quot;favfood-pizza&quot; value=&quot;pizza&quot;&amp;gt; &amp;lt;label for=&quot;favfood-pizza&quot;&amp;gt;Pizza&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;radio&quot; name=&quot;favfood&quot; id=&quot;favfood-beer&quot; value=&quot;beer&quot;&amp;gt; &amp;lt;label for=&quot;favfood-beer&quot;&amp;gt;Beer&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;input type=&quot;radio&quot; name=&quot;favfood&quot; id=&quot;favfood-cookie&quot; value=&quot;cookie&quot;&amp;gt; &amp;lt;label for=&quot;favfood-cookie&quot;&amp;gt;Cookies&amp;lt;/label&amp;gt;&amp;lt;br/&amp;gt;
+&amp;lt;/p&amp;gt;
+
+&amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&amp;gt;
+</code></pre>
+
+<p>&lt;/form&gt;</p>
+
+<p>&lt;/body&gt;<br />
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>So&hellip; what do you think? If you&rsquo;ve never worked with JavaScript, or are just beginning, does this make sense? Any question?</p>
+
+<p><p></p>
+
+<p>p.s. So I mentioned above that one of the things you have to watch our for is errors in your submit handler. One way to work around that - at least in Chrome - is to enable Console/Preserve log upon navigation. This will keep the error in your log even after the form goes to the submit page.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2012\/01\/27\/A-look-at-JavaScript-Form-Validation'; 
+this.page.identifier = '/?p=4510'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/27/A-look-at-JavaScript-Form-Validation" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="A look at JavaScript Form Validation" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/27/A-look-at-JavaScript-Form-Validation" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/27/A-look-at-JavaScript-Form-Validation" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="A look at JavaScript Form Validation" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/27/A-look-at-JavaScript-Form-Validation" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/27/A-look-at-JavaScript-Form-Validation" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

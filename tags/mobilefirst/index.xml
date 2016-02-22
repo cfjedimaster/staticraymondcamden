@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mobilefirst on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/tags/mobilefirst/</link>
+    <description>Recent content in Mobilefirst on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 19 Jan 2016 10:48:55 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/tags/mobilefirst/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>DefinitelyTyped project for IBM MobileFirst and Hybrid Mobile Apps</title>
+      <link>http://www.raymondcamden.com/2016/01/19/definitelytyped-project-for-ibm-mobilefirst-and-hybrid-mobile-apps</link>
+      <pubDate>Tue, 19 Jan 2016 10:48:55 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/19/definitelytyped-project-for-ibm-mobilefirst-and-hybrid-mobile-apps</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve blogged before about the client-side API for hybrid mobile apps built on &lt;a href=&#34;
+https://ibm.biz/IBM-MobileFirst&#34;&gt;IBM MobileFirst&lt;/a&gt;. One of the things I&amp;rsquo;ve discovered recently is the library of &lt;a href=&#34;http://definitelytyped.org/&#34;&gt;DefinitlyTyped&lt;/a&gt; definition files for TypeScript developers. These files provide intellisense for a huge set of various frameworks and client-side code written in TypeScript. Turns out though that you can also use them in regular old JavaScript files too. My editor of choice (Visual Studio Code) has &lt;a href=&#34;https://code.visualstudio.com/docs/languages/javascript&#34;&gt;great support&lt;/a&gt; for this. You can simply get the file, drop it into your project, and go to town.&lt;/p&gt;
+
+&lt;p&gt;So with that in mind - I started working on a DefinitelyTyped file for MobileFirst. I had to guess a bit at exactly how to do it, and I probably did a few things wrong, but you can get the work in progress here: &lt;a href=&#34;https://github.com/cfjedimaster/MobileFirst-Typings&#34;&gt;https://github.com/cfjedimaster/MobileFirst-Typings&lt;/a&gt;. As you will see in the ReadMe, I&amp;rsquo;ve covered a few of the main classes in the WL namespace (this is the core namespace for the API). I&amp;rsquo;m looking for feedback on how I built it as well as volunteers to help complete the library with a pull request.&lt;/p&gt;
+
+&lt;p&gt;In case your curious as to how well this works, check out the video below:&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/wre69RYbDnA&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;As a side note - you can get definition files for Apache Cordova and Ionic as well!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Ionic Creator with MobileFirst 7.1</title>
+      <link>http://www.raymondcamden.com/2015/12/15/using-ionic-creator-with-mobilefirst-7-1</link>
+      <pubDate>Tue, 15 Dec 2015 08:35:14 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/15/using-ionic-creator-with-mobilefirst-7-1</guid>
+      <description>&lt;p&gt;A few months ago I wrote a post discussing how to use &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;IBM MobileFirst&lt;/a&gt; 7.1 with Ionic (&lt;a href=&#34;http://www.raymondcamden.com/2015/08/19/developing-ionic-apps-with-mobilefirst-7-1&#34;&gt;Developing Ionic Apps with MobileFirst 7.1&lt;/a&gt;). Recently, the Ionic folks have done some darn good improvements to &lt;a href=&#34;https://creator.ionic.com&#34;&gt;Ionic Creator&lt;/a&gt;. Not only is the app more powerful to use, but more importantly, the &lt;i&gt;output&lt;/i&gt; of Ionic Creator is, in my not so humble opinion, a heck of lot better. I&amp;rsquo;m still struggling to become &amp;ldquo;Angular-literate&amp;rdquo; so I&amp;rsquo;m not sure if I&amp;rsquo;m the best judge of Angular code, but I find the output from Creator to be a lot easier to work with, and more importantly, closer to the default code you get when you create Ionic applications with the CLI. So in this post, I thought I&amp;rsquo;d quickly demonstrate how to go from an app designed and created in Ionic Creator to a MobileFirst-enabled hybrid application.&lt;/p&gt;
+
+&lt;p&gt;First, I assume you&amp;rsquo;ve got a project up on Ionic Creator already. How it looks, what it does, etc. doesn&amp;rsquo;t really matter. But it has to include a picture of a cat.&lt;/p&gt;
+
+&lt;p&gt;To begin, you&amp;rsquo;ll want to grab the zip download. First hit the export link:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/Ionic_Creator.png&#34; alt=&#34;Ionic_Creator&#34; width=&#34;750&#34; height=&#34;543&#34; class=&#34;aligncenter size-full wp-image-7241&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then select the zip tab:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/Ionic_Creator2.png&#34; alt=&#34;Ionic_Creator2&#34; width=&#34;750&#34; height=&#34;544&#34; class=&#34;aligncenter size-full wp-image-7242&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Extract the zip someplace - it doesn&amp;rsquo;t matter where, we&amp;rsquo;ll be moving it in a second.&lt;/p&gt;
+
+&lt;p&gt;Ok, next, create a new MobileFirst Cordova application with: &lt;code&gt;mfp cordova create&lt;/code&gt;. Just name it whatever you want and accept the defaults. (Or change them if you know what you&amp;rsquo;re doing.)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot1-1.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;674&#34; class=&#34;aligncenter size-full wp-image-7243&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now - I assume you&amp;rsquo;ve already got a working MobileFirst development server, but I like to be sure. So before going any further, go ahead and push the app to the server (&lt;code&gt;mfp push&lt;/code&gt;) and then send it to your emulator (&lt;code&gt;mfp cordova emulate -p ios&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/Simulator-Screen-Shot-Dec-14-2015-10.36.27-AM.png&#34; alt=&#34;Simulator Screen Shot Dec 14, 2015, 10.36.27 AM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7244 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so now lets get in your Ionic Creator code. Open the directory containing your MobileFirst Cordova project. Find the www folder and either delete it or rename it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot2-1.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;425&#34; class=&#34;aligncenter size-full wp-image-7246&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then, copy the assets from your Creator zip export into a new &lt;code&gt;www&lt;/code&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot3.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;847&#34; class=&#34;aligncenter size-full wp-image-7247&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so you&amp;rsquo;re almost done actually. First, be sure to add in Ionic&amp;rsquo;s keyboard plugin: &lt;code&gt;mfp cordova plugin add ionic-plugin-keyboard&lt;/code&gt;. &lt;strong&gt;NOTICE: &lt;/strong&gt; At the time I write this, a bug in the mfp CLI will report &lt;code&gt;Error adding plugin &amp;ldquo;ionic-plugin-keyboard&amp;rdquo;&lt;/code&gt;. But if you &lt;code&gt;mfp cordova plugin ls&lt;/code&gt; you will see that the plugin was added. This bug is known and will be fixed in a future release.&lt;/p&gt;
+
+&lt;p&gt;Next you need to prepare the app to &amp;ldquo;speak&amp;rdquo; to MobileFirst. I covered this process in depth in my earlier article: &lt;a href=&#34;http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1&#34;&gt;Developing Hybrid Mobile Apps with IBM MobileFirst 7.1&lt;/a&gt;. But if you want to quickly just see your app running, open up app.js and simply add this to the end:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var wlInitOptions = {
+    // Options to initialize with the WL.Client object.
+    // For initialization options please refer to IBM MobileFirst Platform Foundation Knowledge Center.
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then simply emulate. (Note, previously you needed to &lt;code&gt;mfp push&lt;/code&gt; before every emulation. Now that is unnecessary.)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot4-1.png&#34; alt=&#34;shot4&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7248 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. Let me know if you&amp;rsquo;ve got any questions about this process by leaving a comment below.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New MobileFirst Slack!</title>
+      <link>http://www.raymondcamden.com/2015/09/04/new-mobilefirst-slack</link>
+      <pubDate>Fri, 04 Sep 2015 10:53:50 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/09/04/new-mobilefirst-slack</guid>
+      <description>&lt;p&gt;If you are interested in learning more about &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;MobileFirst&lt;/a&gt; or are already working with it, come join our new public Slack channel to discuss problems, questions, Star Wars trivia and cats with other developers. Simply sign up at the form here: &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/2015/08/19/come-chat-with-us/&#34;&gt;Come chat with us!&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking on Cordova, Ionic, and MobileFirst/Bluemix in Manilla</title>
+      <link>http://www.raymondcamden.com/2015/09/03/speaking-on-cordova-ionic-and-mobilefirstbluemix-in-manilla</link>
+      <pubDate>Thu, 03 Sep 2015 11:30:09 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/09/03/speaking-on-cordova-ionic-and-mobilefirstbluemix-in-manilla</guid>
+      <description>&lt;p&gt;So I mentioned my &lt;a href=&#34;http://www.raymondcamden.com/2015/08/31/upcoming-ionicbluemix-presentations-in-asia&#34;&gt;other presentations in Asia&lt;/a&gt; next week, but here is the final one - an event in Manilla covering Apache Cordova, Ionic, and MobileFirst/Bluemix. Free for all - attend just to see how crazy tired I am by this point.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.meetup.com/Manila-IBM-Bluemix-Cloud-Computing-and-PaaS-Meetup/events/224664318/&#34;&gt;Build your Hybrid Mobile App with Ionic, MobileFirst and Bluemix Workshop&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking Down Under Next Week</title>
+      <link>http://www.raymondcamden.com/2015/08/20/speaking-down-under-next-week</link>
+      <pubDate>Thu, 20 Aug 2015 08:31:26 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/20/speaking-down-under-next-week</guid>
+      <description>&lt;p&gt;Tomorrow I hop on a plane and head down under. I&amp;rsquo;ll be going to both Australia and New Zealand. In Australia, I&amp;rsquo;ll be speaking at two multi hour events. I&amp;rsquo;ll be covering &lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt;, &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;, and &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;MobileFirst&lt;/a&gt;. Both sessions are a three hour block with an hour focused on each topic.  I&amp;rsquo;ll be bringing some Ionic schwag with me as well as the spirit of America, so please attend if you can!&lt;/p&gt;
+
+&lt;p&gt;The first event is in Melbourne on August 24th: &lt;a href=&#34;http://www.meetup.com/Melbourne-IBM-Open-Cloud-Meetup/events/224710657/&#34;&gt;Cordova/Ionic/MobileFirst&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The second event is in Sydney on August 26th: &lt;a href=&#34;http://www.meetup.com/Sydney-IBM-Open-Cloud-Meetup/events/224710686/&#34;&gt;Cordova/Ionic/MobileFirst&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Both events are completely free, so please show up!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Developing Ionic Apps with MobileFirst 7.1</title>
+      <link>http://www.raymondcamden.com/2015/08/19/developing-ionic-apps-with-mobilefirst-7-1</link>
+      <pubDate>Wed, 19 Aug 2015 15:27:30 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/19/developing-ionic-apps-with-mobilefirst-7-1</guid>
+      <description>&lt;p&gt;Time for the last in my series of blog posts on hybrid development with &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;MobileFirst 7.1&lt;/a&gt;. Obviously I&amp;rsquo;ve got more to say about MobileFirst, but this last post will complete the picture so to speak about the development is like in 7.1. I want to give a special shout out to my coworkers &lt;a href=&#34;https://twitter.com/csantanapr&#34;&gt;Carlos Santana&lt;/a&gt; and Karl Bishop. They helped quite a bit with the first two blog posts and this one in particular is thanks to Carlos. Both are smart folks who make my job of telling yall stuff quite a bit easier. With that in mind, before going further, be sure to read my introductory post (&lt;a href=&#34;http://www.raymondcamden.com/2015/08/17/getting-started-with-mobile-development-and-ibm-mobilefirst-7-1&#34;&gt;Getting Started with Mobile Development and IBM MobileFirst 7.1&lt;/a&gt;) and my follow up (&lt;a href=&#34;http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1&#34;&gt;Developing Hybrid Mobile Apps with IBM MobileFirst 7.1&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;For this post, I&amp;rsquo;m going to speak specifically about &lt;a href=&#34;http://ionicframework.com/&#34;&gt;Ionic&lt;/a&gt; development and MobileFirst. In general, you can follow much the same path as what I described in the &lt;a href=&#34;http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1&#34;&gt;last blog entry&lt;/a&gt;. Basically make a new MobileFirst project, make a new Ionic project, and then copy over the www assets. But you will also want to make sure you include Ionic&amp;rsquo;s keyboard plugin: &lt;code&gt;com.ionic.keyboard&lt;/code&gt;. Finally, you want to include the code I mentioned that makes use of wlCommonInit. Remember, this is the &amp;ldquo;MobileFirst is ready to go&amp;rdquo; event.&lt;/p&gt;
+
+&lt;p&gt;In general, that would work fine, but there&amp;rsquo;s a way to make it even easier. As I mentioned, my buddy Carlos has been working on this issue and has already made something that will help quite a bit - a set of Ionic templates: &lt;a href=&#34;https://github.com/csantanapr/mfp-ionic-templates&#34;&gt;https://github.com/csantanapr/mfp-ionic-templates&lt;/a&gt;. These templates make it easier to work with MobileFirst and Ionic. Assuming you&amp;rsquo;ve checked out the repo, you can simply provide the path to the repo when creating a new MobileFirst hybrid project:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot19.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;229&#34; class=&#34;aligncenter size-full wp-image-6669&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once you&amp;rsquo;ve created the project, you then need to initialize Ionic library values and other settings. Luckily Carlos made this easy - just run: &lt;code&gt;npm install&lt;/code&gt;. This will read in the dependencies defined in package.json &lt;i&gt;and&lt;/i&gt; run bower as well. (This means that Carlos didn&amp;rsquo;t need to include a specific Ionic JavaScript library - you&amp;rsquo;ll always get the latest.)&lt;/p&gt;
+
+&lt;p&gt;If you crack open the code, you&amp;rsquo;ll see that app.js has been updated to include MobileFirst specific chores including wlCommonInit. He also includes a bit of code to ensure the app will work in our Mobile Browser Simulator (&lt;a href=&#34;http://www.raymondcamden.com/2015/02/20/using-the-mobilefirst-mobile-browser-simulator&#34;&gt;Using the MobileFirst Mobile Browser Simulator&lt;/a&gt;) and Ionic serve as well. To be honest, I kinda felt like it was a mistake to include code that just works in those situations, but I&amp;rsquo;m glad he included it. He clearly marked them in app.js and if you&amp;rsquo;re worried about the &amp;lsquo;waste&amp;rsquo; of 15 lines of unnecessary JavaScript code in production, it will be easy to remove it. (And since this is a repo, you can always just check it out and modify it yourself.)&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s an incredibly cool animated Gif of the blank starter in action.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/Untitled4.gif&#34; alt=&#34;Untitled4&#34; width=&#34;408&#34; height=&#34;714&#34; class=&#34;aligncenter size-full wp-image-6670&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And there you have it. Let me know what you think in the comments below!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Developing Hybrid Mobile Apps with IBM MobileFirst 7.1</title>
+      <link>http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1</link>
+      <pubDate>Tue, 18 Aug 2015 14:40:32 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1</guid>
+      <description>&lt;p&gt;In yesterday&amp;rsquo;s blog post (&lt;a href=&#34;http://www.raymondcamden.com/2015/08/17/getting-started-with-mobile-development-and-ibm-mobilefirst-7-1&#34;&gt;Getting Started with Mobile Development and IBM MobileFirst 7.1&lt;/a&gt;), I discussed what &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;MobileFirst&lt;/a&gt; was and why it could be beneficial for mobile developers. In today&amp;rsquo;s post, I&amp;rsquo;m going to discuss how hybrid mobile development works with MobileFirst. This is something I&amp;rsquo;ve discussed before (for MobileFirst 7.0), and while the process wasn&amp;rsquo;t difficult, it was definitely a few steps away from the &amp;ldquo;typical&amp;rdquo; Cordova development workflow. MobileFirst 7.1 really improves this process and makes it somewhat simpler for hybrid developers. In this post I&amp;rsquo;ll talk about the process both for new projects as well as how an existing project can be migrated to MobileFirst. I will not be discussing specifics for &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; until tomorrow, but most of what I say today will apply there as well. Ok, let&amp;rsquo;s get started!&lt;/p&gt;
+
+&lt;h2&gt;Prereqs&lt;/h2&gt;
+
+&lt;p&gt;Before I begin, I&amp;rsquo;m assuming you&amp;rsquo;ve already downloaded and installed the CLI as I described in &lt;a href=&#34;http://www.raymondcamden.com/2015/08/17/getting-started-with-mobile-development-and-ibm-mobilefirst-7-1&#34;&gt;yesterday&amp;rsquo;s post&lt;/a&gt;. You&amp;rsquo;ll also want to have a server up and running, either locally or on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt;. I also assume you have the &amp;ldquo;normal&amp;rdquo; Cordova prereqs like the iOS or Android SDKs.&lt;/p&gt;
+
+&lt;h2&gt;Creating a Project&lt;/h2&gt;
+
+&lt;p&gt;To create a new hybrid project, you begin by running &lt;code&gt;mfp cordova create&lt;/code&gt;. You&amp;rsquo;ll be prompted for the name and given a default package ID and version:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot18.png&#34; alt=&#34;shot1&#34; width=&#34;500&#34; height=&#34;118&#34; class=&#34;aligncenter size-full wp-image-6655&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Next you&amp;rsquo;ll be prompted to select platforms. Like any other Cordova project, you can change this later.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot22.png&#34; alt=&#34;shot2&#34; width=&#34;500&#34; height=&#34;124&#34; class=&#34;aligncenter size-full wp-image-6656&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Next, the CLI lets you know that some plugins are installed by default. These plugins are required for Cordova apps running with MobileFirst:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot31.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;242&#34; class=&#34;aligncenter size-full wp-image-6657&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now the CLI prompts you about other plugins you may want to install. Note that you can easily add, remove, and list plugins later on so don&amp;rsquo;t stress too much over this.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot41.png&#34; alt=&#34;shot4&#34; width=&#34;750&#34; height=&#34;280&#34; class=&#34;aligncenter size-full wp-image-6658&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, the CLI prompts you to select a template to use for your app. You can pass in other templates via the -t argument and you&amp;rsquo;ll see this in action tomorrow when I blog about Ionic:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot51.png&#34; alt=&#34;shot5&#34; width=&#34;750&#34; height=&#34;31&#34; class=&#34;aligncenter size-full wp-image-6659&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;At this point, the CLI will start generating your project as well as push a copy to your MobileFirst server. If everything went well, the last thing you&amp;rsquo;ll see is: &amp;ldquo;MFP Cordova project created successfully.&amp;rdquo; Let&amp;rsquo;s look at the folder created by the CLI.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot61.png&#34; alt=&#34;shot6&#34; width=&#34;750&#34; height=&#34;291&#34; class=&#34;aligncenter size-full wp-image-6660&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For the most part, this should look very similar to a regular Cordova project. Notable differences include:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;application-descriptor.xml: This allows you to tweak some settings for the application under MobileFirst. In general, you won&#39;t need to tweak this and when you do, do not edit it by hand, use &lt;code&gt;mfp config&lt;/code&gt;.
+&lt;li&gt;mobilefirst: The files in this folder are what get pushed up to the MobileFirst server. You won&#39;t need to mess with this.
+&lt;/ul&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it - the rest of this is vanilla Cordova stuff.&lt;/p&gt;
+
+&lt;h2&gt;Working with the MobileFirst/Cordova Project&lt;/h2&gt;
+
+&lt;p&gt;So now that you&amp;rsquo;ve got a project, how do you use it? The MobileFirst CLI wraps calls to the Cordova CLI, much like Ionic does. So for example, to add a platform, you would do: &lt;code&gt;mfp cordova platform add android&lt;/code&gt;. In general, the commands are very similar, but sometimes there are small differences. So for example, to emulate, you need to pass a -p flag: &lt;code&gt;mfp cordova emulate -p ios&lt;/code&gt;. In this case, -p stands for platform. You can easily see the syntax by typing &lt;code&gt;mfp help cordova&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot71.png&#34; alt=&#34;shot7&#34; width=&#34;750&#34; height=&#34;665&#34; class=&#34;aligncenter size-full wp-image-6661&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So the process to code/test is pretty similar. You can open up the www folder, edit, and then see your changes by doing: &lt;code&gt;mfp cordova emulate -p ios&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot81.png&#34; alt=&#34;shot8&#34; width=&#34;750&#34; height=&#34;501&#34; class=&#34;aligncenter size-full wp-image-6662&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;At the time I write this blog post, we have a small bug with the CLI that impacts this process. When working with a MobileFirst server, you need to deploy the bits to the server so it is aware of it. (There&amp;rsquo;s more reasons than that, but let&amp;rsquo;s keep it simple for now.) That command is: &lt;code&gt;mfp push&lt;/code&gt;. The emulate command is &lt;i&gt;supposed&lt;/i&gt; to do a push automatically, but right now it does not. Again, this is a bug, and a known one that is already being worked on. (I&amp;rsquo;ll try to remember to edit this post once the fix is released.) For now, I recommend doing both commands at once. In OSX, this would be: &lt;code&gt;mfp push &amp;amp;&amp;amp; mfp cordova emulate -p ios&lt;/code&gt;. You could automate all of this with Grunt/Gulp of course.&lt;/p&gt;
+
+&lt;p&gt;Outside of that - you&amp;rsquo;re done. Build your app. Make use of the cool features of MobileFirst, iterate, deploy, and be successful.&lt;/p&gt;
+
+&lt;h2&gt;Migrating an Existing Application&lt;/h2&gt;
+
+&lt;p&gt;So what do you do if you&amp;rsquo;ve got an existing application? First, begin by creating a new MFP Cordova project as I outline above. You&amp;rsquo;ll want to match the ID and application name. You can also tell the CLI to install the plugins your app needs, but if you forget, you can always add the plugins later. You can then simply copy the www folder from your existing project into the new MFP www folder.&lt;/p&gt;
+
+&lt;p&gt;Ok, so at this point, you need to make one very small tweak to your application code. As you know, Cordova applications need to wait for the deviceready event before they do anything related to the device itself. Most folks treat deviceready as their main application &amp;ldquo;bootstrap&amp;rdquo; - i.e., they don&amp;rsquo;t really do squat till after it has fired.&lt;/p&gt;
+
+&lt;p&gt;In a MFP Cordova application, you have another event as well - the initialization of the MobileFirst client-side framework. By default, your code can (probably should) have a function called &lt;code&gt;wlCommonInit&lt;/code&gt;. When this function is run, you can then do &amp;ldquo;MobileFirst stuff&amp;rdquo;, much like how deviceready implies device readiness. You can simply include this function in your application so you can begin doing things like remote logging, or other utilities. Here is an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function wlCommonInit(){
+}
+
+document.addEventListener(&#34;deviceready&#34;, init, false);
+function init() {
+    
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you use the default MFP Cordova project, you&amp;rsquo;ll see some additional bits:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var Messages = {
+    // Add here your messages for the default language.
+    // Generate a similar file with a language suffix containing the translated messages.
+    // key1 : message1,
+};
+
+var wlInitOptions = {
+    // Options to initialize with the WL.Client object.
+    // For initialization options please refer to IBM MobileFirst Platform Foundation Knowledge Center.
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;These are optional and can be left out if you don&amp;rsquo;t need them.&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. Heck, technically you don&amp;rsquo;t even need wlCommonInit, it won&amp;rsquo;t throw an error without it, but the assumption here is that you actually want to use MobileFirst.
+Any questions?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Getting Started with Mobile Development and IBM MobileFirst 7.1</title>
+      <link>http://www.raymondcamden.com/2015/08/17/getting-started-with-mobile-development-and-ibm-mobilefirst-7-1</link>
+      <pubDate>Mon, 17 Aug 2015 11:05:29 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/17/getting-started-with-mobile-development-and-ibm-mobilefirst-7-1</guid>
+      <description>&lt;p&gt;A few days ago I &lt;a href=&#34;http://www.raymondcamden.com/2015/08/14/ibm-mobilefirst-7-1-released&#34;&gt;blogged&lt;/a&gt; about the release of &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;MobileFirst 7.1&lt;/a&gt;. At the time, I really didn&amp;rsquo;t have a lot of time so I didn&amp;rsquo;t say much outside of, well, that it was released. Now that I&amp;rsquo;m back home (for a few days anyway), I thought I&amp;rsquo;d write a bit more about MobileFirst 7.1 and how hybrid mobile developers can make use of it. This is going to stretch out over a few posts, mostly written today, so for now I&amp;rsquo;m just going to cover installation and basic setup.&lt;/p&gt;
+
+&lt;p&gt;Before I get into installation, I know some of my readers still don&amp;rsquo;t quite get what MobileFirst is. Hitting the &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;home page&lt;/a&gt; will give you a bunch of pretty pictures and good information for managers, but as developers, we typically like things a bit more boiled down. What follows is my personal take on what MobileFirst is and why it is cool. Obviously I&amp;rsquo;m not a marketer so you will forgive me if what follows is a bit more casual than typical IBM marketing. ;)&lt;/p&gt;
+
+&lt;p&gt;At a high level, MobileFirst is a support system for mobile apps. It is a server product that integrates with your mobile app (and to be clear, this doesn&amp;rsquo;t impact offline support at all) and provides various different services. The server can run in multiple locations (more on that later) and includes a CLI for working with mobile projects. In terms of how your mobile app is built, MobileFirst supports native, hybrid (Cordova), and mobile web sites. The services MobileFirst provides includes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The ability to provide proxies for HTTP, SQL, and other services. So imagine your application makes use of an API that returns weather information. In a typical mobile app, your app makes a HTTP request to the API, parses the response, and then does something with it. In MobileFirst, I can create an &#34;adapter&#34; that represents that API. My mobile app calls the adapter on the MobileFirst service which then proxies the call to the remote API. Right away I get some freaking cool benefits. One, if the remote API returns a bunch of crap I don&#39;t need, I can reduce the result payload to just what I want. Along with reducing the result, I can do whatever I want. Imagine the weather API only returns data in that weird format the rest of the planet uses. I could &#39;fix&#39; that bug by returning Fahrenheit instead. Along with acting as a proxy, I also get reporting on the back end server so I can see how often the API is being called and how much data is going back and forth. Finally, I can completely replace my API provider on a moments notice by updating the adapter. My mobile app wouldn&#39;t need to know at all.&lt;/li&gt;
+&lt;li&gt;The ability to setup Android/iOS Push for your application. A REST API is also provided to so you can dynamically send push notifications to your mobile apps. Oh, and full reporting on your use of push as well.&lt;/li&gt;
+&lt;li&gt;The ability to manage multiple versions of your application as well as deploy new ones. So being able to deploy an update without going to the app store is pretty cool. But you can also do things like send an application message (for example, warning folks if part of your app will be down, or if a new version is coming soon, etc) as well as disable a version (imagine version 1.1 has a bad bug fixed in 1.2, you can disable and warn folks on 1.1).&lt;/li&gt;
+&lt;li&gt;The ability to send logs to a central server (with awesome support for handling your app being offline) so that you can search them later. So if all of a sudden folks on Android begin complaining about bugs, you can go to your MobileFirst server and begin searching on Android logs to see if you can figure it out.&lt;/li&gt;
+&lt;li&gt;You get a set of utilities to use within your mobile application. These utilities cover various things that might be useful. So for example, geolocation related utilities like &#34;am I in a polygon&#34; or &#34;how far am I from a polygon&#34;. Or setting badge icons. Or detailed network information (like is airplane mode on). These utilities aren&#39;t something you would use on every project. They aren&#39;t &#34;oh my god, I&#39;ve waited all my life for these&#34; type things, but they are useful items that you&#39;ll use from time to time and appreciate they exist.&lt;/li&gt;
+&lt;li&gt;I&#39;ve already mentioned analytics in regards to the adapters, but you get more much more analytics of course.&lt;/li&gt;
+&lt;li&gt;Support for working with existing security systems. This lets you tie in things like adapter calls to an authentication framework. I&#39;ll be honest and say I&#39;ve not yet played with this aspect of MobileFirst.&lt;/li&gt;
+&lt;li&gt;Finally, you can also use MobileFirst to handle your enterprise app store.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So that&amp;rsquo;s what MobileFirst is to me, and to be clear, there&amp;rsquo;s more I haven&amp;rsquo;t covered, but these are the aspects that have most interested me as a developer. If you want to check it out, note that you can do so for free. This isn&amp;rsquo;t a &amp;ldquo;trial&amp;rdquo; edition that times out, but a complete developer edition that you can use forever while testing/learning/etc.&lt;/p&gt;
+
+&lt;p&gt;So let&amp;rsquo;s talk installation.&lt;/p&gt;
+
+&lt;h2&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Working with MobileFirst requires two things - a server and a command line interface. There is one main download for MobileFirst and it includes both the server and CLI, so whether you plan to run the server on your local machine or not, you&amp;rsquo;ll download the same package.&lt;/p&gt;
+
+&lt;p&gt;Start off here: &lt;a href=&#34;https://www14.software.ibm.com/webapp/iwm/web/signup.do?source=swg-worklight&amp;S_PKG=ov1268&amp;S_CMP=web_dw_rt_swd&#34;&gt;Get the Developer Edition&lt;/a&gt;. You&amp;rsquo;ll need to register with IBM, but this is a one time thing and we won&amp;rsquo;t spam you. (In fact, I&amp;rsquo;m proud to say we seem to default the &amp;lsquo;can we send you crap&amp;rsquo; email stuff to &lt;i&gt;off&lt;/i&gt;, which is rare for companies.) Once past the registration you&amp;rsquo;ll end up on the download page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot15.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;416&#34; class=&#34;aligncenter size-full wp-image-6639 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click the &amp;ldquo;Command line interface&amp;rdquo; tab and then select the binary for your platform.&lt;/p&gt;
+
+&lt;p&gt;Once downloaded, just run the installer and you&amp;rsquo;ll be good to go. When it is done, open up Terminal or CMD and ensure things are kosher by typing &lt;code&gt;mfp&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot21.png&#34; alt=&#34;shot2&#34; width=&#34;749&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6640&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note - if you don&amp;rsquo;t prefer the CLI, you can also get an Eclipse add on called &amp;ldquo;MobileFirst Studio&amp;rdquo;.&lt;/p&gt;
+
+&lt;h2&gt;The Server&lt;/h2&gt;
+
+&lt;p&gt;Ok, now you have a choice. You can set up a local server for - well - local testing. (The local server can&amp;rsquo;t be used in production of course.) Or you can use the new &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt; support to run a server on the cloud. You would consider the Bluemix route if you wanted to demonstrate something to a client or coworker. To set up a local server, simply decide on a particular folder, and run:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;mfp create servername&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a one time command. To fire it up, you&amp;rsquo;ll do:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;mfp start&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;To stop it, do:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;mfp stop&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;And finally, to get to the web based console, just do:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;mfp console&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;As for using MobileFirst with Bluemix, I was planning on walking folks through that here, but we&amp;rsquo;ve got an excellent guide already online: &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/documentation/getting-started-7-1/bluemix/evaluate-foundation-on-bluemix/&#34;&gt;Evaluate IBM MobileFirst Platform Foundation on IBM Containers&lt;/a&gt;. If any of my readers try this guide and have issues, just let me know and I&amp;rsquo;ll flesh out any confusing bits.&lt;/p&gt;
+
+&lt;h2&gt;What&#39;s Next&lt;/h2&gt;
+
+&lt;p&gt;This post talked about what MobileFirst is, and discussed the installation and setup of an initial server. In my next post, I&amp;rsquo;ll tell you how to build a hybrid app, and discuss how the &amp;ldquo;workflow&amp;rdquo; is handled for working on your app. I&amp;rsquo;ll also discuss how you would move an existing application into MobileFirst.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>IBM MobileFirst 7.1 Released</title>
+      <link>http://www.raymondcamden.com/2015/08/14/ibm-mobilefirst-7-1-released</link>
+      <pubDate>Fri, 14 Aug 2015 07:18:09 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/14/ibm-mobilefirst-7-1-released</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m happy to announce that today we&amp;rsquo;ve released &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;MobileFirst 7.1&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/PFJqA.gif&#34; alt=&#34;PFJqA&#34; width=&#34;265&#34; height=&#34;203&#34; class=&#34;aligncenter size-full wp-image-6627&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note - that is not official IBM MobileFirst branding. Also note - this is why I&amp;rsquo;m not in branding.&lt;/p&gt;
+
+&lt;p&gt;This release includes a pretty significant update to how hybrid apps are developed. You can read more about those updates here: &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/documentation/getting-started-7-1/foundation/hello-world/integrating-mfpf-sdk-in-cordova-applications/&#34;&gt;Integrating IBM MobileFirst Platform Foundation SDK in Cordova applications&lt;/a&gt;. You can also peruse the &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/documentation/getting-started-7-1/&#34;&gt;Getting Started&lt;/a&gt; docs if you&amp;rsquo;ve never looked at MobileFirst at all.&lt;/p&gt;
+
+&lt;p&gt;Evaluating MobileFirst is 100% free. You can download the developer edition here: &lt;a href=&#34;http://www.ibm.com/mobilefirst/us/en/downloads/&#34;&gt;http://www.ibm.com/mobilefirst/us/en/downloads/&lt;/a&gt;. It is &lt;strong&gt;not&lt;/strong&gt; terribly clear where to go next on this page. Scroll down till you see this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/dl.png&#34; alt=&#34;dl&#34; width=&#34;800&#34; height=&#34;549&#34; class=&#34;aligncenter size-full wp-image-6629 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Along with improving support for hybrid mobile apps (and yes, that includes &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;), MobileFirst will be available on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt; as well. This will make setting up the server even easier then it is now. (I&amp;rsquo;m not seeing it available right now but it should be up relatively soon.)&lt;/p&gt;
+
+&lt;p&gt;I gave a presentation on 7.1 yesterday and I plan on turning that content into a series of blog posts and videos&amp;hellip; but not today. I&amp;rsquo;m flying home today so I&amp;rsquo;ll be in the air for most of the day.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Working with Ionic, Box, and IBM MobileFirst</title>
+      <link>http://www.raymondcamden.com/2015/06/24/working-with-ionic-box-and-ibm-mobilefirst</link>
+      <pubDate>Wed, 24 Jun 2015 09:02:30 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/06/24/working-with-ionic-box-and-ibm-mobilefirst</guid>
+      <description>&lt;p&gt;Earlier today IBM &lt;a href=&#34;http://www-03.ibm.com/press/us/en/pressrelease/47185.wss&#34;&gt;announced&lt;/a&gt; a new partnership with Box. Box is a cloud storage provider much like Dropbox, OneDrive, and other services, but also provides some pretty cool workflow features as well. While it is still early, you&amp;rsquo;ll soon see some interesting collaborations between IBM and Box. I decided to see how easy it would be to integrate Box into a hybrid mobile application using both &lt;a href=&#34;http://ionicframework.com&#34;&gt;Ionic&lt;/a&gt; and &lt;a href=&#34;https://ibm.biz/MobileFirst-Platform&#34;&gt;IBM MobileFirst&lt;/a&gt;. This is just a simple proof of concept, but it demonstrates how you can use all these different pieces together in one application.&lt;/p&gt;
+
+&lt;p&gt;Before diving into the code, let&amp;rsquo;s look at a few screen shots of the application in action. On loading the application, you will see a button prompting you to login with Box.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/iOS-Simulator-Screen-Shot-Jun-24-2015-7.55.58-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Jun 24, 2015, 7.55.58 AM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6304 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking this button will begin the authentication process. You need to have an account with Box.com of course.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/iOS-Simulator-Screen-Shot-Jun-24-2015-7.57.47-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Jun 24, 2015, 7.57.47 AM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6305 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After logging in, you have to allow the application access to your data:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/iOS-Simulator-Screen-Shot-Jun-24-2015-7.59.09-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Jun 24, 2015, 7.59.09 AM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6306 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After you&amp;rsquo;ve allowed the app to access your Box account, you can then begin working with your data. For my demo, I simply let the app upload images from the device to the Box account. (You could modify the code to allow new pictures to be taken with the camera too. Since I was testing with the simulator, I limited it to existing pictures.)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/iOS-Simulator-Screen-Shot-Jun-24-2015-8.01.00-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Jun 24, 2015, 8.01.00 AM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6307 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After selecting the image, I display a thumbnail and then upload it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/iOS-Simulator-Screen-Shot-Jun-24-2015-8.02.20-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Jun 24, 2015, 8.02.20 AM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6308 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you have your Box account open in a browser (they have a desktop client as well), you can see the image appear.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot14.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;288&#34; class=&#34;aligncenter size-full wp-image-6309&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. The Box API allows for &lt;strong&gt;full&lt;/strong&gt; access to Box content, more then just uploading. You can even use a special View API to display renditions of Box content. It is a pretty great API and I encourage you to read more about it on their &lt;a href=&#34;https://developers.box.com/&#34;&gt;developer site&lt;/a&gt;. So - let&amp;rsquo;s talk about the code.&lt;/p&gt;
+
+&lt;p&gt;In order to handle the OAuth, I used a great library from Nic Raboy called &lt;a href=&#34;https://github.com/nraboy/ng-cordova-oauth&#34;&gt;ng-cordova-oauth&lt;/a&gt;. It provides OAuth support for a butt load of different services, with Box being one of them. How simple is it? Here is the code behind the button you saw in the screen shot above.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$scope.doAuth = function() {
+    Logger.log(&#34;Beginning to auth against Box&#34;);
+        
+    $cordovaOauth.box(clientId, clientSecret,state).then(function(result) {
+        Logger.log(&#34;Successful log to Box&#34;);
+        token = result.access_token;
+        $scope.noAuth = false;
+    }, function(error) {
+        console.log(&#39;Error&#39;,error);
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yep, that&amp;rsquo;s it. Then using the API itself is rather simple. I first wrote some code to just test hitting the API, in my case, requesting folders at the root of the account. Here is how I did it using Angular&amp;rsquo;s $http service:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$scope.getFolders = function() {
+    console.log(&#34;attempting to get folders&#34;);
+        
+    $http.defaults.headers.common.Authorization = &#39;Bearer &#39;+token;
+         
+    $http.get(&#34;https://api.box.com/2.0/folders/0&#34;).success(function(data, status, headers, config) {
+        console.log(&#39;succcess&#39;);
+        console.dir(data);
+          }).
+      error(function(data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        console.log(&#39;error&#39;);
+        console.dir(arguments);
+     });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The only real interesting part here is setting the OAuth token in the header. You can see that is one simple line before the get. Technically I only need to do this once and should set it after logging in - but as I said - I wrote this just as a test of the API. File uploads were a bit more complex. Instead of using $http, I used Cordova&amp;rsquo;s FileTransfer plugin. This let me upload the image file selected by the user. Here&amp;rsquo;s the entirety of the operation including the camera selection and upload.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$scope.doPicture = function() {
+        
+    navigator.camera.getPicture(function(uri) {
+        $scope.selectedImage = uri;
+        $scope.status.message = &#34;Uploading bits to Box...&#34;;         
+        $scope.$apply();
+
+        Logger.log(&#34;Going to send a file to Box&#34;);
+            
+        var win = function (r) {
+            console.log(&#34;Code = &#34; + r.responseCode);
+            console.log(&#34;Response = &#34; + r.response);
+            console.log(&#34;Sent = &#34; + r.bytesSent);
+            $scope.status.message = &#34;Sent to box!&#34;;
+            Logger.log(&#34;Sent a file to box!&#34;);
+            $scope.$apply();
+        }
+            
+        var fail = function (error) {
+            alert(&#34;An error has occurred: Code = &#34; + error.code);
+            console.log(&#34;upload error source &#34; + error.source);
+            console.log(&#34;upload error target &#34; + error.target);
+            Logger.log(&#34;Failed to send to Box&#34;);
+        }
+            
+        var options = new FileUploadOptions();
+        options.fileKey = &#34;file&#34;;
+        options.fileName = uri.substr(uri.lastIndexOf(&#39;/&#39;) + 1);
+        options.mimeType = &#34;image/jpeg&#34;;
+
+        var headers={&#39;Authorization&#39;:&#39;Bearer &#39;+token};
+            
+        options.headers = headers;
+            
+        var params = {};
+        params.attributes = &#39;{&#34;name&#34;:&#34;&#39;+options.fileName+&#39;&#34;, &#34;parent&#34;:{&#34;id&#34;:&#34;0&#34;}}&#39;;
+            
+        options.params = params;
+        var ft = new FileTransfer();
+        ft.upload(uri, encodeURI(&#34;https://upload.box.com/api/2.0/files/content&#34;), win, fail, options);
+
+                    
+    }, function(err) {
+        console.log(&#34;Camera error&#34;, err);
+    }, {
+        quality:25,
+        destinationType:Camera.DestinationType.FILE_URI,
+        sourceType:Camera.PictureSourceType.PHOTOLIBRARY
+    });
+        
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. I then mixed in MobileFirst - specifically the logging service. I blogged about this a few months back (&lt;a href=&#34;http://www.raymondcamden.com/2015/03/31/using-remote-logging-with-ionic-and-ibm-mobilefirst&#34;&gt;&lt;/a&gt;). It is a rather simple API I can make available via a service in my app:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;}).factory(&#39;Logger&#39;, function() {
+
+    var logger = WL.Logger.create({autoSendLogs:true});
+
+    return {
+        log:function(s) {
+            logger.log(&#39;log&#39;, s);
+                console.log(s);
+        }
+    }
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then when I inject &lt;code&gt;Logger&lt;/code&gt; into my controllers, I can just do &lt;code&gt;Logger.log(&amp;ldquo;some message&amp;rdquo;)&lt;/code&gt;. There were a few examples of that above. Then when my application is out in the wild, I can look at my analytics in my MobileFirst server:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot23.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot23.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;414&#34; class=&#34;aligncenter size-full wp-image-6310&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Want to see all of the code? You can see all the code here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/boxdemo_mfp&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/boxdemo_mfp&lt;/a&gt;. Note that I ran into two small issues with Nic&amp;rsquo;s OAuth plugin. The first is that after authenticating with Box, you will see a 404 error temporarily. Nic already has a fix for this in the dev branch of his library. It is harmless and can be ignored. The second issue was specifically involving his code running in MobileFirst. Plugins act a bit differently there and his code to check for the InAppBrowser didn&amp;rsquo;t work. (To be clear, that one is absolutely &lt;strong&gt;not&lt;/strong&gt; his fault.) The workaround was a quick mod to his code and is in the GitHub repo. You can see a video of the app in action below.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/w9q8gwShyBA?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Cloud Code, Mobile Application Security, Node.js and Bluemix</title>
+      <link>http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix</link>
+      <pubDate>Tue, 09 Jun 2015 13:35:13 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix</guid>
+      <description>&lt;p&gt;So, first off, forgive the somewhat long, rambly title. I&amp;rsquo;m working on a new project that involves quite a few moving parts - many of which are new to me. I ran into some trouble along the way (well, a lot of trouble), and this morning I finally broke through and got things working. I want to give huge thanks to my coworker David Cariello for helping me out and not losing patience with me.&lt;/p&gt;
+
+&lt;p&gt;My application is a hybrid mobile application that makes use of a Node.js app running on &lt;a href=&#34;http://www.bluemix.net?cm_mmc=IBM-MobileFirst-_-DevAdvocacy-_-Digital-_-MF&#34;&gt;Bluemix&lt;/a&gt;. My Node.js app is going to make use of &lt;a href=&#34;https://cloudant.com/&#34;&gt;Cloudant&lt;/a&gt; for data storage and here is where the wrinkle came in. I wanted to make use of a specific feature of Node.js running on Bluemix, &lt;a href=&#34;https://www.ng.bluemix.net/docs/#services/mas/index.html#gettingstarted&#34;&gt;Mobile Application Security&lt;/a&gt; (MAS).&lt;/p&gt;
+
+&lt;p&gt;MAS provides a basic framework for locking down resources in your server application. The docs seem to imply it only works with the Mobile Data and Push services, neither of which I&amp;rsquo;m using. Turns out though you can also secure ad hoc routes in your Node.js application. What&amp;rsquo;s cool is that it isn&amp;rsquo;t an all or nothing solution. You can have some routes open and some closed, depending on whatever your app needs are. So how do you use this?&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start on the client side. You can find all the documentation for working with Bluemix services &lt;a href=&#34;http://mbaas-gettingstarted.ng.bluemix.net/javascript&#34;&gt;here&lt;/a&gt;. It begins by asking you to add a core library using bower:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;bower install &lt;a href=&#34;https://hub.jazz.net/git/bluemixmobilesdk/ibmbluemix-javascript/.git&#34;&gt;https://hub.jazz.net/git/bluemixmobilesdk/ibmbluemix-javascript/.git&lt;/a&gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You then have to add the libraries you&amp;rsquo;ll use. I already said I wasn&amp;rsquo;t using Mobile Application Data and Push. There&amp;rsquo;s another feature though that I will use, &lt;a href=&#34;http://mbaas-gettingstarted.ng.bluemix.net/javascript#cloud-code&#34;&gt;Cloud Code&lt;/a&gt;. You can think of Cloud Code as a quick way of &amp;ldquo;speaking&amp;rdquo; to your Node.js application. So while normally you may do something like so:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$.get(&amp;ldquo;the location of my server/my route&amp;rdquo;, etc etc&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Cloud Code simplifies this down to calls that look like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;cc.get(&amp;ldquo;/my route&amp;rdquo;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;So not a &lt;i&gt;big&lt;/i&gt; savings, but you then get to add security to your calls automatically and toggle between development and production as well. All in all, it&amp;rsquo;s a nice library. You would add it with bower as well:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;bower install &lt;a href=&#34;https://hub.jazz.net/git/bluemixmobilesdk/ibmcloudcode-javascript/.git&#34;&gt;https://hub.jazz.net/git/bluemixmobilesdk/ibmcloudcode-javascript/.git&lt;/a&gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;And once you&amp;rsquo;ve got both libraries installed, simply address them in your code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;script src=&#34;lib/ibmbluemix/js/IBMBluemix.js&#34;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&#39;lib/ibmcloudcode/js/IBMCloudCode.js&#39;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so now comes the question of using CC. If you aren&amp;rsquo;t using security, or have an unsecured route you want to run, the code looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var config = {
+  applicationId:&#34;ApplicationID&#34;,
+  applicationRoute:&#34;ApplicationRoute&#34;,
+  applicationSecret:&#34;ApplicationSecret&#34;
+};
+
+IBMBluemix.initialize(config);
+var cc = IBMCloudCode.initializeService();
+cc.get(&#34;/allfree&#34;).then(function(data){
+    console.log(data);
+},function(err){
+    console.log(&#39;err&#39;,err);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The initial block configures your use of Bluemix. All three values can be found by clicking the Mobile Options link on your Bluemix app dashboard:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot12.png&#34; alt=&#34;shot1&#34; width=&#34;800&#34; height=&#34;327&#34; class=&#34;aligncenter size-full wp-image-6282&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can keep the instance variable around obviously. Also, you get methods for each HTTP type as well, so cc.post, cc.delete, etc. During testing when your Node.js app is running locally, you can switch to hitting your local instance:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;IBMBluemix.initialize(config);
+var cc = IBMCloudCode.initializeService();
+cc.setBaseUrl(&#39;http://localhost:3000&#39;);
+cc.get(&#34;/allfree&#34;).then(function(data){
+    console.log(data);
+},function(err){
+    console.log(&#39;err&#39;,err);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s calling unsecured routes, but what about routes you want locked down? Mobile Application Security supports two types of authentication - Google and Worklight. Google will be easier to use in my mobile application so I selected that. To use Google, you need to use OAuth to log clients in. Nic Raboy has a &lt;strong&gt;very simple&lt;/strong&gt; Cordova plugin for this, &lt;a href=&#34;https://github.com/nraboy/ng-cordova-oauth&#34;&gt;ng-cordova-oauth&lt;/a&gt;. His library supports a butt load of different OAuth providers, including Google. To add Google authentication to my app, I added his plugin, and then used this simple code. Note that I do &lt;strong&gt;not&lt;/strong&gt; store the result from authentication in this code block. That&amp;rsquo;s something I&amp;rsquo;ll be adding later.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$cordovaOauth.google(&#34;619574182936-8csqdjp25j29ml3l63g985lnqo1p9bnr.apps.googleusercontent.com&#34;, [&#34;email&#34;]).then(function(result) {
+    console.log(&#39;good result&#39;);
+    console.dir(result)
+    $scope.token = result.access_token;
+    //more stuff here
+}, function(error) {
+    // error from oath
+    console.log(&#39;err &#39;+error);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That big value up front there is my Google project client ID. Believe it or not - that&amp;rsquo;s the entirety of the code. The plugin handles popping open a window and running the entire OAuth flow:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/iOS-Simulator-Screen-Shot-Jun-9-2015-1.10.42-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jun 9, 2015, 1.10.42 PM&#34; width=&#34;450&#34; height=&#34;800&#34; class=&#34;aligncenter size-full wp-image-6278 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once OAuth is done, we can use the access token returned by that process to &amp;ldquo;sign&amp;rdquo; our calls to Cloud Code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;IBMBluemix.setSecurityToken($scope.token, IBMBluemix.SecurityProvider.GOOGLE).done(function(user) {
+//stuff here
+}, function(err) { 
+    console.log(&#39;something was bad w/ the token&#39;);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now whenever I use Cloud Code calls, they will pass along the token value to the Node.js app.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for the client-side code. Obviously there&amp;rsquo;s a lot more in the details, and when I get the application I&amp;rsquo;m &lt;i&gt;really&lt;/i&gt; building ready to share, I&amp;rsquo;ll be sharing the complete code base then. Now let&amp;rsquo;s turn our attention to the server-side.&lt;/p&gt;
+
+&lt;p&gt;Node.js will require two different packages - first a generic Bluemix library and then the security one. You can install both to your package.json by doing:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+npm install ibmbluemix &amp;ndash;save
+npm install ibmsecurity &amp;ndash;save
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You then configure your application at startup. Here is an example from the boilerplate:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var express = require(&#39;express&#39;),
+    app         = express(),
+    ibmbluemix  = require(&#39;ibmbluemix&#39;),
+    config      = {
+        // change to real application route assigned for your application
+        applicationRoute : &#39;saucedb.mybluemix.net&#39;,
+        // change to real application ID generated by Bluemix for your application
+        applicationId : &#39;38a0a550-b018-4a10-b879-aec68868c249&#39;
+    };
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now - let&amp;rsquo;s discuss the routes I mentioned earlier using Cloud Code. In the first example, you saw me run a route called &lt;code&gt;/allfree&lt;/code&gt;. In order for Cloud Code to access this route, you &lt;strong&gt;must&lt;/strong&gt; modify the route path to include an IBM Bluemix context root. This is fairly simple though:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var ibmconfig = ibmbluemix.getConfig();
+app.get(ibmconfig.getContextRoot()+&#39;/allfree&#39;, function(req, res) {
+    res.send(&#34;Pretend I&#39;m doing stuff here.&#34;);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you forget this, then you&amp;rsquo;ll get errors running Cloud Code calls from your mobile application. To be clear, a regular HTTP call to /allfree would work, but not the &amp;ldquo;wrapped&amp;rdquo; call using Cloud Code.&lt;/p&gt;
+
+&lt;p&gt;So the next question is - how do you enable security for routes? To do this, you first physically separate your routes that need security from those that do not. Your core app.js (or whatever file you use to run your Node.js app) should put the unsecured routes first, and then use this block to begin requiring secured calls:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var mas = require(&#39;ibmsecurity&#39;)();
+app.use(mas);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Simple, right? Any routes after this call will then require a security token to execute. There&amp;rsquo;s one more part to this that I forgot to mention. When selecting what types of authentication you want to allow, you will want to select the Mobile Application Security service in your dashboard and click the checkbox to enable it, as I&amp;rsquo;ve done here:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/06/shot21.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;662&#34; class=&#34;aligncenter size-full wp-image-6279&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I hope this makes sense - if not - just add a comment below.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Looking at the JavaScript API in Hybrid MobileFirst Apps (2)</title>
+      <link>http://www.raymondcamden.com/2015/05/19/looking-at-the-javascript-api-in-hybrid-mobilefirst-apps-2</link>
+      <pubDate>Tue, 19 May 2015 15:19:16 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/19/looking-at-the-javascript-api-in-hybrid-mobilefirst-apps-2</guid>
+      <description>&lt;p&gt;A few weeks back I &lt;a href=&#34;http://www.raymondcamden.com/2015/04/28/looking-at-the-javascript-api-in-hybrid-mobilefirst-apps&#34;&gt;blogged&lt;/a&gt; about some of the JavaScript APIs you have available when building hybrid mobile applications with &lt;a href=&#34;http://ibmmobile.info/IBM-MobileFirst&#34;&gt;IBM MobileFirst&lt;/a&gt;. I had meant to follow up on this a bit sooner but recent trips got in the way. Today I took some time to look at a few more of the APIs.&lt;/p&gt;
+
+&lt;h4&gt;WL.Badge.setNumber&lt;/h4&gt;
+
+&lt;p&gt;As you can guess, this &lt;a href=&#34;http://www-01.ibm.com/support/knowledgecenter/SSHS8R_7.0.0/com.ibm.worklight.apiref.doc/html/refjavascript-client/html/WL.Badge.html?cp=SSHS8R_7.0.0%2F9-0-0-1-4&#34;&gt;API&lt;/a&gt; lets you set the badge number for your application icon. It only applies to iOS and Windows Phone. The API is incredibly simple. You set a number. It shows up in the icon. If you set it to 0, the number is cleared. Yep, that&amp;rsquo;s it.&lt;/p&gt;
+
+&lt;p&gt;I wired up two buttons in an Ionic app for quick testing of this. Here is the JavaScript code I used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$scope.testBadge = function(e) {
+    console.log(&#34;ok, test badge&#34;);
+    WL.Badge.setNumber(2);
+}
+
+$scope.clearBadge = function(e) {
+    console.log(&#34;ok, clear badge&#34;);
+    WL.Badge.setNumber(0);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is a screen shot of the icon updated:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/iOS-Simulator-Screen-Shot-May-19-2015-2.59.25-PM.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/iOS-Simulator-Screen-Shot-May-19-2015-2.59.25-PM.png&#34; alt=&#34;iOS Simulator Screen Shot May 19, 2015, 2.59.25 PM&#34; width=&#34;423&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6168&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, it appears as if iOS 8 has new requirements for apps that try to add badges. In my testing with the iOS 8.X simulator, I got an error in my console stating that permission was required for this action. I&amp;rsquo;ll try to get back to this later, but for now, keep that in mind.&lt;/p&gt;
+
+&lt;h4&gt;WL.BusyIndicator&lt;/h4&gt;
+
+&lt;p&gt;You can probably guess what this one does too - show and hide a &amp;ldquo;busy&amp;rdquo; indicator. The &lt;a href=&#34;http://www-01.ibm.com/support/knowledgecenter/SSHS8R_7.0.0/com.ibm.worklight.apiref.doc/html/refjavascript-client/html/WL.BusyIndicator.html?cp=SSHS8R_7.0.0%2F9-0-0-1-5&#34;&gt;docs&lt;/a&gt; explain the full API, but the general usage is to create an instance of the indicator with the appropriate options and then call &lt;code&gt;show&lt;/code&gt; on it. Where things get interesting is on Android. iOS supports an option to automatically hide the dialog, Android does not. So if you really want a &amp;ldquo;timed&amp;rdquo; dialog then you&amp;rsquo;ll need to set a timeout:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$scope.doBusy = function(e) {
+    console.log(&#34;ok, do busy&#34;);
+    var busy = new WL.BusyIndicator(&#34;body&#34;, {
+    text:&#34;This is text&#34;,
+    bounceAnimation:false,
+    textColor:&#34;red&#34;,
+    fullScreen:false,
+    duration:5
+    });
+    busy.show();
+    window.setTimeout(function() {
+    busy.hide();
+    }, 5*1000);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The options you see above are just some of the options, mainly the ones I was curious about. &lt;code&gt;bounceAnimation&lt;/code&gt; (which defaults to false) was a bit weird when enabled so I don&amp;rsquo;t see using it often. &lt;code&gt;fullScreen&lt;/code&gt; also seemed to a bit too much on iPad, but could be ok on iPhone. In a real app the hide() call would be in the async callback of whatever thing you are waiting for.&lt;/p&gt;
+
+&lt;p&gt;Here is how the indicator looks in iOS:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/iOS-Simulator-Screen-Shot-May-19-2015-3.12.42-PM.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/iOS-Simulator-Screen-Shot-May-19-2015-3.12.42-PM.png&#34; alt=&#34;iOS Simulator Screen Shot May 19, 2015, 3.12.42 PM&#34; width=&#34;423&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6169&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I think it looks nice, outside of the red text which I specifically asked for. (Remember, I&amp;rsquo;m where good design goes to die.)&lt;/p&gt;
+
+&lt;p&gt;And here it is in Android.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/device-2015-05-19-151454.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/device-2015-05-19-151454.png&#34; alt=&#34;device-2015-05-19-151454&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6170&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for today. As a reminder, if you want to see &lt;i&gt;all&lt;/i&gt; of the hybrid API, check out the &lt;a href=&#34;http://ibmmobile.info/ClientSideAPI&#34;&gt;client-side API&lt;/a&gt; docs.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>IBM and Ionic</title>
+      <link>http://www.raymondcamden.com/2015/05/08/ibm-and-ionic</link>
+      <pubDate>Fri, 08 May 2015 09:15:55 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/08/ibm-and-ionic</guid>
+      <description>&lt;p&gt;So I don&amp;rsquo;t typically post links to press releases (I think my readers know I&amp;rsquo;m not that kinda guy), but I wanted to share one that I thought was pretty important. As you know, I&amp;rsquo;ve been doing a lot of posts recently involving &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; and &lt;a href=&#34;http://www.ibm.com/mobilefirst/us/en/&#34;&gt;MobileFirst&lt;/a&gt;. You&amp;rsquo;re going to see even more of those over the next few months. Today the I&amp;rsquo;m sharing the news that we&amp;rsquo;ve (we as in IBM, I can speak for IBM, right? I&amp;rsquo;ve been here 3 months) are announcing a partnership with the Ionic company. You can read the complete press release here:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www-03.ibm.com/press/us/en/pressrelease/46623.wss&#34;&gt;IBM and Ionic Empower Business Users to Accelerate Mobile App Development&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;And also the Ionic blog post here:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.ionic.io/ionic-creator-available-for-ibm-mobilefirst-platform-users/&#34;&gt;Ionic Creator Available for IBM MobileFirst Platform Users&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In a nutshell, I think the takeaway from this is that IBM MobileFirst is an awesome product (admittedly I&amp;rsquo;m biased) to help support the back end services of your mobile app and Ionic is an awesome product (yeah, totally biased) for building the mobile app itself. Ensuring these two awesome things work together is a net win for developers. It is the very example of mixing your chocolate and peanut butter for development. Enjoy.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/12662182664_ec3eded5c1_z.jpg&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/12662182664_ec3eded5c1_z.jpg&#34; alt=&#34;12662182664_ec3eded5c1_z&#34; width=&#34;336&#34; height=&#34;450&#34; class=&#34;aligncenter size-full wp-image-6119&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;i&gt;Totally important picture credit: &lt;a href=&#34;https://flic.kr/p/khUZLd&#34;&gt;https://flic.kr/p/khUZLd&lt;/a&gt; by Mike Mozart&lt;/i&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Working with MP3s, ID3, and PhoneGap/Cordova - Adding IBM MobileFirst</title>
+      <link>http://www.raymondcamden.com/2015/05/06/working-with-mp3s-id3-and-phonegapcordova-adding-ibm-mobilefirst</link>
+      <pubDate>Wed, 06 May 2015 15:44:15 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/06/working-with-mp3s-id3-and-phonegapcordova-adding-ibm-mobilefirst</guid>
+      <description>&lt;p&gt;Welcome to the fourth and final entry in my series on using an ID3 reader for MP3s in a Cordova application. If you missed the initial entries (and I highly recommend reading these in order), they are:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/04/29/working-with-mp3s-id3-and-phonegapcordova&#34;&gt;Working with MP3s, ID3, and PhoneGap/Cordova&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/04/30/working-with-mp3s-id3-and-phonegapcordova-2&#34;&gt;Working with MP3s, ID3, and PhoneGap/Cordova (2)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.raymondcamden.com/2015/05/01/working-with-mp3s-id3-and-phonegapcordova-3&#34;&gt;Working with MP3s, ID3, and PhoneGap/Cordova (3)&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In this series, I described how we could use a JavaScript library and the Cordova File plugin to get ID3 info from MP3 files. In the &lt;a href=&#34;http://www.raymondcamden.com/2015/05/01/working-with-mp3s-id3-and-phonegapcordova-3&#34;&gt;last entry&lt;/a&gt; I made use of the last.fm API to fetch album covers. Their API was simple to use, but you may have noticed something - my API key was embedded in the code:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;defs.push($http.get(&amp;ldquo;&lt;a href=&#34;http://ws.audioscrobbler.com/2.0/?method=album.getinfo&amp;amp;artist=&amp;quot;&#34;&gt;http://ws.audioscrobbler.com/2.0/?method=album.getinfo&amp;amp;artist=&amp;quot;&lt;/a&gt; + encodeURI(artist) + &amp;ldquo;&amp;amp;album=&amp;rdquo; + encodeURI(album) + &amp;ldquo;&amp;amp;api_key=5poo53&amp;amp;format=json&amp;rdquo;));&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;If my app was out in the world, anyone with two minutes to spare could fire up remote debugging and take a look at the code to find the API key. This is where something like &lt;a href=&#34;http://www.ibm.com/mobilefirst/us/en/&#34;&gt;MobileFirst&lt;/a&gt; can save the day. Back on April 8th (which was my birthday by the way, do I look older?) I &lt;a href=&#34;http://www.raymondcamden.com/2015/04/08/using-mobilefirst-http-adapters-with-an-ionic-application&#34;&gt;blogged&lt;/a&gt; about using HTTP Adapters with MobileFirst.&lt;/p&gt;
+
+&lt;p&gt;The basic idea is simple:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;You define your adapter at the command line. For me, I called mine lastfm.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;You edit the adapter XML as needed. For me, I modified the domain for my service and specified a procedure name:&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;!--
+    Licensed Materials - Property of IBM
+    5725-I43 (C) Copyright IBM Corp. 2011, 2013. All Rights Reserved.
+    US Government Users Restricted Rights - Use, duplication or
+    disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+--&amp;gt;
+&amp;lt;wl:adapter name=&amp;quot;lastfm&amp;quot;
+    xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot; 
+    xmlns:wl=&amp;quot;http://www.ibm.com/mfp/integration&amp;quot;
+    xmlns:http=&amp;quot;http://www.ibm.com/mfp/integration/http&amp;quot;&amp;gt;
+
+    &amp;lt;displayName&amp;gt;lastfm&amp;lt;/displayName&amp;gt;
+    &amp;lt;description&amp;gt;lastfm&amp;lt;/description&amp;gt;
+    &amp;lt;connectivity&amp;gt;
+        &amp;lt;connectionPolicy xsi:type=&amp;quot;http:HTTPConnectionPolicyType&amp;quot;&amp;gt;
+            &amp;lt;protocol&amp;gt;http&amp;lt;/protocol&amp;gt;
+            &amp;lt;domain&amp;gt;ws.audioscrobbler.com&amp;lt;/domain&amp;gt;
+            &amp;lt;port&amp;gt;80&amp;lt;/port&amp;gt; 
+            &amp;lt;connectionTimeoutInMilliseconds&amp;gt;30000&amp;lt;/connectionTimeoutInMilliseconds&amp;gt;
+            &amp;lt;socketTimeoutInMilliseconds&amp;gt;30000&amp;lt;/socketTimeoutInMilliseconds&amp;gt;
+            &amp;lt;maxConcurrentConnectionsPerNode&amp;gt;50&amp;lt;/maxConcurrentConnectionsPerNode&amp;gt;
+            &amp;lt;!-- Following properties used by adapter&#39;s key manager for choosing specific certificate from key store  
+            &amp;lt;sslCertificateAlias&amp;gt;&amp;lt;/sslCertificateAlias&amp;gt; 
+            &amp;lt;sslCertificatePassword&amp;gt;&amp;lt;/sslCertificatePassword&amp;gt;
+            --&amp;gt;      
+        &amp;lt;/connectionPolicy&amp;gt;
+    &amp;lt;/connectivity&amp;gt;
+
+    &amp;lt;procedure name=&amp;quot;getAlbumCover&amp;quot;/&amp;gt;
+    
+&amp;lt;/wl:adapter&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the code snippet above, ws.audioscrobbler.com is the last.fm API domain and &lt;code&gt;getAlbumCover&lt;/code&gt; is the procedure name.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;You then write your implementation code. Since the API is simple - pass in an album and artist - my code is simple.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function getAlbumCover(artist,album) {
+
+    var input = {
+        method : &#39;get&#39;,
+        returnedContentType : &#39;json&#39;,
+        path : &#34;2.0/?method=album.getinfo&amp;artist=&#34;+encodeURI(artist)+&#34;&amp;album=&#34;+encodeURI(album)+&#34;&amp;api_key=poo&amp;format=json&#34;
+    };
+
+    WL.Logger.info(&#34;getDetail, requesting artist &#34;+artist+&#34; and album &#34;+album);
+    WL.Logger.info(input.path);
+    
+    var result = WL.Server.invokeHttp(input);
+    
+    if(!result.album) {
+        return {&#34;error&#34;:result.message};
+    }
+    WL.Logger.info(&#34;got this image &#34;+result.album.image[3][&#34;#text&#34;]);
+    return {&#34;img&#34;:result.album.image[3][&#34;#text&#34;]};
+    
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;My function takes the arguments and generates a URL pointing to the API. Of special note - notice how we return &lt;strong&gt;only&lt;/strong&gt; the image. Not only have we abstracted out the service from the client, allowing us to switch to a new provider if we need to, but we&amp;rsquo;ve also &lt;i&gt;dramatically&lt;/i&gt; reduced the network packet sent to the client. How much so? Here is the full result of a &amp;lsquo;regular&amp;rsquo; last.fm API call:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  &amp;quot;statusCode&amp;quot;: 200,
+  &amp;quot;isSuccessful&amp;quot;: true,
+  &amp;quot;album&amp;quot;: {
+    &amp;quot;id&amp;quot;: &amp;quot;2634331&amp;quot;,
+    &amp;quot;listeners&amp;quot;: &amp;quot;2453&amp;quot;,
+    &amp;quot;mbid&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;toptags&amp;quot;: {
+      &amp;quot;tag&amp;quot;: {
+        &amp;quot;name&amp;quot;: &amp;quot;ahmet&amp;quot;,
+        &amp;quot;url&amp;quot;: &amp;quot;http://www.last.fm/tag/ahmet&amp;quot;
+      }
+    },
+    &amp;quot;name&amp;quot;: &amp;quot;Wish&amp;quot;,
+    &amp;quot;image&amp;quot;: [
+      {
+        &amp;quot;#text&amp;quot;: &amp;quot;http://images.amazon.com/images/P/B0000263H7.01._SCMZZZZZZZ_.jpg&amp;quot;,
+        &amp;quot;size&amp;quot;: &amp;quot;small&amp;quot;
+      },
+      {
+        &amp;quot;#text&amp;quot;: &amp;quot;http://images.amazon.com/images/P/B0000263H7.01._SCMZZZZZZZ_.jpg&amp;quot;,
+        &amp;quot;size&amp;quot;: &amp;quot;medium&amp;quot;
+      },
+      {
+        &amp;quot;#text&amp;quot;: &amp;quot;http://images.amazon.com/images/P/B0000263H7.01._SCMZZZZZZZ_.jpg&amp;quot;,
+        &amp;quot;size&amp;quot;: &amp;quot;large&amp;quot;
+      },
+      {
+        &amp;quot;#text&amp;quot;: &amp;quot;http://images.amazon.com/images/P/B0000263H7.01._SCMZZZZZZZ_.jpg&amp;quot;,
+        &amp;quot;size&amp;quot;: &amp;quot;extralarge&amp;quot;
+      },
+      {
+        &amp;quot;#text&amp;quot;: &amp;quot;http://images.amazon.com/images/P/B0000263H7.01._SCMZZZZZZZ_.jpg&amp;quot;,
+        &amp;quot;size&amp;quot;: &amp;quot;mega&amp;quot;
+      }
+    ],
+    &amp;quot;releasedate&amp;quot;: &amp;quot;    &amp;quot;,
+    &amp;quot;playcount&amp;quot;: &amp;quot;28392&amp;quot;,
+    &amp;quot;artist&amp;quot;: &amp;quot;Cure&amp;quot;,
+    &amp;quot;tracks&amp;quot;: &amp;quot;\n            &amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;http://www.last.fm/music/+noredirect/Cure/Wish&amp;quot;
+  },
+  &amp;quot;statusReason&amp;quot;: &amp;quot;OK&amp;quot;,
+  &amp;quot;responseHeaders&amp;quot;: {
+    &amp;quot;X-Web-Node&amp;quot;: &amp;quot;www173&amp;quot;,
+    &amp;quot;Date&amp;quot;: &amp;quot;Wed, 06 May 2015 19:44:37 GMT&amp;quot;,
+    &amp;quot;Access-Control-Allow-Origin&amp;quot;: &amp;quot;*&amp;quot;,
+    &amp;quot;Vary&amp;quot;: &amp;quot;Accept-Encoding&amp;quot;,
+    &amp;quot;Expires&amp;quot;: &amp;quot;Thu, 07 May 2015 19:44:37 GMT&amp;quot;,
+    &amp;quot;Access-Control-Max-Age&amp;quot;: &amp;quot;86400&amp;quot;,
+    &amp;quot;Access-Control-Allow-Methods&amp;quot;: &amp;quot;POST, GET, OPTIONS&amp;quot;,
+    &amp;quot;Connection&amp;quot;: &amp;quot;close&amp;quot;,
+    &amp;quot;Content-Type&amp;quot;: &amp;quot;application/json; charset=utf-8;&amp;quot;,
+    &amp;quot;Server&amp;quot;: &amp;quot;Apache/2.2.22 (Unix)&amp;quot;,
+    &amp;quot;Cache-Control&amp;quot;: &amp;quot;max-age=86400&amp;quot;
+  },
+  &amp;quot;responseTime&amp;quot;: 590,
+  &amp;quot;totalTime&amp;quot;: 591
+}&lt;/code&gt;&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here is what is returned now:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  &amp;quot;isSuccessful&amp;quot;: true,
+  &amp;quot;image&amp;quot;: &amp;quot;http://images.amazon.com/images/P/B0000263H7.01._SCMZZZZZZZ_.jpg&amp;quot;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s a rather significant reduction.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The final piece is to update the client side code. I had to make two changes. First, instead of using $http, I used WLResourceRequest. You can see a good doc on this &lt;a href=&#34;https://developer.ibm.com/mobilefirstplatform/documentation/getting-started-7-0/server-side-development/invoking-adapter-procedures-hybrid-client-applications/&#34;&gt;here&lt;/a&gt;, but this is how my new code looks:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var request = new WLResourceRequest(&#39;/adapters/lastfm/getAlbumCover&#39;, WLResourceRequest.GET);
+request.setQueryParameter(&#39;params&#39;,[artist,album]);
+defs.push(request.send());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;WLResourceRequest returns a promise, so it was pretty much a two second mod. setQueryParameter threw me for a loop though. If you try to use individual parameters, like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;request.setQueryParameter(&#39;artist&#39;, artist);
+request.setQueryParameter(&#39;album&#39;, album);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then it will &lt;strong&gt;not work&lt;/strong&gt;. The doc I linked to above makes this clear, but it was easy to miss. The last thing I tweaked was the result handling code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;if(result.responseJSON.img) {
+    items[i].image = result.responseJSON.img;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As I said above, now my API use is both agnostic, and a bit more secure. I&amp;rsquo;m not saying it is 100% secure - in my sample app I&amp;rsquo;m not using login so anyone could sniff the network request and try to hack it, but it&amp;rsquo;s a heck of a lot more locked down then it was before.&lt;/p&gt;
+
+&lt;p&gt;p.s. I had to make one more small tweak, and I plan on calling this out in it&amp;rsquo;s own blog post. When using the file system and assets under www, MobileFirst takes your www assets from common and puts them in www/default. I kept getting &amp;ldquo;File Not Found&amp;rdquo; errors trying to parse my MP3s and that explained why. I&amp;rsquo;ll discuss this more in a future blog post.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Looking at the JavaScript API in Hybrid MobileFirst Apps</title>
+      <link>http://www.raymondcamden.com/2015/04/28/looking-at-the-javascript-api-in-hybrid-mobilefirst-apps</link>
+      <pubDate>Tue, 28 Apr 2015 13:22:39 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/04/28/looking-at-the-javascript-api-in-hybrid-mobilefirst-apps</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been blogging lately about hybrid apps and &lt;a href=&#34;http://www.ibm.com/mobilefirst/us/en/&#34;&gt;MobileFirst&lt;/a&gt;, and today I thought I&amp;rsquo;d start investigating the &lt;a href=&#34;http://www-01.ibm.com/support/knowledgecenter/SSHS8R_7.0.0/com.ibm.worklight.apiref.doc/apiref/r_ibm_worklight_client_side_api_.html&#34;&gt;JavaScript client-side API&lt;/a&gt; portion of the product. These are API methods you have available to you in your hybrid application. For today, I&amp;rsquo;m going to focus on the &lt;a href=&#34;http://www-01.ibm.com/support/knowledgecenter/api/content/SSHS8R_7.0.0/com.ibm.worklight.apiref.doc/html/refjavascript-client/html/WL.App.html&#34;&gt;WL.App&lt;/a&gt; namespace.&lt;/p&gt;
+
+&lt;p&gt;Here are the (non-deprecated) methods of WL.App, along with some thoughts and suggestions on how you could possibly use them in your application.&lt;/p&gt;
+
+&lt;h4&gt;getDeviceLanguage/getDeviceLocale&lt;/h4&gt;
+
+&lt;p&gt;The first returns the language &lt;i&gt;code&lt;/i&gt;, not the name, so for me it would be &lt;code&gt;en&lt;/code&gt;, not English. Locale will also be the code, so &lt;code&gt;en_US&lt;/code&gt; for example. So how does this compare to the Globalization API? The biggest difference is that these are synchronous, which to me seems to make a bit more sense.&lt;/p&gt;
+
+&lt;h4&gt;getServerUrl/setServerUrl&lt;/h4&gt;
+
+&lt;p&gt;These get and set the MobileFirst server url. I don&amp;rsquo;t imagine there are often times when you would want to set the URL, but perhaps for testing purposes you may want to switch the URL being used on the fly. I could see the getter then being used to provide feedback about which server is currently being used. Make note that the API here uses &lt;code&gt;Url&lt;/code&gt; in the method names. Later on you will see a method using &lt;code&gt;URL&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4&gt;hideSplashscreen/showSplashscreen&lt;/h4&gt;
+
+&lt;p&gt;I&amp;rsquo;ve already talked a bit about this in regards to &lt;a href=&#34;http://www.raymondcamden.com/2015/03/30/working-with-ibm-mobile-first-and-ionic-a-follow-up&#34;&gt;bootstrapping an Ionic&lt;/a&gt; application under MobileFirst.&lt;/p&gt;
+
+&lt;h4&gt;overrideBackButton/resetBackButton&lt;/h4&gt;
+Only applicable to Android and Windows Phone 8, this lets you change the behavior of the device back button. Having a reset there is handy to quickly go back to the system default.
+
+&lt;h4&gt;openURL&lt;/h4&gt;
+
+&lt;p&gt;So yes - this is &lt;code&gt;URL&lt;/code&gt; not &lt;code&gt;Url&lt;/code&gt;! This opens up a new browser to a particular URL. There&amp;rsquo;s options you can pass in (see full docs &lt;a href=&#34;http://www-01.ibm.com/support/knowledgecenter/api/content/SSHS8R_7.0.0/com.ibm.worklight.apiref.doc/html/refjavascript-client/html/WL.App.html#openURL&#34;&gt;here&lt;/a&gt;) but they don&amp;rsquo;t apply to Android and iOS. Note that this does &lt;strong&gt;not&lt;/strong&gt; work like the InAppBrowser. This opens the system browser as a new activity. On Android you can hit Back to return to the app, but on iOS you would need to return to the app using the double click/select behavior. (That I don&amp;rsquo;t think many users really know about.) I think in most cases you will probably want InAppBrowser instead, but this is another option.&lt;/p&gt;
+
+&lt;h4&gt;BackgroundHandler.setOnAppEnteringBackground / BackgroundHandler.setOnAppEnteringForeground&lt;/h4&gt;
+
+&lt;p&gt;Note that these methods are on the BackgroundHandler object (so the full API is &lt;code&gt;WL.App.BackgroundHandler.etc&lt;/code&gt;). These two methods are iOS only but are really freaking neat. When an app is put in the background, iOS takes a snapshot of the current view. This could be a security issue since sensitive information may be on the screen. By using these events, you can hide/show sensitive information so it doesn&amp;rsquo;t show up when the user is viewing running apps in the background. You can either specify a custom function (to hide specific items) or tell the handler to just blank it out.&lt;/p&gt;
+
+&lt;p&gt;Here is a screenshot. Note that the scratch app is blanked out.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/shot16.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/shot16.png&#34; alt=&#34;shot1&#34; width=&#34;850&#34; height=&#34;669&#34; class=&#34;alignnone size-full wp-image-6075&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4&gt;addActionReceiver/removeActionReceiver/sendActionToNative&lt;/h4&gt;
+
+&lt;p&gt;Now - this is cool one. Typically when you want to use native code, you have to build a plugin. Plugins are necessarily difficult to write, but you may not necessarily want to go that far for everything you do. MobileFirst&amp;rsquo;s client-side API provides a simpler solution. You can use &lt;code&gt;sendActionToNative&lt;/code&gt; to send a message to your native code. Your native code can then do&amp;hellip; whatever. There&amp;rsquo;s a reverse to this as well. You can tell your hybrid app to listen in for actions sent from the native side and react appropriately. As an example, imagine this within your JavaScript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var data = {someproperty:1234};
+WL.App.sendActionToNative(&#34;doSomething&#34;, data);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then on the native side - you can listen for it and do something:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+-(void) onActionReceived:(NSString *)action withData:(NSDictionary *) data {
+    NSLog(@&#34;The action receiver&#34;);
+    if ([action isEqualToString:@&#34;doSomething&#34;]){
+        NSLog(@&#34;Yes, doing it&#34;);
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&#34;Wait&#34; message:@&#34;Are you sure you want to delete this.  This action cannot be undone&#34; delegate:self cancelButtonTitle:@&#34;Delete&#34; otherButtonTitles:@&#34;Cancel&#34;, nil];
+        [alert show];        
+        
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, you can listen for the action string and do something with it. You could also handle the args sent to it. In my example I just open an alert (which, to be clear, you do &lt;strong&gt;not&lt;/strong&gt; need to do this way, just use the Dialogs plugin) but I could do pretty much anything here. And again - I could broadcast back to the JavaScript code as well. For times when you don&amp;rsquo;t want a full plugin and just need to quickly talk to the native side, this is a pretty cool option.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

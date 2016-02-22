@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Building your first Model-Glue application (part 9) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Building your first Model-Glue application (part 9)" />
+<meta property="og:description" content=" Welcome to the ninth installment of the &ldquo;Build your first Model-Glue application&rdquo; series. We are approaching the end (really, I swear) of the application with only two more articles after today&rsquo;s entry. (That&rsquo;s the plan anyway.) The reason I built this application was to share photos, and gosh darnit, it&rsquo;s about time I actually allow for it.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2006/04/03/Building-your-first-ModelGlue-application-part-9" />
+
+
+<meta property="og:updated_time" content="2006-04-03T22:04:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Building your first Model-Glue application (part 9)">
+<meta itemprop="description" content=" Welcome to the ninth installment of the &ldquo;Build your first Model-Glue application&rdquo; series. We are approaching the end (really, I swear) of the application with only two more articles after today&rsquo;s entry. (That&rsquo;s the plan anyway.) The reason I built this application was to share photos, and gosh darnit, it&rsquo;s about time I actually allow for it.
+">
+
+
+<meta itemprop="dateModified" content="2006-04-03T22:04:00&#43;06:00" />
+<meta itemprop="wordCount" content="2287">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Building your first Model-Glue application (part 9)"/>
+<meta name="twitter:description" content=" Welcome to the ninth installment of the &ldquo;Build your first Model-Glue application&rdquo; series. We are approaching the end (really, I swear) of the application with only two more articles after today&rsquo;s entry. (That&rsquo;s the plan anyway.) The reason I built this application was to share photos, and gosh darnit, it&rsquo;s about time I actually allow for it.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2006/04/03/Building-your-first-ModelGlue-application-part-9">
+    <h1 class="article-title" itemprop="name">
+        Building your first Model-Glue application (part 9)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2006-04-03 22:04:00 &#43;0600 &#43;0600" itemprop="datePublished">2006-04-03</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p><img src="http://ray.camdenfamily.com/images/mg.jpg" align="left" border="1" hspace="5"> Welcome to the ninth installment of the &ldquo;Build your first Model-Glue application&rdquo; series. We are approaching the end (really, I swear) of the application with only two more articles after today&rsquo;s entry. (That&rsquo;s the plan anyway.) The reason I built this application was to share photos, and gosh darnit, it&rsquo;s about time I actually allow for it.</p>
+
+<p>So lets talk about photos. There are many properties I think I could use with photos, but in an effort to keep things nice and simple, I&rsquo;ve narrowed them down to the following properties:</p>
+
+<table border="1">
+<tr>
+<td>id</td>
+<td>This is the primary key. It auto increments.</td>
+</tr>
+<tr>
+<td>originalfilename</td>
+<td>This is the file name of the image as it was when you uploaded. I will be saving all images in one folder, so it's possible ColdFusion will need to rename them. I want to store the original file name so that the uploader recognizes it.</td>
+</tr>
+<tr>
+<td>filename</td>
+<td>Obviously the application also needs to know the <i>real</i> filename of the image.</td>
+</tr>
+<tr>
+<td>caption</td>
+<td>This is an optional caption that can be added to an image for descriptive purposes.</td>
+</tr>
+<tr>
+<td>galleryidfk</td>
+<td>A pointer back to the gallery this image belongs in.</td>
+</tr>
+</table>
+
+<p>Again - there is a lot more I can, and probably should add to this list, but I want to keep things nice and simple. After defining my model, I then create the bean, DAO, and gateway CFCs. Since they are basically copies of the gallery versions, there isn&rsquo;t any real need to show the complete files.</p>
+
+<p>I&rsquo;m going to set up image adding/editing much like it was done with galleries. When you view a gallery, a form will be present at the bottom to either add or edit an image. So let&rsquo;s start with simple gallery viewing. I already made a link to do this on the view galleries page. The event name is viewgallery. Here is what I added to the ModelGlue.xml file:</p>
+
+<p><code>
+    &lt;event-handler name=&ldquo;ViewGallery&rdquo;&gt;
+      &lt;broadcasts&gt;
+        &lt;message name=&ldquo;getAuthenticated&rdquo; /&gt;
+        &lt;message name=&ldquo;getGallery&rdquo; /&gt;
+    &lt;message name=&ldquo;getImagesForGallery&rdquo; /&gt;
+      &lt;/broadcasts&gt;
+      &lt;views&gt;
+        &lt;include name=&ldquo;body&rdquo; template=&ldquo;dspGallery.cfm&rdquo; /&gt;
+    &lt;include name=&ldquo;main&rdquo; template=&ldquo;dspTemplate.cfm&rdquo; /&gt;
+      &lt;/views&gt;
+      &lt;results&gt;
+        &lt;result name=&ldquo;notAuthenticated&rdquo; do=&ldquo;Logon&rdquo; redirect=&ldquo;yes&rdquo; /&gt;
+        &lt;result name=&ldquo;badGallery&rdquo; do=&ldquo;Home&rdquo; redirect=&ldquo;yes&rdquo; /&gt;
+      &lt;/results&gt;
+    &lt;/event-handler&gt;
+</code></p>
+
+<p>As you can see, there isn&rsquo;t anything special here. As with other methods, I check security to ensure the user is logged on. There is also a &lsquo;badGallery&rsquo; result. I&rsquo;ll use this in case the user messes with the ID or bookmarks an ID that doesn&rsquo;t exist anymore. This event broadcasts getGallery and getImagesForGallery, so next I need to add them to my controller block:</p>
+
+<p><code>
+&lt;message-listener message=&ldquo;getGallery&rdquo; function=&ldquo;getGallery&rdquo; /&gt;
+&lt;message-listener message=&ldquo;getImagesForGallery&rdquo; function=&ldquo;getImagesForGallery&rdquo; /&gt;
+</code></p>
+
+<p>And now let&rsquo;s hop into the controller to add this functionality. First, getGallery:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;getGallery&rdquo; access=&ldquo;public&rdquo; returntype=&ldquo;void&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;I get a gallery.&rdquo;&gt;
+    &lt;cfargument name=&ldquo;event&rdquo; type=&ldquo;ModelGlue.Core.Event&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfset var galleryID = arguments.event.getValue(&ldquo;id&rdquo;)&gt;
+    &lt;cfset var gallery = variables.galleryDAO.read(galleryID)&gt;</p>
+
+<pre><code>&amp;lt;cfif gallery.getID() neq galleryID&amp;gt;
+    &amp;lt;cfset arguments.event.addResult(&quot;badGallery&quot;)&amp;gt;
+&amp;lt;/cfif&amp;gt;   
+&amp;lt;cfset arguments.event.setValue(&quot;gallery&quot;, gallery)&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>Nothing special here. Note that I have no security here. As you know, we support multiple types of security settings when it comes to viewing galleries. For now, I&rsquo;m just keeping things nice and open. The only check I bother with is to ensure the ID was a valid one. It doesn&rsquo;t ensure that it&rsquo;s numeric (that&rsquo;s something I&rsquo;ll come back to in the later &ldquo;clean up&rdquo; entry). But if the user changes the ID to a value that doesn&rsquo;t exist in the database, this will catch it.  Now let&rsquo;s get the images:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;getImagesForGallery&rdquo; access=&ldquo;public&rdquo; returntype=&ldquo;void&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;I return a query of images for a gallery.&rdquo;&gt;
+    &lt;cfargument name=&ldquo;event&rdquo; type=&ldquo;ModelGlue.Core.Event&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfset var galleryID = arguments.event.getValue(&ldquo;id&rdquo;)&gt;<br />
+    &lt;cfset var images =  variables.imageGateway.getImagesForGallery(galleryID)&gt;</p>
+
+<pre><code>&amp;lt;cfset arguments.event.setValue(&quot;images&quot;, images)&amp;gt;
+&amp;lt;cfset arguments.event.setValue(&quot;imagedir&quot;, getModelGlue().getConfigSetting(&quot;imagedir&quot;))&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>Once again - fairly simple. If you remember the gallery gateway, I had built both a getGalleries and getGalleriesforUser. I&rsquo;ve done the same thing with the image gateway. There is a generic getImages method along with a getImagesForGallery method as I used above. Later on I&rsquo;m going to talk about the folder where images will be stored. For right now just know that I&rsquo;m passing this value to the viewState so I can render the images. Last but not least, we need to build the view, dspGallery.cfm, so I can actually display the gallery. Let&rsquo;s look at this template:</p>
+
+<p><code>
+&lt;cfset gallery = viewState.getValue(&ldquo;gallery&rdquo;)&gt;
+&lt;cfset images = viewState.getValue(&ldquo;images&rdquo;)&gt;</p>
+
+<p>&lt;cfset viewState.setValue(&ldquo;title&rdquo;, &ldquo;Gallery: #gallery.getName()#&ldquo;)&gt;</p>
+
+<p>&lt;!&mdash; Used for form. &mdash;&gt;
+&lt;cfset caption = viewState.getValue(&ldquo;caption&rdquo;, &ldquo;&rdquo;)&gt;
+&lt;cfset originalfilename = viewState.getValue(&ldquo;originalfilename&rdquo;, &ldquo;&rdquo;)&gt;</p>
+
+<p>&lt;!&mdash; editing? &mdash;&gt;
+&lt;cfset editingImage = viewState.getValue(&ldquo;image&rdquo;)&gt;</p>
+
+<p>&lt;!&mdash; grab potential errors &mdash;&gt;
+&lt;cfset errors = viewState.getValue(&ldquo;errors&rdquo;)&gt;</p>
+
+<p>&lt;cfif isQuery(images) and images.recordCount&gt;</p>
+
+<pre><code>&amp;lt;!--- Simple 5 picture per cell dump ---&amp;gt;
+&amp;lt;cfdump var=&quot;#images#&quot;&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;</p>
+
+<pre><code>&amp;lt;p&amp;gt;
+This gallery is empty. Upload some photos!
+&amp;lt;/p&amp;gt;
+</code></pre>
+
+<p>&lt;/cfif&gt;</p>
+
+<p>&lt;cfif isSimpleValue(editingImage)&gt;</p>
+
+<pre><code>&amp;lt;cfoutput&amp;gt;
+&amp;lt;p&amp;gt;
+Please use the form below to upload a new photo. 
+&amp;lt;/p&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;</p>
+
+<pre><code>&amp;lt;cfoutput&amp;gt;
+&amp;lt;p&amp;gt;
+Please use the form below to edit the photo: #editingImage.getOriginalFilename()# 
+&amp;lt;/p&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>&lt;/cfif&gt;</p>
+
+<p>&lt;cfif isArray(errors) and arrayLen(errors)&gt;
+    &lt;cfoutput&gt;
+    &lt;ul&gt;
+    &lt;b&gt;
+    Please correct the following errors:&lt;br&gt;
+    &lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;1&rdquo; to=&ldquo;#arrayLen(errors)#&rdquo;&gt;
+    &lt;li&gt;#errors[x]#&lt;/li&gt;
+    &lt;/cfloop&gt;
+    &lt;/b&gt;
+    &lt;/ul&gt;
+    &lt;/cfoutput&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfoutput&gt;
+&lt;p&gt;
+&lt;cfif not isSimpleValue(editingImage)&gt;
+    &lt;form action=&ldquo;#viewstate.getValue(&ldquo;myself&rdquo;)#updateimage&rdquo; method=&ldquo;post&rdquo; enctype=&ldquo;multipart/form-data&rdquo;&gt;
+    &lt;input type=&ldquo;hidden&rdquo; name=&ldquo;id&rdquo; value=&ldquo;#gallery.getID()#&rdquo;&gt;
+    &lt;input type=&ldquo;hidden&rdquo; name=&ldquo;imageid&rdquo; value=&ldquo;#editingImage.getID()#&rdquo;&gt;
+&lt;cfelse&gt;
+    &lt;form action=&ldquo;#viewstate.getValue(&ldquo;myself&rdquo;)#addimage&rdquo; method=&ldquo;post&rdquo; enctype=&ldquo;multipart/form-data&rdquo;&gt;
+    &lt;input type=&ldquo;hidden&rdquo; name=&ldquo;id&rdquo; value=&ldquo;#gallery.getID()#&rdquo;&gt;
+&lt;/cfif&gt;
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td&gt;file:&lt;/td&gt;
+        &lt;td&gt;&lt;input type=&ldquo;file&rdquo; name=&ldquo;originalfilename&rdquo; value=&ldquo;#originalfilename#&rdquo;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;caption:&lt;/td&gt;
+        &lt;td&gt;&lt;input type=&ldquo;text&rdquo; name=&ldquo;caption&rdquo; value=&ldquo;#caption#&rdquo;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;&nbsp;&lt;/td&gt;
+        &lt;td&gt;
+        &lt;cfif isSimpleValue(editingImage)&gt;
+            &lt;input type=&ldquo;submit&rdquo; name=&ldquo;submit&rdquo; value=&ldquo;Upload Image&rdquo;&gt;
+        &lt;cfelse&gt;
+            &lt;input type=&ldquo;submit&rdquo; name=&ldquo;submit&rdquo; value=&ldquo;Update Image&rdquo;&gt;
+        &lt;/cfif&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+&lt;/p&gt;
+&lt;/cfoutput&gt;
+</code></p>
+
+<p>Ok, so a lot going on here. Let me handle this line by line:</p>
+
+<p><code>
+&lt;cfset gallery = viewState.getValue(&ldquo;gallery&rdquo;)&gt;
+&lt;cfset images = viewState.getValue(&ldquo;images&rdquo;)&gt;
+</code></p>
+
+<p>This grabs the data that was stored in our viewstate earlier. I have both the gallery and the images. The next line simply sets the title of the page based on the gallery.</p>
+
+<p><code>
+&lt;cfset viewState.setValue(&ldquo;title&rdquo;, &ldquo;Gallery: #gallery.getName()#&ldquo;)&gt;
+</code></p>
+
+<p>As with the galleries, I used the page to handle both showing images and adding or editing images. So I grab the caption and originalfilename values to use later in the form.</p>
+
+<p><code>
+&lt;cfset caption = viewState.getValue(&ldquo;caption&rdquo;, &ldquo;&rdquo;)&gt;
+&lt;cfset originalfilename = viewState.getValue(&ldquo;originalfilename&rdquo;, &ldquo;&rdquo;)&gt;
+</code></p>
+
+<p>Since the form may be used for editing, I check the view state to see if the data exists:</p>
+
+<p><code>
+&lt;cfset editingImage = viewState.getValue(&ldquo;image&rdquo;)&gt;
+</code></p>
+
+<p>After this I check for errors, much like every other page in the application using forms. Next notice how I display the gallery:</p>
+
+<p><code>
+&lt;cfif isQuery(images) and images.recordCount&gt;</p>
+
+<pre><code>&amp;lt;!--- Simple 5 picture per cell dump ---&amp;gt;
+&amp;lt;cfdump var=&quot;#images#&quot;&amp;gt;
+</code></pre>
+
+<p></code></p>
+
+<p>If you look at the code in the zip, you won&rsquo;t see this. But this is what I started off with. It lets me focus on the form and start adding data. The dump confirms when things work (or don&rsquo;t work). I&rsquo;ll circle back later and make it pretty.</p>
+
+<p>Let&rsquo;s scroll past the rest and go to the form. In general, it mimics the form I built for working with galleries. Probably the only difference you will want to note is the hidden fields we pass. In either the editing or creating case I pass in the gallery ID. This is so we can return to the gallery. In the case where I&rsquo;m editing an image I simply add the image ID as well.</p>
+
+<p>Now that I&rsquo;ve got that working, it&rsquo;s time to build support for adding images. My form posts to either addimage or updateimage for the event. Obviously I need to start with addimage. Here is the event I used:</p>
+
+<p><code>
+    &lt;event-handler name=&ldquo;AddImage&rdquo;&gt;
+      &lt;broadcasts&gt;
+        &lt;message name=&ldquo;getAuthenticated&rdquo; /&gt;
+        &lt;message name=&ldquo;getGallery&rdquo; /&gt;
+        &lt;message name=&ldquo;addImage&rdquo; /&gt;
+      &lt;/broadcasts&gt;
+      &lt;results&gt;
+        &lt;result name=&ldquo;notAuthenticated&rdquo; do=&ldquo;Logon&rdquo; redirect=&ldquo;yes&rdquo; /&gt;
+        &lt;result name=&ldquo;badGallery&rdquo; do=&ldquo;Home&rdquo; redirect=&ldquo;yes&rdquo; /&gt;
+        &lt;result do=&ldquo;ViewGallery&rdquo; /&gt;
+      &lt;/results&gt;
+    &lt;/event-handler&gt;
+</code></p>
+
+<p>You will notice I still call getGallery. This is important since it will check and see if a bad gallery ID was passed. It will also let us return to the ViewGallery event when done. The new message broadcast here is addImage, so it needs to be added to the controller block. Here is the actual code for adding an image, and as a warning, I&rsquo;m going to show something a bit bad. I&rsquo;ll explain why I did it that way and how it could be rewritten the &ldquo;right&rdquo; way:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;addImage&rdquo; access=&ldquo;public&rdquo; returntype=&ldquo;void&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;I add a image.&rdquo;&gt;
+    &lt;cfargument name=&ldquo;event&rdquo; type=&ldquo;ModelGlue.Core.Event&rdquo; required=&ldquo;true&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfset var bean = arguments.event.makeEventBean(&quot;model.imageBean&quot;) /&amp;gt;
+&amp;lt;cfset var errors = arrayNew(1)&amp;gt;
+&amp;lt;cfset var extension = &quot;&quot;&amp;gt;
+&amp;lt;cfset var theFile = &quot;&quot;&amp;gt;
+
+&amp;lt;!--- gallery id comes from ID ---&amp;gt;       
+&amp;lt;cfset bean.setGalleryIDFK(arguments.event.getValue(&quot;id&quot;))&amp;gt;
+
+&amp;lt;!--- upload file ---&amp;gt;
+&amp;lt;cffile action=&quot;upload&quot; destination=&quot;#expandPath(getModelGlue().getConfigSetting(&quot;imagedir&quot;))#&quot; filefield=&quot;originalfilename&quot; nameconflict=&quot;makeunique&quot; result=&quot;theFile&quot;&amp;gt;
+
+&amp;lt;!--- get extension ---&amp;gt;
+&amp;lt;cfif listLen(theFile.serverFile, &quot;.&quot;) gte 2&amp;gt;
+    &amp;lt;cfset extension = listLast(thefile.serverFile, &quot;.&quot;)&amp;gt;
+&amp;lt;/cfif&amp;gt;
+
+&amp;lt;cfif not listFindNoCase(&quot;gif,jpg,png&quot;, extension)&amp;gt;
+    &amp;lt;cfset arrayAppend(errors, &quot;File is the wrong type. It must be a gif, jpg, or png.&quot;)&amp;gt;
+    &amp;lt;cffile action=&quot;delete&quot; file=&quot;#expandPath(getModelGlue().getConfigSetting(&quot;imagedir&quot;))#/#theFile.serverFile#&quot;&amp;gt;
+&amp;lt;/cfif&amp;gt;
+
+&amp;lt;cfif not arrayLen(errors)&amp;gt;   
+    &amp;lt;!--- set new filename ---&amp;gt;
+    &amp;lt;cfset bean.setOriginalFilename(thefile.clientFile)&amp;gt;
+    &amp;lt;cfset bean.setFilename(theFile.serverFile)&amp;gt;
+    &amp;lt;cfset errors = bean.validate()&amp;gt;  
+&amp;lt;/cfif&amp;gt;
+
+&amp;lt;cfif not arrayLen(errors)&amp;gt;
+    &amp;lt;cfset imageDAO.create(bean)&amp;gt; 
+    &amp;lt;!--- clear values ---&amp;gt;
+    &amp;lt;cfset arguments.event.setValue(&quot;originalfilename&quot;, &quot;&quot;)&amp;gt;
+    &amp;lt;cfset arguments.event.setValue(&quot;caption&quot;, &quot;&quot;)&amp;gt;
+&amp;lt;cfelse&amp;gt;
+    &amp;lt;cfset arguments.event.setValue(&quot;errors&quot;, errors) /&amp;gt;
+&amp;lt;/cfif&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>There is a lot here, so let&rsquo;s just go down line by line. I start off using my old friend the makeEventBean() method. Our image bean is so small this is probably overkill, but it is a &ldquo;standard&rdquo; for me so I use it anyway. After the var scoping, I manually set the gallery foreign key relationship. Why? The gallery was stored in the ID portion of the event, remember that we are viewing a gallery here when adding an image. So I need to use the right value for the gallery. In case you are wondering, the setID() method will be called as well by makeEventBean. I&rsquo;m not so sure I can since I know we are adding an image and the ID will be overwritten anyway, but it is something to consider returning to later on.</p>
+
+<p>Now for the part that I know will make people groan. I started off this series saying I was still a Model-Glue newbie. One thing that troubled me when I was building an application last month was how to handle form file uploads. You may have noticed that I <i>never</i> directly refer to any scope (except for session for security matters) when it comes to event arguments. I let Model-Glue handle all of that form me. However, the only way to handle a form upload (normally) is with the cffile tag. This bugs me as it adds too much cohesion between the controller and the form scope. However - I got over it. I recognize that it isn&rsquo;t the best solution but it does work. The good news is that there <i>is</i> a way around this, if you want to go down that route. Jared Rypka-Hauer blogged about such a method <a href="http://www.web-relevant.com/blogs/cfobjective/index.cfm?mode=entry&entry=BD613BAF-BDB9-5320-E7F02F683C0421A1">here</a>. Consider it extra credit for this tutorial. The folder for the upload comes from a new Model-Glue setting, imagedir. I added this to the config settings in ModelGlue.xml. I chose the wonderfully imaginative folder name, &ldquo;pimages.&rdquo;</p>
+
+<p>Next we check the extension. This is <b>not</b> bullet-proof. A better test would be to use some Java methods to actually look into the file as well to ensure the binary data is correct, but again, I&rsquo;m trying to keep it simple.</p>
+
+<p>If everything is ok - I then set the original file name. Remember that ColdFusion may rename the file when you upload it. I use the setOriginalFilename was that value, and setFilename for the file that ColdFusion created. After all of that I call the bean&rsquo;s validate method. The rest of the methods follows the same flow that my other methods did.</p>
+
+<p>Ok - so now I&rsquo;m going to come back around and work on the display of the gallery. Wanting to keep things simple, all the images were placed under web root, and I&rsquo;m not even going to secure the actual display of the image. I&rsquo;m simply going to link to them, and if a user wants to share a URL that points directly to an image, so be it. In fact, I think I kind of like that. I started this entire, gigantic blog series with the preposition that Flickr was a bit flawed in how you share images. So hey - it&rsquo;s a feature and no more insecure than Windows. For the display I decided on a table with five images per row. Ugly - but functional. I also made another design choice and did thumbnails by simply shrinking the image in HTML. There are ways to create &ldquo;real&rdquo; thumbnails. I&rsquo;ve recommend <a href="http://www.alagad.com/index.cfm/name-aic">Alagad&rsquo;s Image.cfc</a> before and I&rsquo;ll do so here. In the last big Model-Glue application I built, I used Image.cfc to do thumbnails for user profiles. The code is rather simple so I&rsquo;m going to leave it out of the entry for now.</p>
+
+<p>So - I hope folks don&rsquo;t mind - but I&rsquo;m going to make a decision here about the application. I&rsquo;ve gotten a lot of good feedback so far (thank you!) but as a writer (or writer wanna-be) I kinda feel like things are dragging a bit. So I&rsquo;m going to end this entry without &ldquo;completing&rdquo; the image portion, specifically editing and deleting images from the gallery. I feel like I&rsquo;m repeating myself so much that I don&rsquo;t think folks would really learn from it. I want to move on to the next entry where I&rsquo;ll focus on the gallery security, and then finally, a wrap up where I point out the things I&rsquo;d add to &ldquo;clean up&rdquo; the application. If folks <i>really</i> want me to add image deleting/updating, let me know and I&rsquo;ll do it post wrap up.</p>
+
+<p><b>Summary:</b>
+<ul>
+<li>I added the table to store images. I also added corresponding bean, DAO, and gateway CFCs for the data.
+<li>I added a new event to handle viewing galleries. This view handled both displaying the images as well as providng a simple form to upload new images.
+</ul></p>
+
+<p>As always, you can view the application <a href="http://pg1.camdenfamily.com">here</a> and you can download it via the download link at the bottom.<p><a href='enclosures/D%3A%5Cwebsites%5Ccamdenfamily%5Csource%5Cmorpheus%5Cblog%5Cenclosures%2Fwwwroot8%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2006\/04\/03\/Building-your-first-ModelGlue-application-part-9'; 
+this.page.identifier = '/?p=1185'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/04/03/Building-your-first-ModelGlue-application-part-9" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Building your first Model-Glue application (part 9)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/04/03/Building-your-first-ModelGlue-application-part-9" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/04/03/Building-your-first-ModelGlue-application-part-9" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Building your first Model-Glue application (part 9)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/04/03/Building-your-first-ModelGlue-application-part-9" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/04/03/Building-your-first-ModelGlue-application-part-9" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

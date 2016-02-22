@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Deep dive into CFCs and Requests &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Deep dive into CFCs and Requests" />
+<meta property="og:description" content="Last week I had an interesting discussion with Jaana G., a ColdFusion developer, who wasn&rsquo;t very clear on how CFCs operate over the wire. She had used CFCs as web services but didn&rsquo;t quite get how to use them in other ways - like for Ajax applications. I did a quick check of the docs and found this page: Invoking component methods by using a URL. While this explains some of the feature, it completely skips over the returnFormat portion and therefore wouldn&rsquo;t be too useful for Ajax developers. I thought then it might be a good idea to wrote up a guide that covers exactly what happens when you work with CFCs via HTTP requests. Any comments or corrections would be greatly appreciated.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/06/21/Deep-dive-into-CFCs-and-Requests" />
+
+
+<meta property="og:updated_time" content="2011-06-21T07:06:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Deep dive into CFCs and Requests">
+<meta itemprop="description" content="Last week I had an interesting discussion with Jaana G., a ColdFusion developer, who wasn&rsquo;t very clear on how CFCs operate over the wire. She had used CFCs as web services but didn&rsquo;t quite get how to use them in other ways - like for Ajax applications. I did a quick check of the docs and found this page: Invoking component methods by using a URL. While this explains some of the feature, it completely skips over the returnFormat portion and therefore wouldn&rsquo;t be too useful for Ajax developers. I thought then it might be a good idea to wrote up a guide that covers exactly what happens when you work with CFCs via HTTP requests. Any comments or corrections would be greatly appreciated.
+">
+
+
+<meta itemprop="dateModified" content="2011-06-21T07:06:00&#43;06:00" />
+<meta itemprop="wordCount" content="1635">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Deep dive into CFCs and Requests"/>
+<meta name="twitter:description" content="Last week I had an interesting discussion with Jaana G., a ColdFusion developer, who wasn&rsquo;t very clear on how CFCs operate over the wire. She had used CFCs as web services but didn&rsquo;t quite get how to use them in other ways - like for Ajax applications. I did a quick check of the docs and found this page: Invoking component methods by using a URL. While this explains some of the feature, it completely skips over the returnFormat portion and therefore wouldn&rsquo;t be too useful for Ajax developers. I thought then it might be a good idea to wrote up a guide that covers exactly what happens when you work with CFCs via HTTP requests. Any comments or corrections would be greatly appreciated.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/06/21/Deep-dive-into-CFCs-and-Requests">
+    <h1 class="article-title" itemprop="name">
+        Deep dive into CFCs and Requests
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-06-21 07:06:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-06-21</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Last week I had an interesting discussion with Jaana G., a ColdFusion developer, who wasn&rsquo;t very clear on how CFCs operate over the wire. She had used CFCs as web services but didn&rsquo;t quite get how to use them in other ways - like for Ajax applications. I did a quick check of the docs and found this page: <a href="http://help.adobe.com/en_US/ColdFusion/9.0/Developing/WSc3ff6d0ea77859461172e0811cbec0ac4a-7fd9.html#WSc3ff6d0ea77859461172e0811cbec22c24-7db0">Invoking component methods by using a URL</a>. While this explains some of the feature, it completely skips over the returnFormat portion and therefore wouldn&rsquo;t be too useful for Ajax developers. I thought then it might be a good idea to wrote up a guide that covers exactly what happens when you work with CFCs via HTTP requests. Any comments or corrections would be greatly appreciated.</p>
+
+<p/>
+
+Let's begin slowly with a simple CFC. The code below will be used for our demonstration.
+
+<p/>
+
+<code>
+component {
+
+    public string function helloWorld(string name="Nameless") {
+        return "Hello, #arguments.name#";   
+    }
+
+}
+</code>
+
+<p/>
+
+Nothing too complex here, right? Just one simple helloWorld method with an optional name argument. Given this, when you open your browser and point to the URL, in my case, http://localhost/test.cfc, you get... 
+
+<p/>
+
+<img src="http://www.raymondcamden.com/images/ScreenClip118.png" />
+
+
+<p/>
+
+Unless you have both your CF Admin and RDS passwords turned off, you are prompted to enter one of them. If you do, you then get a description of the CFC and it's methods:
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip119.png" />
+
+<p/>
+
+This is a pretty handy service actually. The more you describe your CFC, for example, adding hints to your method and arguments, the more documentation you will get. However, keep in mind that it is only 'safe' on a development server. You won't have the admin unprotected anywhere else (I hope!) so this is really just for developers. (If you want a copy of those nice docs without sharing your CF Admin password, consider the <a href="http://www.cflib.org/udf/cfcToPrinter">cfcToPrinter</a> udf.) <b>So to recap - if you request a CFC just by file name with nothing else then you get either the login prompt or the self-generated documentation.</b>
+
+<p/>
+
+So how do we begin actually using our CFC over the wire? First off - ColdFusion is going to prevent you from remotely executing any method that is not marked "remote". In the code block above we had used "public". So first off, let's change that real quick:
+
+<p/>
+
+<code>
+component {
+
+    remote string function helloWorld(string name="Nameless") {
+        return "Hello, #arguments.name#";   
+    }
+
+}
+</code>
+
+<p/>
+
+There are thee main ways you will see people use CFCs remotely:
+
+<p/>
+
+<ol>
+<li>Web Services
+<li>Flash Remoting
+<li>Straight HTTP Calls
+</ol>
+
+<p/>
+
+In this guide I'm focusing on the last item above, but let's quickly cover the first two as well. In order for a CFC to be used as a web service, the client calling your CFC simply changes the URL to include ?wsdl as the end. So my previous url of localhost/test.cfc becomes localhost/test.cfc?wsdl. That's it. If you open the CFC with your own browser and enter that URL you will see the response is totally changed:
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip120.png" />
+
+<p/>
+
+What you are seeing there is the "WSDL" for the web services. You can think of this as documentation for web service clients. You <i>can</i> read this - much like you <i>can</i> build your own airplane to travel, but frankly, you really don't want to. If you want your CFC to be used as a web service by someone else, you simply tell them the URL. Using the web service is a matter of what their client is. As we know, in ColdFusion it is pretty simple. Once you createObject the web service, you can treat it like a simple library.
+
+<p/>
+
+I'm not going to cover Flash Remoting at all - outside to say that it just plain works. If you are using Flex than you will have a RemoteObject tag and will address the CFC via "dot" notation. So given that my CFC was called test and was in web root, I'd just use "test". If my CFC had been in a remote folder under a subdirectory called tests, I'd use "remote.tests.test." Nothing else is required. There's things you can do to optimize your code more for the Flex/Flash client, but again, I'm not going to spend much time on that now. (And by the way, it works just as easy for Flex/Flash on the mobile devices as well.)
+
+<p/>
+
+So now we are on our third option - straight HTTP calls. The <a href="http://help.adobe.com/en_US/ColdFusion/9.0/Developing/WSc3ff6d0ea77859461172e0811cbec0ac4a-7fd9.html#WSc3ff6d0ea77859461172e0811cbec22c24-7db0">documentation</a> I had linked to earlier discusses both URL and Form based requests. It basically boils down to this - <b>you must tell ColdFusion what method you want to run</b>. In URL form, that's just by adding a method attribute. In form form (oops, form mode let's say), it's just adding a method form field. So for example, I'd change my URL to this to invoke my helloWorld method: localhost/test.cfc?method=helloWorld. In a form, I'd include a field, typically hidden, that used method for a name and helloWorld for a value. <b>Basically, the method name/value pair is special in regards to running CFCs.</b> So what happens when I try that with my CFC?
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip121.png" />
+
+<p/>
+
+Nice and simple, right? If I want to include a name, then I'd just add another argument: localhost/helloWorld.cfc?method=helloWorld&name=Darth
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip122.png" />
+
+<p/>
+
+That's it, right? Nope. View source and you will next see the other crucial change - the encoding:
+
+<p/>
+
+<code>
+&lt;wddxPacket version='1.0'&gt;&lt;header/&gt;&lt;data&gt;&lt;string&gt;Hello, Darth&lt;/string&gt;&lt;/data&gt;&lt;/wddxPacket&gt;
+</code>
+
+<p/>
+
+Woah, what the heck is that? Well what you are seeing is ColdFusion encoding the result. For a string it seems a bit pointless, but imagine for a minute you were returning an array of values. HTTP responses have to text or binary. Binary wouldn't work (most of the time). How would you represent then - in text - an array? XML encoding allows for that. This string version of the data an more easily be parsed remotely and converted back into real data. But WDDX? Most likely this is not what you want. Luckily ColdFusion 9 (and I'll talk a bit about earlier versions below) provides more control via the returnFormat attribute. There are three ways data can be returned over the wire:
+
+<p/>
+
+<ol>
+<li>WDDX - This is the default and is a XML version of your data
+<li>Plain - This is a "Don't touch anything" version. <b>It only works for simple values, like strings, dates, numbers.</b>
+<li>JSON - This is the most preferred format. JSON is slimmer than XML and understood by more clients, including libraries like jQuery.
+</ol>
+
+<p/>
+
+To control this behavior, you have two choices (technically 3 but we're going to ignore one for now). You either specify returnFormat in your CFC function as an argument or you pass it over the URL. For the most part, I recommend specifying it in the URL, like so: localhost/test.cfc?method=helloWorld&returnFormat=plain&name=Darth. If you run that using my test code, you will see a plain text result. (But be sure to View Source!) Let's add another method though so we can see an example of something a bit more complex:
+
+<p/>
+
+<code>
+component {
+
+    remote string function helloWorld(string name="Nameless") {
+        return "Hello, #arguments.name#";   
+    }
+
+    remote array function getNames() {
+        return ["Ray","Scott","Todd","Jason","Booger"];
+    }
+    
+}
+</code>
+
+<p/>
+
+I've added a new function to my CFC called getNames. It returns an array of 5 names. Watch what happens when we return it using the 3 different return types:
+
+<p/>
+
+<b>localhost/test.cfc?method=getNames&returnformat=wddx</b><br/>
+<code>
+&lt;wddxPacket version='1.0'&gt;&lt;header/&gt;&lt;data&gt;&lt;array length='5'&gt;&lt;string&gt;Ray&lt;/string&gt;&lt;string&gt;Scott&lt;/string&gt; &lt;string&gt;Todd&lt;/string&gt;&lt;string&gt;Jason&lt;/string&gt; &lt;string&gt;Booger&lt;/string&gt;&lt;/array&gt;&lt;/data&gt;&lt;/wddxPacket&gt;
+</code>
+
+<p/>
+
+<i>Note - I added a space or two to make it wrap.</i>
+
+<p/>
+
+<b>localhost/test.cfc?method=getNames&returnFormat=json</b><br/>
+<code>
+["Ray","Scott","Todd","Jason","Booger"]
+</code>
+
+</p>
+
+<p><b>localhost/test.cfc?method=getNames&amp;returnFormat=plain</b><br/>
+<img src="http://www.coldfusionjedi.com/images/ScreenClip123.png" /></p>
+
+<p><p/></p>
+
+<p>As you can see, trying to return a complex value &ldquo;plainly&rdquo; is not possible.</p>
+
+<p><p/></p>
+
+<p>So I hope this helps. I want to leave you guys with a few other things to consider as well. Consider this extra reading material and if your mind is swimming already, stop for now.</p>
+
+<p><p/></p>
+
+<ul>
+<li>So what about versions of ColdFusion earlier then 9 and return types? In ColdFusion MX, the result was always WDDX. Period. If you wanted anything like, like JSON for your jQuery, you pointed to a CFM instead. The CFM would run the CFC and create a JSON response. ColdFusion 7 added a modification where if returnType (not format, type) was XML, then it would NOT WDDX-ize the result. This was useful for returning XML but not JSON obviously. In ColdFusion 8 then we finally got returnFormat to make it more explicit.
+<li>There is another special argument - queryFormat - that modifies how queries are encoded. It's discussed <a href="http://help.adobe.com/en_US/ColdFusion/9.0/Developing/WSc3ff6d0ea77859461172e0811cbec10e40-7fe3.html">here</a> and in earlier blog posts. 
+<li>Did you know that ColdFusion 901 made it possible to use CFCs outside of web root? This feature is limited to binding and AjaxProxy - you can't use it with your jQuery code - but it is a new feature. Check the 901 release notes for more information. (Here is the link I have for the release notes - it isn't loading for me right now so good luck: <a href="http://www.adobe.com/support/documentation/en/coldfusion/releasenotes.html">http://www.adobe.com/support/documentation/en/coldfusion/releasenotes.html</a>)
+<li>What about Application.cfc? A request to load a CFC is like any other request. If this is the very first hit, onApplicationStart is run. Ditto for onSessionStart. In earlier versions of ColdFusion onRequest would fire and could possibly break your request. ColdFusion now has an onCFCRequest method instead that can handle these requests. This isn't a feature most people use though.
+<li>A common question I get is - what about CFCs I set up in onApplicationStart? CFCs that are initialized with variables like for my DSN? There's a few ways to handle them, but the simplest is to create another CFC that just runs as a proxy. So if you have a CFC called blog, for example, defined with a DSN and other variables, and it's stored in the Application scope, you can make a new CFC that works with that CFC. Maybe doing something as simple as:  return application.blog.getComments(). But wait - isn't addressing outside scopes in a CFC bad? Sure - but like most tips - there's always exceptions, and this is a good one. In this case,  your remote CFC is acting as a proxy to your application-scoped code and that's a great use I think.
+</ul>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/06\/21\/Deep-dive-into-CFCs-and-Requests'; 
+this.page.identifier = '/?p=4276'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/06/21/Deep-dive-into-CFCs-and-Requests" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Deep dive into CFCs and Requests" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/06/21/Deep-dive-into-CFCs-and-Requests" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/06/21/Deep-dive-into-CFCs-and-Requests" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Deep dive into CFCs and Requests" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/06/21/Deep-dive-into-CFCs-and-Requests" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/06/21/Deep-dive-into-CFCs-and-Requests" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

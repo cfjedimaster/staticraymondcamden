@@ -1,0 +1,1520 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Flex on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/flex/</link>
+    <description>Recent content in Flex on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 26 Jul 2012 15:07:00 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/flex/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How I debugged a Flash-based uploader issue</title>
+      <link>http://www.raymondcamden.com/2012/07/26/How-I-debugged-a-Flashbased-uploader-issue</link>
+      <pubDate>Thu, 26 Jul 2012 15:07:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2012/07/26/How-I-debugged-a-Flashbased-uploader-issue</guid>
+      <description>&lt;p&gt;Since I&amp;rsquo;ve been on a &amp;lsquo;How I fix things&amp;rsquo; kick lately I thought I&amp;rsquo;d share a quick real world example. A reader wrote in stating that he had issues with ColdFusion&amp;rsquo;s multi-file uploader. This is a Flash-based utility that allows you to upload any number of files. On the server side, you handle the file as you wish (copy it to a folder, upload it to S3, whatever), but you are responsible for outputting a JSON string back to the front end that is then interpreted by the Flash application.&lt;/p&gt;
+
+&lt;p&gt;My reader was having an issue with the uploader where files were being processed correctly but the front end always reported it as an error. Since the files were handled ok the issue must have been in the communication back to the front end. So how did I debug this?&lt;/p&gt;
+
+&lt;p&gt;First off - the Flash network call was a POST but it was not rendered properly in Chrome dev tools. Chrome actually showed the POST but the response wasn&amp;rsquo;t displayed:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/ScreenClip104.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Firebug didn&amp;rsquo;t even render the request. So I switched to a lower-level tool I like - &lt;a href=&#34;http://www.charlesproxy.com/&#34;&gt;Charles&lt;/a&gt;. I&amp;rsquo;ve often used Charles (and &lt;a href=&#34;http://kevinlangdon.com/serviceCapture/&#34;&gt;ServiceCapture&lt;/a&gt;) for Flash and Flex-based applications since it does a real good job of handling those applications.&lt;/p&gt;
+
+&lt;p&gt;Charles monitors pretty much every network request on your box so the first thing you want to do is click Proxy/Recording Settings , go to the Include tab and enter a new record for your testing site. This makes it a lot easier to keep track of the network requests you care about.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/ScreenClip105.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I then simply switched over to the browser, uploaded a file via the Flash app, and then popped back into Charles. I selected the individual request and then the Response tab. This is the real result and I bet you can see the error right away:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/ScreenClip106.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Yep - extra HTML comments from the server side code (see note for ColdFusion folks below) breaking the JSON. In this case, it was something emitted from earlier in his code in a completely different file but executed during the request.&lt;/p&gt;
+
+&lt;p&gt;From start to finish this was probably a 3-5 minute debug for me but something I know he had worked on for some time. As I&amp;rsquo;ve been saying recently at conferences, knowing the types of tools you have available to help debug issues is &lt;b&gt;priceless&lt;/b&gt;.&lt;/p&gt;
+
+&lt;p&gt;p.s. As a special note to ColdFusion users - the mistake above most likely came from accidentally using an HTML comment when a CFML comment was meant instead. It is an easy mistake to make (two dashes instead of three) and something you should watch out for.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Example of Flex/AIR - Greg&#39;s Toolkit</title>
+      <link>http://www.raymondcamden.com/2011/10/28/Example-of-FlexAIR-Gregs-Toolkit</link>
+      <pubDate>Fri, 28 Oct 2011 10:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/10/28/Example-of-FlexAIR-Gregs-Toolkit</guid>
+      <description>&lt;p&gt;My boss sent me this yesterday and I think it&amp;rsquo;s one of the coolest examples of Flex/AIR I&amp;rsquo;ve seen in a while. &lt;a href=&#34;http://www.gregstoolkit.com/&#34;&gt;Greg&amp;rsquo;s Toolkit&lt;/a&gt; (I love the product, don&amp;rsquo;t love the name so much) is a desktop/mobile application that let&amp;rsquo;s you monitor your Amazon web service assets. It gives you a real time view of your instances. I don&amp;rsquo;t have any great screen shots, but I&amp;rsquo;ll steal one from his site:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.gregstoolkit.com/wp-content/uploads/2011/09/gtk-ss-desktop-mobile.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;His application essentially turns your Amazon assets into a virtual server room, allowing you to work with them in a much simpler, quicker fashion then heading over to Amazon&amp;rsquo;s web site.&lt;/p&gt;
+
+&lt;p&gt;Greg&amp;rsquo;s Toolkit is available for desktop, iOS, and soon for Android tablets.&lt;/p&gt;
+
+&lt;p&gt;By the way, if any of my readers are building cool AIR applications, drop me a line.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Updating Death Clock for Flex 4.6</title>
+      <link>http://www.raymondcamden.com/2011/10/21/Updating-Death-Clock-for-Flex-46</link>
+      <pubDate>Fri, 21 Oct 2011 15:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/10/21/Updating-Death-Clock-for-Flex-46</guid>
+      <description>&lt;p&gt;Adobe has been talking lately about the next update to Flex and Flash Builder, version 4.6. There&amp;rsquo;s a lot of cool stuff planned, but some of the things that interest me most are the new UI components. You can read a good article on them here, &lt;a href=&#34;http://www.adobe.com/devnet/flex/articles/whats-new-flex-flash-builder-46.html&#34;&gt;What&amp;rsquo;s new in Flex 4.6 SDK and Flash Builder 4.6&lt;/a&gt;. I thought it might be interesting to update one of my own application, the Death Clock mobile app, to use some of these new components.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;When I built the &lt;a href=&#34;https://market.android.com/details?id=air.DeathClock&amp;feature=search_result#?t=W251bGwsMSwxLDEsImFpci5EZWF0aENsb2NrIl0.&#34;&gt;Death Clock&lt;/a&gt; application, one of the first things I ran into was handling the UI for picking gender and the month of your birth. Dropdowns just don&amp;rsquo;t work well on a mobile device. I ended up using a hybrid approach that used states and groups of radio buttons. You can read more about this in my &lt;a href=&#34;http://www.raymondcamden.com/index.cfm/2010/10/21/My-First-Android-Application&#34;&gt;original blog post&lt;/a&gt; from &amp;hellip; wow&amp;hellip; exactly one year ago. Man - I&amp;rsquo;d love to say I planned that but it was completely random! Anyway - be sure to look at that post for an example of the UI.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;For my new application, I decided to get rid of this work around and make use of the new ToggleSwitch and DateSpinner classes. I thought the ToggleSwitch would be a good replacement for the gender selection and the date spinner would - obviously - replace the date drop downs. Here&amp;rsquo;s what the Flex code looks like for the original version, again, with the work around:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;Death Clock&amp;rdquo; initialize=&amp;ldquo;init()&amp;rdquo; xmlns:mx=&amp;ldquo;library://ns.adobe.com/flex/mx&amp;rdquo; backgroundColor=&amp;ldquo;0x000000&amp;rdquo;&amp;gt;
+    &amp;lt;fx:Declarations&amp;gt;
+        &amp;lt;mx:NumberValidator id=&amp;ldquo;dayValidator&amp;rdquo; source=&amp;ldquo;{dayBorn}&amp;rdquo; property=&amp;ldquo;text&amp;rdquo; allowNegative=&amp;ldquo;false&amp;rdquo; minValue=&amp;ldquo;1&amp;rdquo; maxValue=&amp;ldquo;31&amp;rdquo;
+                            invalidCharError=&amp;ldquo;Day Born must be a number.&amp;rdquo; integerError=&amp;ldquo;Day Born must be a number.&amp;rdquo; negativeError=&amp;ldquo;Day Born must be a positive number.&amp;rdquo;
+                            lowerThanMinError=&amp;ldquo;Day Born must be over 0.&amp;rdquo; exceedsMaxError=&amp;ldquo;Day Born must be lower than 31.&amp;rdquo;/&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    &amp;amp;lt;mx:NumberValidator id=&amp;quot;yearValidator&amp;quot; source=&amp;quot;{yearBorn}&amp;quot; property=&amp;quot;text&amp;quot; allowNegative=&amp;quot;false&amp;quot; minValue=&amp;quot;1900&amp;quot; maxValue=&amp;quot;2020&amp;quot; 
+                        invalidCharError=&amp;quot;Year Born must be a number.&amp;quot; integerError=&amp;quot;Year Born must be a number.&amp;quot; negativeError=&amp;quot;Year Born must be a positive number.&amp;quot; 
+                        lowerThanMinError=&amp;quot;Year Born must be over 1900.&amp;quot; exceedsMaxError=&amp;quot;Year Born must be lower than 2020.&amp;quot; /&amp;amp;gt;
+
+    &amp;amp;lt;s:RadioButtonGroup id=&amp;quot;monthRBG&amp;quot; change=&amp;quot;setMonthLabel()&amp;quot;/&amp;amp;gt;
+    &amp;amp;lt;s:RadioButtonGroup id=&amp;quot;genderRBG&amp;quot; change=&amp;quot;setGenderLabel()&amp;quot;/&amp;amp;gt;
+&amp;amp;lt;/fx:Declarations&amp;amp;gt;
+
+&amp;amp;lt;fx:Style&amp;amp;gt;
+    @namespace s &amp;quot;library://ns.adobe.com/flex/spark&amp;quot;;
+    @namespace mx &amp;quot;library://ns.adobe.com/flex/mx&amp;quot;;
+
+    #errorDiv {
+        font-weight: bold;
+        color: red;
+    }
+&amp;amp;lt;/fx:Style&amp;amp;gt;
+
+&amp;amp;lt;fx:Script&amp;amp;gt;
+    &amp;amp;lt;![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.events.ValidationResultEvent;
+
+        [Bindable] private var months:ArrayCollection;      
+        [Bindable] private var days:ArrayCollection;
+        [Bindable] private var years:ArrayCollection;
+
+        private var selectedMonth:int;
+        private var selectedGender:int;
+
+        private function setGenderLabel():void {
+            if(genderRBG.selection) { 
+                genderButton.label = genderRBG.selection.label;
+                selectedGender = int(genderRBG.selection.value);
+            }
+            toggleGenderState();
+        }
+
+        private function setMonthLabel():void {
+            if(monthRBG.selection) { 
+                monthButton.label = monthRBG.selection.label;
+                selectedMonth = int(monthRBG.selection.value);
+            }
+            toggleMonthState();
+        }
+
+        private function toggleGenderState():void {
+            if(this.currentState == &#39;normal&#39;) this.currentState=&#39;selectedGender&#39;;       
+            else this.currentState=&#39;normal&#39;;
+        }
+
+        private function toggleMonthState():void {
+            if(this.currentState == &#39;normal&#39;) this.currentState=&#39;selectedMonth&#39;;        
+            else this.currentState=&#39;normal&#39;;
+        }
+
+        private function init():void {
+            this.currentState = &#39;normal&#39;;
+
+        }
+
+        private function doClock():void {
+
+            var validation:ValidationResultEvent;
+            validation = dayValidator.validate();
+            if(validation.type == &amp;quot;invalid&amp;quot;) {
+                errorDiv.text = validation.message;
+                return;         
+            }
+            validation = yearValidator.validate();
+            if(validation.type == &amp;quot;invalid&amp;quot;) {
+                errorDiv.text = validation.message;
+                return;         
+            }
+
+            errorDiv.text = &#39;&#39;;
+
+            var bDay:Date = new Date();
+            bDay.fullYear = int(yearBorn.text);
+
+            bDay.month = selectedMonth;
+            bDay.date = int(dayBorn.text);
+
+            var now:Date = new Date();
+
+            //Life expectancy will be 75.6 for men, 80.8 for women (http://en.wikipedia.org/wiki/List_of_countries_by_life_expectancy)
+            //for the .6 and .8 we just guestimate based on 60 and 80% of 365
+            //date math idea from: http://blog.flexexamples.com/2007/08/24/date-math-for-lazy-people/
+            var deathDate:Date = new Date(bDay.time);
+            if(selectedGender == 0) {
+                deathDate[&amp;quot;fullYear&amp;quot;] += 72;
+                deathDate[&amp;quot;date&amp;quot;] += 219;
+            } else {
+                deathDate[&amp;quot;fullYear&amp;quot;] += 78;
+                deathDate[&amp;quot;date&amp;quot;] += 292;
+            }
+
+            //are you dead already?
+            if(deathDate.getTime() &amp;amp;lt; now.getTime()) {            
+                errorDiv.text = &#39;Sorry, but you are already dead. Have a nice day.&#39;;
+                return;
+            }
+
+            var timeLeft:Number = Math.round((deathDate.time - now.time)/1000);
+            trace(&#39;death is &#39;+deathDate.toString()+ &#39; v=&#39;+deathDate.time);
+            trace(&#39;Now is &#39; +now.toString()+ &#39; v=&#39;+now.time);
+            trace(&#39;diff is &#39;+timeLeft);
+            //trace(bDay.toString()+&#39;\n&#39;+deathDate.toString()+&#39;\n&#39;+timeLeft.toString());
+
+            navigator.pushView(Counter,{deathDate:deathDate,timeLeft:timeLeft});
+
+        }
+    ]]&amp;amp;gt;
+&amp;amp;lt;/fx:Script&amp;amp;gt;
+
+&amp;amp;lt;s:states&amp;amp;gt;
+    &amp;amp;lt;s:State name=&amp;quot;normal&amp;quot;/&amp;amp;gt;
+    &amp;amp;lt;s:State name=&amp;quot;selectedMonth&amp;quot;/&amp;amp;gt;
+    &amp;amp;lt;s:State name=&amp;quot;selectedGender&amp;quot;/&amp;amp;gt;
+&amp;amp;lt;/s:states&amp;amp;gt;
+
+&amp;amp;lt;s:layout&amp;amp;gt;
+    &amp;amp;lt;s:VerticalLayout paddingTop=&amp;quot;10&amp;quot; paddingLeft=&amp;quot;5&amp;quot; paddingRight=&amp;quot;5&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/s:layout&amp;amp;gt;
+
+&amp;amp;lt;!--
+The idea of button groups to handle drop downs is from Dirk Eismann (DEismann@herrlich-ramuschkat.de)
+--&amp;amp;gt;
+&amp;amp;lt;s:HGroup width=&amp;quot;100%&amp;quot; height.selectedGender=&amp;quot;100%&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Gender: &amp;quot; width=&amp;quot;50%&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:Button id=&amp;quot;genderButton&amp;quot; label=&amp;quot;Male&amp;quot; click=&amp;quot;toggleGenderState()&amp;quot; includeIn=&amp;quot;normal,selectedMonth&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:Scroller includeIn=&amp;quot;selectedGender&amp;quot; height=&amp;quot;100%&amp;quot; width=&amp;quot;100%&amp;quot;&amp;amp;gt;            
+        &amp;amp;lt;s:Group&amp;amp;gt;         
+            &amp;amp;lt;s:layout&amp;amp;gt;
+                &amp;amp;lt;s:VerticalLayout/&amp;amp;gt;
+            &amp;amp;lt;/s:layout&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;Male&amp;quot; value=&amp;quot;0&amp;quot; selected=&amp;quot;true&amp;quot; groupName=&amp;quot;genderRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;Female&amp;quot; value=&amp;quot;1&amp;quot; groupName=&amp;quot;genderRBG&amp;quot;/&amp;amp;gt;
+        &amp;amp;lt;/s:Group&amp;amp;gt;
+    &amp;amp;lt;/s:Scroller&amp;amp;gt;
+
+&amp;amp;lt;/s:HGroup&amp;amp;gt;
+
+&amp;amp;lt;s:HGroup width=&amp;quot;100%&amp;quot; height.selectedMonth=&amp;quot;100%&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Month Born: &amp;quot; width=&amp;quot;50%&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:Button id=&amp;quot;monthButton&amp;quot; label=&amp;quot;January&amp;quot; click=&amp;quot;toggleMonthState()&amp;quot; includeIn=&amp;quot;normal,selectedGender&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:Scroller includeIn=&amp;quot;selectedMonth&amp;quot; height=&amp;quot;100%&amp;quot; width=&amp;quot;100%&amp;quot;&amp;amp;gt;         
+        &amp;amp;lt;s:Group &amp;amp;gt;            
+            &amp;amp;lt;s:layout&amp;amp;gt;
+                &amp;amp;lt;s:VerticalLayout/&amp;amp;gt;
+            &amp;amp;lt;/s:layout&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;January&amp;quot; value=&amp;quot;0&amp;quot; selected=&amp;quot;true&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;February&amp;quot; value=&amp;quot;1&amp;quot;  groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;March&amp;quot; value=&amp;quot;2&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;April&amp;quot; value=&amp;quot;3&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;May&amp;quot; value=&amp;quot;4&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;June&amp;quot; value=&amp;quot;5&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;July&amp;quot; value=&amp;quot;6&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;August&amp;quot; value=&amp;quot;7&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;September&amp;quot; value=&amp;quot;8&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;October&amp;quot; value=&amp;quot;9&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;November&amp;quot; value=&amp;quot;10&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+            &amp;amp;lt;s:RadioButton label=&amp;quot;December&amp;quot; value=&amp;quot;11&amp;quot; groupName=&amp;quot;monthRBG&amp;quot;/&amp;amp;gt;
+        &amp;amp;lt;/s:Group&amp;amp;gt;
+    &amp;amp;lt;/s:Scroller&amp;amp;gt;
+
+&amp;amp;lt;/s:HGroup&amp;amp;gt;
+
+&amp;amp;lt;s:HGroup width=&amp;quot;100%&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Day Born: &amp;quot; width=&amp;quot;50%&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:TextInput id=&amp;quot;dayBorn&amp;quot; width=&amp;quot;50%&amp;quot; text=&amp;quot;1&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/s:HGroup&amp;amp;gt;
+
+&amp;amp;lt;s:HGroup width=&amp;quot;100%&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Year Born: &amp;quot; width=&amp;quot;50%&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:TextInput id=&amp;quot;yearBorn&amp;quot; width=&amp;quot;50%&amp;quot; text=&amp;quot;1973&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/s:HGroup&amp;amp;gt;
+
+&amp;amp;lt;s:Button id=&amp;quot;runClockBtn&amp;quot; label=&amp;quot;Begin&amp;quot; width=&amp;quot;100%&amp;quot; bottom=&amp;quot;5&amp;quot; click=&amp;quot;doClock()&amp;quot; /&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;errorDiv&amp;quot; width=&amp;quot;100%&amp;quot; /&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s right at 190 lines. Not bad for my first Flex mobile application. Now let&amp;rsquo;s look at the new version.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;Death Clock&amp;rdquo; backgroundColor=&amp;ldquo;0x000000&amp;rdquo; xmlns:mx=&amp;ldquo;library://ns.adobe.com/flex/mx&amp;rdquo;&amp;gt;
+    &amp;lt;fx:Declarations&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;/fx:Declarations&amp;amp;gt;
+
+&amp;amp;lt;fx:Style&amp;amp;gt;
+@namespace s &amp;quot;library://ns.adobe.com/flex/spark&amp;quot;;
+@namespace mx &amp;quot;library://ns.adobe.com/flex/mx&amp;quot;;
+
+#errorDiv {
+    font-weight: bold;
+    color: red;
+}
+&amp;amp;lt;/fx:Style&amp;amp;gt;
+
+
+&amp;amp;lt;fx:Script&amp;amp;gt;
+&amp;amp;lt;![CDATA[
+    import mx.collections.ArrayCollection;
+
+    private function doClock():void {
+
+        var bDay:Date = dob.selectedDate;
+
+        var now:Date = new Date();
+
+        //Life expectancy will be 75.6 for men, 80.8 for women (http://en.wikipedia.org/wiki/List_of_countries_by_life_expectancy)
+        //for the .6 and .8 we just guestimate based on 60 and 80% of 365
+        //date math idea from: http://blog.flexexamples.com/2007/08/24/date-math-for-lazy-people/
+        var deathDate:Date = new Date(bDay.time);
+        if(!selectedGender.selected) {
+            deathDate[&amp;quot;fullYear&amp;quot;] += 72;
+            deathDate[&amp;quot;date&amp;quot;] += 219;
+        } else {
+            deathDate[&amp;quot;fullYear&amp;quot;] += 78;
+            deathDate[&amp;quot;date&amp;quot;] += 292;
+        }
+        deathDate[&amp;quot;fullYear&amp;quot;] += 78;
+        deathDate[&amp;quot;date&amp;quot;] += 292;
+
+        //are you dead already?
+        if(deathDate.getTime() &amp;amp;lt; now.getTime()) {            
+            errorDiv.text = &#39;Sorry, but you are already dead. Have a nice day.&#39;;
+            return;
+        }
+
+        var timeLeft:Number = Math.round((deathDate.time - now.time)/1000);
+        trace(&#39;death is &#39;+deathDate.toString()+ &#39; v=&#39;+deathDate.time);
+        trace(&#39;Now is &#39; +now.toString()+ &#39; v=&#39;+now.time);
+        trace(&#39;diff is &#39;+timeLeft);
+        //trace(bDay.toString()+&#39;\n&#39;+deathDate.toString()+&#39;\n&#39;+timeLeft.toString());
+
+        navigator.pushView(Counter,{deathDate:deathDate,timeLeft:timeLeft});
+    }
+]]&amp;amp;gt;
+&amp;amp;lt;/fx:Script&amp;amp;gt;
+
+&amp;amp;lt;s:layout&amp;amp;gt;
+    &amp;amp;lt;s:VerticalLayout paddingTop=&amp;quot;10&amp;quot; paddingLeft=&amp;quot;5&amp;quot; paddingRight=&amp;quot;5&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/s:layout&amp;amp;gt;
+
+&amp;amp;lt;s:HGroup width=&amp;quot;100%&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Gender: &amp;quot; width=&amp;quot;30%&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:ToggleSwitch id=&amp;quot;selectedGender&amp;quot; skinClass=&amp;quot;skins.GenderToggleSkin&amp;quot; width=&amp;quot;70%&amp;quot;  /&amp;amp;gt;
+&amp;amp;lt;/s:HGroup&amp;amp;gt;
+
+&amp;amp;lt;s:HGroup width=&amp;quot;100%&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Birth Date:&amp;quot; width=&amp;quot;30%&amp;quot;  /&amp;amp;gt;
+    &amp;amp;lt;s:DateSpinner id=&amp;quot;dob&amp;quot; width=&amp;quot;70%&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/s:HGroup&amp;amp;gt;
+
+&amp;amp;lt;s:Button id=&amp;quot;runClockBtn&amp;quot; label=&amp;quot;Begin&amp;quot; width=&amp;quot;100%&amp;quot; bottom=&amp;quot;5&amp;quot; click=&amp;quot;doClock()&amp;quot; /&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;errorDiv&amp;quot; width=&amp;quot;100%&amp;quot; /&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;78 lines. Bit nicer, right? Here&amp;rsquo;s a screen shot showing the new UI controls.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip206.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;I just need to change that &amp;ldquo;Begin&amp;rdquo; button to a skull or something and it will be perfect.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Recording, slides, and code from my Flex and ColdFusion Presentation</title>
+      <link>http://www.raymondcamden.com/2011/10/13/Recording-slides-and-code-from-my-Flex-and-ColdFusion-Presentation</link>
+      <pubDate>Thu, 13 Oct 2011 10:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/10/13/Recording-slides-and-code-from-my-Flex-and-ColdFusion-Presentation</guid>
+      <description>&lt;p&gt;As always, I&amp;rsquo;m making use of the excellent, ColdFusion-powered, &lt;a href=&#34;http://www.slidesix.com&#34;&gt;SlideSix&lt;/a&gt; service for my presentation. You can get the attachment and recording url by clicking the menu. Note - you will have to have an Adobe.com username to get into the recording. That&amp;rsquo;s free and takes 2 seconds (ok, maybe 3), so do not let that deter you from hearing the smooth silky vocal intonations of the Jedi himself, me. (Wow, that was about as egotistical as I can get&amp;hellip; ;)&lt;/p&gt;
+
+&lt;p&gt;&lt;object height=&#34;425&#34; width=&#34;550&#34;&gt;&lt;param name=&#34;movie&#34; value=&#34;http://slidesix.com/viewer/SlideSixViewer.swf?alias=Flex-and-ColdFusion&#34; /&gt;&lt;param name=&#34;menu&#34; value=&#34;false&#34;/&gt;&lt;param name=&#34;scale&#34; value=&#34;noScale&#34;/&gt;&lt;param name=&#34;allowFullScreen&#34; value=&#34;true&#34;/&gt;&lt;param name=&#34;allowScriptAccess&#34; value=&#34;always&#34; /&gt;&lt;param value=&#34;transparent&#34; name=&#34;wmode&#34; /&gt;&lt;param value=&#34;quality&#34; name=&#34;best&#34; /&gt;&lt;embed src=&#34;http://slidesix.com/viewer/SlideSixViewer.swf?alias=Flex-and-ColdFusion&#34; allowscriptaccess=&#34;always&#34; allowFullScreen=&#34;true&#34; height=&#34;425&#34; width=&#34;550&#34; type=&#34;application/x-shockwave-flash&#34; wmode=&#34;transparent&#34; quality=&#34;best&#34; /&gt;&lt;/object&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>E-Seminar on Tuesday - Flex and ColdFusion</title>
+      <link>http://www.raymondcamden.com/2011/10/07/ESeminar-on-Tuesday-Flex-and-ColdFusion</link>
+      <pubDate>Fri, 07 Oct 2011 12:10:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/10/07/ESeminar-on-Tuesday-Flex-and-ColdFusion</guid>
+      <description>&lt;p&gt;Next Tuesday, at 12PM CST, I&amp;rsquo;ll be giving an online presentation titled &amp;ldquo;Flex 4.5 and ColdFusion.&amp;rdquo; This is an Adobe e-seminar so please remember that you will need to RSVP in order to participate: &lt;a href=&#34;http://www.adobe.com/cfusion/event/index.cfm?event=detail&amp;id=1880349&amp;loc=en_us&#34;&gt;Flex 4.5 with ColdFusion&lt;/a&gt;. This session will be a basic introduction to Flex 4.5 with a focus on using ColdFusion as the back end service for data.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Quick video demo of using Flash Builder to inspect remote data results</title>
+      <link>http://www.raymondcamden.com/2011/09/27/Quick-video-demo-of-using-Flash-Builder-to-inspect-remote-data-results</link>
+      <pubDate>Tue, 27 Sep 2011 10:09:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/09/27/Quick-video-demo-of-using-Flash-Builder-to-inspect-remote-data-results</guid>
+      <description>&lt;p&gt;Wow, that title sounds a lot more complex than it should. Basically, someone wrote me this morning asking about how to work with result data in Flex. I pointed out that simply debugging in the result handler would let you inspect the result object and see the structure of data. I decided to whip up a quick demo and record it. I&amp;rsquo;m fighting off a small cold so I apologize for my &amp;ldquo;1960s Jazz Singer&amp;rdquo; voice. Hope this helps.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/images/2011-09-27_0828.swf&#34;&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip193.png&#34; title=&#34;Click to hear my wonderful voice.&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Tracking application usage with Flex Mobile</title>
+      <link>http://www.raymondcamden.com/2011/09/24/Tracking-application-usage-with-Flex-Mobile</link>
+      <pubDate>Sat, 24 Sep 2011 17:09:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/09/24/Tracking-application-usage-with-Flex-Mobile</guid>
+      <description>&lt;p&gt;On a web site, with good analytic software, it&amp;rsquo;s possible to get estimates for how long the average user spends on your site. This week I was thinking about how one could do the same with a mobile application. In theory, it should be possible to get a precise figure. You know when your application starts and you know when it ends. Therefore, I just need to write the code to handle those events and persist the data somehow. I worked up a few examples here and I welcome any comments on them. I&amp;rsquo;d &lt;i&gt;especially&lt;/i&gt; like to know if anyone is actually doing something like this with their apps now.&lt;/p&gt;
+
+&lt;p&gt;
+
+For my first iteration, I wrote an application that simply noticed when it began and ended, and on those events would write to a log file. The entire application consists of a few files. First, let&#39;s look at the top level ViewNavigatorApplication.
+
+&lt;p&gt;
+
+&lt;code&gt;
+
+&amp;lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&amp;gt;
+&amp;lt;s:ViewNavigatorApplication xmlns:fx=&#34;http://ns.adobe.com/mxml/2009&#34; 
+                            xmlns:s=&#34;library://ns.adobe.com/flex/spark&#34; firstView=&#34;views.LogTestHomeView&#34; initialize=&#34;initApp(event)&#34;&amp;gt;
+    &amp;lt;fx:Script&amp;gt;
+        &amp;lt;![CDATA[
+        import model.dbController;      
+        import mx.events.FlexEvent;
+        
+        protected function initApp(event:FlexEvent):void {
+            dbController.instance.addLog(&#34;opened&#34;);
+            NativeApplication.nativeApplication.addEventListener(Event.EXITING, myExiting);
+        }
+
+        protected function myExiting(event:Event):void {
+            dbController.instance.addLog(&#34;closed&#34;);
+            // Handle exiting event.
+        }
+        ]]&amp;gt;
+    &amp;lt;/fx:Script&amp;gt;
+
+&amp;lt;/s:ViewNavigatorApplication&amp;gt;
+&lt;/code&gt;
+
+&lt;p&gt;
+
+Not much here. You can see one method tied to the initialize event and one to the application exiting event. My dbController is a simple wrapper for database operations. I used a basic singleton approach (cribbed from an &lt;a href=&#34;http://cookbooks.adobe.com/post_Singleton_Pattern-262.html&#34;&gt;Adobe Cookbook recipe&lt;/a&gt;). Here&#39;s the file.
+
+&lt;p&gt;
+
+&lt;code&gt;
+package model {
+
+    import flash.data.SQLConnection;
+    import flash.data.SQLResult;
+    import flash.data.SQLStatement;
+    import flash.filesystem.File;
+
+    public class dbController {
+
+        private static var _instance:dbController = new dbController();
+        
+        private var dbFile:File;
+        private var dbCon:SQLConnection;
+        
+        public function dbController() {
+            dbFile = File.applicationStorageDirectory.resolvePath(&#34;log.db&#34;);
+            trace(dbFile.nativePath);
+            dbCon = new SQLConnection();
+            dbCon.open(dbFile);
+
+            //create default table
+            var sqlStat:SQLStatement = new SQLStatement();
+            sqlStat.text = &#34;CREATE TABLE IF NOT EXISTS log(msg TEXT, timestamp TEXT)&#34;;
+            sqlStat.sqlConnection = dbCon;
+            sqlStat.execute();
+
+            if (_instance != null) {
+                throw new Error(&#34;dbController can only be accessed through dbController.instance&#34;);
+            }
+        }
+
+        public static function get instance():dbController {
+            return _instance;
+        }
+        
+        public function addLog(s:String):void {
+            var sqlStat:SQLStatement = new SQLStatement();
+            sqlStat.sqlConnection = dbCon;
+            sqlStat.text = &#34;insert into log(msg, timestamp) values(:msg,:tst)&#34;;
+            sqlStat.parameters[&#34;:msg&#34;] = s;
+            sqlStat.parameters[&#34;:tst&#34;] = new Date();
+            sqlStat.execute();
+            trace(&#34;inserted: &#34;+s);      
+        }
+
+        public function getLog():SQLResult {
+            trace(&#34;getting log&#34;);
+            var sqlStat:SQLStatement = new SQLStatement();
+            sqlStat.text = &#34;select * from log&#34;;
+            sqlStat.sqlConnection = dbCon;
+            sqlStat.execute();
+            return sqlStat.getResult();
+            
+        }
+    }
+}
+&lt;/code&gt;
+
+&lt;p&gt;
+
+That&#39;s kind of a big file, but you can see it basically handles the database setup, the addition of a log message, and getting the log. (I could make this a bit nicer by making getLog simply return the data attribute. That way calling code could not worry about working with SQLResult objects.) So based on this code, you can see now that when my application starts and ends, it&#39;s going to log to the database. Now let&#39;s look at the view in my mobile app:
+
+&lt;p&gt;
+
+&lt;code&gt;
+
+&amp;lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&#34;http://ns.adobe.com/mxml/2009&#34; 
+        xmlns:s=&#34;library://ns.adobe.com/flex/spark&#34; title=&#34;HomeView&#34; viewActivate=&#34;init(event)&#34;&amp;gt;
+    &amp;lt;fx:Script&amp;gt;
+        &amp;lt;![CDATA[
+            import model.dbController;
+            
+            import spark.events.ViewNavigatorEvent;
+            
+            protected function init(event:ViewNavigatorEvent):void {
+                var res:SQLResult = dbController.instance.getLog();
+                for(var i:int=0; i&amp;lt;res.data.length; i++) {
+                    log.text += res.data[i].msg + &#39; at &#39; + res.data[i].timestamp + &#39;\n&#39;;
+                }
+            }
+            
+        ]]&amp;gt;
+    &amp;lt;/fx:Script&amp;gt;
+    
+    &amp;lt;s:Label id=&#34;log&#34; /&amp;gt;
+        
+&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;
+
+&lt;p&gt;
+
+All we do here is simply get the log and display it. After running it a few times, here is what the app displays. (Note - the case of the messages changes about half way through. This happened when I changed the messages.)
+
+&lt;p&gt;
+
+&lt;img src=&#34;http://www.raymondcamden.com/images/ScreenClip188.png&#34; /&gt;
+
+&lt;p&gt;
+
+So that was my first draft. I could - in theory - have used this to generate a &#34;Total Time Used&#34; value. I&#39;d have to loop through the records and figure out the differences. That seemed like a lot of hard work so I decided on an easier version. Since I know when the app starts and ends - why not simply create a timestamp in the application itself? When the application ends, I can simply save the difference. Here&#39;s my new top level application:
+
+&lt;p&gt;
+
+&lt;code&gt;
+&amp;lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&amp;gt;
+&amp;lt;s:ViewNavigatorApplication xmlns:fx=&#34;http://ns.adobe.com/mxml/2009&#34; 
+                            xmlns:s=&#34;library://ns.adobe.com/flex/spark&#34; firstView=&#34;views.LogTest2HomeView&#34; initialize=&#34;initApp(event)&#34;&amp;gt;
+
+    &amp;lt;fx:Script&amp;gt;
+        &amp;lt;![CDATA[
+            import model.dbController;
+            
+            import mx.events.FlexEvent;
+            
+            private var beginTS:Date;
+            
+            protected function initApp(event:FlexEvent):void {
+                beginTS = new Date();
+                NativeApplication.nativeApplication.addEventListener(Event.EXITING, myExiting);
+            }
+            
+            protected function myExiting(event:Event):void {
+                var now:Date = new Date();
+                var duration:Number = (Math.floor(now.valueOf()/1000)) - (Math.floor(beginTS.valueOf()/1000));
+                trace(&#34;using duration of &#34;+duration);
+                dbController.instance.addLog(duration);
+                // Handle exiting event.
+            }
+        ]]&amp;gt;
+    &amp;lt;/fx:Script&amp;gt;
+    
+&amp;lt;/s:ViewNavigatorApplication&amp;gt;
+&lt;/code&gt;
+
+&lt;p&gt;
+
+You can see now I&#39;ve got a variable, beginTS, that acts as my startup timestamp. When the application ends, I get the difference, do some math, and store it as the number of seconds. Here&#39;s the new dbController. Notice I&#39;ve tweaked the table structure a bit.
+
+&lt;p&gt;
+
+&lt;code&gt;
+package model {
+
+    import flash.data.SQLConnection;
+    import flash.data.SQLResult;
+    import flash.data.SQLStatement;
+    import flash.filesystem.File;
+
+    public class dbController {
+
+        private static var _instance:dbController = new dbController();
+        
+        private var dbFile:File;
+        private var dbCon:SQLConnection;
+        
+        public function dbController() {
+            dbFile = File.applicationStorageDirectory.resolvePath(&#34;log.db&#34;);
+            trace(dbFile.nativePath);
+            dbCon = new SQLConnection();
+            dbCon.open(dbFile);
+
+            //create default table
+            var sqlStat:SQLStatement = new SQLStatement();
+            sqlStat.text = &#34;CREATE TABLE IF NOT EXISTS log(duration INTEGER,timestamp  TEXT)&#34;;
+            sqlStat.sqlConnection = dbCon;
+            sqlStat.execute();
+
+            if (_instance != null) {
+                throw new Error(&#34;dbController can only be accessed through dbController.instance&#34;);
+            }
+        }
+
+        public static function get instance():dbController {
+            return _instance;
+        }
+        
+        public function addLog(dur:Number):void {
+            var sqlStat:SQLStatement = new SQLStatement();
+            sqlStat.sqlConnection = dbCon;
+            sqlStat.text = &#34;insert into log(duration, timestamp) values(:dur,:tst)&#34;;
+            sqlStat.parameters[&#34;:dur&#34;] = dur;
+            sqlStat.parameters[&#34;:tst&#34;] = new Date();
+            sqlStat.execute();
+            trace(&#34;inserted: &#34;+dur);        
+        }
+
+        public function getLog():SQLResult {
+            trace(&#34;getting log&#34;);
+            var sqlStat:SQLStatement = new SQLStatement();
+            sqlStat.text = &#34;select * from log&#34;;
+            sqlStat.sqlConnection = dbCon;
+            sqlStat.execute();
+            return sqlStat.getResult();
+            
+        }
+
+        public function getTotalUsage():Number {
+            trace(&#34;getting duration&#34;);
+            var sqlStat:SQLStatement = new SQLStatement();
+            sqlStat.text = &#34;select sum(duration) as total from log&#34;;
+            sqlStat.sqlConnection = dbCon;
+            sqlStat.execute();
+            var res:SQLResult = sqlStat.getResult();
+            return res.data[0].total;
+        }
+
+    }
+}
+&lt;/code&gt;
+
+&lt;p&gt;
+
+Along with changing the table structure, I&#39;ve added a method, getTotalUsage, that returns the total number of seconds the application has been used. Now my front end view can display it:
+
+&lt;p&gt;
+
+&lt;code&gt;
+
+&amp;lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&#34;http://ns.adobe.com/mxml/2009&#34; 
+        xmlns:s=&#34;library://ns.adobe.com/flex/spark&#34; title=&#34;HomeView&#34; viewActivate=&#34;init(event)&#34;&amp;gt;
+
+    &amp;lt;fx:Script&amp;gt;
+        &amp;lt;![CDATA[
+            import model.dbController;
+            
+            import spark.events.ViewNavigatorEvent;
+            
+            protected function init(event:ViewNavigatorEvent):void {
+                var total:Number = dbController.instance.getTotalUsage();
+                trace(total);
+                log.text = &#34;You&#39;ve used this application for &#34;+total+&#34; seconds.&#34;;
+            }
+            
+        ]]&amp;gt;
+    &amp;lt;/fx:Script&amp;gt;
+    
+    &amp;lt;s:Label id=&#34;log&#34; /&amp;gt;
+&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;
+
+&lt;p&gt;
+
+Which gives me this:
+
+&lt;p&gt;
+
+&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip189.png&#34; /&gt;
+
+&lt;p&gt;
+
+Technically the message should be something like, &#34;In the past, you&#39;ve used this application for...&#34; but you get the point. So - any thoughts on this? If the application crashes it won&#39;t store anything, but that should be a rare event. If you &lt;i&gt;really&lt;/i&gt; were concerned about that you could used a timed event to store a duration ever few minutes or so. If you want to play with my code, I&#39;ve made FXPs from both projects and added them to a zip attached to this blog entry.&lt;p&gt;&lt;a href=&#39;enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fprojects%2Ezip&#39;&gt;Download attached file.&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Couple of Adobe AIR announcements, and a reminder...</title>
+      <link>http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder</link>
+      <pubDate>Wed, 21 Sep 2011 10:09:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/09/21/Couple-of-Adobe-AIR-announcements-and-a-reminder</guid>
+      <description>&lt;p&gt;Today we published a few new Adobe AIR articles that I think my readers may be interested in:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.adobe.com/devnet/air/articles/air3_whatsnew.html&#34;&gt;What&amp;rsquo;s new in Adobe AIR 3&lt;/a&gt;&lt;br/&gt;
+A darn good, concise, list of everything new in Adobe AIR 3.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.adobe.com/devnet/air/ajax/articles/air_and_webkit.html&#34;&gt;HTML updates in Adobe AIR 3&lt;/a&gt;&lt;br/&gt;
+Do you remember that you can create full AIR apps (desktop anyway) using HTML and JavaScript? This article details some of the changes in that area. If you&amp;rsquo;ve never explored this before, check out the &lt;a href=&#34;http://www.adobe.com/products/air/develop/javascript/&#34;&gt;main landing page&lt;/a&gt; for AIR and JavaScript development. I&amp;rsquo;ve done quite a bit in this area myself and find it to be a great platform. I&amp;rsquo;ll also remind folks that there is a &lt;a href=&#34;https://groups.google.com/forum/#!forum/air-html-js&#34;&gt;Google Group&lt;/a&gt; just for this topic (as well as one for &lt;a href=&#34;https://groups.google.com/forum/#!forum/adobe-air-for-devices&#34;&gt;devices&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.adobe.com/devnet/flex/articles/whats-new-flex-flash-builder-46.html&#34;&gt;What&amp;rsquo;s new in Flex 4.6 SDK and Flash Builder 4.6&lt;/a&gt;&lt;br/&gt;
+Exciting stuff here - especially the new components. Check out the SplitViewNavigator built specifically for tablets.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.adobe.com/devnet/air/native-extensions-for-air.html&#34;&gt;Native extensions for Adobe AIR&lt;/a&gt;&lt;br/&gt;
+Good round of native extensions. Many link to complete articles on them as well so it&amp;rsquo;s not just a list of downloads. New extensions include support for the gyroscope and vibration.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html&#34;&gt;Installation and deployment options in Adobe AIR 3&lt;/a&gt;&lt;br/&gt;
+This has a good look at the new captive runtime feature. I.e., no need to install the SDK when installing your apps!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Flex for Mobile - VPN? Secure connections?</title>
+      <link>http://www.raymondcamden.com/2011/09/07/Flex-for-Mobile-VPN-Secure-connections</link>
+      <pubDate>Wed, 07 Sep 2011 16:09:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/09/07/Flex-for-Mobile-VPN-Secure-connections</guid>
+      <description>&lt;p&gt;Mike asked:&lt;/p&gt;
+
+&lt;blockquote&gt;
+Quick question regarding Flex 4.5 and mobile. Do you know if there is any type of vpn type of solution?
+
+We are in the process of evaluating some things and the question came up about security and flex. So basically if a mobile app was created for say some internal employees and we needed to have the data they access and submit to be inside the firewall is there a way to connect via vpn into the network or would we need some type of 3rd party vpn software on the device itself?
+
+Also one last question on security, when you build a mobile app what is the best practice with flex to security data, would it be with some type of ssl?
+&lt;/blockquote&gt;
+
+&lt;p&gt;So this is an area that I have &lt;b&gt;not&lt;/b&gt; dived into so take what I say with a grain of salt. I talked it over with &lt;a href=&#34;http://gregsramblings.com/&#34;&gt;Greg Wilson&lt;/a&gt; and his advice was along these lines:&lt;/p&gt;
+
+&lt;p&gt;1) There are already VPN apps for mobile applications. Your application could simply try to access the VPN only URL (let&amp;rsquo;s say 10.0.0.1) and gracefully handle it when the connection can&amp;rsquo;t be made. It could even explicitly tell your employee &amp;ldquo;Hey run the VPN app first, dude!&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;2) In terms of using SSL, when you define your URL in your remote object tag, you can simply provide a https url instead of a http url. Obviously your back end server has to be set up to support that, but on the client side it should be as easy as it is for the web.&lt;/p&gt;
+
+&lt;p&gt;Hope this helps - and if someone out there has some practical experience in this area I&amp;rsquo;d gladly take their comments!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Crazy Flex, Mobile, ColdFusion, BlazeDS experiment</title>
+      <link>http://www.raymondcamden.com/2011/09/02/Crazy-Flex-Mobile-ColdFusion-BlazeDS-experiment</link>
+      <pubDate>Fri, 02 Sep 2011 17:09:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/09/02/Crazy-Flex-Mobile-ColdFusion-BlazeDS-experiment</guid>
+      <description>&lt;p&gt;After lunch today I decided to embark on a little test. Folks know - or should know - that ColdFusion ships with an incredibly powerful Server Monitor. If you haven&amp;rsquo;t yet played with it, I highly encourage taking a look at Charlie Arehart&amp;rsquo;s &lt;a href=&#34;http://www.adobe.com/devnet/coldfusion/articles/monitoring_pt1.html&#34;&gt;four part article&lt;/a&gt; over on the Adobe Developer connection for a review. One of the features he talks about is the Alerts system. For folks who don&amp;rsquo;t want to spend all day staring at a computer screen (wait, people don&amp;rsquo;t?), then the Alerts feature is a powerful way to have the monitor tell you when something is wrong as opposed to you keeping a constant eye on it. Alerts can do a variety of things, but when the built in functionality doesn&amp;rsquo;t meet your needs, you can also have it run a CFC for you - and that&amp;rsquo;s where this experiment began.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;I began by creating a simple data services messaging gateway in my ColdFusion Administrator. This is a pretty deep topic (and some of my readers will share that it&amp;rsquo;s not always as easy as I&amp;rsquo;m going to make out), but for the most part, I simply created the event gateway and I was done with that part. On the Flex side, it&amp;rsquo;s a simple matter of setting up code to connect to that event gateway. So here for example is a one page Flex Mobile app that let&amp;rsquo;s me send a message to the gateway.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;HomeView&amp;rdquo; viewActivate=&amp;ldquo;init(event)&amp;rdquo; xmlns:mx=&amp;ldquo;library://ns.adobe.com/flex/mx&amp;rdquo;&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;fx:Declarations&amp;amp;gt;
+    &amp;amp;lt;mx:Consumer id=&amp;quot;mainConsumer&amp;quot; destination=&amp;quot;ColdFusionGateway&amp;quot; message=&amp;quot;msgResponder(event)&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;mx:Producer id=&amp;quot;mainProducer&amp;quot; destination=&amp;quot;ColdFusionGateway&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/fx:Declarations&amp;amp;gt;
+
+&amp;amp;lt;fx:Script&amp;amp;gt;
+    &amp;amp;lt;![CDATA[
+        import mx.messaging.ChannelSet;
+        import mx.messaging.channels.AMFChannel;
+        import mx.messaging.events.MessageEvent;
+        import mx.messaging.messages.AsyncMessage;
+
+        import spark.events.ViewNavigatorEvent;
+
+        private var pollChannel:AMFChannel = new AMFChannel(&amp;quot;cf-polling-amf&amp;quot;, &amp;quot;http://127.0.0.1/flex2gateway/cfamfpolling&amp;quot;);
+        private var amfChannelSet:ChannelSet = new ChannelSet();
+
+        protected function init(event:ViewNavigatorEvent):void {
+            amfChannelSet.addChannel(pollChannel);
+
+            mainConsumer.channelSet = amfChannelSet;
+            mainProducer.channelSet = amfChannelSet;
+            mainConsumer.subscribe();
+        }
+
+
+        protected function msgResponder(event:MessageEvent):void
+        {
+            trace(&amp;quot;got something&amp;quot;);
+            debug.text += event.message.body.MESSAGE + &#39;\n&#39;;
+        }
+
+        protected function btnClick(event:MouseEvent):void
+        {
+            var msgString:String = inputText.text;
+            var msg:AsyncMessage = new AsyncMessage();
+            msg.body.MESSAGE = msgString;
+            msg.headers.gatewayid=&amp;quot;MobileGateway1&amp;quot;;
+            mainProducer.send(msg);
+            trace(&amp;quot;sent &amp;quot;+msgString);
+        }
+
+    ]]&amp;amp;gt;
+&amp;amp;lt;/fx:Script&amp;amp;gt;
+
+&amp;amp;lt;s:layout&amp;amp;gt;
+    &amp;amp;lt;s:VerticalLayout /&amp;amp;gt;
+&amp;amp;lt;/s:layout&amp;amp;gt;
+
+&amp;amp;lt;s:TextInput id=&amp;quot;inputText&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;s:Button label=&amp;quot;Send&amp;quot; click=&amp;quot;btnClick(event)&amp;quot; /&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;debug&amp;quot; /&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;On the ColdFUsion side, my CFC listened for messages and echoed them back:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+component {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;remote struct function onIncomingMessage(required any event) {
+    writelog(file=&amp;quot;application&amp;quot;, text=&amp;quot;gateway  - #serializejson(event)#&amp;quot;);
+    event.data.body.MESSAGE = &amp;quot;Sent back &amp;quot; &amp;amp; event.data.body.MESSAGE;
+    return event.data;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice I modify the message a bit just so I can see it working right. Here&amp;rsquo;s a screen shot of it working.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/ScreenClip174.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;To be clear - that&amp;rsquo;s Flex talking to BlazeDS and ColdFusion on the server. If I had more devices, they all would have gotten the message. So - with me so far? Because here is where things get interesting.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;As I mentioned before, the Server Monitor allows you to specify alerts, and allows you to specify CFCs to run. The docs, unfortunately, are completely lacking in useful information here. For example, they don&amp;rsquo;t tell you how to specify the CFC. You can only use a file name (no directory!) and it must live in cfusioninstall\runtime\bin. (Thanks to Charlie&amp;rsquo;s article on that.) And while you are told what methods your CFC must have, they don&amp;rsquo;t tell you what the data looks like when your CFC is run. I ended up using writeDump to a directory just to see this! Here is an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip175.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so given that I&amp;rsquo;ve got some basic info there - I wrote my CFCs then to send messages to my event gateway.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+component {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;remote function onAlertStart(struct alert) {
+    writelog(file=&amp;quot;application&amp;quot;, text=&amp;quot;START - #serializejson(alert)#&amp;quot;);
+    writedump(output=&amp;quot;c:\raytest\#createUUID()#.html&amp;quot;, var=alert, format=&amp;quot;html&amp;quot;, label=&amp;quot;START&amp;quot;);
+    var s = {
+        destination=&amp;quot;ColdFusionGateway&amp;quot;,
+        body={
+            type=alert.alerttype,
+            message=alert.alertmessage,
+            start=true
+        }
+    };
+
+    sendGatewaymessage(&amp;quot;MobileGateway1&amp;quot;, s);
+}
+
+remote function onAlertEnd(struct alert) {
+    writelog(file=&amp;quot;application&amp;quot;, text=&amp;quot;END - #serializejson(alert)#&amp;quot;);
+    writedump(output=&amp;quot;c:\raytest\#createUUID()#.html&amp;quot;, var=alert, format=&amp;quot;html&amp;quot;, label=&amp;quot;END&amp;quot;);
+
+    var s = {
+        destination=&amp;quot;ColdFusionGateway&amp;quot;,
+        body={
+            type=alert.alerttype,
+            message=alert.alertmessage,
+            start=false
+        }
+    };
+
+    sendGatewaymessage(&amp;quot;MobileGateway1&amp;quot;, s);
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;To be clear, the first two lines in both methods was just for testing purposes. You can see though that I take a few values from the alert and send it to the gateway. Now for the front end.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;Server Monitor&amp;rdquo; viewActivate=&amp;ldquo;init(event)&amp;rdquo; xmlns:mx=&amp;ldquo;library://ns.adobe.com/flex/mx&amp;rdquo;&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;fx:Declarations&amp;amp;gt;
+    &amp;amp;lt;mx:Consumer id=&amp;quot;mainConsumer&amp;quot; destination=&amp;quot;ColdFusionGateway&amp;quot; message=&amp;quot;msgResponder(event)&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;mx:Producer id=&amp;quot;mainProducer&amp;quot; destination=&amp;quot;ColdFusionGateway&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/fx:Declarations&amp;amp;gt;
+
+&amp;amp;lt;fx:Style&amp;amp;gt;
+    @namespace s &amp;quot;library://ns.adobe.com/flex/spark&amp;quot;;
+    @namespace mx &amp;quot;library://ns.adobe.com/flex/mx&amp;quot;;
+
+    .inactiveBtn {
+        backgroundColor:#c0c0c0;
+    }
+
+    .activeBtn {
+        backgroundColor:red;
+    }
+&amp;amp;lt;/fx:Style&amp;amp;gt;
+&amp;amp;lt;fx:Script&amp;amp;gt;
+    &amp;amp;lt;![CDATA[
+        import mx.messaging.ChannelSet;
+        import mx.messaging.channels.AMFChannel;
+        import mx.messaging.events.MessageEvent;
+        import mx.messaging.messages.AsyncMessage;
+
+        import spark.events.ViewNavigatorEvent;
+
+        private var pollChannel:AMFChannel = new AMFChannel(&amp;quot;cf-polling-amf&amp;quot;, &amp;quot;http://192.168.1.108/flex2gateway/cfamfpolling&amp;quot;);
+        private var amfChannelSet:ChannelSet = new ChannelSet();
+
+        protected function init(event:ViewNavigatorEvent):void {
+            amfChannelSet.addChannel(pollChannel);
+
+            mainConsumer.channelSet = amfChannelSet;
+            mainProducer.channelSet = amfChannelSet;
+            mainConsumer.subscribe();
+        }
+
+
+        protected function msgResponder(event:MessageEvent):void
+        {
+            trace(&amp;quot;got something&amp;quot;);
+            switch(event.message.body.TYPE) {
+
+                case &amp;quot;Timeouts Alert&amp;quot;: { 
+                        ssa.styleName = &#39;inactiveBtn&#39;;
+                        usa.styleName = &#39;inactiveBtn&#39;;
+                        jma.styleName = &#39;inactiveBtn&#39;;
+                        if(event.message.body.START == &amp;quot;true&amp;quot;) toa.styleName = &#39;activeBtn&#39;; 
+                        else toa.styleName = &#39;inactiveBtn&#39;;
+                        break;
+                }
+                case &amp;quot;Slow Server Alert&amp;quot;: {
+                    if(event.message.body.START == &amp;quot;true&amp;quot;) ssa.styleName = &#39;activeBtn&#39;; 
+                    else ssa.styleName = &#39;inactiveBtn&#39;;
+                    usa.styleName = &#39;inactiveBtn&#39;;
+                    jma.styleName = &#39;inactiveBtn&#39;;
+                    toa.styleName = &#39;inactiveBtn&#39;; 
+                }
+            }
+            //only log if starting
+            if(event.message.body.START == &amp;quot;true&amp;quot;) messageArea.text = event.message.body.MESSAGE + &#39;\n&#39; + messageArea.text;
+        }
+
+    ]]&amp;amp;gt;
+&amp;amp;lt;/fx:Script&amp;amp;gt;
+
+&amp;amp;lt;s:layout&amp;amp;gt;
+    &amp;amp;lt;s:VerticalLayout paddingTop=&amp;quot;10&amp;quot; paddingLeft=&amp;quot;10&amp;quot; paddingRight=&amp;quot;10&amp;quot; paddingBottom=&amp;quot;10&amp;quot; verticalAlign=&amp;quot;middle&amp;quot; horizontalAlign=&amp;quot;center&amp;quot;  /&amp;amp;gt;
+&amp;amp;lt;/s:layout&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;ssa&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;60&amp;quot; styleName=&amp;quot;inactiveBtn&amp;quot; text=&amp;quot;Slow Server Alert&amp;quot;
+         textAlign=&amp;quot;center&amp;quot; verticalAlign=&amp;quot;middle&amp;quot;/&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;toa&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;60&amp;quot; styleName=&amp;quot;inactiveBtn&amp;quot; text=&amp;quot;Timeout Alert&amp;quot;
+         textAlign=&amp;quot;center&amp;quot; verticalAlign=&amp;quot;middle&amp;quot;/&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;usa&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;60&amp;quot; styleName=&amp;quot;inactiveBtn&amp;quot; text=&amp;quot;Unresponsive Server&amp;quot;
+         textAlign=&amp;quot;center&amp;quot; verticalAlign=&amp;quot;middle&amp;quot;/&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;jma&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;60&amp;quot; styleName=&amp;quot;inactiveBtn&amp;quot; text=&amp;quot;JVM Memory&amp;quot;
+         textAlign=&amp;quot;center&amp;quot; verticalAlign=&amp;quot;middle&amp;quot;/&amp;amp;gt;
+
+&amp;amp;lt;s:Label id=&amp;quot;messageArea&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;100%&amp;quot; /&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Yeah - a bit more code there. It may help if I run it so you can see it first:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip176.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Basically - my application has 4 labels. When a message is received (notice this version never actually sends anything - I can get rid of the Producer) - I highlight various fields based on what the alert type was. I only wrote code for two of the types, but you can imagine what support for the other two would do. And what happens? Check out this horrible, shaky, YouTube video. I apologize in advance. Oh, and it&amp;rsquo;s boring too. You will have to wait a bit to see the results. That isn&amp;rsquo;t Flex or BlazeBS being slow, it&amp;rsquo;s me trying to force a slow server alert on my box by reloading a very large Model-Glue site in 5-6 tabs at once.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;345&#34; src=&#34;http://www.youtube.com/embed/WRAWxqex6OE&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Latest Nook App - TBS Horoscope</title>
+      <link>http://www.raymondcamden.com/2011/08/28/Latest-Nook-App-TBS-Horoscope</link>
+      <pubDate>Sun, 28 Aug 2011 09:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/08/28/Latest-Nook-App-TBS-Horoscope</guid>
+      <description>&lt;p&gt;A week or so ago I shared my &lt;a href=&#34;http://www.raymondcamden.com/index.cfm/2011/8/19/Thoughts-on-developing-for-the-Nook&#34;&gt;thoughts&lt;/a&gt; on developing for the NookColor. Today I&amp;rsquo;m happy to say my second Nook app is available on the market. The turn around time for this app was &lt;i&gt;much&lt;/i&gt; quicker than before. I had the idea for it last Sunday. By Monday night it was almost done. Tuesday I submitted my metadata and it was approved in a couple hours. I then submitted the application and it was approved by Friday. I checked Friday and it wasn&amp;rsquo;t in the store yet, but as of this morning it&amp;rsquo;s there. I&amp;rsquo;m pretty sure it was out Saturday as I&amp;rsquo;m seeing a few sales already.&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;!-- Begin NOOK App Badge : TBS Horoscope --&gt;&lt;a href=&#34;https://nookdeveloper.barnesandnoble.com/tools/dev/linkManager/2940043858320&#34; target=&#34;_new&#34;&gt;&lt;img src=&#34;https://nookdeveloper.barnesandnoble.com/tools/dev/badge/2940043858320&#34; alt=&#34;NOOK App : TBS Horoscope&#34; /&gt;&lt;/a&gt;&lt;!-- End NOOK App Badge --&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;TBS Horoscope is mainly a joke horoscope generator. Unlike serious horoscope programs (ahem), this one creates horoscopes entirely randomly. Here&amp;rsquo;s the initial screen.&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip165.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;The icons there are scrollable. You can also see the background image I &lt;a href=&#34;http://www.coldfusionjedi.com/index.cfm/2011/8/24/Using-a-background-with-a-Flex-Mobile-project&#34;&gt;blogged about&lt;/a&gt; before. Once you select the sign you get a horoscope:&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip167.png&#34; /&gt;
+&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;Yeah - that&amp;rsquo;s crazy - again - unlike real, scientific horoscopes out there. (Ahem again.) One thing that&amp;rsquo;s kind of interesting is the persistence. I generate a random horoscope per sign per day. If you click on Aries twice it will be the same until the next day. Here&amp;rsquo;s the snippet that handles that:&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+    protected function getHoroscope(date:Date):String {
+        //A repeat of the above, but in theory, you could run the app for a while
+        var today:Date = new Date();
+        var dateString:String = (today.month+1) + &amp;ldquo;/&amp;rdquo; + today.date + &amp;ldquo;/&amp;rdquo; + today.fullYear;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    //See if we have one in the db
+    var stmt:SQLStatement = new SQLStatement();
+    stmt.sqlConnection = sqlConnection;
+
+    stmt.text = &amp;quot;select horoscope from horoscopes where sign = :sign and date = :datestr&amp;quot;;
+    stmt.parameters[&amp;quot;:sign&amp;quot;] = data.sign.name;
+    stmt.parameters[&amp;quot;:datestr&amp;quot;] = dateString;
+    stmt.execute();
+    var res:SQLResult = stmt.getResult();
+
+    if(!res.data) {
+        var newHoroscope:String = horoscopeGenerator.generateHoroscope();
+
+        var insStmt:SQLStatement = new SQLStatement();
+        insStmt.sqlConnection = sqlConnection;
+        insStmt.text = &amp;quot;insert into horoscopes(sign,horoscope,date) &amp;quot; + 
+                       &amp;quot;values(:sign,:horoscope,:datestr)&amp;quot;;
+        insStmt.parameters[&amp;quot;:sign&amp;quot;] = data.sign.name;
+        insStmt.parameters[&amp;quot;:horoscope&amp;quot;] = newHoroscope;
+        insStmt.parameters[&amp;quot;:datestr&amp;quot;] = dateString;
+
+        insStmt.execute();
+
+        return newHoroscope;
+    } else {
+        return res.data[0].horoscope;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m using AIR&amp;rsquo;s SQLite support to handle checking for an existing horoscope (I could probably cache that but it executes so fast I don&amp;rsquo;t think it would be worth it) in the database. If it doesn&amp;rsquo;t exist, I generate the random one and store it. In case you&amp;rsquo;re curious, here&amp;rsquo;s the entire ActionScript class for the horoscope generator. It&amp;rsquo;s not terribly intelligent, but was fun as heck to write.&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+package model {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public class HoroscopeGenerator {
+
+    private var adjectives:Array = [&amp;quot;forgetful&amp;quot;,&amp;quot;scary&amp;quot;,&amp;quot;red&amp;quot;,&amp;quot;blue&amp;quot;,&amp;quot;green&amp;quot;,&amp;quot;yellow&amp;quot;,&amp;quot;orange&amp;quot;,&amp;quot;brown&amp;quot;,&amp;quot;smelly&amp;quot;,&amp;quot;left handed&amp;quot;,&amp;quot;right handed&amp;quot;,&amp;quot;smart&amp;quot;,&amp;quot;dumb&amp;quot;,
+                                &amp;quot;blue haired&amp;quot;,&amp;quot;red haired&amp;quot;,&amp;quot;tall&amp;quot;,&amp;quot;short&amp;quot;,&amp;quot;fat&amp;quot;,&amp;quot;thin&amp;quot;,&amp;quot;remote&amp;quot;,&amp;quot;close&amp;quot;,&amp;quot;skinny&amp;quot;,&amp;quot;wide&amp;quot;,&amp;quot;high&amp;quot;,&amp;quot;low&amp;quot;];
+    private var nouns:Array = [&amp;quot;mouse&amp;quot;,&amp;quot;wig&amp;quot;,&amp;quot;radio&amp;quot;,&amp;quot;computer&amp;quot;,&amp;quot;cat&amp;quot;,&amp;quot;dog&amp;quot;,&amp;quot;duck&amp;quot;,&amp;quot;desk&amp;quot;,&amp;quot;piece of paper&amp;quot;,&amp;quot;bird&amp;quot;,&amp;quot;werewolf&amp;quot;,&amp;quot;vampire&amp;quot;,&amp;quot;ghost&amp;quot;,
+                                &amp;quot;dart board&amp;quot;,&amp;quot;chair&amp;quot;,&amp;quot;television&amp;quot;,&amp;quot;egg&amp;quot;,&amp;quot;table&amp;quot;,&amp;quot;book&amp;quot;,&amp;quot;phone&amp;quot;,&amp;quot;pillow&amp;quot;,&amp;quot;cactus&amp;quot;,&amp;quot;rose&amp;quot;,&amp;quot;hat&amp;quot;,&amp;quot;airplane&amp;quot;];
+
+    public function HoroscopeGenerator() {
+    }
+
+    private function getAdjective():String {
+        return adjectives[randRange(0,adjectives.length-1)];
+    }
+
+    private function getFinancialString():String {
+        var options:Array = [
+            &amp;quot;Today is a good day to invest. Stock prices will change. &amp;quot;,
+            &amp;quot;Today is a bad day to invest. Stock prices will change. &amp;quot;,
+            &amp;quot;Investments are a good idea today. Spend wisely before the &amp;quot; + getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot; turns your luck! &amp;quot;,
+            &amp;quot;Save your pennies! Your &amp;quot; + getNoun() + &amp;quot; is not a safe investment today. &amp;quot;,
+            &amp;quot;You can buy a lottery ticket or a &amp;quot; + getNoun() + &amp;quot;. Either is a good investment. &amp;quot;
+        ];
+        return options[randRange(1,options.length-1)];
+    }
+
+
+    private function getNoun():String {
+        return nouns[randRange(0,nouns.length-1)];
+    }
+
+    private function getRomanticString():String {
+        var options:Array = [
+            &amp;quot;Follow your heart like you would follow a &amp;quot;+getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot;. It won&#39;t lead you astray. &amp;quot;,
+            &amp;quot;Romance is not in your future today. Avoid it like a &amp;quot; + getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot;. &amp;quot;,
+            &amp;quot;Romance is blossoming like a &amp;quot; + getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot;! &amp;quot;,
+            &amp;quot;Avoid romantic engagements today. Wait for a sign - it will resemble a &amp;quot; +getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot;. &amp;quot;,
+            &amp;quot;Love is in the air. Unfortunately not the air you will be breathing. &amp;quot;
+        ];
+        return options[randRange(1,options.length-1)];
+    }
+
+    private function getRandomString():String {
+        var options:Array = [
+            &amp;quot;Today you need to practice your patience. And your piano. &amp;quot;,
+            &amp;quot;Meet new people today. Show them your &amp;quot; + getNoun() + &amp;quot;. &amp;quot;,
+            &amp;quot;Your spirits are high today - but watch our for a &amp;quot; + getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot;. &amp;quot;,
+            &amp;quot;Your sign is in the third phase today. This is important. &amp;quot;,
+            &amp;quot;Your sign is in the second phase today. This is critical. &amp;quot;,
+            &amp;quot;Something big is going to happen today. Or tomorrow. &amp;quot;,
+            &amp;quot;A &amp;quot; + getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot; will give you important advice today. &amp;quot;,
+            &amp;quot;A &amp;quot; + getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot; has it out for you today. &amp;quot;,
+            &amp;quot;Last Tuesday was a good day. Today - not so much. &amp;quot;,
+            &amp;quot;A dark stranger will enter your life. They will have a &amp;quot; + getAdjective() + &amp;quot; &amp;quot; + getNoun() + &amp;quot;. &amp;quot;
+        ];
+        return options[randRange(1,options.length-1)];
+    }
+
+    public function generateHoroscope():String {
+        var horoscope:String = &amp;quot;&amp;quot;;
+        horoscope += getRandomString();
+        horoscope += getFinancialString();
+        horoscope += getRomanticString();
+        horoscope += &amp;quot;\n\n&amp;quot;;
+        horoscope += &amp;quot;Your lucky numbers are &amp;quot; + randRange(1,10) + &amp;quot;, &amp;quot; + randRange(1,10) + &amp;quot;, and &amp;quot; + getNoun() + &amp;quot;.&amp;quot;;
+        return horoscope;
+    }
+
+    //credit: http://snipplr.com/view/7326/
+    private function randRange(minNum:Number, maxNum:Number):Number {
+        return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;So folks - if you have a Nook and 99 cents to spare, check it out. (&lt;a href=&#34;http://search.barnesandnoble.com/TBS-Horoscope/Raymond-Camden/e/2940043858320&#34;&gt;Direct Link&lt;/a&gt;) I&amp;rsquo;d especially love it if you would rate it up a bit against some anonymous person who gave it one star. It&amp;rsquo;s easily a two star app, right???&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using a background with a Flex Mobile project</title>
+      <link>http://www.raymondcamden.com/2011/08/24/Using-a-background-with-a-Flex-Mobile-project</link>
+      <pubDate>Wed, 24 Aug 2011 13:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/08/24/Using-a-background-with-a-Flex-Mobile-project</guid>
+      <description>&lt;p&gt;Earlier this week I started work on a new NookColor app (already done and submitted). One of the minor design elements I wanted was a simple background using a graphic. I had assumed this would be a simple matter. It&amp;rsquo;s already easy to set a background color. However this turned out to be slightly more complex than I imagined. What follows is an example of how it can be done. Credit for this goes to &lt;a href=&#34;http://blogs.adobe.com/jasonsj/&#34;&gt;Jason San Jose&lt;/a&gt; and &lt;a href=&#34;http://devgirl.org/&#34;&gt;Holly Schinsky&lt;/a&gt;. Please note that part of this blog entry is my understanding of what&amp;rsquo;s going on and there is a strong possibility I could be wrong. Any mistakes - blame me. If it&amp;rsquo;s perfect - thank them. ;)&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start off with a super simple Flex Mobile application. I&amp;rsquo;ve got a view based application with one view. Here&amp;rsquo;s the top level Application.&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:ViewNavigatorApplication xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+                            xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; firstView=&amp;ldquo;views.BGTestHomeView&amp;rdquo;&amp;gt;
+    &amp;lt;fx:Declarations&amp;gt;
+        &amp;lt;!&amp;ndash; Place non-visual elements (e.g., services, value objects) here &amp;ndash;&amp;gt;
+    &amp;lt;/fx:Declarations&amp;gt;
+&amp;lt;/s:ViewNavigatorApplication&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;And here is my view:&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;HomeView&amp;rdquo;&amp;gt;
+    &amp;lt;fx:Declarations&amp;gt;
+        &amp;lt;!&amp;ndash; Place non-visual elements (e.g., services, value objects) here &amp;ndash;&amp;gt;
+    &amp;lt;/fx:Declarations&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;s:VGroup horizontalAlign=&amp;quot;center&amp;quot; paddingTop=&amp;quot;10&amp;quot; paddingLeft=&amp;quot;10&amp;quot; paddingRight=&amp;quot;10&amp;quot; paddingBottom=&amp;quot;10&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;100%&amp;quot; verticalAlign=&amp;quot;middle&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Mobile Apps Rule!&amp;quot; width=&amp;quot;75%&amp;quot; fontSize=&amp;quot;50&amp;quot; textAlign=&amp;quot;center&amp;quot;  /&amp;amp;gt;        
+&amp;amp;lt;/s:VGroup&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Which produces the lovely&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/ScreenClip160.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Now - if I want to add a background color, I can do so in two places - either the root app (ViewNavigatorApplication) or the view. Putting it in the root will only work for a brief second. You can see the background color for a second right before the view loads. So let&amp;rsquo;s just put it in the view.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;HomeView&amp;rdquo; backgroundColor=&amp;ldquo;blue&amp;rdquo;&amp;gt;
+    &amp;lt;fx:Declarations&amp;gt;
+        &amp;lt;!&amp;ndash; Place non-visual elements (e.g., services, value objects) here &amp;ndash;&amp;gt;
+    &amp;lt;/fx:Declarations&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;s:VGroup horizontalAlign=&amp;quot;center&amp;quot; paddingTop=&amp;quot;10&amp;quot; paddingLeft=&amp;quot;10&amp;quot; paddingRight=&amp;quot;10&amp;quot; paddingBottom=&amp;quot;10&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;100%&amp;quot; verticalAlign=&amp;quot;middle&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Mobile Apps Rule!&amp;quot; width=&amp;quot;75%&amp;quot; fontSize=&amp;quot;50&amp;quot; color=&amp;quot;white&amp;quot; textAlign=&amp;quot;center&amp;quot;  /&amp;amp;gt;      
+&amp;amp;lt;/s:VGroup&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Note the addition of &amp;ldquo;blue&amp;rdquo; to the View as well as the white color for the label. This creates this awesomely pretty view:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip161.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok. So when I first discovered this, I assumed that there was probably some other argument, like backgroundImage or some such, that would just as easy. Unfortunately that&amp;rsquo;s not the case. Some Googling turned up a few blog posts talking about how to do it for Flex 4 apps in general. The recommendation was to create a skin for the application as a whole. You can do this in pure ActionScript or MXML. Here&amp;rsquo;s my attempt with MXML.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:ViewNavigatorApplication xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+                            xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; firstView=&amp;ldquo;views.BGTestHomeView&amp;rdquo; skinClass=&amp;ldquo;skins.myAppSkin&amp;rdquo;&amp;gt;
+    &amp;lt;fx:Declarations&amp;gt;
+        &amp;lt;!&amp;ndash; Place non-visual elements (e.g., services, value objects) here &amp;ndash;&amp;gt;
+    &amp;lt;/fx:Declarations&amp;gt;
+&amp;lt;/s:ViewNavigatorApplication&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Note the change here - I&amp;rsquo;ve added skinClass. Let&amp;rsquo;s look at that file.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:Skin name=&amp;ldquo;CustomApplicationSkin&amp;rdquo;
+        xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo;
+         &amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;fx:Metadata&amp;amp;gt;
+    &amp;amp;lt;![CDATA[ 
+    [HostComponent(&amp;quot;BGTest&amp;quot;)]
+    ]]&amp;amp;gt;
+&amp;amp;lt;/fx:Metadata&amp;amp;gt; 
+
+&amp;amp;lt;s:states&amp;amp;gt;
+    &amp;amp;lt;s:State name=&amp;quot;normal&amp;quot; /&amp;amp;gt;
+    &amp;amp;lt;s:State name=&amp;quot;disabled&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;/s:states&amp;amp;gt;
+
+&amp;amp;lt;s:BitmapImage width=&amp;quot;100%&amp;quot; height=&amp;quot;100%&amp;quot; source=&amp;quot;@Embed(&#39;/images/grass.jpg&#39;)&amp;quot;/&amp;amp;gt;
+
+&amp;amp;lt;s:Group id=&amp;quot;contentGroup&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;100%&amp;quot; minWidth=&amp;quot;0&amp;quot; minHeight=&amp;quot;0&amp;quot; /&amp;amp;gt;
+
+&amp;amp;lt;s:ViewNavigator id=&amp;quot;navigator&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;100%&amp;quot; /&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:Skin&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;At first I kind of thought of the skin file like a CSS sheet, where I&amp;rsquo;d specify just what I wanted to change. But - it&amp;rsquo;s more like a &amp;ldquo;skeleton&amp;rdquo; or outline for your entire application. Notice I included the viewNavigator in there. And my content group. This is - from what I understand - the default way the mobile application would be laid out anyway. So my modification then was to simply include the image. End of story, right? Not exactly.&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Turns out this &amp;ldquo;works&amp;rdquo;, but the View ends up covering the background picture. This is where Jason&amp;rsquo;s tip came in. If we go into our view and set the alpha of the background like so:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;HomeView&amp;rdquo; backgroundAlpha=&amp;ldquo;0&amp;rdquo;&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;We allow the content to show the background behind it. Here&amp;rsquo;s the complete view. I added a black background to the label as well.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+        xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;HomeView&amp;rdquo; backgroundAlpha=&amp;ldquo;0&amp;rdquo;&amp;gt;
+    &amp;lt;fx:Declarations&amp;gt;
+        &amp;lt;!&amp;ndash; Place non-visual elements (e.g., services, value objects) here &amp;ndash;&amp;gt;
+    &amp;lt;/fx:Declarations&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;s:VGroup horizontalAlign=&amp;quot;center&amp;quot; paddingTop=&amp;quot;10&amp;quot; paddingLeft=&amp;quot;10&amp;quot; paddingRight=&amp;quot;10&amp;quot; paddingBottom=&amp;quot;10&amp;quot; width=&amp;quot;100%&amp;quot; height=&amp;quot;100%&amp;quot; verticalAlign=&amp;quot;middle&amp;quot;&amp;amp;gt;
+    &amp;amp;lt;s:Label text=&amp;quot;Mobile Apps Rule!&amp;quot; width=&amp;quot;75%&amp;quot; fontSize=&amp;quot;50&amp;quot; color=&amp;quot;white&amp;quot; textAlign=&amp;quot;center&amp;quot; backgroundColor=&amp;quot;black&amp;quot;  /&amp;amp;gt;      
+&amp;amp;lt;/s:VGroup&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;And the result:&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip162.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Awesome. I bet you didn&amp;rsquo;t know I was such a good designer, did you? As I said, this solution may not be 100% accurate across all situations, and there may be other ways of doing this, but I hope this is helpful to others.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Flex Mobile Chat Session on Thursday</title>
+      <link>http://www.raymondcamden.com/2011/08/17/Flex-Mobile-Chat-Session-on-Thursday</link>
+      <pubDate>Wed, 17 Aug 2011 10:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/08/17/Flex-Mobile-Chat-Session-on-Thursday</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m a bit late to post this, but myself, and a &lt;i&gt;bunch&lt;/i&gt; of other Adobe evangelists, will be holding a Flex Mobile Chat Session on Connect this Thursday at 9AM Pacific. It&amp;rsquo;s free and open to all so please stop by. See &lt;a href=&#34;http://flex.org/ask/&#34;&gt;http://flex.org/ask/&lt;/a&gt; for details.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>AIR 3 Beta updated</title>
+      <link>http://www.raymondcamden.com/2011/08/10/AIR-3-Beta-updated</link>
+      <pubDate>Wed, 10 Aug 2011 09:08:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/08/10/AIR-3-Beta-updated</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m a bit late on this, but Labs has an update for the &lt;a href=&#34;http://labs.adobe.com/technologies/flashplatformruntimes/air3/&#34;&gt;Adobe AIR 3 Beta&lt;/a&gt;. Some interesting new features in this update are&amp;hellip;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Stage Video Hardware Acceleration (AIR for mobile)&lt;/li&gt;
+&lt;li&gt;Captive Runtime Support (AIR for desktop and Android)&lt;/li&gt;
+&lt;li&gt;iOS Background Audio Playback Support&lt;/li&gt;
+&lt;li&gt;Android Licensing Service Support&lt;/li&gt;
+&lt;li&gt;Android Front-facing Camera Support&lt;/li&gt;
+&lt;li&gt;Encrypted Local Storage for Mobile&lt;/li&gt;
+&lt;li&gt;H.264/AVC Software Encoding for Cameras (desktop)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;See the labs site for more details, but I want to especially call out the captive runtime item. What this means - practically - is that your apps can ship &lt;b&gt;with&lt;/b&gt; the AIR runtime in it. No need for a separate download.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Flex Mobile and ColdFusion Sessions</title>
+      <link>http://www.raymondcamden.com/2011/07/28/Flex-Mobile-and-ColdFusion-Sessions</link>
+      <pubDate>Thu, 28 Jul 2011 17:07:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2011/07/28/Flex-Mobile-and-ColdFusion-Sessions</guid>
+      <description>&lt;p&gt;It just works. Thanks. Bye.&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok - maybe a little more detail is in order? ;) I knew that Flex on the desktop, when making calls to CFC, kept a session just like any other normal HTTP request. I was also mostly certain that the same held true for Flex Mobile. I decided to verify it just to be sure though. I created an incredibly simple Flex Mobile project that pings a ColdFusion service. Here is the view:&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+&amp;lt;?xml version=&amp;ldquo;1.0&amp;rdquo; encoding=&amp;ldquo;utf-8&amp;rdquo;?&amp;gt;
+&amp;lt;s:View xmlns:fx=&amp;ldquo;&lt;a href=&#34;http://ns.adobe.com/mxml/2009&amp;quot;&#34;&gt;http://ns.adobe.com/mxml/2009&amp;quot;&lt;/a&gt;
+                 xmlns:s=&amp;ldquo;library://ns.adobe.com/flex/spark&amp;rdquo; title=&amp;ldquo;HomeView&amp;rdquo;&amp;gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;amp;lt;fx:Declarations&amp;amp;gt;
+    &amp;amp;lt;s:RemoteObject id=&amp;quot;testService&amp;quot; destination=&amp;quot;ColdFusion&amp;quot; source=&amp;quot;demos.july282011.remote&amp;quot; endpoint=&amp;quot;http://www.raymondcamden.com/flex2gateway/&amp;quot; /&amp;amp;gt;           
+&amp;amp;lt;/fx:Declarations&amp;amp;gt;
+
+&amp;amp;lt;s:layout&amp;amp;gt;
+    &amp;amp;lt;s:VerticalLayout/&amp;amp;gt;
+&amp;amp;lt;/s:layout&amp;amp;gt;
+
+&amp;amp;lt;s:Button label=&amp;quot;Test&amp;quot; click=&amp;quot;testService.getKey()&amp;quot; /&amp;amp;gt;
+&amp;amp;lt;s:Label id=&amp;quot;resultLabel&amp;quot; text=&amp;quot;{testService.getKey.lastResult}&amp;quot; /&amp;amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;/s:View&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;For those of you who have never seen a lick of Flex code, you can probably guess as to what this code is doing. I&amp;rsquo;ve defined a CFC service that points to my blog. I&amp;rsquo;ve got a button that when clicked will run getKey. getKey is a ColdFusion component method. I&amp;rsquo;ve taken the label field below and bound it to the last result. That&amp;rsquo;s a built in feature that allows me to quickly say, &amp;ldquo;Just take the last result and drop it here.&amp;rdquo; Normally you&amp;rsquo;re going to use an event handler for the result but for this simple test it works well enough. Now let&amp;rsquo;s look at the code. First, my Application.cfc:&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+component {
+    this.name=&amp;ldquo;flexremotetest1&amp;rdquo;;
+    this.sessionManagement=&amp;ldquo;true&amp;rdquo;;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public void function onSessionStart() {
+    session.mykey = randRange(1,9999);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;Nothing too interesting there - just a session start event handler that assigns a random number to the session scope. Now let&amp;rsquo;s look at my CFC:&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+component {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;remote string function getKey() { 
+    return session.mykey &amp;amp; &amp;quot; - &amp;quot; &amp;amp; session.urltoken;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve got one method, getKey, that returns the key, and just to be extra sure, the built in URL token for the session. The result is - as expected -  a random number (with the urltoken):&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.coldfusionjedi.com/images/ScreenClip148.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;p/&gt;&lt;/p&gt;
+
+&lt;p&gt;I tested it in a few devices just to be extra sure, and as expected, they each had their own sessions. Too easy.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

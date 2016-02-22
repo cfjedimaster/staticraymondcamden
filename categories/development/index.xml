@@ -1,0 +1,1351 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Development on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/development/</link>
+    <description>Recent content in Development on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 22 Feb 2016 10:42:00 -0700</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/development/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Building a Twitter bot to display random comic book covers</title>
+      <link>http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers</link>
+      <pubDate>Mon, 22 Feb 2016 10:42:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers</guid>
+      <description>
+
+&lt;p&gt;A bit over two years ago I played around with the (then) recently released &lt;a href=&#34;http://developer.marvel.com/&#34;&gt;Marvel API&lt;/a&gt; to build some &lt;a href=&#34;http://www.raymondcamden.com/2014/02/02/Examples-of-the-Marvel-API/&#34;&gt;cool demos&lt;/a&gt;. The end result of that experiment was a simple web app that randomly displayed a Marvel comic book cover every minute:
+&lt;a href=&#34;http://marvel.raymondcamden.com/&#34;&gt;http://marvel.raymondcamden.com/&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This weekend I was thinking about a few Twitter accounts I follow that just post random pictures. (I&amp;rsquo;ll share a list of them at the end.) I like these accounts because they&amp;rsquo;re easy to ignore, provide something simple and cool to my feed, and are just a random piece of coolness during the day. I thought it might be kind of fun to build a similar mechanism for comic books (well, Marvel comics, I need to see if DC has an API).&lt;/p&gt;
+
+&lt;p&gt;In theory - all I needed to do was:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create a way to select a random cover (which was already done - by me)&lt;/li&gt;
+&lt;li&gt;Create a way to Tweet (there&amp;rsquo;s probably a npm library for that - yep - there is)&lt;/li&gt;
+&lt;li&gt;Create a schedule (there&amp;rsquo;s probably a npm library for that too - yep - there is)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It ended up being &lt;em&gt;very&lt;/em&gt; quick to develop - maybe two hours total. Here is the complete source of the main script file. (Note, the entire thing is up on GitHub - the link will be at the bottom.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+&amp;#x2F;*eslint-env node*&amp;#x2F;
+
+var request = require(&amp;#x27;request&amp;#x27;);
+
+var express = require(&amp;#x27;express&amp;#x27;);
+
+var credentials = require(&amp;#x27;.&amp;#x2F;credentials.json&amp;#x27;);
+
+var Twitter = require(&amp;#x27;twitter&amp;#x27;);
+var client = new Twitter(credentials.twitter);
+
+var marvel = require(&amp;#x27;.&amp;#x2F;marvel&amp;#x27;);
+marvel.setCredentials(credentials.marvel.private_key, credentials.marvel.api_key);
+
+&amp;#x2F;&amp;#x2F; cfenv provides access to your Cloud Foundry environment
+&amp;#x2F;&amp;#x2F; for more info, see: https:&amp;#x2F;&amp;#x2F;www.npmjs.com&amp;#x2F;package&amp;#x2F;cfenv
+var cfenv = require(&amp;#x27;cfenv&amp;#x27;);
+
+var app = express();
+
+app.use(express.static(__dirname + &amp;#x27;&amp;#x2F;public&amp;#x27;));
+
+&amp;#x2F;&amp;#x2F; get the app environment from Cloud Foundry
+var appEnv = cfenv.getAppEnv();
+
+&amp;#x2F;&amp;#x2F; start server on the specified port and binding host
+app.listen(appEnv.port, &amp;#x27;0.0.0.0&amp;#x27;, function() {
+
+    &amp;#x2F;&amp;#x2F; print a message when the server starts listening
+    console.log(&amp;quot;server starting on &amp;quot; + appEnv.url);
+});
+
+var MONTHS = [&amp;#x27;January&amp;#x27;, &amp;#x27;February&amp;#x27;, &amp;#x27;March&amp;#x27;, &amp;#x27;April&amp;#x27;, &amp;#x27;May&amp;#x27;, &amp;#x27;June&amp;#x27;, &amp;#x27;July&amp;#x27;, &amp;#x27;August&amp;#x27;, &amp;#x27;September&amp;#x27;, &amp;#x27;October&amp;#x27;, &amp;#x27;November&amp;#x27;, &amp;#x27;December&amp;#x27;];
+
+function tweetRandomCover() {
+    console.log(&amp;#x27;First, we get a random cover.&amp;#x27;);
+
+    marvel.getCover(function(res) {
+        console.log(&amp;#x27;back from mavel&amp;#x27;);
+        console.dir(res);
+        var tweet = res.title + &amp;#x27; published &amp;#x27;+(MONTHS[res.date.getMonth()])+&amp;#x27; &amp;#x27;+res.date.getFullYear() +&amp;#x27;\n&amp;#x27;+res.link;
+        
+        console.log(&amp;#x27;Now going to fetch the image link.&amp;#x27;);
+
+        request.get({url:res.url,encoding:null}, function(err, response, body) {
+            if(!err &amp;amp;&amp;amp; response.statusCode === 200) {
+                console.log(&amp;#x27;Image copied to RAM&amp;#x27;);
+
+                client.post(&amp;#x27;media&amp;#x2F;upload&amp;#x27;, {media: body}, function(error, media, response) {
+
+                    if(error) {
+                        console.error(&amp;#x27;Error from media&amp;#x2F;upload: &amp;#x27;+error);
+                        return; 
+                    }
+                    
+                    &amp;#x2F;&amp;#x2F; If successful, a media object will be returned.
+                    console.log(&amp;#x27;Image uploaded to Twitter&amp;#x27;);
+
+                    var status = {
+                        status: tweet,
+                        media_ids: media.media_id_string 
+                    }
+
+                    client.post(&amp;#x27;statuses&amp;#x2F;update&amp;#x27;, status, function(error, tweet, response){
+                        if (!error) {
+                            console.log(&amp;#x27;Tweeted ok&amp;#x27;);
+                        }
+                    });
+
+                });
+                        
+            }
+        });
+    }); 
+}
+
+app.get(&amp;#x27;&amp;#x2F;forceTweet&amp;#x27;, function(req, res) {
+    tweetRandomCover();
+    res.end(&amp;#x27;Done (not really)&amp;#x27;);
+});
+
+var cron = require(&amp;#x27;cron&amp;#x27;);
+var cronJob = cron.job(&amp;#x27;0 6,12,18 * * *&amp;#x27;, function() {
+    console.log(&amp;#x27;do the cover&amp;#x27;);
+    tweetRandomCover(); 
+    console.log(&amp;#x27;cron job complete&amp;#x27;);
+});
+cronJob.start();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s break it down bit by bit, focusing on the important parts. To handle the Twitter API, I used the &lt;a href=&#34;https://www.npmjs.com/package/twitter&#34;&gt;twitter&lt;/a&gt; Node library. As you will see a bit later in the code, it is &lt;em&gt;incredibly&lt;/em&gt; trivial to use, even when creating Tweets with media attached.&lt;/p&gt;
+
+&lt;p&gt;The Marvel API is just a copy of the code I used before, although I&amp;rsquo;ve modified it a bit so I can pass in my credentials.&lt;/p&gt;
+
+&lt;p&gt;The real meat of the code is in &lt;code&gt;tweetRandomCover&lt;/code&gt;. We begin by asking the Marvel API for a random cover. If you read my &lt;a href=&#34;http://www.raymondcamden.com/2014/02/02/Examples-of-the-Marvel-API/&#34;&gt;post from two years ago&lt;/a&gt; you&amp;rsquo;ll note that I have to fake that a bit. I essentially select a random month+year and grab everything I can from there - then select an item.&lt;/p&gt;
+
+&lt;p&gt;Once I have the random issue, I use the &lt;a href=&#34;https://github.com/request/request&#34;&gt;request&lt;/a&gt; library to suck down the binary of the image into a variable. I&amp;rsquo;ve heard of this library quite a bit, but I&amp;rsquo;ve never actually used it. Big mistake on my part.&lt;/p&gt;
+
+&lt;p&gt;Finally - I have to create the tweet. Twitter requires you to upload the media first so it is a two step process. First the image is posted and then the actual Tweet is created. I&amp;rsquo;ve got a bit of &amp;ldquo;Callback Hell&amp;rdquo; going on here and if this app did &lt;em&gt;anything&lt;/em&gt; else I&amp;rsquo;d abstract this logic out of the main script, but since this isn&amp;rsquo;t a web app people will hit, I&amp;rsquo;m not going to worry about it.&lt;/p&gt;
+
+&lt;p&gt;The final aspect is scheduling - which you can see is done via &lt;a href=&#34;https://github.com/ncb000gt/node-cron&#34;&gt;node-cron&lt;/a&gt;. Easy to use - it took me longer to figure out the right cron syntax than it did to implement the code. As you can see, I&amp;rsquo;ve selected a schedule that should post tweets three times a day which &amp;ldquo;feels&amp;rdquo; right for this kind of account. I may tweak that later.&lt;/p&gt;
+
+&lt;p&gt;You can find the complete code (although there&amp;rsquo;s not much else) up on GitHub: &lt;a href=&#34;https://github.com/cfjedimaster/randomcomicbook&#34;&gt;https://github.com/cfjedimaster/randomcomicbook&lt;/a&gt;. I&amp;rsquo;m hosting the app up on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And of course, you can (and should!) follow the Twitter acount: &lt;a href=&#34;https://twitter.com/randomcomicbook&#34;&gt;https://twitter.com/randomcomicbook&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Incredible Hulk (1962) #146 published December 1971&lt;a href=&#34;https://t.co/3VyfTGup9r&#34;&gt;https://t.co/3VyfTGup9r&lt;/a&gt; &lt;a href=&#34;https://t.co/5jJFJHj58h&#34;&gt;pic.twitter.com/5jJFJHj58h&lt;/a&gt;&lt;/p&gt;&amp;mdash; Random Comic Book (@randomcomicbook) &lt;a href=&#34;https://twitter.com/randomcomicbook/status/701813244017528833&#34;&gt;February 22, 2016&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;ps:f1de4146a89fdcf87154d4e15552a286&#34;&gt;PS&amp;hellip;&lt;/h2&gt;
+
+&lt;p&gt;So yeah - about those random Twitter accounts I follow for pictures? Here they are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/EmrgencyKittens&#34;&gt;https://twitter.com/EmrgencyKittens&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/iLove_Aviation&#34;&gt;https://twitter.com/iLove_Aviation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/Aviation4_Life&#34;&gt;https://twitter.com/Aviation4_Life&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/ClassicStarWars&#34;&gt;https://twitter.com/ClassicStarWars&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I used to follow some related to historical pictures, but they either turned to spam or shared pictures unrelated to history, which to me is a cardinal sin of these types of accounts. (Another example - news organizations that will RT their sports or entertainment accounts. I freaking hate that.)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Creating an unread count for a static site</title>
+      <link>http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site</link>
+      <pubDate>Thu, 18 Feb 2016 14:23:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site</guid>
+      <description>
+
+&lt;p&gt;Lately I&amp;rsquo;ve noticed some sites will include a little &amp;ldquo;unread&amp;rdquo; icon for their blog, showing you how many new articles they have since your last visit. As an example, here is how the &lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt; displays it in their header:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogoneunread.png&#34; alt=&#34;Unread blog entries&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve seen this on a few other sites (like &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;) and I assume it is a simple plugin, but I thought it would be kind of fun to build a prototype of this myself. What follows is a simple example of the feature that can be used for static sites. There&amp;rsquo;s probably many different ways to add this feature (and I&amp;rsquo;ll discuss some options at the end) and I&amp;rsquo;d love to hear from my readers how they&amp;rsquo;ve accomplished this if they have it on their site. As a reminder, everything I share here is free for you to make use of on your own site. All I ask is that you show your appreciation with a quick visit to my &lt;a href=&#34;http://www.amazon.com/gp/registry/wishlist/2TCL1D08EZEYE/ref=cm_wl_rlist_go_v?&#34;&gt;Amazon Wishlist&lt;/a&gt; if you can.&lt;/p&gt;
+
+&lt;p&gt;Ok - so before we get into the code, let&amp;rsquo;s discuss how we can handle this. When comes to the site, we can see if they&amp;rsquo;ve been to the site before. There are a variety of ways to persist data on the client, but the simplest is localStorage.&lt;/p&gt;
+
+&lt;p&gt;Given that a user first hit the site on February 1, 2016, we can then ask the blog for a list of articles. Luckily there&amp;rsquo;s a simple way to do that - RSS. By parsing the blog&amp;rsquo;s RSS feed, we can iterate over every entry and see when it was published. If it was published after February 1, we can increment a counter of unread articles.&lt;/p&gt;
+
+&lt;p&gt;So far so good, but then we have a few questions. What if the user has never been to the site before? Should we show an unread count of 10? (10 being the &amp;ldquo;typical&amp;rdquo; number of items in an RSS feed.) In my opinion, no. It feels a bit pushy.&lt;/p&gt;
+
+&lt;p&gt;How and when do we update the value? In theory you could update the date value immediately. I may choose to go the blog or not, but since you&amp;rsquo;ve already told me that the site has X unread articles, there isn&amp;rsquo;t necessarily a need to &lt;em&gt;keep&lt;/em&gt; telling me that. Or - I could only update the date when you visit the blog (either the home page or any particular entry).&lt;/p&gt;
+
+&lt;p&gt;To keep things a bit simpler, we&amp;rsquo;ll say that when you visit the blog home page, we&amp;rsquo;ll automatically update the &amp;ldquo;last visited&amp;rdquo; value so you no longer see an unread count. Alright, let&amp;rsquo;s write some code!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$(document).ready(function() {
+    
+    if(!onBlog()) {
+        getUnReadCount();   
+    }
+    
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For our first iteration, we&amp;rsquo;ve got a bit of simple code that says - well - you can probably read that out loud and figure out exactly what we&amp;rsquo;re doing. If we aren&amp;rsquo;t on the blog, get the unread count. Now let&amp;rsquo;s flesh out those methods.&lt;/p&gt;
+
+&lt;p&gt;First - &lt;code&gt;onBlog&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function onBlog() {
+    return window.location.pathname.indexOf(&#34;blog&#34;) &amp;gt;= 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A bit lame, but all we do here is see if &amp;lsquo;blog&amp;rsquo; exists in the current path. Obviously your site could use &amp;lsquo;news&amp;rsquo; for the path so you may need to modify that logic to match your particular site.&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at &lt;code&gt;getUnReadCount&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function getUnReadCount(cb) { 
+
+    &amp;#x2F;&amp;#x2F;have we been here?
+    var lastvisit = localStorage[&amp;#x27;lastVisit&amp;#x27;];
+    if(!lastvisit) return cb(0);
+        
+    &amp;#x2F;&amp;#x2F;ok, get the RSS
+    var yql = &amp;quot;https:&amp;#x2F;&amp;#x2F;query.yahooapis.com&amp;#x2F;v1&amp;#x2F;public&amp;#x2F;yql?q=select%20*from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&amp;quot;;
+    
+    var unread = 0;
+    $.getJSON(yql, function(res) {
+        var items = res.query.results.item;
+        console.log(items); 
+        items.forEach(function(item) {
+            var articleDate = new Date(item.pubDate).getTime();
+            if(articleDate &amp;gt; lastvisit) unread++;
+        });
+        cb(unread);
+    }, &amp;quot;jsonp&amp;quot;);
+        
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So notice that we&amp;rsquo;re now expecting an argument to the function that will be a callback to fire when we&amp;rsquo;re done with our work. If the user has never been to the site, we shortcircuit out by returning 0.&lt;/p&gt;
+
+&lt;p&gt;We then hit the RSS feed for our site. I talked about &lt;a href=&#34;http://www.raymondcamden.com/2015/12/08/parsing-rss-feeds-in-javascript-options/&#34;&gt;parsing RSS&lt;/a&gt; on my blog a few months ago and at the time I mentioned YQL as an excellent replacement for the Google Feed API. In our case, we get the items from the RSS feed in a nice array we can loop over.&lt;/p&gt;
+
+&lt;p&gt;Note the array iterator. For each article get the time in milliseconds and compare it to our &lt;code&gt;lastvisit&lt;/code&gt; value. We increment every time the article is newer. Now is probably a good time to go back and show the complete code.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$(document).ready(function() {
+    
+    if(!onBlog()) {
+        getUnReadCount(function(count) {
+            console.log(&amp;#x27;result is &amp;#x27;+count);
+            if(count &amp;gt; 0) {
+                $(&amp;#x27;.badge&amp;#x27;).text(count);
+            }
+        }); 
+    } else {
+        localStorage[&amp;#x27;lastVisit&amp;#x27;] = new Date().getTime(); 
+    }   
+});
+
+function onBlog() {
+    return window.location.pathname.indexOf(&amp;quot;blog&amp;quot;) &amp;gt;= 0;
+}
+
+function getUnReadCount(cb) { 
+
+    &amp;#x2F;&amp;#x2F;have we been here?
+    var lastvisit = localStorage[&amp;#x27;lastVisit&amp;#x27;];
+    if(!lastvisit) return cb(0);
+        
+    &amp;#x2F;&amp;#x2F;ok, get the RSS
+    var yql = &amp;quot;https:&amp;#x2F;&amp;#x2F;query.yahooapis.com&amp;#x2F;v1&amp;#x2F;public&amp;#x2F;yql?q=select%20*from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&amp;quot;;
+    
+    var unread = 0;
+    $.getJSON(yql, function(res) {
+        var items = res.query.results.item;
+        items.forEach(function(item) {
+            var articleDate = new Date(item.pubDate).getTime();
+            if(articleDate &amp;gt; lastvisit) unread++;
+        });
+        cb(unread);
+    }, &amp;quot;jsonp&amp;quot;);
+        
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see now that we&amp;rsquo;re handling the display update as well as storing your last visit when you are on the blog. The DOM selector is just running against a super simple Bootstrap template I whipped up just for this example.&lt;/p&gt;
+
+&lt;p&gt;Here is a screen shot of in action:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogup1.png&#34; alt=&#34;Blog updated&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I went ahead and put up the demo here: &lt;a href=&#34;http://static.raymondcamden.com/demos/2016/02/18/test.html&#34;&gt;http://static.raymondcamden.com/demos/2016/02/18/test.html&lt;/a&gt; But obviously it will be a bit weird since the RSS is on my site, not the demo and, but, you can get the complete HTML templates from there if you want.&lt;/p&gt;
+
+&lt;h2 id=&#34;alternatives:369e0168548cb617eaff8ff65dfd827e&#34;&gt;Alternatives&lt;/h2&gt;
+
+&lt;p&gt;Right off the bat, I can think of one quick way to simplify this a bit. Don&amp;rsquo;t forget that most static
+site generators let you have dynamic files of all sorts - not just HTML. Imagine if my JavaScript code was dynamic as well. I could dynamically generate an array of the last ten date values. Then my code could skip going to YQL. Heck, it wouldn&amp;rsquo;t even need to be async anymore. It would add a tiny bit of weight to the download of the file, but the network speed optimization should make up for that I think.&lt;/p&gt;
+
+&lt;p&gt;You could replace the use of localStorage with a cookie and - in general - get slightly more support - but that seems like overkill to me. (However, I &lt;em&gt;would&lt;/em&gt; consider adding a simple localStorage check in my code before doing any of the checks.)&lt;/p&gt;
+
+&lt;p&gt;What do you think?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My PhoneGap Day 2016 Presentation</title>
+      <link>http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation</link>
+      <pubDate>Wed, 17 Feb 2016 08:41:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation</guid>
+      <description>&lt;p&gt;I was honored to be chosen to speak at this year&amp;rsquo;s &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap Day&lt;/a&gt;, but honestly, even if I wasn&amp;rsquo;t chosen to speak, I would have tried like heck to get there. I missed last year, but every PhoneGap Day I&amp;rsquo;ve been too has been &lt;em&gt;incredible&lt;/em&gt;. If you missed it, all of the presentations will be available online via the &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap blog&lt;/a&gt;. You can also read their
+excellent &lt;a href=&#34;http://phonegap.com/blog/2016/02/09/recapping-phonegap-day-us-2016/&#34;&gt;recap&lt;/a&gt; of the event too.&lt;/p&gt;
+
+&lt;p&gt;My session is available now, and you can watch it below.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/rmvJzHMQk6U&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In my session, I talked a bit about one of the things PhoneGap/Cordova developers need to keep in mind - internationalization. My focus was specifically on number and date formatting (hey, I only had twenty minutes!) and I demonstrated how you can use the &lt;a href=&#34;https://www.npmjs.com/package/cordova-plugin-globalization&#34;&gt;Globalization&lt;/a&gt; plugin to achieve this.&lt;/p&gt;
+
+&lt;p&gt;If you have any questions about what I demonstrated, just leave me a comment below!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Time for Ionic 2</title>
+      <link>http://www.raymondcamden.com/2016/02/11/time-for-ionic-2</link>
+      <pubDate>Thu, 11 Feb 2016 15:53:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/11/time-for-ionic-2</guid>
+      <description>&lt;p&gt;A few weeks ago I wrote about my experience looking into Angular 2 (&lt;a href=&#34;http://www.raymondcamden.com/2016/01/18/time-for-angular-2/&#34;&gt;Time for Angular 2?&lt;/a&gt;). I haven&amp;rsquo;t had a chance to dig deeper into Angular 2 since then but it is still high on my list to get more familiar with over the year. About a week and a half ago I had pleasure of meeting &lt;a href=&#34;http://mhartington.io/&#34;&gt;Mike Hartington&lt;/a&gt; from the Ionic team at PhoneGap Day. I sat in his Ionic 2 workshop and came out convinced it was time to give it a try as well. And of course, just a few days later the Ionic folks released the &lt;a href=&#34;http://blog.ionic.io/announcing-ionic-framework-2-beta/&#34;&gt;beta version of 2.0&lt;/a&gt;. It is definitely beta, but I was able to build an &lt;em&gt;incredibly&lt;/em&gt; simple app with it (after some help from Mike and others) and I thought I&amp;rsquo;d share my experience.&lt;/p&gt;
+
+&lt;p&gt;One of the most important things to note is that you can install Ionic V2 &lt;em&gt;without&lt;/em&gt; screwing up your ability to do Ionic V1 apps or work with existing projects. It may sound silly, but as easy as &lt;code&gt;npm&lt;/code&gt; can be, I didn&amp;rsquo;t want to have to worry about switching back and forth to work with existing projects. Heck, the CLI even defaults to V1 anyway so in case you forget, are in a rush, or whatever, it will continue to work the way you expect it to.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll want to spend some time in the &lt;a href=&#34;http://ionicframework.com/docs/v2/&#34;&gt;docs&lt;/a&gt; of course, and specifically the &lt;a href=&#34;http://ionicframework.com/docs/v2/getting-started/&#34;&gt;Getting Started&lt;/a&gt; guide. Note that there are mistakes in the guide (hey, it &lt;em&gt;is&lt;/em&gt; a beta) that may trip you up. Specifically it seems like some of the code samples are a bit out of date. For the most part I think you can figure it out, but these issues have been reported and may be corrected by the time you get to it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-1.gif&#34; class=&#34;imgborder&#34; title=&#34;Ionic V2 Docs&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Working through the Getting Started guide gets you through a simple application and will give you a &lt;em&gt;super&lt;/em&gt;
+basic idea of what&amp;rsquo;s going on, but I&amp;rsquo;d strongly urge you to go through the &lt;a href=&#34;https://angular.io/docs/ts/latest/quickstart.html&#34;&gt;Angular 2 quickstart&lt;/a&gt; first just so things aren&amp;rsquo;t completely alien to you.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll also want to peruse the &lt;a href=&#34;http://ionicframework.com/docs/v2/components&#34;&gt;components&lt;/a&gt; docs. From my quick look through it, things look quite a bit simpler to use, but again, this is still in development. A notable missing component currently is the loading widget. Be sure to notice that the component examples
+give you a quick way to toggle between Android and iOS views, and specifically that Android now has a Material look that is &lt;em&gt;really&lt;/em&gt; freaking sweet. As an example, here are tabs in iOS:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-2.gif&#34; alt=&#34;iOS Tabs Ionic 2&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now compare it to the Android version:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-3.gif&#34; alt=&#34;Android Tabs Ionic 2&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s damn spiffy.&lt;/p&gt;
+
+&lt;p&gt;So what&amp;rsquo;s the code like? As I said before, Angular 2 is different. Not bad different, just&amp;hellip; &lt;em&gt;different.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/pikacat.jpg&#34; alt=&#34;Like this...&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While working on my first demo, I ran into things I immediately liked. For example, I love that my &amp;ldquo;page&amp;rdquo; template and controller are in a folder nicely packaged together. I could have easily done that in Ionic/Angular1 too I guess, but I like the organization.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m also really liking working with ES6. I&amp;rsquo;m barely scratching the surface of course, and probably doing it wrong, but even stuff I thought was overblown, like fat arrows, are &lt;em&gt;really&lt;/em&gt; growing on me.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, some things I ran into felt&amp;hellip; wrong. I got over it. I also know there were things like that in Angular1 as well. But sometimes I just bit my tongue and went with it. So without further ado, here is an Ionic 2 version of my RSS Reader app. I did not build it out completely like the version I have on the Ionic market (&lt;a href=&#34;https://market.ionic.io/starters/rssviewer&#34;&gt;RSS Reader&lt;/a&gt;), but I built in basic list/detail support. I&amp;rsquo;ll share the code, but I want to give big thanks to Mike Hartington (again), @adbella on the Ionic slack, and others.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Please do not treat this as good code!&lt;/strong&gt; Treat this code like a slightly drunk cat walked over your keyboard and then had a little &amp;ldquo;accident&amp;rdquo;. It works - and the part that @abdella helped me with is elegant, but I&amp;rsquo;m sure I could have done things better. With that out of the way, let&amp;rsquo;s first look at the home page. It simply lists items from the RSS feed. First I&amp;rsquo;ll show the view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-navbar *navbar&amp;gt;
+&amp;lt;ion-title&amp;gt;
+Home
+&amp;lt;&amp;#x2F;ion-title&amp;gt;
+&amp;lt;&amp;#x2F;ion-navbar&amp;gt;
+
+&amp;lt;ion-content&amp;gt;
+&amp;lt;ion-list inset&amp;gt;
+&amp;lt;ion-item *ngFor=&amp;quot;#entry of entries&amp;quot; (click)=&amp;quot;openPage(entry)&amp;quot;&amp;gt;{{entry.title}}&amp;lt;&amp;#x2F;ion-item&amp;gt;
+&amp;lt;&amp;#x2F;ion-list&amp;gt;
+&amp;lt;&amp;#x2F;ion-content&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing really weird here except the new way Angular 2 does attributes/code/etc. But I&amp;rsquo;m assuming you can figure out what is happening here. Now let&amp;rsquo;s look at the code for this page.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Page,NavController} from &#39;ionic/ionic&#39;;
+import {RssService} from &#39;../../providers/rss-service/rss-service&#39;;
+import {DetailPage} from &#39;../detail-page/detail-page&#39;;
+
+@Page({
+  templateUrl: &#39;build/pages/home/home.html&#39;,
+  providers:[RssService]
+})
+export class HomePage {
+  constructor(public rssService:RssService, nav:NavController) {
+      this.nav = nav;
+      
+      this.entries = [];
+
+      this.rssService.load().subscribe(
+          data =&amp;gt; {
+              this.entries = data;
+          }
+      );
+
+  }
+  
+  openPage(entry) {
+      console.log(&#39;open page called with &#39;+entry.title);
+      this.nav.push(DetailPage, {selectedEntry:entry});
+  }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So yeah - this is where things got a bit weird. One of the new things in the Angular 2 world is the idea of Observables. These replace (ok, not replace, but my understanding is that they are &lt;em&gt;preferred&lt;/em&gt;) Promises and are supposed to be quite a bit more powerful. You can&amp;rsquo;t really see the Observable, but see the subscribe() call? That&amp;rsquo;s using it. Part of what makes them powerful is that they would support live updates. That doesn&amp;rsquo;t really come into play with RSS parsing, but if it ever were added to my project, in theory it would just plain work. (Note to self - I&amp;rsquo;m going to try to make a demo of a live updating Ionic 2 app soon!)&lt;/p&gt;
+
+&lt;p&gt;Also note the navigation in openPage. I don&amp;rsquo;t have to build an app router now. I just load the page and pass data. I really, really appreciate that.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at the service now.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Injectable} from &#39;angular2/core&#39;;
+import {Http} from &#39;angular2/http&#39;;
+import {Observable} from &#39;rxjs/Observable&#39;;
+import &#39;rxjs/add/observable/from&#39;;
+import &#39;rxjs/add/operator/map&#39;;
+
+/*
+  Generated class for the RssService provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular 2 DI.
+*/
+
+//Credit for latest version is @abdella from the Ionic Slack
+@Injectable()
+export class RssService {
+
+    url = &#39;https://query.yahooapis.com/v1/public/yql?q=select%20title%2Clink%2Cdescription%20from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&#39;;
+    
+    constructor(http: Http) {
+        this.http = http;
+    }
+    
+    load() {
+ 
+        return this.http.get(this.url)
+            .map(res =&amp;gt; res.json())
+            .map(data =&amp;gt; data.query.results.item);
+          
+      /* v2
+      return Observable.create(s =&amp;gt; {
+
+        this.http.get(&#39;https://query.yahooapis.com/v1/public/yql?q=select%20title%2Clink%2Cdescription%20from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&#39;).subscribe(res =&amp;gt; {
+            console.log(&#39;in sub&#39;);
+            console.dir(s);
+            var result = res.json().query.results.item;
+            result.forEach(i=&amp;gt;s.next(i));
+            s.complete();
+            
+        });
+
+      });
+    */  
+
+    // Static version     
+    //    let data = [{title:&amp;quot;do one&amp;quot;},{title:&amp;quot;do two&amp;quot;},{title:&amp;quot;three&amp;quot;}];
+    //    return Observable.from(data);
+
+    
+  }
+}
+&lt;/pre&gt;&lt;/code&gt;
+
+I apologize for the large blocks of commented out code, but I wanted to keep a record of my previous versions for reference later. The slick http.get().map().map() syntax is an example of Oberservables in action and is thanks to @abdella. The basic idea here is we&#39;re fetching the remote data, converting it from a JSON string into an object, and then specifying a precise part of the result to work with (data.query.results.item).
+
+The imports on top are a bit weird. Specifically the fact that we have to import specific parts of Observable. It seems to me that if I want to use a library, I don&#39;t want to have to worry about parts of it being &#34;optional&#34;, and basic functionality like I used doesn&#39;t seem like it should be optional. This is one of those parts that bugged me and I just got over for now. 
+
+The detail page is pretty trivial as well. Here is the view:
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-navbar *navbar&amp;gt;
+  &amp;lt;ion-title&amp;gt;{{entry.title}}&amp;lt;/ion-title&amp;gt;
+&amp;lt;/ion-navbar&amp;gt;
+
+&amp;lt;ion-content padding class=&amp;quot;detail-page&amp;quot;&amp;gt;
+    &amp;lt;div [innerHTML]=&amp;quot;entry.description&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;/ion-content&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That last bit, &lt;code&gt;[innerHTML]=&lt;/code&gt;, is how you handle rendering HTML in Angular since it is &lt;em&gt;still&lt;/em&gt; a pain in the rear about it. (Yes, I know there are reasons, and yes, it still bugs me.) The code for the page just picks up the passed in data. Again - this is really super easy I think.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Page,NavController,NavParams} from &#39;ionic/ionic&#39;;
+
+@Page({
+  templateUrl: &#39;build/pages/detail-page/detail-page.html&#39;
+})
+export class DetailPage {
+    constructor(nav: NavController,navParams:NavParams) {
+        console.log(&#39;run&#39;);
+        this.nav = nav;
+        this.entry = navParams.get(&#39;selectedEntry&#39;);
+        console.log(&#39;my entry is &#39;+this.entry.title);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the home page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-4.png&#34; class=&#34;imgborder&#34; title=&#34;Home Page&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;And one detail page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-5.png&#34; class=&#34;imgborder&#34; title=&#34;Detail Page&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Not exactly rocket science, but you get the idea. So far, I&amp;rsquo;m digging it. I&amp;rsquo;ve got a lot of research to do, and I&amp;rsquo;m really looking forward to when things hit a firm release and stop changing, but I&amp;rsquo;d definitely take some time to look into it. As a reminder, you can, and should, join the &lt;a href=&#34;http://ionicworldwide.herokuapp.com/&#34;&gt;Ionic Slack&lt;/a&gt; channel. It is the best place to get support and help others.&lt;/p&gt;
+
+&lt;p&gt;If you want a copy of my app, you can find it on my GitHub repo here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_ionic_v2&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_ionic_v2&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>HTML Escaper Visual Studio Code Extension</title>
+      <link>http://www.raymondcamden.com/2016/02/10/html-escaper-visual-studio-code-extension</link>
+      <pubDate>Wed, 10 Feb 2016 09:21:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/10/html-escaper-visual-studio-code-extension</guid>
+      <description>&lt;p&gt;Just a quick note to say I&amp;rsquo;ve released a new extension for &lt;a href=&#34;http://code.visualstudio.com&#34;&gt;Visual Studio Code&lt;/a&gt;. This extension simply takes a document and outputs an escaped version of it appropriate for blog posts
+or other online forums. This is basically the same thing I built for Brackets, but it wasn&amp;rsquo;t possible for
+Visual Studio Code until the release this month. Here&amp;rsquo;s an example of how it looks.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/vsc_preview.gif&#34; alt=&#34;Example&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The code I used was based on a simple example made by Erich Gamma of Microsoft. Shoot, 90% of the code is his and I just modified the bare minimum to create my extension. You can find my code here (&lt;a href=&#34;https://github.com/cfjedimaster/htmlescape-vscode&#34;&gt;https://github.com/cfjedimaster/htmlescape-vscode&lt;/a&gt; and you can install it directly within Visual Studio Code itself. You can also download the packaged version
+from the &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=raymondcamden.htmlescape-vscode-extension&#34;&gt;gallery&lt;/a&gt; as well.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking at DevNexus 2016</title>
+      <link>http://www.raymondcamden.com/2016/02/05/speaking-at-devnexus-2016</link>
+      <pubDate>Fri, 05 Feb 2016 14:06:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/05/speaking-at-devnexus-2016</guid>
+      <description>&lt;p&gt;Just a quick note to let folks know I&amp;rsquo;ll be speaking at &lt;a href=&#34;https://devnexus.com/s/index&#34;&gt;DevNexus&lt;/a&gt; in ten days. I&amp;rsquo;m giving a presentation on &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; services and will also be covering my coworker &lt;a href=&#34;http://www.tricedesigns.com/&#34;&gt;Andy Trice&lt;/a&gt;&amp;rsquo;s presentation on cognitive computing and mobile applications.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately it looks like the conference is already sold out, but if you&amp;rsquo;re attending and read this blog, please come by and say hello. I&amp;rsquo;ll be bringing a copy of my last two books with me and will pretty much give them out to the first person who asks for them. Hope to see you there!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Playing with StrongLoop - Building a Blog - Part Three</title>
+      <link>http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three</link>
+      <pubDate>Wed, 03 Feb 2016 13:11:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/03/playing-with-strongloop-building-a-blog-part-three</guid>
+      <description>&lt;p&gt;Welcome to the third in my series of building a (somewhat) real-world application using &lt;a href=&#34;http://www.strongloop.com/&#34;&gt;StrongLoop&lt;/a&gt;. In the &lt;a href=&#34;http://www.raymondcamden.com/2016/01/05/playing-with-strongloop-building-a-blog-part-one&#34;&gt;first entry&lt;/a&gt; I built the beginnings of a simple blog engine. I defined two models (entry and category) and whipped up a quick front end for the blog. In the &lt;a href=&#34;http://www.raymondcamden.com/2016/01/07/playing-with-strongloop-building-a-blog-part-two/&#34;&gt;last entry&lt;/a&gt; I locked down the APIs so that unauthenticated visitors couldn&amp;rsquo;t create content. Today I&amp;rsquo;m going to demonstrate an administrator for my blog. My administrator will be a desktop tool built with &lt;a href=&#34;http://electron.atom.io/&#34;&gt;Electron&lt;/a&gt; and &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;. I first &lt;a href=&#34;http://www.raymondcamden.com/2015/07/23/some-initial-thoughts-on-building-desktop-apps-with-ionic-and-electron/&#34;&gt;blogged&lt;/a&gt; about mixing Ionic and Electron about six months ago. It is still rather easy and you can check out the results on the GitHub repo for this project when your done reading. (I&amp;rsquo;ll include the link at the end.)&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a quick tour through the app and then I&amp;rsquo;ll demonstrate it in action with a quick video. On startup, the application prompts you to login. Please do not blame Ionic for my poor color choices.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogeditor1.png&#34; class=&#34;imgborder&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;After login, you&amp;rsquo;re presented with a list of existing blog entries as well as a button to add a new one. For this quick demonstration, I did not add editing or deleting capabilities, but it wouldn&amp;rsquo;t be too difficult.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogeditor2.png&#34; class=&#34;imgborder&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking Add Entry brings you to a simple form:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/blogeditor3.png&#34; class=&#34;imgborder&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. As I said, proper edit/delete isn&amp;rsquo;t built in yet, but that&amp;rsquo;s all it would take to turn this into a real CRUD desktop app for the server.&lt;/p&gt;
+
+&lt;p&gt;To be clear, I&amp;rsquo;m really barely scratching the surface of what Electron can do. I&amp;rsquo;ve basically used it as a simple wrapper for a web view and nothing more. Off the top of my head - here are some more interesting features I could add to it:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Drag and drop images. I could capture the drop event - upload the file to the server, and automatically inject the HTML for the image into the source. This is how WordPress does it and it would certainly be possible with Electron.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Of course, I could customize the icon like a &amp;ldquo;proper&amp;rdquo; desktop application.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;And probably more that I&amp;rsquo;m not thinking about.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So how about the code? First and foremost I want to point out that StrongLoop has an &lt;a href=&#34;https://docs.strongloop.com/display/public/LB/AngularJS+JavaScript+SDK&#34;&gt;AngularJS library&lt;/a&gt; and I that I &lt;em&gt;should&lt;/em&gt; have made use of it. I did not. I want to - eventually - but I thought it might be a good opportunity to work more with AngularJS&amp;rsquo;s &lt;a href=&#34;https://docs.angularjs.org/api/ngResource/service/$resource&#34;&gt;$resource&lt;/a&gt; feature. To be honest, I had a few problems with it and I should have taken that as a clue to just switch to StrongLoop&amp;rsquo;s stuff, but I was stubborn.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how I designed my Services:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+angular.module(&#39;starter.services&#39;, [])
+.factory(&#39;userService&#39;, function($q,$resource) {
+
+    return $resource(&#39;http://localhost:3000/api/appusers/:id&#39;,{},
+    {
+        &#39;login&#39;:{
+            &#39;method&#39;:&#39;POST&#39;,
+            &#39;url&#39;:&#39;http://localhost:3000/api/appusers/login&#39;
+        }
+    });
+
+})
+.factory(&#39;entryService&#39;, function($q,$resource) {
+
+    return $resource(&#39;http://localhost:3000/api/entries/:id&#39;);
+
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see - I simply $resource-wrapped my two main APIs - one for users and one for entries. (I&amp;rsquo;m still not &lt;em&gt;really&lt;/em&gt; supporting categories yet.) For users I had to add the custom login method that ships out of the box. On the calling side, here is the controller code for doing login.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.controller(&#39;loginCtrl&#39;, [&#39;$scope&#39;, &#39;$rootScope&#39;, &#39;userService&#39;, &#39;$state&#39;, &#39;$http&#39;,
+    function($scope, $rootScope, userService, $state, $http) {
+    
+    $scope.user = {username:&#39;raymondcamden@gmail.com&#39;,password:&#39;password&#39;};
+
+    $scope.doLogin = function() {
+        if($scope.user.username === &#39;&#39; || $scope.user.password === &#39;&#39;) {
+            return;
+        }
+        userService.login({email:$scope.user.username,password:$scope.user.password},function(res) {
+            $rootScope.authToken = res.id; // don&#39;t really need to keep it
+            $http.defaults.headers.common[&#39;Authorization&#39;] = $rootScope.authToken;
+            $state.go(&#39;root.Home&#39;); 
+        },function(e) {
+            //for right now - generic error
+            alert(&#39;Login Failed&#39;);
+        });
+    };
+
+}])
+&lt;/code&gt;&lt;/pre&gt; 
+
+&lt;p&gt;First off - I&amp;rsquo;m hard coding the username and password in there just to save me on typing. That&amp;rsquo;s a pro-tip there. The login call is pretty simple, but I need to remember the auth token returned by the Loopback API. I both store it in rootScope (that&amp;rsquo;s bad, right? I&amp;rsquo;m ok with bad) and add it to my $http headers. I did that because I had trouble getting custom headers to work with $resource. That&amp;rsquo;s most likely my fault, but this worked for now. You can read more about authenticating requests and StrongLoop at the docs: &lt;a href=&#34;https://docs.strongloop.com/display/public/LB/Making+authenticated+requests&#34;&gt;Making authenticated requests&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Listing entries is simple - I had to include the ordering argument in the controller code which &lt;em&gt;also&lt;/em&gt; feels like a mistake (it should be in the service I think), but it worked well enough:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+entryService.query({&#34;filter[order]&#34;:&#34;published desc&#34;},function(res) {
+    $scope.entries = res;
+}, function(e) {
+    console.log(&#39;bad &#39;+JSON.stringify(e));          
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally - here&amp;rsquo;s how I save a new entry. Note I automate the slug and published values.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$scope.doSave = function() {
+    var postedDate = new Date();
+
+    var newEntry = new entryService();
+    newEntry.title = $scope.entry.title;
+    newEntry.body = $scope.entry.body;
+    newEntry.released = true;
+    newEntry.published = new Date();
+    //not perfect...
+    newEntry.slug = newEntry.title.replace(/ /g,&#39;-&#39;);
+    newEntry.$save();
+    $state.go(&#39;root.Home&#39;); 
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can find the source code for my app here: &lt;a href=&#34;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2/client/electron-quick-start&#34;&gt;https://github.com/cfjedimaster/StrongLoopDemos/tree/master/blog2/client/electron-quick-start&lt;/a&gt;. I also built a quick video showing the app in action. Enjoy!&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/TsLKg7notnA&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Article on Improving Your JavaScript Skills</title>
+      <link>http://www.raymondcamden.com/2016/02/01/article-on-improving-your-javascript-skills</link>
+      <pubDate>Mon, 01 Feb 2016 12:12:24 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/01/article-on-improving-your-javascript-skills</guid>
+      <description>&lt;p&gt;Nothing much to say here really except that I&amp;rsquo;ve released another article for the
+&lt;a href=&#34;http://developer.telerik.com/&#34;&gt;Telerik Developer Network&lt;/a&gt; - &lt;a href=&#34;http://developer.telerik.com/featured/leveling-up-your-javascript/&#34;&gt;&amp;ldquo;Leveling Up Your JavaScript&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As you can probably guess, the article discusses how to improve your JavaScript skills. This is not meant to replace any of the good books out there. Rather, this is a high level view at what helped &lt;em&gt;me&lt;/em&gt; improve my own skills. It is focused on a few specific strategies that I found useful for becoming a better developer.&lt;/p&gt;
+
+&lt;p&gt;And to be clear - I&amp;rsquo;m talking about a &amp;ldquo;better developer&amp;rdquo;, not a &amp;ldquo;great&amp;rdquo; developer or heck, even &amp;ldquo;good&amp;rdquo; - just better. Becoming better at JavaScript (and web development in general) has been a fun, and sometimes painful, process. So I&amp;rsquo;ve tried to provide some guidance as to what worked well for me. Obviously these tips may not work for you, but I hope they provide some useful suggestions for you.&lt;/p&gt;
+
+&lt;p&gt;Please let me know what you think in the comments on the article!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Visual Studio Code extension for Cordova</title>
+      <link>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</link>
+      <pubDate>Thu, 28 Jan 2016 17:27:24 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</guid>
+      <description>&lt;p&gt;Earlier today Microsoft released a set of updates for &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt;. TACO stands
+for &amp;ldquo;Tools for Apache Cordova&amp;rdquo; and has been around for a little while yet, but I&amp;rsquo;ve not had a chance to give it proper review on the blog. I still plan on doing so, but I wanted to specifically call out part of what was released today - &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=vsmobile.cordova-tools&#34;&gt;tooling support&lt;/a&gt; for Visual Studio Code.&lt;/p&gt;
+
+&lt;p&gt;Obviously this only helps you if you are a Visual Studio Code user, and if you are not, I highly suggest you take a look at the rest of the &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt; site to look at the other parts of the suite. As I said - there is some impressive stuff here. If you do use Visual Studio Code though you&amp;rsquo;ll want to grab this extension right away.&lt;/p&gt;
+
+&lt;p&gt;The extension provides three main features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, you get a debugger for iOS and Android. You can debug applications running on both the simulator and a real device.&lt;/li&gt;
+&lt;li&gt;Second, you get Cordova commands in the command palette. Right now this is just Build and Run, but it&amp;rsquo;s something.&lt;/li&gt;
+&lt;li&gt;Third, and my favorite, you get intellisense for the plugin APIs. This provides code completion for Cordova plugins. Even cooler - the extension is smart enough to know what plugins you have installed in the current project. So if you don&amp;rsquo;t have the Camera plugin installed, you won&amp;rsquo;t get code completion. How does it look? Here is a quick example:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/cordovaext1.png&#34; alt=&#34;Visual Studio Code completion&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To give you an idea of how the debugger looks, I did a quick video. I&amp;rsquo;m coming down with a bit of a cold, so forgive the somewhat scratchy voice.&lt;/p&gt;
+
+&lt;iframe width=&#34;480&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/9o-U0vH-5DI&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Survey Results for Rebecca Murphey&#39;s Learning JavaScript Survey</title>
+      <link>http://www.raymondcamden.com/2016/01/25/survey-results-learning-javascript</link>
+      <pubDate>Tue, 26 Jan 2016 15:40:46 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/25/survey-results-learning-javascript</guid>
+      <description>
+
+&lt;p&gt;A few weeks back, &lt;a href=&#34;http://t.co/w58cLHiW3H&#34;&gt;Rebecca Murphey&lt;/a&gt; tweeted out a link to a survey she was running involving how people learn JavaScript and how it has impacted their careers.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Have you worked on getting better at JS in the last year? I’d love your input &lt;a href=&#34;https://t.co/qEGaIWW6ha&#34;&gt;https://t.co/qEGaIWW6ha&lt;/a&gt; I’ll share what I’ve learned soon!&lt;/p&gt;&amp;mdash; Rebecca Murphey (@rmurphey) &lt;a href=&#34;https://twitter.com/rmurphey/status/686970717494104064&#34;&gt;January 12, 2016&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;More recently she shared the &lt;a href=&#34;https://gist.github.com/rmurphey/9d154a005f46f37d2b91&#34;&gt;raw results&lt;/a&gt; as a CSV dump and I thought it would be fun to parse the results. I was genuinely interested in the data and I thought it would give me a chance to play with a JavaScript charting engine. I&amp;rsquo;ve taken a stab at rendering the data and I thought I&amp;rsquo;d share the results. I&amp;rsquo;ll link to the demo at the end, and please note that any mistakes are entirely on my end, and not Rebecca&amp;rsquo;s fault.&lt;/p&gt;
+
+&lt;p&gt;I began by looking into CSV parsing with JavaScript. A quick search turned up &lt;a href=&#34;http://papaparse.com/&#34;&gt;PapaParse&lt;/a&gt; which has an incredibly simple API. Here&amp;rsquo;s what I had to do to parse the data.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+Papa.parse(&#34;./learning-js.csv&#34;, {
+    download:true,
+    header:true,
+    complete:function(results) {
+        allData = results.data;
+        doCharts();
+    }   
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s pretty darn simple. PapaParse has quite a few options so I definitely recommend checking it out.&lt;/p&gt;
+
+&lt;p&gt;I then looked into charting the results. I began with &lt;a href=&#34;http://www.chartjs.org/&#34;&gt;Chart.js&lt;/a&gt; which was pretty and easy to use, but I couldn&amp;rsquo;t figure out how to make the pie chart labels show up all the time and not just on mouse over. I found a workaround, but honestly, it just kind of bugged me that I couldn&amp;rsquo;t do it easier so I punted and went over to &lt;a href=&#34;http://gionkunz.github.io/chartist-js/index.html&#34;&gt;Chartist.js&lt;/a&gt;. Personally it was the mascot that sold me.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/chartist.png&#34; alt=&#34;Chartist&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The API was a bit weird in places, but I was able to get some basic charts written out. I thought the engine made some odd choices for colors. For example, a two-slice pie chart would use a red and then a near-red color. You could distinguish the slices, but they were pretty close. You can tweak the colors of course, but the &lt;em&gt;defaults&lt;/em&gt; for the pie chart seemed odd in my opinion.&lt;/p&gt;
+
+&lt;p&gt;Anyway, here are the questions and results, taken out of my ugly demo app and positioned a bit nicer.&lt;/p&gt;
+
+&lt;h2 id=&#34;have-you-focused-specifically-on-improving-your-js-skills-at-any-time-in-the-last-year:bcbb765956ceab02096d602f6dd88456&#34;&gt;Have you focused specifically on improving your JS skills at any time in the last year?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey1.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Absolutely no surprise here.&lt;/p&gt;
+
+&lt;h2 id=&#34;which-resources-did-you-use-to-help-you-learn:bcbb765956ceab02096d602f6dd88456&#34;&gt;Which resources did you use to help you learn?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey2a.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Kinda surprised how high blogs rank here, especially since blogs seem to be better for one offs, like, &amp;ldquo;How do I do cowbell in X&amp;rdquo;, versus more broad training. Then again, maybe people need more concrete examples versus learning JavaScript at a broad level.&lt;/p&gt;
+
+&lt;h2 id=&#34;during-your-learning-which-areas-have-been-particularly-challenging:bcbb765956ceab02096d602f6dd88456&#34;&gt;During your learning, which areas have been particularly challenging?&lt;/h2&gt;
+
+&lt;p&gt;Just an FYI, I skipped a few question. Anyway, the chart. And I apologize, this is a big one.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey3a.png&#34; target=&#34;_new&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The labels are pretty much unreadable there. You can find a larger version &lt;a href=&#34;http://www.raymondcamden.com/images/2016/01/survey3_big.png&#34;&gt;here&lt;/a&gt;. Again, just click for the &amp;ldquo;full&amp;rdquo; view. Top three issues were:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Build tools&lt;/li&gt;
+&lt;li&gt;Understanding how to apply things to the real world&lt;/li&gt;
+&lt;li&gt;Lack of mentoring/guidance&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Number two in that list is a particular pet peeve of mine. I&amp;rsquo;ve seen far too many examples that are so far removed from reality that they are near useless. (And to be fair, I&amp;rsquo;ve done it myself.)&lt;/p&gt;
+
+&lt;h2 id=&#34;which-technologies-do-you-use-in-your-current-role:bcbb765956ceab02096d602f6dd88456&#34;&gt;Which technologies do you use in your current role?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey4.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Again, no real surprises here, although I would have thought Node would have been higher. I apologize for the clunkiness of some of the labels.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-long-have-you-been-working-professionally-in-web-development:bcbb765956ceab02096d602f6dd88456&#34;&gt;How long have you been working professionally in web development?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey5.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Woot - I&amp;rsquo;m not the only old person in tech! I&amp;rsquo;m squarely in the 10+ years bar there. I began working with the web around 1994 or so.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-would-you-rate-the-improvement-of-your-js-skills-in-the-last-year:bcbb765956ceab02096d602f6dd88456&#34;&gt;How would you rate the improvement of your JS skills in the last year?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey6.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a good chart. Well, not my design - I don&amp;rsquo;t like the lack of space. What I mean is - it looks like most people are improving, and improving at least a little bit. Hey, you don&amp;rsquo;t have to go from noob to demigod in one year. Baby steps is just fine.&lt;/p&gt;
+
+&lt;h2 id=&#34;have-you-gotten-a-new-job-a-promotion-or-new-responsibilities-since-improving-your-js-skills:bcbb765956ceab02096d602f6dd88456&#34;&gt;Have you gotten a new job, a promotion, or new responsibilities since improving your JS skills?&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/survey7.png&#34; alt=&#34;Chart&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d say that&amp;rsquo;s a damn good chart too.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-full-report:bcbb765956ceab02096d602f6dd88456&#34;&gt;The full report&lt;/h2&gt;
+
+&lt;p&gt;Ok, I should clarify - this isn&amp;rsquo;t a full report - I didn&amp;rsquo;t chart the questions focused on the &lt;em&gt;one&lt;/em&gt; resource that was best/worst. But you can view everything here: &lt;a href=&#34;http://static.raymondcamden.com/rmurphey/&#34;&gt;http://static.raymondcamden.com/rmurphey/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Please - for the love of God - do not view source. Seriously. I&amp;rsquo;m not being humble. This is absolute crap code. Thanks again to Rebecca Murphey for creating this survey. I&amp;rsquo;d strongly recommend checking out her &lt;a href=&#34;https://github.com/rmurphey/js-assessment&#34;&gt;js-assessment&lt;/a&gt; project as well.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Apache Cordova SplashScreen Change</title>
+      <link>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</link>
+      <pubDate>Mon, 25 Jan 2016 16:16:10 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</guid>
+      <description>&lt;p&gt;A few days ago I began to notice something odd with my Apache Cordova tests. When the application would launch, the splash screen would fade away as opposed to just disappearing. I thought this seemed familiar so I double checked the Apache Cordova blog and re-read the last &lt;a href=&#34;http://cordova.apache.org/news/2016/01/19/plugins-release.html&#34;&gt;plugins release&lt;/a&gt; post. I had read it when it was published, but not terribly closely. In it, it mentions that the SplashScreen plugin was updated to 3.1.0. In the notes, you can see &amp;ldquo;Implementing FadeSplashScreen feature for Android&amp;rdquo; and something similar for iOS.&lt;/p&gt;
+
+&lt;p&gt;If you head over to the &lt;a href=&#34;https://github.com/apache/cordova-plugin-splashscreen&#34;&gt;SplashScreen plugin&lt;/a&gt; doc though, this update isn&amp;rsquo;t mentioned in the main Preferences section. Rather, you have to scroll down to &amp;ldquo;Android and iOS Quirks&amp;rdquo; to see that both a FadeSplashScreen and FadeSplashScreenDuration preference were added. (I&amp;rsquo;ve logged a bug about documenting this up in the top preferences section.)&lt;/p&gt;
+
+&lt;p&gt;As the docs say - the default is true, so if for some reason you don&amp;rsquo;t like this new behavior, you&amp;rsquo;ll need to add this to your config.xml:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;preference name=&#34;FadeSplashScreen&#34; value=&#34;false&#34; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Want to see what this new feature looks like in action? Check out the video I created.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/F1yrrvgbyJc&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>DefinitelyTyped project for IBM MobileFirst and Hybrid Mobile Apps</title>
+      <link>http://www.raymondcamden.com/2016/01/19/definitelytyped-project-for-ibm-mobilefirst-and-hybrid-mobile-apps</link>
+      <pubDate>Tue, 19 Jan 2016 10:48:55 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/19/definitelytyped-project-for-ibm-mobilefirst-and-hybrid-mobile-apps</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve blogged before about the client-side API for hybrid mobile apps built on &lt;a href=&#34;
+https://ibm.biz/IBM-MobileFirst&#34;&gt;IBM MobileFirst&lt;/a&gt;. One of the things I&amp;rsquo;ve discovered recently is the library of &lt;a href=&#34;http://definitelytyped.org/&#34;&gt;DefinitlyTyped&lt;/a&gt; definition files for TypeScript developers. These files provide intellisense for a huge set of various frameworks and client-side code written in TypeScript. Turns out though that you can also use them in regular old JavaScript files too. My editor of choice (Visual Studio Code) has &lt;a href=&#34;https://code.visualstudio.com/docs/languages/javascript&#34;&gt;great support&lt;/a&gt; for this. You can simply get the file, drop it into your project, and go to town.&lt;/p&gt;
+
+&lt;p&gt;So with that in mind - I started working on a DefinitelyTyped file for MobileFirst. I had to guess a bit at exactly how to do it, and I probably did a few things wrong, but you can get the work in progress here: &lt;a href=&#34;https://github.com/cfjedimaster/MobileFirst-Typings&#34;&gt;https://github.com/cfjedimaster/MobileFirst-Typings&lt;/a&gt;. As you will see in the ReadMe, I&amp;rsquo;ve covered a few of the main classes in the WL namespace (this is the core namespace for the API). I&amp;rsquo;m looking for feedback on how I built it as well as volunteers to help complete the library with a pull request.&lt;/p&gt;
+
+&lt;p&gt;In case your curious as to how well this works, check out the video below:&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/wre69RYbDnA&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;As a side note - you can get definition files for Apache Cordova and Ionic as well!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Time for Angular 2?</title>
+      <link>http://www.raymondcamden.com/2016/01/18/time-for-angular-2</link>
+      <pubDate>Mon, 18 Jan 2016 12:32:12 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/18/time-for-angular-2</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/angular.png&#34; alt=&#34;angular&#34; width=&#34;200&#34; height=&#34;200&#34; class=&#34;alignleft size-full wp-image-7400&#34; /&gt; I&amp;rsquo;ve been avoiding even &lt;i&gt;thinking&lt;/i&gt; about the latest rev of Angular as every time I &lt;strong&gt;did&lt;/strong&gt; look at it, I came away with a headache. It was weird and the docs were even weirder. I saw plenty of blog posts on the topic, but in general they dealt with one small slice of Angular 2 and were too confusing for me to grok.&lt;/p&gt;
+
+&lt;p&gt;Over the holidays, I checked out the web site again (Angular 2 can be found at &lt;a href=&#34;https://angular.io/&#34;&gt;https://angular.io/&lt;/a&gt; whereas Angular 1 is still at the old site: &lt;a href=&#34;https://angularjs.org/&#34;&gt;https://angularjs.org/&lt;/a&gt;). I tried the &lt;a href=&#34;https://angular.io/docs/ts/latest/quickstart.html&#34;&gt;five minute quick start&lt;/a&gt; and while it took me a bit more than five minutes, it made a bit of sense. It certainly wasn&amp;rsquo;t crystal clear to me, but it wasn&amp;rsquo;t crazy either.&lt;/p&gt;
+
+&lt;p&gt;I then went through the &lt;a href=&#34;https://angular.io/docs/ts/latest/tutorial/&#34;&gt;tutorials&lt;/a&gt; and things began to make even more sense. I&amp;rsquo;m far from being even close to being able to build a demo with it, but the basics are beginning to click for me.&lt;/p&gt;
+
+&lt;p&gt;There were three things in particular I ran into that caused me grief.&lt;/p&gt;
+
+&lt;p&gt;1) Working with Angular 2 means working with TypeScript. I like TypeScript. But I&amp;rsquo;m kinda disappointed that working with Angular now means working with a build system to get it into the browser. To be absolutely clear, I&amp;rsquo;m not saying this is bad. I&amp;rsquo;m just saying I feel a bit disappointed that this is required now. I&amp;rsquo;ll get over it.&lt;/p&gt;
+
+&lt;p&gt;2) The @Component stuff was terribly confusing to me until it finally sank in that those blocks are providing metadata to the classes. It seems so obvious now, but I just couldn&amp;rsquo;t understand what in the heck stuff like this was doing:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Component} from &#39;angular2/core&#39;;
+
+@Component({
+    selector: &#39;my-app&#39;,
+    template: &#39;&lt;h1&gt;My First Angular 2 App&lt;/h1&gt;&#39;
+})
+export class AppComponent { }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3) One thing I really didn&amp;rsquo;t like in Angular 2 was all the different types of &amp;ldquo;syntax sugar&amp;rdquo; being used in templates. Here are just a few examples: &lt;code&gt;[(ngModel)]=&amp;ldquo;foo.name&amp;rdquo;&lt;/code&gt; and &lt;code&gt;*ngFor&lt;/code&gt; and &lt;code&gt;(click)=&amp;ldquo;something&amp;rdquo;&lt;/code&gt;. I figured there was no way in heck I&amp;rsquo;d be able to get that right. Luckily - there&amp;rsquo;s a great &lt;a href=&#34;https://angular.io/cheatsheet&#34;&gt;cheat sheet&lt;/a&gt; that nicely documents all this and is easy to use.&lt;/p&gt;
+
+&lt;p&gt;So what&amp;rsquo;s next? I plan on making my way - slowly - through the rest of the docs. I&amp;rsquo;m also going to reread the tutorials a few times. I then need to make the time to look at &lt;a href=&#34;http://ionicframework.com/docs/v2/getting-started/installation/&#34;&gt;Ionic 2&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;For a while now I&amp;rsquo;ve been telling people that - at least in my opinion - it was too early to start playing with Angular 2. Now I definitely feel like it would be a great time to start playing with it and - possibly - even building real apps with it. I&amp;rsquo;d love to know what my readers think so leave a comment below. Are you using Angular 2 yet or have you been holding off?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Working with Hugo on RaymondCamden.com</title>
+      <link>http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com</link>
+      <pubDate>Sat, 16 Jan 2016 11:02:31 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve mentioned before that I&amp;rsquo;m considering moving my blog from a Wordpress install to purely static. I&amp;rsquo;ve made some progress on this effort and while I&amp;rsquo;m not 100% sure I&amp;rsquo;m going to pull the plug, I&amp;rsquo;m &lt;i&gt;real&lt;/i&gt; close to it.
+I thought I&amp;rsquo;d talk a bit about how this is going and share some of the things I&amp;rsquo;ve learned about &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I had looked at Hugo a while ago and I &lt;i&gt;really&lt;/i&gt; didn&amp;rsquo;t like it. It&amp;rsquo;s difficult to explain why, but it was just plain weird to me. A few weeks ago I decided to give it another look, and while I still found it weird, I kept at it and I&amp;rsquo;m kinda digging it now. In no particular order, here are some things I discovered/struggled with/built/etc:&lt;/p&gt;
+
+&lt;h2&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;So&amp;hellip; this is the biggest issue. To install Hugo, you use brew. I only use brew when some random app asks me too. Most apps use npm. Ok, no big deal, they tell you exactly what command to do so you can cut and paste.&lt;/p&gt;
+
+&lt;p&gt;However&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;When I installed, it gave me Hugo 0.13, an older version. This caused a number of problems while I was going through the docs.&lt;/p&gt;
+
+&lt;p&gt;Turns out - Brew has some kind of internal registry and you have to update brew itself before you get an app.&lt;/p&gt;
+
+&lt;p&gt;Now - I&amp;rsquo;m sure there is a good reason for that. But on first blush, it seems really stupid. If you can never install an app (safely!) without updating brew first, then why isn&amp;rsquo;t that baked in? Or at least have a warning of some sort? This one issue took me a good day to get past. I filed a bug report for it and now the Hugo docs include updating brew as part of the install process.&lt;/p&gt;
+
+&lt;h2&gt;Content versus Themes&lt;/h2&gt;
+
+&lt;p&gt;The biggest issue I had was understanding the relationship between the files of your project versus a theme. So for example, it took me a while to figure out where my home page was. Why? I had thought my &amp;ldquo;theme&amp;rdquo; was just layout junk and nothing more. But that&amp;rsquo;s not the case. The theme actually includes your home page and other assets.&lt;/p&gt;
+
+&lt;p&gt;Ok, so a theme then is kind of like a full application. That took me some time to wrap my head around, but I get it now. If you want to modify how your site behaves, like for example, how many entries to show on a blog&amp;rsquo;s home page, then you either edit the theme or you can copy the file. If Hugo sees the same file name in your app directory versus the theme, it will run your file instead. I figured that early on and assumed it was best practice.&lt;/p&gt;
+
+&lt;h2&gt;Go Templates&lt;/h2&gt;
+
+&lt;p&gt;So Hugo uses &lt;a href=&#34;http://golang.org/pkg/html/template/&#34;&gt;Go Templates&lt;/a&gt; for its dynamic templates. Go is weird. I like it. But it is just plain weird. Here is an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;section id=&amp;quot;main&amp;quot;&amp;gt;
+    {{ range first 10 (where .Site.Pages &amp;quot;Type&amp;quot; &amp;quot;post&amp;quot;) }}
+    &amp;lt;article class=&amp;quot;article article-type-post&amp;quot; itemscope=&amp;quot;&amp;quot; itemprop=&amp;quot;blogPost&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;article-inner&amp;quot;&amp;gt;
+            {{ if and (isset .Params &amp;quot;banner&amp;quot;) (not (eq .Params.banner &amp;quot;&amp;quot;)) }}
+            &amp;lt;a href=&amp;quot;{{ .Permalink }}&amp;quot; itemprop=&amp;quot;url&amp;quot;&amp;gt;
+                &amp;lt;img src=&amp;quot;{{ .Site.BaseURL }}{{ .Params.banner }}&amp;quot; class=&amp;quot;article-banner&amp;quot;&amp;gt; {{ end }}
+            &amp;lt;/a&amp;gt;
+
+            {{ partial &amp;quot;article_header&amp;quot; . }}
+            &amp;lt;div class=&amp;quot;article-entry&amp;quot; itemprop=&amp;quot;articleBody&amp;quot;&amp;gt;
+                &amp;lt;p&amp;gt;
+                    {{ printf &amp;quot;%s&amp;quot; .Summary | markdownify }}
+                    &amp;lt;br&amp;gt;
+                &amp;lt;/p&amp;gt;
+                &amp;lt;p class=&amp;quot;article-more-link&amp;quot;&amp;gt;
+                    &amp;lt;a href=&amp;quot;{{ .Permalink }}&amp;quot;&amp;gt;
+                        {{with .Site.Data.l10n.articles.read_more}}{{.}}{{end}}
+                    &amp;lt;/a&amp;gt;
+                &amp;lt;/p&amp;gt;
+            &amp;lt;/div&amp;gt;
+            {{ partial &amp;quot;article_footer&amp;quot; . }}
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/article&amp;gt;
+    {{ end }}
+
+    {{ partial &amp;quot;pagination&amp;quot; . }}
+&amp;lt;/section&amp;gt;
+&amp;lt;!-- // main section --&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It is readable - just&amp;hellip; odd. Odd or not, I liked working with it although I had a hard time with the docs sometimes. For example, just figuring out how to limit a loop to N results took me a while.&lt;/p&gt;
+
+&lt;h2&gt;Content pages versus Layouts&lt;/h2&gt;
+
+&lt;p&gt;This was the last issue I hit, and is probably the only thing that really bugs me. Your layout files can include Go in them to make them dynamic. Your content pages cannot. So I built a contact page and I couldn&amp;rsquo;t include a simple Go variable for my site&amp;rsquo;s URL. However - while you can&amp;rsquo;t use logic/variables, you can use something called &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;shortcodes&lt;/a&gt; instead. For my contact form, I had to build a shortcode that literally just output the site&amp;rsquo;s URL. That seems stupid too, but I&amp;rsquo;m assuming there is a good reason for this. (And as it took me 2 minutes fix I got over it. ;)&lt;/p&gt;
+
+&lt;h2&gt;Populating Hugo&lt;/h2&gt;
+
+&lt;p&gt;To populate my Hugo site, I used WordPress&amp;rsquo;s XML export feature. I then wrote a Node.js script that read it, parsed it, and output all 5000+ blog entries in the proper format. I can share this code if anyone wants to see it, but it isn&amp;rsquo;t very pretty.&lt;/p&gt;
+
+&lt;h2&gt;Hugo Performance&lt;/h2&gt;
+
+&lt;p&gt;Hugo is really fast. But even with it being fast, at 5K+ blog entries, every modification to source files took about 30 seconds for Hugo to handle. That was too long. So while I was working, I cut out about 4k of my blog entries. At that point, Hugo was taking about a second or so to update which was fine. Hugo will also auto reload in server mode which was pretty cool. I just had to open my browser and wait for it to reload when I saved.&lt;/p&gt;
+
+&lt;h2&gt;Theming&lt;/h2&gt;
+
+&lt;p&gt;Hugo has a bunch of themes you can browse at &lt;a href=&#34;http://themes.gohugo.io/&#34;&gt;http://themes.gohugo.io/&lt;/a&gt;. I went with Icarus. Here is a screen shot of blog so far.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/Screen-Shot-2016-01-16-at-10.40.14.png&#34; alt=&#34;Screen Shot 2016-01-16 at 10.40.14&#34; width=&#34;750&#34; height=&#34;577&#34; class=&#34;aligncenter size-full wp-image-7391 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And here is a random blog entry.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/Screen-Shot-2016-01-16-at-10.42.52-1.png&#34; alt=&#34;Screen Shot 2016-01-16 at 10.42.52&#34; width=&#34;516&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7393 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I dig it. I&amp;rsquo;m not 100% sold on the look, but I like it.&lt;/p&gt;
+
+&lt;h2&gt;Forms and Search&lt;/h2&gt;
+
+&lt;p&gt;For my contact form, I use &lt;a href=&#34;http://formspree.io/&#34;&gt;Formspree&lt;/a&gt;. They let you POST to them and send an email for free. It is super easy to use.&lt;/p&gt;
+
+&lt;p&gt;For search, I&amp;rsquo;m using a &lt;a href=&#34;https://cse.google.com/cse/&#34;&gt;Google Custom Search&lt;/a&gt; instance. I&amp;rsquo;ve used this in the past (see the search at &lt;a href=&#34;http://www.cflib.org&#34;&gt;CFLib&lt;/a&gt;) and it works fine. I kinda think Google knows a thing or two about search.&lt;/p&gt;
+
+&lt;h2&gt;Hosting&lt;/h2&gt;
+
+&lt;p&gt;Hosting will be via &lt;a href=&#34;http://surge.sh&#34;&gt;Surge&lt;/a&gt;. With me no longer using Google Cloud Compute Engine (which, btw, works darn well and is recommended), I&amp;rsquo;ll put my money into Surge instead for their professional plan. Deploying the full site of 5000+ files takes about a minute.&lt;/p&gt;
+
+&lt;h2&gt;Writing&lt;/h2&gt;
+
+&lt;p&gt;And this is the sore point for me. I really, &lt;i&gt;really&lt;/i&gt; like the WordPress creation process. I can easily drag and drop images. I can easily assign categories and tags. I can save a work in progress for later. It is perfect. Now I&amp;rsquo;m going to a much a simpler system.&lt;/p&gt;
+
+&lt;p&gt;First I&amp;rsquo;ll make a file. That&amp;rsquo;s not hard of course. On top I&amp;rsquo;ll need to add my own metadata. Hugo lets you use a variety of formats for that including JSON. Here is an example.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+{
+    &#34;title&#34;: &#34;Hello World! I love yo!&#34;,
+    &#34;categories&#34;: [
+        &#34;ColdFusion&#34;
+    ],
+    &#34;tags&#34;: [],
+    &#34;date&#34;: &#34;2016-01-15T06:01:00+06:00&#34;,
+    &#34;url&#34;: &#34;/2016/01/15/hello-world&#34;
+}
+
+Yesterday on Facebook! I saw one of those &#34;PLEASE SHARE WITH EVERYONE&#34;. This is
+just me *testing* crap.
+
+&amp;lt;!--more--&amp;gt;
+
+I thought this would be rather simple, but from what I can see, it is impossible. What **the** heck. 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;ve got to write that all up myself (Hugo supports creating a new content file via the CLI, but I don&amp;rsquo;t think it will work for me - need to investigate that) and then work on my article. My editor of choice, Visual Studio Code, has a built in Markdown preview:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot.png&#34; alt=&#34;shot&#34; width=&#34;750&#34; height=&#34;441&#34; class=&#34;aligncenter size-full wp-image-7394&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see the data on top is rendered too but that&amp;rsquo;s easily ignorable. The real issue I&amp;rsquo;ve got now is images. I&amp;rsquo;ll need to copy those myself to the right folder and then insert the Markdown code to include the image. I&amp;rsquo;m almost tempted to build my own editor in Electron as a desktop app - but that would be silly&amp;hellip; right?&lt;/p&gt;
+
+&lt;p&gt;In the end - this is the main thing holding me back. I want to be sure that when I have a quick blog post (like when I write an article and just want to share it with others) that I don&amp;rsquo;t feel like my &amp;ldquo;process&amp;rdquo; dissuades me from writing.&lt;/p&gt;
+
+&lt;p&gt;I have to say though - the thought of going static and removing any concern over security, web servers, MySQL, etc, is &lt;strong&gt;extremely&lt;/strong&gt; compelling. I want this site to be a resource that helps others and doesn&amp;rsquo;t need to be constantly monitored. To be fair, Surge had downtime recently. (See the &lt;a href=&#34;https://medium.com/surge-sh/january-7-2016-downtime-79d9440177b4#.dvtw5uwx8&#34;&gt;explanation&lt;/a&gt; for why.) But frankly - I&amp;rsquo;d rather have someone else worry about getting stuff back up then me.&lt;/p&gt;
+
+&lt;h2&gt;Everything Else&lt;/h2&gt;
+
+&lt;p&gt;So I&amp;rsquo;ve already released this blog entry but I wanted to add a few more notes. I feel like I focused more on the issues I had with Hugo and not quite enough about what I liked. I mean, I said I liked it, but didn&amp;rsquo;t really point out &lt;i&gt;why&lt;/i&gt; I liked it. So here are more points - again - not in any particular order.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;One &lt;i&gt;very&lt;/i&gt; cool feature of Hugo is that you have 100% control over the URLs via front matter. In the other static site generators I worked with, the URL was based on the physical file path. But by using front-matter on your content page, you can explicitly specify what the URL is and it need not have any relation to the physical path. I really dug that.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;I mentioned this quickly above, but by default, the server uses autoreload. My primary experience with autoreload in the browser is with Ionic, but it works darn well with Hugo too. As I said, sometimes it took a second or two for Hugo to catch up with my changes, but having it autoreload when ready meant I didn&amp;rsquo;t have to reload myself.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;While this is a feature I removed (I&amp;rsquo;ll explain why in a second), the built in Pagination was &lt;i&gt;really&lt;/i&gt; well done. The code to support it was simple - and frankly - it is rare for pagination to ever be simple. I decided against pagination for my blog as I&amp;rsquo;ve got so many darn entries, but I was incredibly impressed by the support for this in Hugo.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;And more! Ok, that&amp;rsquo;s a bit lame, but I&amp;rsquo;m still reading the docs and finding gems, so I&amp;rsquo;m going to keep learning.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Going from static to dynamic with Ionic Creator</title>
+      <link>http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator</link>
+      <pubDate>Mon, 11 Jan 2016 14:28:32 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator</guid>
+      <description>&lt;p&gt;As I&amp;rsquo;ve mentioned more than once now, I&amp;rsquo;m &lt;i&gt;really&lt;/i&gt; happy with how much &lt;a href=&#34;http://creator.ionic.io&#34;&gt;Ionic Creator&lt;/a&gt; has improved recently. For this blog post, I thought it might be useful to demonstrate how you could go from a &amp;ldquo;static&amp;rdquo; Ionic Creator proof of concept to a dynamic one that made use of a real API. For hard core developers, this is probably not going to be very helpful. But I imagine Creator will attract folks who may not have a lot of experience working with JavaScript and APIs so I thought a concrete example would be helpful. As always, if anything doesn&amp;rsquo;t make sense, leave me a comment and I&amp;rsquo;ll try my best to help out.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s begin by discussing the type of application we&amp;rsquo;re going to build. It will be a simple &amp;ldquo;Master/Detail&amp;rdquo; example where the initial page is a list of items and the detail provides - well - detail. As a completely random &amp;ldquo;not related to anything recent&amp;rdquo; idea, let&amp;rsquo;s use Star Wars films for our data.&lt;/p&gt;
+
+&lt;p&gt;It just so happens that an API exists, &lt;a href=&#34;https://swapi.co/&#34;&gt;SWAPI&lt;/a&gt;, that provides information about Star Wars films. In fact, I&amp;rsquo;ve already released a helper library for this API: &lt;a href=&#34;https://github.com/cfjedimaster/SWAPI-Wrapper&#34;&gt;SWAPI-Wrapper&lt;/a&gt;. We won&amp;rsquo;t be using that helper in this blog post, but just remember it if you decide to actually use this data in a real application.&lt;/p&gt;
+
+&lt;h2&gt;Creating the Static Proof of Concept&lt;/h2&gt;
+
+&lt;p&gt;We&amp;rsquo;ll start off by creating a new application in Ionic Creator. Remember that this is 100% free to try. You only need to pay if you want additional projects. (You can find more detail on their &lt;a href=&#34;http://ionic.io/products/creator/pricing&#34;&gt;Pricing Page&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Begin by creating a new project, the name doesn&amp;rsquo;t matter, and use the Blank template:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot1-3.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;602&#34; class=&#34;aligncenter size-full wp-image-7287&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This will drop you into the editing interface with a blank page. On this page we&amp;rsquo;ll do two things. First, we&amp;rsquo;ll edit the title to give it something that makes sense for the app.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot2-4.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7288 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then we&amp;rsquo;ll drag a List component onto the page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot3-2.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7289 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice how it adds 3 list items automatically. If you want, you can remove some, or add some, but for now, three is just fine. If you click each one, you can give them a unique text value. While not necessary, I&amp;rsquo;d go ahead and do that just so you mentally keep in mind what we&amp;rsquo;re actually building.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot4-2.png&#34; alt=&#34;shot4&#34; width=&#34;750&#34; height=&#34;603&#34; class=&#34;aligncenter size-full wp-image-7290 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice that the list items have a &amp;ldquo;Link&amp;rdquo; attribute. We can use that to add basic interaction to our demo, but for now, we don&amp;rsquo;t have a page to actually target for that link. Let&amp;rsquo;s fix that by adding a new page. Be sure to use the Blank template again. I gave it a simple title too:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot5-1.png&#34; alt=&#34;shot5&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7291 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This page represents the detail view of the film. Right now we don&amp;rsquo;t necessarily know what we&amp;rsquo;re going to show, so let&amp;rsquo;s keep it simple and imagine we&amp;rsquo;ll just show the opening crawl. On the off chance that my readers have never seen a Star Wars film (for shame), this is an example of what I mean:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/crawl.png&#34; alt=&#34;crawl&#34; width=&#34;750&#34; height=&#34;319&#34; class=&#34;aligncenter size-full wp-image-7292&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For now, let&amp;rsquo;s just use a bit of static text. Drag the Paragraph component onto the page and then edit the content to be something that describes the purpose of the text block.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot6.png&#34; alt=&#34;shot6&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7294 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s hook up the list from the first page to the detail. Now, in the real application, each list item would link to a page showing different text based on the selection. However, the dynamic aspect will be handled by code we add later on. If you were to demonstrate this dummy app to a client, you may need to make 3 distinct pages so they don&amp;rsquo;t get confused. If you do, don&amp;rsquo;t forget that you can select the page in the left hand nav and click the &amp;ldquo;Duplicate&amp;rdquo; icon.&lt;/p&gt;
+
+&lt;p&gt;For now, click back to the first page, and select the first list item. Note that you can now select a link that points to the new page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot7.png&#34; alt=&#34;shot7&#34; width=&#34;750&#34; height=&#34;605&#34; class=&#34;aligncenter size-full wp-image-7295 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Go ahead and do that for all three list items (and again, you don&amp;rsquo;t &lt;i&gt;really&lt;/i&gt; need to) and then click the Preview icon on top to test out your beautiful, if fake, application.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot8.png&#34; alt=&#34;shot8&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7296&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Woot! We&amp;rsquo;re done with the prototype!&lt;/p&gt;
+
+&lt;h2&gt;Creating the Application - Part 1&lt;/h2&gt;
+
+&lt;p&gt;Ok, so at this point, we&amp;rsquo;ve got a working prototype. The first thing we need to do is get a copy of the code. You can use the Export menu option to open a window showing you four different ways of working with the code. I recommend using the Zip File. While we can create a new application from the code of the prototype directly with the CLI, I think it would be nice to have a copy of the prototype locally to compare and contrast while working on the new version.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;750&#34; height=&#34;603&#34; class=&#34;aligncenter size-full wp-image-7297&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I recommend creating a new folder for this project, and then extracting the zip into a folder. (All of my code for this blog entry is in GitHub, and that&amp;rsquo;s the way I laid out stuff there as well.) Assuming you&amp;rsquo;ve done this in a folder called &lt;code&gt;creator_version&lt;/code&gt;, we can use the Ionic CLI to create a new application based on the contents. That command is:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ionic start v1 ./creator_version&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The &amp;ldquo;v1&amp;rdquo; part there is the name of the subdirectory. As you can guess, we&amp;rsquo;re going to iterate a bit from the original Creator version to our final version. Why?&lt;/p&gt;
+
+&lt;p&gt;We currently have a static version of the application. It doesn&amp;rsquo;t use any &amp;ldquo;real&amp;rdquo; data. Our first iteration is going to make the application dynamic, but it is going to use fake, static data.&lt;/p&gt;
+
+&lt;p&gt;Ok, that probably sounds confusing. Let me explain again.&lt;/p&gt;
+
+&lt;p&gt;Right now, our list of films is a hard coded list of 3 films.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;re going to create a &amp;ldquo;Service&amp;rdquo; in our application responsible for returning the list of films. Our plan is to use SWAPI remote service, but to keep it simple for now we&amp;rsquo;ll build a service that returns 3 &amp;lsquo;fake&amp;rsquo; films. We&amp;rsquo;ll then edit the first page to render those films as if they had come from some remote service. Essentially we will go from static to &amp;ldquo;Dynamic with Fake Data&amp;rdquo;. After we have this running well, we&amp;rsquo;ll then use the &amp;ldquo;real&amp;rdquo; service. (This part of the process is very important. So if it doesn&amp;rsquo;t make sense, let me know in the comments.)&lt;/p&gt;
+
+&lt;p&gt;Ok, so go into the v1 folder and open it with your favorite editor. We need to modify three things to make the initial page dynamic. Let&amp;rsquo;s start with the template. Right now it is hard coded for three films:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view title=&amp;quot;Star Wars Films&amp;quot;&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;ion-list&amp;gt;
+            &amp;lt;ion-item href=&amp;quot;#/page4&amp;quot;&amp;gt;A New Hope&amp;lt;/ion-item&amp;gt;
+            &amp;lt;ion-item href=&amp;quot;#/page4&amp;quot;&amp;gt;The Empire Strikes Back&amp;lt;/ion-item&amp;gt;
+            &amp;lt;ion-item href=&amp;quot;#/page4&amp;quot;&amp;gt;Return of the Jedi&amp;lt;/ion-item&amp;gt;
+        &amp;lt;/ion-list&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ll begin by removing two of the ion-items and making the third dynamic.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view title=&amp;quot;Star Wars Films&amp;quot;&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;ion-list&amp;gt;
+            &amp;lt;ion-item ng-repeat=&amp;quot;film in films&amp;quot; ui-sref=&amp;quot;filmTitle({id:film.id})&amp;quot;&amp;gt;{{film.title}}&amp;lt;/ion-item&amp;gt;
+        &amp;lt;/ion-list&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;rsquo;s two important things here. First, we are repeating &amp;ldquo;film&amp;rdquo; over &amp;ldquo;films&amp;rdquo;. We don&amp;rsquo;t have that data yet, but I know when I build it I&amp;rsquo;ll have it return an array of films. I also guess that I&amp;rsquo;ll have a title value and an ID that uniquely identifies it. (This is actually going to be a mistake, but that&amp;rsquo;s ok, it&amp;rsquo;s a good mistake!)&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at the controller. By default Creator made a blank one for us called starWarsFilmCtrl. We need to edit this to work with data.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.controller(&#39;starWarsFilmsCtrl&#39;, function($scope,FilmService) {
+    $scope.films = [];
+    
+    FilmService.getFilms().then(function(res) {
+        $scope.films = res;     
+    });
+    
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so what in the heck is FilmService? We haven&amp;rsquo;t written it yet! Basically we&amp;rsquo;re setting up the controller to work with a service we&amp;rsquo;ll write later that&amp;rsquo;s going to return our array of data. Note we use $scope.films to set the initial, empty array. We can then call the service and set the result.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s go ahead and update the other view first. The detail page begins like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view title=&amp;quot;Film Title&amp;quot;&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;p&amp;gt;The opening crawl would go here.&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We need to make the title and text dynamic. Here is the updated version:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view&amp;gt;
+    &amp;lt;ion-nav-title&amp;gt;{{film.title}}&amp;lt;/ion-nav-title&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;p&amp;gt;{{film.crawl}}&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Why did we switch to ion-nav-title? See &lt;a href=&#34;http://www.raymondcamden.com/2015/12/18/is-your-ionic-view-title-not-updating&#34;&gt;this blog post&lt;/a&gt; for an explanation. Basically we need to use that directive to handle dynamic titles.&lt;/p&gt;
+
+&lt;p&gt;Ok, so now let&amp;rsquo;s go and update the controller.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.controller(&#39;filmTitleCtrl&#39;, function($scope,$stateParams,FilmService) {
+    $scope.film = {};
+    
+    FilmService.getFilm($stateParams.id).then(function(res) {
+        $scope.film = res;  
+    });
+    
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As before, we&amp;rsquo;re using a FilmService that doesn&amp;rsquo;t exist yet. I&amp;rsquo;m calling the service in a way that makes sense to me (first GetFilms then GetFilm). The $stateParams part relates back to how we handle navigation. In the first view, make note of the ui-sref part. This handles changing to a new state and passing a unique id. In order to make that work, we need to do a small change to the routes.js file. Right now it has this hard coded route:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+    .state(&#39;filmTitle&#39;, {
+      url: &#39;/page4&#39;,
+      templateUrl: &#39;templates/filmTitle.html&#39;,
+      controller: &#39;filmTitleCtrl&#39;
+    })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to handle recognizing an ID, we modify it to this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+    .state(&#39;filmTitle&#39;, {
+      url: &#39;/page4/:id&#39;,
+      templateUrl: &#39;templates/filmTitle.html&#39;,
+      controller: &#39;filmTitleCtrl&#39;
+    })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Alright - so now for the final part, we build the service. We&amp;rsquo;re going to write it to &amp;ldquo;agree with&amp;rdquo; what the controller was expecting. Here&amp;rsquo;s the complete code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+angular.module(&#39;app.services&#39;, [])
+
+.factory(&#39;FilmService&#39;, [&#39;$q&#39;,function($q){
+
+    return {
+        getFilms:function() {
+            var deferred = $q.defer();
+            
+            //temp 
+            var films = [
+                {
+                    id:1,
+                    title:&#34;A New Hope&#34;,
+                    crawl:&#34;ANH crawl&#34;
+                },
+                {
+                    id:2,
+                    title:&#34;The Empire Strikes Back&#34;,
+                    crawl:&#34;ESB crawl&#34;
+                },
+                {
+                    id:3,
+                    title:&#34;Return of the Jedi&#34;,
+                    crawl:&#34;ROTJ crawl&#34;
+                }
+            ];
+                
+            deferred.resolve(films);
+            return deferred.promise;
+        },
+        getFilm:function(id) {
+            var deferred = $q.defer();
+            
+            //temp
+            var film = {
+                id:id,
+                title:&#34;Film &#34;+id,
+                crawl:&#34;Crawl for &#34;+id
+            };
+
+            deferred.resolve(film);
+            return deferred.promise;
+            
+            
+            
+        }   
+    };
+
+}]);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So let&amp;rsquo;s quickly review what we did here. We updated the completely static application to be &lt;i&gt;partially&lt;/i&gt; dynamic. Both the initial page (the list) and the detail are now dynamic. The controller speaks to the service to ask for data, returns it and makes it available to the templates. The data itself may be static, but every other aspect of the application is now dynamic! Woot.&lt;/p&gt;
+
+&lt;p&gt;At this point, I recommend taking the app for test drive just to ensure it is working correctly. Here is it running with &lt;code&gt;ionic serve -l&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot10.png&#34; alt=&#34;shot10&#34; width=&#34;750&#34; height=&#34;606&#34; class=&#34;aligncenter size-full wp-image-7298 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you want, edit the services file to add a new film. When you reload, you&amp;rsquo;ll see the new item show up.&lt;/p&gt;
+
+&lt;h2&gt;Creating the Application - Part 2&lt;/h2&gt;
+
+&lt;p&gt;Alright - so in theory now the only thing we need to is update the services file to use SWAPI. In theory. As I kind of alluded to before, we&amp;rsquo;re going to run into a small issue but that&amp;rsquo;s ok - we&amp;rsquo;re professionals and we can handle it. Using SWAPI is pretty easy (and you can read the &lt;a href=&#34;https://swapi.co/documentation&#34;&gt;docs&lt;/a&gt; for a full explanation), so let&amp;rsquo;s begin by making the call to get films use real data.&lt;/p&gt;
+
+&lt;p&gt;Here is the updated version:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+getFilms:function() {
+    var deferred = $q.defer();
+            
+    $http.get(&#34;http://swapi.co/api/films&#34;).then(function(res) {
+        //console.dir(res.data.results);
+        deferred.resolve(res.data.results);
+    });
+    return deferred.promise;
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yeah, that&amp;rsquo;s it. Literally just a call to a URL. As a quick note, we modified the services injected into the file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.factory(&#39;FilmService&#39;, [&#39;$http&#39;,&#39;$q&#39;,function($http,$q){
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So in theory, as soon as you test this, it works. You should see a complete list of films:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot11-1.png&#34; alt=&#34;shot11&#34; width=&#34;696&#34; height=&#34;493&#34; class=&#34;aligncenter size-full wp-image-7300 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However, clicking to the detail won&amp;rsquo;t work. Why? The SWAPI doesn&amp;rsquo;t actually return an &amp;ldquo;id&amp;rdquo; value. Notice the console.dir on the results in the code snippet above? It&amp;rsquo;s currently commented out, but if you remove the comments, you can see the data yourself. This is also fully documented as well.&lt;/p&gt;
+
+&lt;p&gt;So what do we do? We need a &amp;ldquo;unique&amp;rdquo; way to identify the film so we can fetch the details. Turns out there is a &lt;code&gt;url&lt;/code&gt; property on the film. That points to the film&amp;rsquo;s detail on the API. We have two options here. We can actually modify the data in the service file so that id &lt;i&gt;does&lt;/i&gt; exist and uses the URL. Or we can simply modify the template to use the new property. I prefer to keep the template as is and modify the service. Basically my code gets to pretend that SWAPI returned the data as I expected:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$http.get(&#34;http://swapi.co/api/films&#34;).then(function(res) {
+    //console.dir(res.data.results);
+    var results = res.data.results.map(function(result) {
+        result.id = result.url;
+        return result;
+    });
+    deferred.resolve(results);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The last modification is to get film details. We&amp;rsquo;re passing in the URL value so the code here is rather simple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+getFilm:function(url) {
+    var deferred = $q.defer();
+            
+    $http.get(url).then(function(res) {
+        //console.dir(res.data);
+        deferred.resolve(res.data);
+    });
+
+    return deferred.promise;
+            
+}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the result:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot12-1.png&#34; alt=&#34;shot12&#34; width=&#34;696&#34; height=&#34;624&#34; class=&#34;aligncenter size-full wp-image-7301 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Wrap Up&lt;/h2&gt;
+
+&lt;p&gt;Obviously every application will be different and our API was especially simple, but I hope this demonstration was useful. If you want to look at the code, you can find it here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/statictodynamic&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/statictodynamic&lt;/a&gt;. As I said, please let me know if anything didn&amp;rsquo;t make sense.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ve read the post, now watch the video!&lt;/p&gt;
+
+&lt;p&gt;&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/R9UwlFu56Wo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+Ok, while not necessarily required reading, here are a few quick notes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Sharp readers may notice that the initial getFilms call actually returns &lt;strong&gt;all&lt;/strong&gt; the data. We could make the application better if we stored that data in the service. Calls to getFilm would just return the appropriate portion of the stored data. What&#39;s cool is we can make this modification in the service and nothing else needs to change. This is basic MVC architecture stuff, but again, for folks who may be new to development, this is &lt;i&gt;exactly&lt;/i&gt; the reason we use setups like this. It allows for optimizations later that are confined to one file and don&#39;t break other parts.
+&lt;li&gt;Since our application is performing HTTP requests, we really should provide feedback to the user. I&#39;d suggest the Ionic Loading widget. I talked about that here: &lt;a href=&#34;http://www.raymondcamden.com/2015/12/17/a-quick-example-of-the-ionic-loading-widget&#34;&gt;A quick example of the Ionic Loading Widget&lt;/a&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

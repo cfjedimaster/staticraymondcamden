@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Working with Hugo on RaymondCamden.com &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Working with Hugo on RaymondCamden.com" />
+<meta property="og:description" content="I&rsquo;ve mentioned before that I&rsquo;m considering moving my blog from a Wordpress install to purely static. I&rsquo;ve made some progress on this effort and while I&rsquo;m not 100% sure I&rsquo;m going to pull the plug, I&rsquo;m real close to it.
+I thought I&rsquo;d talk a bit about how this is going and share some of the things I&rsquo;ve learned about Hugo
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com" />
+
+
+<meta property="og:updated_time" content="2016-01-16T11:02:31&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Working with Hugo on RaymondCamden.com">
+<meta itemprop="description" content="I&rsquo;ve mentioned before that I&rsquo;m considering moving my blog from a Wordpress install to purely static. I&rsquo;ve made some progress on this effort and while I&rsquo;m not 100% sure I&rsquo;m going to pull the plug, I&rsquo;m real close to it.
+I thought I&rsquo;d talk a bit about how this is going and share some of the things I&rsquo;ve learned about Hugo
+">
+
+
+<meta itemprop="dateModified" content="2016-01-16T11:02:31&#43;06:00" />
+<meta itemprop="wordCount" content="1690">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Working with Hugo on RaymondCamden.com"/>
+<meta name="twitter:description" content="I&rsquo;ve mentioned before that I&rsquo;m considering moving my blog from a Wordpress install to purely static. I&rsquo;ve made some progress on this effort and while I&rsquo;m not 100% sure I&rsquo;m going to pull the plug, I&rsquo;m real close to it.
+I thought I&rsquo;d talk a bit about how this is going and share some of the things I&rsquo;ve learned about Hugo
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com">
+    <h1 class="article-title" itemprop="name">
+        Working with Hugo on RaymondCamden.com
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2016-01-16 11:02:31 &#43;0600 &#43;0600" itemprop="datePublished">2016-01-16</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I&rsquo;ve mentioned before that I&rsquo;m considering moving my blog from a Wordpress install to purely static. I&rsquo;ve made some progress on this effort and while I&rsquo;m not 100% sure I&rsquo;m going to pull the plug, I&rsquo;m <i>real</i> close to it.
+I thought I&rsquo;d talk a bit about how this is going and share some of the things I&rsquo;ve learned about <a href="https://gohugo.io/">Hugo</a></p>
+
+<p>I had looked at Hugo a while ago and I <i>really</i> didn&rsquo;t like it. It&rsquo;s difficult to explain why, but it was just plain weird to me. A few weeks ago I decided to give it another look, and while I still found it weird, I kept at it and I&rsquo;m kinda digging it now. In no particular order, here are some things I discovered/struggled with/built/etc:</p>
+
+<h2>Installation</h2>
+
+<p>So&hellip; this is the biggest issue. To install Hugo, you use brew. I only use brew when some random app asks me too. Most apps use npm. Ok, no big deal, they tell you exactly what command to do so you can cut and paste.</p>
+
+<p>However&hellip;</p>
+
+<p>When I installed, it gave me Hugo 0.13, an older version. This caused a number of problems while I was going through the docs.</p>
+
+<p>Turns out - Brew has some kind of internal registry and you have to update brew itself before you get an app.</p>
+
+<p>Now - I&rsquo;m sure there is a good reason for that. But on first blush, it seems really stupid. If you can never install an app (safely!) without updating brew first, then why isn&rsquo;t that baked in? Or at least have a warning of some sort? This one issue took me a good day to get past. I filed a bug report for it and now the Hugo docs include updating brew as part of the install process.</p>
+
+<h2>Content versus Themes</h2>
+
+<p>The biggest issue I had was understanding the relationship between the files of your project versus a theme. So for example, it took me a while to figure out where my home page was. Why? I had thought my &ldquo;theme&rdquo; was just layout junk and nothing more. But that&rsquo;s not the case. The theme actually includes your home page and other assets.</p>
+
+<p>Ok, so a theme then is kind of like a full application. That took me some time to wrap my head around, but I get it now. If you want to modify how your site behaves, like for example, how many entries to show on a blog&rsquo;s home page, then you either edit the theme or you can copy the file. If Hugo sees the same file name in your app directory versus the theme, it will run your file instead. I figured that early on and assumed it was best practice.</p>
+
+<h2>Go Templates</h2>
+
+<p>So Hugo uses <a href="http://golang.org/pkg/html/template/">Go Templates</a> for its dynamic templates. Go is weird. I like it. But it is just plain weird. Here is an example:</p>
+
+<pre><code class="language-markup">
+&lt;section id=&quot;main&quot;&gt;
+    {{ range first 10 (where .Site.Pages &quot;Type&quot; &quot;post&quot;) }}
+    &lt;article class=&quot;article article-type-post&quot; itemscope=&quot;&quot; itemprop=&quot;blogPost&quot;&gt;
+        &lt;div class=&quot;article-inner&quot;&gt;
+            {{ if and (isset .Params &quot;banner&quot;) (not (eq .Params.banner &quot;&quot;)) }}
+            &lt;a href=&quot;{{ .Permalink }}&quot; itemprop=&quot;url&quot;&gt;
+                &lt;img src=&quot;{{ .Site.BaseURL }}{{ .Params.banner }}&quot; class=&quot;article-banner&quot;&gt; {{ end }}
+            &lt;/a&gt;
+
+            {{ partial &quot;article_header&quot; . }}
+            &lt;div class=&quot;article-entry&quot; itemprop=&quot;articleBody&quot;&gt;
+                &lt;p&gt;
+                    {{ printf &quot;%s&quot; .Summary | markdownify }}
+                    &lt;br&gt;
+                &lt;/p&gt;
+                &lt;p class=&quot;article-more-link&quot;&gt;
+                    &lt;a href=&quot;{{ .Permalink }}&quot;&gt;
+                        {{with .Site.Data.l10n.articles.read_more}}{{.}}{{end}}
+                    &lt;/a&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+            {{ partial &quot;article_footer&quot; . }}
+        &lt;/div&gt;
+    &lt;/article&gt;
+    {{ end }}
+
+    {{ partial &quot;pagination&quot; . }}
+&lt;/section&gt;
+&lt;!-- // main section --&gt;
+</code></pre>
+
+<p>It is readable - just&hellip; odd. Odd or not, I liked working with it although I had a hard time with the docs sometimes. For example, just figuring out how to limit a loop to N results took me a while.</p>
+
+<h2>Content pages versus Layouts</h2>
+
+<p>This was the last issue I hit, and is probably the only thing that really bugs me. Your layout files can include Go in them to make them dynamic. Your content pages cannot. So I built a contact page and I couldn&rsquo;t include a simple Go variable for my site&rsquo;s URL. However - while you can&rsquo;t use logic/variables, you can use something called <a href="https://gohugo.io/extras/shortcodes/">shortcodes</a> instead. For my contact form, I had to build a shortcode that literally just output the site&rsquo;s URL. That seems stupid too, but I&rsquo;m assuming there is a good reason for this. (And as it took me 2 minutes fix I got over it. ;)</p>
+
+<h2>Populating Hugo</h2>
+
+<p>To populate my Hugo site, I used WordPress&rsquo;s XML export feature. I then wrote a Node.js script that read it, parsed it, and output all 5000+ blog entries in the proper format. I can share this code if anyone wants to see it, but it isn&rsquo;t very pretty.</p>
+
+<h2>Hugo Performance</h2>
+
+<p>Hugo is really fast. But even with it being fast, at 5K+ blog entries, every modification to source files took about 30 seconds for Hugo to handle. That was too long. So while I was working, I cut out about 4k of my blog entries. At that point, Hugo was taking about a second or so to update which was fine. Hugo will also auto reload in server mode which was pretty cool. I just had to open my browser and wait for it to reload when I saved.</p>
+
+<h2>Theming</h2>
+
+<p>Hugo has a bunch of themes you can browse at <a href="http://themes.gohugo.io/">http://themes.gohugo.io/</a>. I went with Icarus. Here is a screen shot of blog so far.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2016/01/Screen-Shot-2016-01-16-at-10.40.14.png" alt="Screen Shot 2016-01-16 at 10.40.14" width="750" height="577" class="aligncenter size-full wp-image-7391 imgborder" /></p>
+
+<p>And here is a random blog entry.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2016/01/Screen-Shot-2016-01-16-at-10.42.52-1.png" alt="Screen Shot 2016-01-16 at 10.42.52" width="516" height="750" class="aligncenter size-full wp-image-7393 imgborder" /></p>
+
+<p>I dig it. I&rsquo;m not 100% sold on the look, but I like it.</p>
+
+<h2>Forms and Search</h2>
+
+<p>For my contact form, I use <a href="http://formspree.io/">Formspree</a>. They let you POST to them and send an email for free. It is super easy to use.</p>
+
+<p>For search, I&rsquo;m using a <a href="https://cse.google.com/cse/">Google Custom Search</a> instance. I&rsquo;ve used this in the past (see the search at <a href="http://www.cflib.org">CFLib</a>) and it works fine. I kinda think Google knows a thing or two about search.</p>
+
+<h2>Hosting</h2>
+
+<p>Hosting will be via <a href="http://surge.sh">Surge</a>. With me no longer using Google Cloud Compute Engine (which, btw, works darn well and is recommended), I&rsquo;ll put my money into Surge instead for their professional plan. Deploying the full site of 5000+ files takes about a minute.</p>
+
+<h2>Writing</h2>
+
+<p>And this is the sore point for me. I really, <i>really</i> like the WordPress creation process. I can easily drag and drop images. I can easily assign categories and tags. I can save a work in progress for later. It is perfect. Now I&rsquo;m going to a much a simpler system.</p>
+
+<p>First I&rsquo;ll make a file. That&rsquo;s not hard of course. On top I&rsquo;ll need to add my own metadata. Hugo lets you use a variety of formats for that including JSON. Here is an example.</p>
+
+<pre><code class="language-markup">
+{
+    "title": "Hello World! I love yo!",
+    "categories": [
+        "ColdFusion"
+    ],
+    "tags": [],
+    "date": "2016-01-15T06:01:00+06:00",
+    "url": "/2016/01/15/hello-world"
+}
+
+Yesterday on Facebook! I saw one of those "PLEASE SHARE WITH EVERYONE". This is
+just me *testing* crap.
+
+&lt;!--more--&gt;
+
+I thought this would be rather simple, but from what I can see, it is impossible. What **the** heck. 
+</code></pre>
+
+<p>I&rsquo;ve got to write that all up myself (Hugo supports creating a new content file via the CLI, but I don&rsquo;t think it will work for me - need to investigate that) and then work on my article. My editor of choice, Visual Studio Code, has a built in Markdown preview:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2016/01/shot.png" alt="shot" width="750" height="441" class="aligncenter size-full wp-image-7394" /></p>
+
+<p>As you can see the data on top is rendered too but that&rsquo;s easily ignorable. The real issue I&rsquo;ve got now is images. I&rsquo;ll need to copy those myself to the right folder and then insert the Markdown code to include the image. I&rsquo;m almost tempted to build my own editor in Electron as a desktop app - but that would be silly&hellip; right?</p>
+
+<p>In the end - this is the main thing holding me back. I want to be sure that when I have a quick blog post (like when I write an article and just want to share it with others) that I don&rsquo;t feel like my &ldquo;process&rdquo; dissuades me from writing.</p>
+
+<p>I have to say though - the thought of going static and removing any concern over security, web servers, MySQL, etc, is <strong>extremely</strong> compelling. I want this site to be a resource that helps others and doesn&rsquo;t need to be constantly monitored. To be fair, Surge had downtime recently. (See the <a href="https://medium.com/surge-sh/january-7-2016-downtime-79d9440177b4#.dvtw5uwx8">explanation</a> for why.) But frankly - I&rsquo;d rather have someone else worry about getting stuff back up then me.</p>
+
+<h2>Everything Else</h2>
+
+<p>So I&rsquo;ve already released this blog entry but I wanted to add a few more notes. I feel like I focused more on the issues I had with Hugo and not quite enough about what I liked. I mean, I said I liked it, but didn&rsquo;t really point out <i>why</i> I liked it. So here are more points - again - not in any particular order.</p>
+
+<ul>
+<li><p>One <i>very</i> cool feature of Hugo is that you have 100% control over the URLs via front matter. In the other static site generators I worked with, the URL was based on the physical file path. But by using front-matter on your content page, you can explicitly specify what the URL is and it need not have any relation to the physical path. I really dug that.</p></li>
+
+<li><p>I mentioned this quickly above, but by default, the server uses autoreload. My primary experience with autoreload in the browser is with Ionic, but it works darn well with Hugo too. As I said, sometimes it took a second or two for Hugo to catch up with my changes, but having it autoreload when ready meant I didn&rsquo;t have to reload myself.</p></li>
+
+<li><p>While this is a feature I removed (I&rsquo;ll explain why in a second), the built in Pagination was <i>really</i> well done. The code to support it was simple - and frankly - it is rare for pagination to ever be simple. I decided against pagination for my blog as I&rsquo;ve got so many darn entries, but I was incredibly impressed by the support for this in Hugo.</p></li>
+
+<li><p>And more! Ok, that&rsquo;s a bit lame, but I&rsquo;m still reading the docs and finding gems, so I&rsquo;m going to keep learning.</p></li>
+</ul>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2016\/01\/16\/working-with-hugo-on-raymondcamden-com'; 
+this.page.identifier = '/?p=7389'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Working with Hugo on RaymondCamden.com" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Working with Hugo on RaymondCamden.com" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2016/01/16/working-with-hugo-on-raymondcamden-com" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

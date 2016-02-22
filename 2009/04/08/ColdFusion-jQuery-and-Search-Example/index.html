@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>ColdFusion, jQuery and Search Example &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="ColdFusion, jQuery and Search Example" />
+<meta property="og:description" content="I wrote a few sample applications for my jQuery presentation yesterday that I wanted to explore a bit deeper in a blog post. I think search is a great place for Ajax to help out. How can we build a search interface using jQuery and ColdFusion? Let&rsquo;s start with a simple example.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/04/08/ColdFusion-jQuery-and-Search-Example" />
+
+
+<meta property="og:updated_time" content="2009-04-08T09:04:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="ColdFusion, jQuery and Search Example">
+<meta itemprop="description" content="I wrote a few sample applications for my jQuery presentation yesterday that I wanted to explore a bit deeper in a blog post. I think search is a great place for Ajax to help out. How can we build a search interface using jQuery and ColdFusion? Let&rsquo;s start with a simple example.
+">
+
+
+<meta itemprop="dateModified" content="2009-04-08T09:04:00&#43;06:00" />
+<meta itemprop="wordCount" content="1154">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ColdFusion, jQuery and Search Example"/>
+<meta name="twitter:description" content="I wrote a few sample applications for my jQuery presentation yesterday that I wanted to explore a bit deeper in a blog post. I think search is a great place for Ajax to help out. How can we build a search interface using jQuery and ColdFusion? Let&rsquo;s start with a simple example.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/04/08/ColdFusion-jQuery-and-Search-Example">
+    <h1 class="article-title" itemprop="name">
+        ColdFusion, jQuery and Search Example
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-04-08 09:04:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-04-08</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I wrote a few sample applications for my <a href="http://www.raymondcamden.com/index.cfm/2009/4/7/jQuery-101-Presentation">jQuery presentation</a> yesterday that I wanted to explore a bit deeper in a blog post. I think search is a great place for Ajax to help out. How can we build a search interface using jQuery and ColdFusion? Let&rsquo;s start with a simple example.</p>
+
+<p>First I&rsquo;ll create a simple form with just a tiny bit of jQuery:</p>
+
+<p><code>
+&lt;!DOCTYPE html PUBLIC &ldquo;-//W3C//DTD XHTML 1.0 Transitional//EN&rdquo; &ldquo;<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a>
+&lt;html xmlns=&ldquo;<a href="http://www.w3.org/1999/xhtml&quot;&gt;">http://www.w3.org/1999/xhtml&quot;&gt;</a>
+&lt;head&gt;
+&lt;meta http-equiv=&ldquo;Content-Type&rdquo; content=&ldquo;text/html; charset=UTF-8&rdquo; /&gt;
+&lt;title&gt;Untitled Document&lt;/title&gt;
+&lt;script src=&ldquo;../jquery.js&rdquo;&gt;&lt;/script&gt;
+&lt;script&gt;</p>
+
+<p>$(document).ready(function() {
+    $(&ldquo;#searchForm&rdquo;).submit(function() {
+        //get the value
+        var search = $(&ldquo;#searchText&rdquo;).val()
+        if($.trim(search) == &ldquo;) return false
+        $.get(&lsquo;search.cfm&rsquo;,{search:search},
+              function(data,status) {
+                  $(&ldquo;#results&rdquo;).html(data)
+              })
+        return false
+    })
+});</p>
+
+<p>&lt;/script&gt;</p>
+
+<p>&lt;/head&gt;</p>
+
+<p>&lt;body&gt;</p>
+
+<p>&lt;form id=&ldquo;searchForm&rdquo;&gt;&lt;input type=&ldquo;text&rdquo; id=&ldquo;searchText&rdquo; /&gt;&lt;input type=&ldquo;submit&rdquo; value=&ldquo;Search&rdquo; /&gt;&lt;/form&gt;</p>
+
+<p>&lt;div id=&ldquo;results&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p>Reading from the bottom up, you can see a simple form with one text field. The jQuery code handles taking over the submit action for the form. I first grab the value of the form field and then do a trim() on it. (Trim is something ColdFusion developers are used to and exists as a utility method in jQuery.)</p>
+
+<p>The actual Ajax portion is done with the get call. The first argument is the code I&rsquo;m going to hit: search.cfm. The second argument is a structure of name/value pairs. In this case I&rsquo;m passing an argument named search and using the value from the form. The last argument to the get function is my call back, or, &lsquo;what to do when done&rsquo;. In this case, I&rsquo;m simply taking the results and stuffing it into the DIV with the ID of &ldquo;results&rdquo;.</p>
+
+<p>So to translate all of this into English: Get the form field. Pass it to search.cfm. Paste the result onto the page.</p>
+
+<p>The ColdFusion code is trivial:</p>
+
+<p><code>
+&lt;cfparam name=&ldquo;url.search&rdquo; default=&ldquo;&rdquo;&gt;</p>
+
+<p>&lt;cfif len(trim(url.search))&gt;
+    &lt;cfset url.search = trim(htmlEditFormat(lcase(url.search)))&gt;</p>
+
+<pre><code>&amp;lt;cfquery name=&quot;getArt&quot; datasource=&quot;cfartgallery&quot;&amp;gt;
+select  artname, description, price
+from    art
+where   lower(artname) like &amp;lt;cfqueryparam cfsqltype=&quot;cf_sql_varchar&quot; value=&quot;%#url.search#%&quot;&amp;gt;
+or      description like &amp;lt;cfqueryparam cfsqltype=&quot;cf_sql_lomgvarchar&quot; value=&quot;%#url.search#%&quot;&amp;gt;
+&amp;lt;/cfquery&amp;gt;
+
+&amp;lt;cfoutput&amp;gt;
+&amp;lt;p&amp;gt;
+Your search for #url.search# returned #getArt.recordCount# result(s).
+&amp;lt;/p&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+
+&amp;lt;cfoutput query=&quot;getArt&quot;&amp;gt;
+&amp;lt;p&amp;gt;
+&amp;lt;b&amp;gt;#artname#&amp;lt;/b&amp;gt; #dollarFormat(price)#&amp;lt;br/&amp;gt;
+#description#
+&amp;lt;/p&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>&lt;/cfif&gt;
+</code></p>
+
+<p>I don&rsquo;t have much much going on here. I do some simple validation to ensure a search term was passed. If so, I do the query and just output the results. The CFM handles both the search and display of results.</p>
+
+<p>Let&rsquo;s kick it up a notch. What if we wanted a more advanced search page? Here is a new version of the search page:</p>
+
+<p><code>
+&lt;cfquery name=&ldquo;mediatypes&rdquo; datasource=&ldquo;cfartgallery&rdquo;&gt;
+select  mediaid, mediatype
+from    media
+&lt;/cfquery&gt;</p>
+
+<p>&lt;!DOCTYPE html PUBLIC &ldquo;-//W3C//DTD XHTML 1.0 Transitional//EN&rdquo; &ldquo;<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</a>
+&lt;html xmlns=&ldquo;<a href="http://www.w3.org/1999/xhtml&quot;&gt;">http://www.w3.org/1999/xhtml&quot;&gt;</a>
+&lt;head&gt;
+&lt;meta http-equiv=&ldquo;Content-Type&rdquo; content=&ldquo;text/html; charset=UTF-8&rdquo; /&gt;
+&lt;title&gt;Untitled Document&lt;/title&gt;
+&lt;script src=&ldquo;../jquery.js&rdquo;&gt;&lt;/script&gt;
+&lt;script&gt;</p>
+
+<p>$(document).ready(function() {
+    $(&ldquo;#searchForm&rdquo;).submit(function() {
+        //get the value
+        var search = $(&ldquo;#searchText&rdquo;).val()
+        if($.trim(search) == &ldquo;) return false
+        var type = $(&ldquo;#mediatype option:selected&rdquo;).val()
+        $.post(&lsquo;search2.cfm&rsquo;,{search:search,mediatype:type},
+              function(data,status) {
+                  $(&ldquo;#results&rdquo;).html(data)
+              })
+        return false
+    })
+});</p>
+
+<p>&lt;/script&gt;</p>
+
+<p>&lt;/head&gt;</p>
+
+<p>&lt;body&gt;</p>
+
+<p>&lt;form id=&ldquo;searchForm&rdquo;&gt;
+&lt;input type=&ldquo;text&rdquo; id=&ldquo;searchText&rdquo; /&gt;
+&lt;select name=&ldquo;mediatype&rdquo; id=&ldquo;mediatype&rdquo;&gt;
+    &lt;option value=&ldquo;&rdquo;&gt;Any Media Type&lt;/option&gt;
+    &lt;cfoutput query=&ldquo;mediatypes&rdquo;&gt;
+    &lt;option value=&ldquo;#mediaid#&rdquo;&gt;#mediatype#&lt;/option&gt;
+    &lt;/cfoutput&gt;
+&lt;/select&gt;
+&lt;input type=&ldquo;submit&rdquo; value=&ldquo;Search&rdquo; /&gt;&lt;/form&gt;</p>
+
+<p>&lt;div id=&ldquo;results&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p>What&rsquo;s different here? On top I did a quick query to get all the media types from the cfartgallery datasource. Once I have this data, I can use it in a select tag within the form (at the bottom of the code listing above). Now users can search both for a keyword and a keyword and a type of media.</p>
+
+<p>The jQuery code changed a bit as well. Now I also get the selected value from the drop down and pass it in the Ajax call. Notice I switched to post as well. No real reason. In general I almost always prefer Post calls. I&rsquo;m not going to post the code for search2.cfm as the only change was to look for and notice the mediatype value. (I&rsquo;m including all of this in a zip attached to the blog entry though.)</p>
+
+<p>Ok, one more example. In the previous two listings, ColdFusion handled running the search query as well as displaying the results. How about making this simpler? I&rsquo;ll just show the jQuery code for my third example since that&rsquo;s the only thing I&rsquo;m going to change:</p>
+
+<p><code>
+$(document).ready(function() {
+    $(&ldquo;#searchForm&rdquo;).submit(function() {
+        //get the value
+        var search = $(&ldquo;#searchText&rdquo;).val()
+        if($.trim(search) == &ldquo;) return false
+        var type = $(&ldquo;#mediatype option:selected&rdquo;).val()
+        $.getJSON(&lsquo;art.cfc?method=search&amp;returnFormat=json&amp;queryformat=column&rsquo;,{term:search,mediatype:type},
+            function(result,status) {
+                //console.dir(result)</p>
+
+<pre><code>            var str = ''
+            for(var i=0; i &amp;lt; result.ROWCOUNT; i++) {
+                str+= '&amp;lt;p&amp;gt;&amp;lt;b&amp;gt;'+result.DATA.ARTNAME[i]+'&amp;lt;/b&amp;gt; $'+result.DATA.PRICE[i]+'&amp;lt;br /&amp;gt;'
+                str+= result.DATA.DESCRIPTION[i]+'&amp;lt;/p&amp;gt;'
+            }
+
+            $(&quot;#results&quot;).html(str)
+
+        })
+    return false
+})
+</code></pre>
+
+<p>});
+</code></p>
+
+<p>So the first few lines are the same - notice the form submission, get the values, etc. Note that I&rsquo;ve switched my Ajax call to getJSON. This let&rsquo;s jQuery know that I&rsquo;ll be calling something that returns JSON data. jQuery will handle converting the JSON for me into real JavaScript data.</p>
+
+<p>Notice the URL I&rsquo;m posting too:</p>
+
+<p>art.cfc?method=search&amp;returnFormat=json&amp;queryformat=column</p>
+
+<p>This is a CFC I&rsquo;ve built to handle the search logic for me. I&rsquo;ve passed returnFormat to tell ColdFusion to automatically convert the result into JSON.</p>
+
+<p>A quick side note: I have both search parameters (term and mediatype) and url parameters (method, returnFormat, queryFormat). Could I mix them up differently? Yes. I could have used no URL parameters at all and put them all with the {}s in the second argument. I could have used an empty {} and put everything in the URL (with proper escaping of course). In my opinion, the form I used makes the most sense. I&rsquo;ve kept the &lsquo;meta&rsquo; stuff (how the request works) in the URL, separate from business logic params used in the second parameter.</p>
+
+<p>Because I&rsquo;m getting JSON back, I have to handle formatting the result myself. I worked with the result data to create a string and then simply set it to the results div using the html() function. How did I know how to work with the JSON data? Trust me, I had no idea. See this line?</p>
+
+<p><code>
+//console.dir(result)
+</code></p>
+
+<p>I removed the comments before the line and Firebug gave me a nice display of the data. This let me see how things were setup and let me write the rest of the code. Once again, <b>install Firebug!</b></p>
+
+<p>The CFC isn&rsquo;t too special. Here is the method I used:</p>
+
+<p><code>
+&lt;cfcomponent&gt;</p>
+
+<p>&lt;cffunction name=&ldquo;search&rdquo; access=&ldquo;remote&rdquo; returntype=&ldquo;query&rdquo;&gt;
+    &lt;cfargument name=&ldquo;term&rdquo; type=&ldquo;string&rdquo; required=&ldquo;yes&rdquo;&gt;
+    &lt;cfargument name=&ldquo;mediatype&rdquo; type=&ldquo;any&rdquo; required=&ldquo;yes&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfset var getArt = &quot;&quot;&amp;gt;
+
+&amp;lt;cfquery name=&quot;getArt&quot; datasource=&quot;cfartgallery&quot;&amp;gt;
+select  artname, description, price
+from    art
+where   (lower(artname) like &amp;lt;cfqueryparam cfsqltype=&quot;cf_sql_varchar&quot; value=&quot;%#arguments.term#%&quot;&amp;gt;
+or      description like &amp;lt;cfqueryparam cfsqltype=&quot;cf_sql_lomgvarchar&quot; value=&quot;%#arguments.term#%&quot;&amp;gt;)
+&amp;lt;cfif len(arguments.mediatype) and isNumeric(arguments.mediatype) and arguments.mediatype gte 1&amp;gt;
+and     mediaid = &amp;lt;cfqueryparam cfsqltype=&quot;cf_sql_integer&quot; value=&quot;#arguments.mediatype#&quot;&amp;gt;
+&amp;lt;/cfif&amp;gt;
+&amp;lt;/cfquery&amp;gt;
+
+&amp;lt;cfreturn getArt&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;</p>
+
+<p>&lt;/cfcomponent&gt;
+</code></p>
+
+<p>What I love about this is that my CFC has nothing in it related to jQuery, Ajax, JavaScript, JSON, etc. The only clue that there is any Ajax stuff going on is the access=&ldquo;remote&rdquo; argument. Because the JSON stuff is built into ColdFusion 8, I can write my business logic and use it either in my &lsquo;old school&rsquo; Web 1.0 application or my fancy, multi-billion dollar Web 2.0 site.</p>
+
+<p>That&rsquo;s it. Any questions?<p><a href='enclosures/E%3A%5Chosts%5Cwww%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fdemo%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/04\/08\/ColdFusion-jQuery-and-Search-Example'; 
+this.page.identifier = '/?p=3307'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/04/08/ColdFusion-jQuery-and-Search-Example" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="ColdFusion, jQuery and Search Example" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/04/08/ColdFusion-jQuery-and-Search-Example" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/04/08/ColdFusion-jQuery-and-Search-Example" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="ColdFusion, jQuery and Search Example" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/04/08/ColdFusion-jQuery-and-Search-Example" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/04/08/ColdFusion-jQuery-and-Search-Example" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

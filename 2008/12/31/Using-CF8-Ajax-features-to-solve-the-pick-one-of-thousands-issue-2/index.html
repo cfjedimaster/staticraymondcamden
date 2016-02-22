@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using CF8 Ajax features to solve the &#39;pick one of thousands&#39; issue (2) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using CF8 Ajax features to solve the &#39;pick one of thousands&#39; issue (2)" />
+<meta property="og:description" content="A few days ago I posted a blog entry discussing a method to allow someone to browse thousands of records within a form. The blog entry made use of ColdFusion 8 built-in Ajax technology. I promised a jQuery version and I finally got around to it. (Reminder - I&rsquo;m still rather new to jQuery so this code does not represent best practice. Well, probably not. If it does, I&rsquo;m unexpectedly brilliant.)
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2008/12/31/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2" />
+
+
+<meta property="og:updated_time" content="2008-12-31T10:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using CF8 Ajax features to solve the &#39;pick one of thousands&#39; issue (2)">
+<meta itemprop="description" content="A few days ago I posted a blog entry discussing a method to allow someone to browse thousands of records within a form. The blog entry made use of ColdFusion 8 built-in Ajax technology. I promised a jQuery version and I finally got around to it. (Reminder - I&rsquo;m still rather new to jQuery so this code does not represent best practice. Well, probably not. If it does, I&rsquo;m unexpectedly brilliant.)
+">
+
+
+<meta itemprop="dateModified" content="2008-12-31T10:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="921">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using CF8 Ajax features to solve the &#39;pick one of thousands&#39; issue (2)"/>
+<meta name="twitter:description" content="A few days ago I posted a blog entry discussing a method to allow someone to browse thousands of records within a form. The blog entry made use of ColdFusion 8 built-in Ajax technology. I promised a jQuery version and I finally got around to it. (Reminder - I&rsquo;m still rather new to jQuery so this code does not represent best practice. Well, probably not. If it does, I&rsquo;m unexpectedly brilliant.)
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2008/12/31/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2">
+    <h1 class="article-title" itemprop="name">
+        Using CF8 Ajax features to solve the &#39;pick one of thousands&#39; issue (2)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2008-12-31 10:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2008-12-31</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>A few days ago I <a href="http://www.raymondcamden.com/index.cfm/2008/12/25/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue">posted</a> a blog entry discussing a method to allow someone to browse thousands of records within a form. The blog entry made use of ColdFusion 8 built-in Ajax technology. I promised a jQuery version and I finally got around to it. (<b>Reminder</b> - I&rsquo;m still rather new to jQuery so this code does not represent best practice. Well, probably not. If it does, I&rsquo;m unexpectedly brilliant.)</p>
+
+<p>I knew that jQuery doesn&rsquo;t provide UI widgets out of the box. There is a <a href="http://ui.jquery.com/">jQuery UI</a> project (although I&rsquo;m not sure how far along it is) and about one million UI plugins, but I decided to stick to what came with the default library.</p>
+
+<p>Instead of using a window like I did in the previous demo, I used jQuery&rsquo;s animation support to hide and show a div. This is rather easy. You can use show, hide, and toggle to show or hide any element on the page. So if you remember my form from the previous blog entry, I added a div below it:</p>
+
+<p><code>
+&lt;div id=&ldquo;userlist&rdquo; style=&ldquo;background-color:##3CF;width:500px;&rdquo;&gt;&lt;/div&gt;
+</code></p>
+
+<p>The color and width were just random picks and aren&rsquo;t really relevant. Since the div is empty it will not show up on initial page load. Next to my user form field, I added new code to activate my user list:</p>
+
+<p><code>
+&lt;tr valign=&ldquo;top&rdquo;&gt;
+    &lt;td&gt;Owner:&lt;/td&gt;
+    &lt;td&gt;
+    &lt;input type=&ldquo;hidden&rdquo; id=&ldquo;useridfk&rdquo; name=&ldquo;useridfk&rdquo; value=&ldquo;#form.useridfk#&rdquo; /&gt;
+    &lt;span id=&ldquo;ownerspan&rdquo;&gt;User 1&lt;/span&gt;&lt;br/&gt;
+    &lt;a href=&ldquo;&rdquo; onClick=&ldquo;toggleSelector();return false&rdquo;&gt;Select Owner&lt;/a&gt;
+    &lt;/td&gt;
+&lt;/tr&gt;
+</code></p>
+
+<p>Note the toggleSelector code. This runs:</p>
+
+<p><code>
+function toggleSelector() {
+    $(&ldquo;##userlist&rdquo;).toggle(&ldquo;fast&rdquo;,loadUsers);<br />
+}
+</code></p>
+
+<p>This code gets the userlist div (the double # is due to the code being within a cfoutput) and runs toggle on it. Fast is the speed and loadUsers is a function to run when the toggle is done. Let&rsquo;s look at loadUsers:</p>
+
+<p><code>
+function loadUsers() {
+    //<a href="http://dotnet.org.za/heinrich/archive/2008/09/10/jquery-test-for-visibility.aspx">http://dotnet.org.za/heinrich/archive/2008/09/10/jquery-test-for-visibility.aspx</a>
+    if(!$(&lsquo;##userlist&rsquo;).is(&rsquo;:visible&rsquo;)) return;
+    console.log(&lsquo;im on, so going to load stuff&rsquo;);
+    $(&lsquo;##userlist&rsquo;).load(&lsquo;test_userlist2.cfm&rsquo;);
+}
+</code></p>
+
+<p>Now I ran into my first problem. I want to load content into div when it is shown. While jQuery makes it easy to show or hide a div, it does not, as far as I know, provide an easy way to tell if the div is currently visible. That seems a bit silly, but after some Googling, I found the URL referenced in the code above and used that for my check. If we aren&rsquo;t showing the div, we just leave. I could have used a JavaScript variable as well I guess. If the div is visible, then we need to load my list of users. I love how simple jQuery makes it.</p>
+
+<p>Ok, so this was almost perfect. The next issue I ran into involved the initial state of the div. Remember how I said it was essentially hidden because nothing was in the div? While it may not have shown anything, it was not actually hidden. The first time you click the link and toggle() is run, it will hide the div. I wanted the first click to show the user list. I used the following code to hide the div on page load:</p>
+
+<p><code>
+$(document).ready(function() {
+    $(&ldquo;##userlist&rdquo;).hide()
+});
+</code></p>
+
+<p>Alright - the next thing I need to do is work on my user list. In the previous example I used ajaxLink for my next/previous links. This kept the content within the cfwindow. Obviously I&rsquo;m not using a cfwindow now, so what can I do? I decided to simply use the same .load function I demonstrated earlier. Let&rsquo;s look at the complete test_userlist2.cfm:</p>
+
+<p><code>
+&lt;cfparam name=&ldquo;url.start&rdquo; default=&ldquo;1&rdquo;&gt;
+&lt;cfset total = 92&gt;
+&lt;cfset perpage = 10&gt;</p>
+
+<p>&lt;script&gt;
+selectUser = function(id,label) {
+    $(&ldquo;#ownerspan&rdquo;).html(label);
+    $(&ldquo;#useridfk&rdquo;).val(id);
+    $(&lsquo;#userlist&rsquo;).toggle(&lsquo;fast&rsquo;);
+}</p>
+
+<p>load = function(url) {
+    $(&lsquo;#userlist&rsquo;).load(url);
+}
+&lt;/script&gt;</p>
+
+<p>&lt;h3&gt;Select User&lt;/h3&gt;</p>
+
+<p>&lt;cfloop index=&ldquo;x&rdquo; from=&ldquo;#url.start#&rdquo; to=&ldquo;#min(url.start+perpage-1, total)#&rdquo;&gt;
+   &lt;cfoutput&gt;
+   &lt;a href=&ldquo;&rdquo; onClick=&ldquo;selectUser(#x#,&lsquo;Record #x#&rsquo;);return false;&rdquo;&gt;Record #x#&lt;/a&gt;&lt;br /&gt;
+   &lt;/cfoutput&gt;
+&lt;/cfloop&gt;</p>
+
+<p>&lt;cfoutput&gt;
+&lt;cfif url.start gt 1&gt;
+   &lt;a href=&ldquo;&rdquo; onClick=&ldquo;load(&lsquo;#cgi.script_name#?start=#url.start-perpage#&lsquo;);return false;&rdquo;&gt;Previous&lt;/a&gt;
+&lt;cfelse&gt;
+   Previous
+&lt;/cfif&gt;
+/
+&lt;cfif (url.start+perpage-1) lt total&gt;
+   &lt;a href=&ldquo;&rdquo; onClick=&ldquo;load(&lsquo;#cgi.script_name#?start=#url.start+perpage#&lsquo;);return false;&rdquo;&gt;Next&lt;/a&gt;
+&lt;cfelse&gt;
+   Next
+&lt;/cfif&gt;
+&lt;/cfoutput&gt;
+</code></p>
+
+<p>If you scroll to the bottom of the code, you can see I&rsquo;m calling a new load() function (I used the same name as the jQuery function, which may be bad) with the URL I want to load into div. My load function just runs the jQuery version, and with that, my pagination is complete.</p>
+
+<p>The code I use when you select a user is a bit simpler than the CF8 version. I use html() to set the user&rsquo;s name in the span. I set val() to set the hidden form field variable, and then I toggle to div to hide it away.</p>
+
+<p>All in all, I think the CF8 version was a bit simpler to use, especially in the simple &lsquo;show/hide&rsquo; part of the application. I spent 80% of my dev time on this just trying to solve the problem of &ldquo;is the div showing&rdquo; which is a bit surprising. I also performed a YSlow comparison. I know folks complain from time to time about the download impact of CF8 Ajax stuff. In my opinion, it really isn&rsquo;t that big of a deal, especially when you consider the ease of use, but I did want to take a look and compare.</p>
+
+<p>The CF8 version, when cached, 12.7K. The jQuery version, when cached, was 10.5K. Not different enough to be significant in my opinion. The non cached version though was hugely different. The jQuery version 66.3K. The CF8 version was 462.5K. As I said - significant. Of course, that&rsquo;s just your first hit, and probably not that much different than a typical Flex application.</p>
+
+<p>The code I used for this demo is attached to the blog entry.<p><a href='enclosures/D%3A%5Chosts%5Cwww%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Farchive22%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2008\/12\/31\/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2'; 
+this.page.identifier = '/?p=3169'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/31/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using CF8 Ajax features to solve the &#39;pick one of thousands&#39; issue (2)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/31/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/31/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using CF8 Ajax features to solve the &#39;pick one of thousands&#39; issue (2)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/31/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/12/31/Using-CF8-Ajax-features-to-solve-the-pick-one-of-thousands-issue-2" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

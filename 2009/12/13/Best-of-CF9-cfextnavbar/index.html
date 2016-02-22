@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Best of CF9: cf_ext_navbar &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Best of CF9: cf_ext_navbar" />
+<meta property="og:description" content="Today&rsquo;s entry is cf_ext_navbar. It was submitted by Andrew Duval and reviewed by Todd Sharp. Todd&rsquo;s review is below in it&rsquo;s entirety with no editing from me. Thanks Andrew and Todd! This contest entry is called CF_EXT_NAVBAR&rsquo;and was created by Andrew Duvall and is an example of how to utilize the Ext3 JavaScript library included with ColdFusion 9. Many developers were thrilled when they learned that the Ext libraries that power the ColdFusion Ajax and UI widgets was being upgraded to the most recent version of the popular framework because there were a number of significant upgrades since the launch of ColdFusion 8 which bundled Ext 1.0." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2009/12/13/Best-of-CF9-cfextnavbar" />
+
+
+<meta property="og:updated_time" content="2009-12-13T21:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Best of CF9: cf_ext_navbar">
+<meta itemprop="description" content="Today&rsquo;s entry is cf_ext_navbar. It was submitted by Andrew Duval and reviewed by Todd Sharp. Todd&rsquo;s review is below in it&rsquo;s entirety with no editing from me. Thanks Andrew and Todd! This contest entry is called CF_EXT_NAVBAR&rsquo;and was created by Andrew Duvall and is an example of how to utilize the Ext3 JavaScript library included with ColdFusion 9. Many developers were thrilled when they learned that the Ext libraries that power the ColdFusion Ajax and UI widgets was being upgraded to the most recent version of the popular framework because there were a number of significant upgrades since the launch of ColdFusion 8 which bundled Ext 1.0.">
+
+
+<meta itemprop="dateModified" content="2009-12-13T21:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="1265">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Best of CF9: cf_ext_navbar"/>
+<meta name="twitter:description" content="Today&rsquo;s entry is cf_ext_navbar. It was submitted by Andrew Duval and reviewed by Todd Sharp. Todd&rsquo;s review is below in it&rsquo;s entirety with no editing from me. Thanks Andrew and Todd! This contest entry is called CF_EXT_NAVBAR&rsquo;and was created by Andrew Duvall and is an example of how to utilize the Ext3 JavaScript library included with ColdFusion 9. Many developers were thrilled when they learned that the Ext libraries that power the ColdFusion Ajax and UI widgets was being upgraded to the most recent version of the popular framework because there were a number of significant upgrades since the launch of ColdFusion 8 which bundled Ext 1.0."/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2009/12/13/Best-of-CF9-cfextnavbar">
+    <h1 class="article-title" itemprop="name">
+        Best of CF9: cf_ext_navbar
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2009-12-13 21:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2009-12-13</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p><img src="http://www.raymondcamden.com/images/cfjedi/bestcfcontest1.jpg" title="Best of ColdFusion 9" align="left" style="margin-right:5px;margin-bottom:5px"/> Today&rsquo;s entry is cf_ext_navbar. It was submitted by Andrew Duval and reviewed by Todd Sharp. Todd&rsquo;s review is below in it&rsquo;s entirety with no editing from me. Thanks Andrew and Todd!</p>
+
+<p>This contest entry is called CF_EXT_NAVBAR&rsquo;and was created by Andrew Duvall and is an example of how to utilize the Ext3 JavaScript library included with ColdFusion 9.  Many developers were thrilled when they learned that the Ext libraries that power the ColdFusion Ajax and UI widgets was being upgraded to the most recent version of the popular framework because there were a number of significant upgrades since the launch of ColdFusion 8 which bundled Ext 1.0.  Andrew&rsquo;s entry demonstrates the required libraries and scripts to create a &ldquo;navbar&rdquo; widget.</p>
+
+<p>When I first ran the entry I had the same reaction that I usually have when I see Ext widgets - &ldquo;wow, that&rsquo;s pretty cool looking.&rdquo; Here&rsquo;s what the entry looks like:</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/1.png" /></p>
+
+<p>My next step was to load up the code in ColdFusion Builder and once I got that done I loaded the entry up in the internal browser so I could have a peek at the code and the entry at the same time.  Unfortunately what I saw in the internal browser wasn&rsquo;t so pretty:</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/2.png" /></p>
+
+<p>Turns out my default browser in CF Builder was set to IE and since IE can&rsquo;t render HTML properly like every other browser on earth there was a bit of a problem.  To be fair to Andrew, I&rsquo;m sure this isn&rsquo;t his fault.  What surprises me is that the Ext folks never caught this issue with the navbar in IE.</p>
+
+<p>At this point I had the same second thought that I always do when I see Ext widgets - &ldquo;I wonder how many scripts had to be imported just to create a simple navbar?&rdquo;   I opened up Firebug and took a look:</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/3.png" /></p>
+
+<p>I was pretty shocked to see 590 KB of scripts and images for a simple navbar widget especially since my local environment uses gzip compression on scripts.  The majority (519KB out of 590KB) of that bloat does come from a single  file – &lsquo;ext-all-debug.js&rsquo; which I&rsquo;m pretty sure is the core Ext library (and is actually 2.5MB before being gzip&rsquo;d).    I swapped out the &lsquo;ext-all-debug.js&rsquo; for the minified &lsquo;ext-all.js&rsquo; and the total script size dropped down to 238 KB – much easier to swallow (but still pretty large for a simple navbar in my opinion).  The fact that about 99% of the scripts and images are served from cache on subsequent page requests makes all of this a bit irrelevant if you were creating a full blown application but it&rsquo;s something to keep in mind if you&rsquo;re thinking of just dropping in a simple widget on a page somewhere.</p>
+
+<p>So let&rsquo;s take a look at some of the code.  I really would have liked if Andrew would have wrapped this up in a custom tag but since this is just a simple example I&rsquo;ll give him a pass on that.  The first thing that caught my eye was the following – and this isn&rsquo;t necessarily related to ColdFusion 9, but it is a pet peeve of mine so I thought it was worth mentioning:</p>
+
+<p><code>
+&lt;cfif ListContainsNoCase(&lsquo;small,medium,large&rsquo;, scaleSize) EQ 0&gt;
+        &lt;!&mdash; alright, this is not a hacker challenge here; i expect only small, medium, or large to be passed in the URL for this demo  &mdash;&gt;
+    &lt;cfset scaleSize = &ldquo;large&rdquo;&gt;
+&lt;/cfif&gt;<br />
+&lt;cfset scaleSize = lcase(scaleSize) /&gt;&lt;!&mdash; it is case sensitive inside the js &mdash;&gt;</p>
+
+<p>&lt;cfscript&gt;
+//NOTE: by changing [scaleSize] it retrieves the proper icons from the properly scaled icon folder
+//scaleSize = &ldquo;large&rdquo;; // values: small, medium, or large
+if (scaleSize EQ &ldquo;small&rdquo;) {
+iconSize = &ldquo;16&rdquo;; // 16*16
+}
+else if (scaleSize EQ &ldquo;medium&rdquo;) {
+iconSize = &ldquo;24&rdquo;; // 24*24
+}
+else {
+iconSize = &ldquo;32&rdquo;; // 32*32
+}
+&lt;/cfscript&gt;
+</code></p>
+
+<p>So he starts out with a simple logic check that sets the &lsquo;scaleSize&rsquo; variable as appropriate and then he does some simple clean up to make sure the variable is lower case.  So far, so good, but then he immediately jumps into a <cfscript> block to do some more conditional variable setting.  He stays in cfscript for a little while but jumps back to using tags when he&rsquo;s generating some JavaScript later on.  Personally I&rsquo;m not a fan of cfscript, but I won&rsquo;t take anything away from those who are.  My biggest issue is that jumping back and forth between tags and script creates inconsistent code that is difficult to read and follow.  Now that CF9 has full cfscript support there is really no excuse to not pick one style and stick with it.</p>
+
+<p>The next part I found a bit perplexing was the fact that Andrew created a 2d array of values in ColdFusion and then manually looped over the values to create the required JavaScript to create the navbar.  Here&rsquo;s a snippet from his code that creates the 2d array:</p>
+
+<p><code>
+&lt;cfscript&gt;
+stNavBar1.title[1] = &ldquo;HOME&rdquo;;
+stNavbar1.url[1] = &ldquo;index.cfm&rdquo;;
+stNavbar1.iconCls[1] = &ldquo;icon-menu#iconSize#-1&rdquo;;</p>
+
+<p>stNavBar1.title[2] = &ldquo;SECOND BUTTON&rdquo;;
+stNavbar1.url[2] = &ldquo;index.cfm&rdquo;;
+stNavbar1.iconCls[2] = &ldquo;icon-menu#iconSize#-2&rdquo;;</p>
+
+<p>stNavBar1.title[3] = &ldquo;SCALE THE TOOLBAR&rdquo;;
+stNavbar1.url[3] = &ldquo;index.cfm&rdquo;;
+stNavbar1.iconCls[3] = &ldquo;icon-menu#iconSize#-3&rdquo;;</p>
+
+<p>stNavBar2.title[3][1]= &ldquo;Let&rsquo;s see a LARGE Toolbar&rdquo;;<br />
+stNavbar2.url[3][1] = &ldquo;index.cfm?scaleSize=large&rdquo;;
+stNavbar2.iconCls[3][1] = &ldquo;icon-6-1&rdquo;;</p>
+
+<p>stNavBar2.title[3][2]= &ldquo;Let&rsquo;s see a MEDIUM Toolbar&rdquo;;<br />
+stNavbar2.url[3][2] = &ldquo;index.cfm?scaleSize=medium&rdquo;;
+stNavbar2.iconCls[3][2] = &ldquo;icon-6-1&rdquo;;</p>
+
+<p>stNavBar2.title[3][3]= &ldquo;Let&rsquo;s see a SMALL Toolbar&rdquo;;<br />
+stNavbar2.url[3][3] = &ldquo;index.cfm?scaleSize=small&rdquo;;
+stNavbar2.iconCls[3][3] = &ldquo;icon-6-1&rdquo;;
+&lt;/cfscript&gt;
+</code></p>
+
+<p>And here is how he looped over it to create the JavaScript:</p>
+
+<p><code>
+var mymenu=new SamplePanel({</p>
+
+<pre><code>tbar: [{
+    xtype:'buttongroup',
+    hideBorders:'true',
+    items: [
+    &amp;lt;cfloop index=&quot;i&quot; from=&quot;1&quot; to=&quot;#ArrayLen(stNavBar1.title)#&quot;&amp;gt;
+    &amp;lt;cfif i NEQ 1&amp;gt;,&amp;lt;/cfif&amp;gt;
+    {
+        &amp;lt;cfif arrayLen(stNavBar2.title[i]) GT 0&amp;gt;
+            xtype:'splitbutton', 
+            text: '&amp;lt;cfoutput&amp;gt;#stNavBar1.title[i]#&amp;lt;/cfoutput&amp;gt;',
+            iconCls: '&amp;lt;cfoutput&amp;gt;#stNavBar1.iconCls[i]#&amp;lt;/cfoutput&amp;gt;',
+            scale: '&amp;lt;cfoutput&amp;gt;#scaleSize#&amp;lt;/cfoutput&amp;gt;',
+            handler: navigate,
+            url: '&amp;lt;cfoutput&amp;gt;#stNavBar1.url[i]#&amp;lt;/cfoutput&amp;gt;',                 
+            menu: [
+            &amp;lt;cfloop index=&quot;j&quot; from=&quot;1&quot; to=&quot;#ArrayLen(stNavBar2.title[i])#&quot;&amp;gt;
+            &amp;lt;cfif j NEQ 1&amp;gt;,&amp;lt;/cfif&amp;gt;
+            {                                   
+                text: &quot;&amp;lt;cfoutput&amp;gt;#stNavBar2.title[i][j]#&amp;lt;/cfoutput&amp;gt;&quot;,                       
+                iconCls: &quot;&amp;lt;cfoutput&amp;gt;#stNavBar2.iconCls[i][j]#&amp;lt;/cfoutput&amp;gt;&quot;,                      
+                tooltip:' &amp;lt;cfoutput&amp;gt;#stNavBar2.url[i][j]#&amp;lt;/cfoutput&amp;gt;',
+                url: '&amp;lt;cfoutput&amp;gt;#stNavBar2.url[i][j]#&amp;lt;/cfoutput&amp;gt;',
+                handler: navigate
+            }
+            &amp;lt;/cfloop&amp;gt;
+            ]
+        &amp;lt;cfelse&amp;gt;
+            text: '&amp;lt;cfoutput&amp;gt;#stNavBar1.title[i]#&amp;lt;/cfoutput&amp;gt;',
+            iconCls: '&amp;lt;cfoutput&amp;gt;#stNavBar1.iconCls[i]#&amp;lt;/cfoutput&amp;gt;',
+            scale: '&amp;lt;cfoutput&amp;gt;#scaleSize#&amp;lt;/cfoutput&amp;gt;',
+            handler: navigate,
+            url: '&amp;lt;cfoutput&amp;gt;#stNavBar1.url[i]#&amp;lt;/cfoutput&amp;gt;'
+        &amp;lt;/cfif&amp;gt;
+    }
+    &amp;lt;/cfloop&amp;gt;
+]
+</code></pre>
+
+<p>}]
+</code></p>
+
+<p>While that certainly works I tend to think he&rsquo;s overcomplicating things a bit.  Take a look at a sample of the generated source code:</p>
+
+<p><code>
+[
+    {</p>
+
+<pre><code>text: 'HOME',
+iconCls: 'icon-menu24-1',
+scale: 'medium',
+handler: navigate,
+url: 'index.cfm'
+}
+//additional objects as needed – possibly nested
+</code></pre>
+
+<p>]
+</code></p>
+
+<p>So Ext is basically looking for a simple array of objects.  To me it would have been much simpler (and easier to read) to just create an array of structs in CF and serialize it as JSON.  Here&rsquo;s one way that might have looked.  Remember that you&rsquo;ll need to use associative array, or &lsquo;bracket&rsquo; notation to keep CF from changing the case of your struct keys when serializing.</p>
+
+<p><code>
+&lt;cfset menuArr = arrayNew(1) /&gt;
+&lt;cfset menuItem = structNew() /&gt;
+&lt;cfset menuItem[&ldquo;text&rdquo;] = &ldquo;TODD&rdquo; /&gt;
+&lt;cfset menuItem[&ldquo;iconCls&rdquo;] = &ldquo;icon-menu24-1&rdquo; /&gt;
+&lt;cfset menuItem[&ldquo;scale&rdquo;] = &ldquo;medium&rdquo; /&gt;
+&lt;cfset menuItem[&ldquo;handler&rdquo;] = &ldquo;navigate&rdquo; /&gt;
+&lt;cfset menuItem[&ldquo;url&rdquo;] = &ldquo;index.cfm&rdquo; /&gt;
+&lt;cfset arrayAppend(menuArr, menuItem) /&gt;
+&lt;cfset jArr = serializeJSON(menuArr) /&gt;
+</code></p>
+
+<p>Which produces the following JSON object:</p>
+
+<p><code>
+[
+    {
+    &ldquo;scale&rdquo;:&ldquo;medium&rdquo;,
+    &ldquo;iconCls&rdquo;:&ldquo;icon-menu24-1&rdquo;,
+    &ldquo;text&rdquo;:&ldquo;TODD&rdquo;,
+    &ldquo;handler&rdquo;:&ldquo;navigate&rdquo;,
+    &ldquo;url&rdquo;:&ldquo;index.cfm&rdquo;
+    }
+]
+</code></p>
+
+<p>The only issue with this version is that CF treats all the values as strings and if you notice Andrew&rsquo;s JSON object the value for the &lsquo;handler&rsquo; key is actually a variable reference to the navigate JavaScript function.  I worked around this by just replacing the quoted value &ldquo;navigate&rdquo; with an unquoted value in the JSON string that CF created:</p>
+
+<p><code>
+&lt;cfset jArr = replace(jArr,&lsquo;&ldquo;navigate&rdquo;&rsquo;, &ldquo;navigate&rdquo;, &ldquo;all&rdquo;) /&gt;
+</code></p>
+
+<p>Sure, it&rsquo;s a bit of a hack but I&rsquo;m willing to accept a simple hack in exchange for not having my eyes bleed from trying to work with a 2d array.</p>
+
+<p>Overall I think it was a good entry that took advantage of the Ext 3.0 features that ship with CF 9.<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fcf%5Fext%5Fnavbar%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2009\/12\/13\/Best-of-CF9-cfextnavbar'; 
+this.page.identifier = '/?p=3646'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/13/Best-of-CF9-cfextnavbar" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Best of CF9: cf_ext_navbar" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/13/Best-of-CF9-cfextnavbar" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/13/Best-of-CF9-cfextnavbar" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Best of CF9: cf_ext_navbar" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/13/Best-of-CF9-cfextnavbar" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2009/12/13/Best-of-CF9-cfextnavbar" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

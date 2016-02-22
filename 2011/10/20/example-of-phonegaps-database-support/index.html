@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Example of PhoneGap&#39;s Database Support &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Example of PhoneGap&#39;s Database Support" />
+<meta property="og:description" content="Folks who have used Adobe AIR before already know (or hopefully know) about it&rsquo;s cool, built-in database support. Any AIR application (whether written in Flex or HTML - you do remember you can do AIR with HTML, right?) can make use of an embedded SQLite database. This is incredibly useful for applications and pretty darn easy to use as well. PhoneGap also has built in support for SQLite via their storage support. In this blog entry I&rsquo;ll walk you through a sample application I&rsquo;ve created that makes use of the feature. I&rsquo;ll also point out some of the mistakes I made while writing so that hopefully you can avoid the issues I ran into.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/10/20/example-of-phonegaps-database-support" />
+
+
+<meta property="og:updated_time" content="2011-10-20T11:10:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Example of PhoneGap&#39;s Database Support">
+<meta itemprop="description" content="Folks who have used Adobe AIR before already know (or hopefully know) about it&rsquo;s cool, built-in database support. Any AIR application (whether written in Flex or HTML - you do remember you can do AIR with HTML, right?) can make use of an embedded SQLite database. This is incredibly useful for applications and pretty darn easy to use as well. PhoneGap also has built in support for SQLite via their storage support. In this blog entry I&rsquo;ll walk you through a sample application I&rsquo;ve created that makes use of the feature. I&rsquo;ll also point out some of the mistakes I made while writing so that hopefully you can avoid the issues I ran into.
+">
+
+
+<meta itemprop="dateModified" content="2011-10-20T11:10:00&#43;06:00" />
+<meta itemprop="wordCount" content="1355">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Example of PhoneGap&#39;s Database Support"/>
+<meta name="twitter:description" content="Folks who have used Adobe AIR before already know (or hopefully know) about it&rsquo;s cool, built-in database support. Any AIR application (whether written in Flex or HTML - you do remember you can do AIR with HTML, right?) can make use of an embedded SQLite database. This is incredibly useful for applications and pretty darn easy to use as well. PhoneGap also has built in support for SQLite via their storage support. In this blog entry I&rsquo;ll walk you through a sample application I&rsquo;ve created that makes use of the feature. I&rsquo;ll also point out some of the mistakes I made while writing so that hopefully you can avoid the issues I ran into.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/10/20/example-of-phonegaps-database-support">
+    <h1 class="article-title" itemprop="name">
+        Example of PhoneGap&#39;s Database Support
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-10-20 11:10:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-10-20</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Folks who have used Adobe AIR before already know (or hopefully know) about it&rsquo;s cool, built-in database support. Any AIR application (whether written in Flex or HTML - you do remember you can do AIR with HTML, right?) can make use of an embedded SQLite database. This is incredibly useful for applications and pretty darn easy to use as well. PhoneGap also has built in support for SQLite via their <a href="http://docs.phonegap.com/en/1.1.0/phonegap_storage_storage.md.html">storage</a> support. In this blog entry I&rsquo;ll walk you through a sample application I&rsquo;ve created that makes use of the feature. I&rsquo;ll also point out some of the mistakes I made while writing so that hopefully you can avoid the issues I ran into.</p>
+
+<p/>
+
+First - it is important to <i>carefully</i> read PhoneGap's <a href="http://docs.phonegap.com/en/1.1.0/phonegap_storage_storage.md.html">storage</a> documentation. I don't know why - but the biggest issue I've had with PhoneGap so far has been around my incorrect assumptions not matching up with reality. I guess I shouldn't be surprised there, but with PhoneGap I've found it <i>really</i> critical to <b>carefully</b> read the docs. It isn't that PhoneGap is brittle per se, but you really need to ensure you know what you're doing. Consider yourself warned. 
+
+<p/>
+
+Along with PhoneGap's docs, you want to read the W3C spec for <a href="http://dev.w3.org/html5/webdatabase/">Web SQL Database</a> support. It definitely helped fill in some things that the PhoneGap docs didn't cover. As an example, the PhoneGap docs enumerate the error codes for the SQLError object, but don't tell you the actual values that go with them. The W3C <a href="http://dev.w3.org/html5/webdatabase/#sqlerror">docs</a> for SQLError though have both the labels and the codes. 
+
+<p/>
+
+For folks who are familiar with SQLite in AIR, there are two main differences I've found between the AIR and PhoneGap platforms.
+
+<p/>
+
+First - it seems (although I've not confirmed this) that PhoneGap only supports asynchronous connections. That's not a bad thing typically, but I tend to prefer synchronous connections since they are a lot simpler to work with. They can lock your application up if you need to perform a particularly long operation, but I like having the option at least. I'll typically use two connections in an AIR app. I'll have a synchronous one for setup and then an asynchronous one to handle post-launch operations. Again - with PhoneGap you only have the asynchronous option.
+
+<p/>
+
+Second - while both AIR and PhoneGap support transactions through SQLite, PhoneGap requires <b>all</b> SQL transactions to go through a transaction. This adds a level of complexity to your code that may be a bit confusing at first, but once you've worked through a couple of examples it really isn't that big of a deal. It tended to bite me in the rear because I made the mistake of running "executeSQL" on my transaction object instead of "executeSql". The application reported it as a database error because the transaction callback was executing. This was confusing and hard to debug.
+
+<p/>
+
+Ok - so let's talk about the application. My demo application is called SimpleNotes. It's a very poor, very limited note taking application. It's got a grand total of two screens. The first is a list of your current notes.
+
+<p/>
+
+
+<img src="http://www.raymondcamden.com/images/cfjedi/device-2011-10-20-091716.png" />
+
+<p/>
+
+You can click a note to edit it, or simply click Add Note.
+
+<p/>
+
+<img src="http://www.raymondcamden.com/images/cfjedi/device-2.png" />
+
+<p/>
+
+So how does it work? I've got an event handler that listens in for the <a href="http://docs.phonegap.com/en/1.1.0/phonegap_events_events.md.html#deviceready">deviceready</a> event. This event is fired by PhoneGap when the hardware is ready for business time. I began by having it call a function named phoneReady:
+
+<p/>
+
+<code>
+function phoneReady() {
+    //First, open our db    
+    dbShell = window.openDatabase("SimpleNotes", 2, "SimpleNotes", 1000000);
+    //run transaction to create initial tables
+    dbShell.transaction(setupTable,dbErrorHandler,getEntries);
+}
+</code>
+
+<p/>
+
+In case your curious why I named the database twice - the first string is the database name while the second one is the <i>display</i> name. Much like my name is Raymond but I write it as G-Megabyte. (Now you know...) The second argument is the version. This can be used to shift the application from one database version to another. Normally you would update a database with SQL though so I'm not sure that folks would change this often in production. The last argument is the size. I picked 1000000 because I thought it looked nice on paper. Notice then we have a transaction to run setupTable. This is where I'll do my initial definitions.
+
+<p/>
+
+<code>
+//I just create our initial table - all one of em
+function setupTable(tx){
+    tx.executeSql("CREATE TABLE IF NOT EXISTS notes(id INTEGER PRIMARY KEY,title,body,updated)");
+}   
+</code>
+
+<p/>
+
+As you can see, I use "IF NOT EXISTS" in my creation script. That makes it safe to run more than once. For information on valid SQL syntax for SQLite, check their <a href="http://www.sqlite.org/docs.html">docs</a>. Ok, now if you remember the original transaction call, it had 2 more arguments. The second was a generic error handler, and the third was getEntries. First let's look at the error handler:
+
+<p/>
+
+<code>
+function dbErrorHandler(err){
+    alert("DB Error: "+err.message + "\nCode="+err.code);
+}
+</code>
+
+<p/>
+
+Most likely, and especially for an application like this, any error should be logged, possibly emailed, and also result in the termination of the app itself. My application is pretty useless if it can't do what it needs to with the database. But how you handle your errors will be up to the individual application. Let's more on then to getEntries.
+
+<p/>
+
+<code>
+//I handle getting entries from the db
+function getEntries() {
+    dbShell.transaction(function(tx) {
+        tx.executeSql("select id, title, body, updated from notes order by updated desc",[],renderEntries,dbErrorHandler);
+    }, dbErrorHandler);
+}
+</code>
+
+<p/>
+
+So compared to the earlier transaction call I got a bit fancier here. I've embedded the function within the transaction call itself. It may be a bit hard to read there so let me rewrite this in pseudo-code so it is clear:
+
+<p/>
+
+<code>
+Start a transaction:
+  execute my sql, and on a good result, run renderEntries, and on a bad result, run dbErrorHandler
+If the transaction fails: run dbErrorHandler
+</code>
+
+<p/>
+
+I sometimes tried to put the result handler in the transaction call, but if you do that, you don't get passed the result of the SQL execution. So... don't do that. The second argument to executeSql (the empty array) is how bound parameters are handled. Since I have none I just pass it as an empty array. Now let's look at renderEntries.
+
+<p/>
+
+<code>
+function renderEntries(tx,results){
+    doLog("render entries");
+    if (results.rows.length == 0) {
+        $("#mainContent").html("&lt;p&gt;You currently do not have any notes.&lt;/p&gt;");
+    } else {
+       var s = "";
+       for(var i=0; i&lt;results.rows.length; i++) {
+         s += "&lt;li&gt;&lt;a href='edit.html?id="+results.rows.item(i).id + "'&gt;" + results.rows.item(i).title + "&lt;/a&gt;&lt;/li&gt;";   
+       }
+       $("#noteTitleList").html(s);
+       $("#noteTitleList").listview("refresh");
+    }
+}
+</code>
+
+<p/>
+
+So a good portion of this is generic DOM manipulation and jQuery Mobile related, but focus on how I use the results attribute. I can easily check the length and handle an empty database. I can also easily loop over them and access the data. Pretty simple, right? Let's look at one more function. When saving a note, I'm either saving an existing note or editing a new one. I've got code in there to handle that, but let's focus on the actual save operation.
+
+<p/>
+
+<code>
+function saveNote(note, cb) {
+    //Sometimes you may want to jot down something quickly....
+    if(note.title == "") note.title = "[No Title]";
+    dbShell.transaction(function(tx) {
+        if(note.id == "") tx.executeSql("insert into notes(title,body,updated) values(?,?,?)",[note.title,note.body, new Date()]);
+        else tx.executeSql("update notes set title=?, body=?, updated=? where id=?",[note.title,note.body, new Date(), note.id]);
+    }, dbErrorHandler,cb);
+}
+</code>
+
+<p/>
+
+So before we start - I'll say that the note argument is a simple JavaScript object. It's got values for title, body, and possibly the ID. The cb argument is simply a call back to execute. Notice how I handle insert versus update logic. Also note how i handle the bound parameters. Very much like AIR. It looks like you can't do named parameters like you can in Adobe AIR, so make your get your positions right.
+
+<p/>
+
+And that's pretty much it. There's a lot more logic around to handle my form editing and the like, but you can see that yourself in the attached zip. The zip contains an unsigned APK as well as a copy of the code. Note - when saving a note I've got a weird page display issue going on. Anyone who fixes that gets mega bonus points from the pool.
+
+<b>Edit:</b> For folks downloading the code, please see Anne's comment <a href="http://www.raymondcamden.com/2011/10/20/Example-of-PhoneGaps-Database-Support#cA435E0AE-B9F8-5539-415C9E70E6806AEA">here</a>.
+
+<p><a href='/enclosures/SimpleNote.zip'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/10\/20\/example-of-phonegaps-database-support'; 
+this.page.identifier = '/?p=4401'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/10/20/example-of-phonegaps-database-support" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Example of PhoneGap&#39;s Database Support" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/10/20/example-of-phonegaps-database-support" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/10/20/example-of-phonegaps-database-support" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Example of PhoneGap&#39;s Database Support" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/10/20/example-of-phonegaps-database-support" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/10/20/example-of-phonegaps-database-support" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

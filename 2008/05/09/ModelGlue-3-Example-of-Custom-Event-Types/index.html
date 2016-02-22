@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Model-Glue 3 - Example of Custom Event Types &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Model-Glue 3 - Example of Custom Event Types" />
+<meta property="og:description" content="Now that Model-Glue 3 has been announced and available for folks to play with, it&rsquo;s time to start working up some demos so folks can see stuff in action. Joe has included a few demos in the zip, but if I don&rsquo;t play with it myself, I don&rsquo;t learn.
+
+Before I go any further, and yes, I will be repeating this warning a lot, keep in mind the following two points:
+
+
+Model-Glue 3 is in Alpha. Everything I talk about here may stop working tomorrow. If it does, I&#39;m going to hunt Joe down and make him rewrite Model-Glue in Pascal. 
+Like every new feature, there are &#34;good&#34; ways of using it and &#34;not so good&#34; ways of using it. This is the first time I&#39;ve done this feature. It may be a stupid example. I may look back in a month and ask - what was I drinking. 
+
+
+So with the above in mind, let&rsquo;s dig in.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2008/05/09/ModelGlue-3-Example-of-Custom-Event-Types" />
+
+
+<meta property="og:updated_time" content="2008-05-09T16:05:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Model-Glue 3 - Example of Custom Event Types">
+<meta itemprop="description" content="Now that Model-Glue 3 has been announced and available for folks to play with, it&rsquo;s time to start working up some demos so folks can see stuff in action. Joe has included a few demos in the zip, but if I don&rsquo;t play with it myself, I don&rsquo;t learn.
+
+Before I go any further, and yes, I will be repeating this warning a lot, keep in mind the following two points:
+
+
+Model-Glue 3 is in Alpha. Everything I talk about here may stop working tomorrow. If it does, I&#39;m going to hunt Joe down and make him rewrite Model-Glue in Pascal. 
+Like every new feature, there are &#34;good&#34; ways of using it and &#34;not so good&#34; ways of using it. This is the first time I&#39;ve done this feature. It may be a stupid example. I may look back in a month and ask - what was I drinking. 
+
+
+So with the above in mind, let&rsquo;s dig in.
+">
+
+
+<meta itemprop="dateModified" content="2008-05-09T16:05:00&#43;06:00" />
+<meta itemprop="wordCount" content="1184">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Model-Glue 3 - Example of Custom Event Types"/>
+<meta name="twitter:description" content="Now that Model-Glue 3 has been announced and available for folks to play with, it&rsquo;s time to start working up some demos so folks can see stuff in action. Joe has included a few demos in the zip, but if I don&rsquo;t play with it myself, I don&rsquo;t learn.
+
+Before I go any further, and yes, I will be repeating this warning a lot, keep in mind the following two points:
+
+
+Model-Glue 3 is in Alpha. Everything I talk about here may stop working tomorrow. If it does, I&#39;m going to hunt Joe down and make him rewrite Model-Glue in Pascal. 
+Like every new feature, there are &#34;good&#34; ways of using it and &#34;not so good&#34; ways of using it. This is the first time I&#39;ve done this feature. It may be a stupid example. I may look back in a month and ask - what was I drinking. 
+
+
+So with the above in mind, let&rsquo;s dig in.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2008/05/09/ModelGlue-3-Example-of-Custom-Event-Types">
+    <h1 class="article-title" itemprop="name">
+        Model-Glue 3 - Example of Custom Event Types
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2008-05-09 16:05:00 &#43;0600 &#43;0600" itemprop="datePublished">2008-05-09</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Now that Model-Glue 3 has been announced and available for folks to play with, it&rsquo;s time to start working up some demos so folks can see stuff in action. Joe has included a few demos in the zip, but if I don&rsquo;t play with it myself, I don&rsquo;t learn.</p>
+
+<p>Before I go any further, and yes, I <b>will</b> be repeating this warning a lot, keep in mind the following two points:</p>
+
+<ol>
+<li>Model-Glue 3 is in Alpha. Everything I talk about here may stop working tomorrow. If it does, I'm going to hunt Joe down and make him rewrite Model-Glue in Pascal. 
+<li>Like every new feature, there are "good" ways of using it and "not so good" ways of using it. This is the first time I've done this feature. It may be a stupid example. I may look back in a month and ask - what was I drinking. 
+</ol>
+
+<p>So with the above in mind, let&rsquo;s dig in.</p>
+
+<p>First off - let&rsquo;s talk about what Custom Event Types (CETs) are. Those of us who develop in Model-Glue are used to the repeated XML we have to use for things like layout and security checks. Consider:</p>
+
+<p><code>
+&lt;event-handler name=&ldquo;page.about&rdquo;&gt;
+    &lt;broadcasts /&gt;
+    &lt;views&gt;
+    &lt;include name=&ldquo;body&rdquo; template=&ldquo;main.about.cfm&rdquo; /&gt;
+    &lt;/views&gt;
+    &lt;results&gt;
+    &lt;result do=&ldquo;view.template&rdquo; /&gt;
+    &lt;/results&gt;
+&lt;/event-handler&gt;
+&lt;event-handler name=&ldquo;page.category&rdquo;&gt;
+    &lt;broadcasts&gt;
+    &lt;message name=&ldquo;GetProjectCategory&rdquo; /&gt;
+    &lt;message name=&ldquo;GetProjectsForCategory&rdquo; /&gt;
+    &lt;/broadcasts&gt;
+    &lt;views&gt;
+    &lt;include name=&ldquo;body&rdquo; template=&ldquo;main.category.cfm&rdquo; /&gt;
+    &lt;/views&gt;
+    &lt;results&gt;
+    &lt;result do=&ldquo;view.template&rdquo; /&gt;
+    &lt;/results&gt;
+&lt;/event-handler&gt;
+</code></p>
+
+<p>These two simple events both have an unnamed event to run a template view. As you can imagine, my application has this repeated quite a bit. CETs allow us a simple way to get around it. Let&rsquo;s start with the XML changes you have to make.</p>
+
+<p>MG3 supports a type argument to the event-handler tag. Here is a simple example:</p>
+
+<p><code>
+&lt;event-handler name=&ldquo;page.index&rdquo; type=&ldquo;mg3app1.events.customLayoutEvent&rdquo;&gt;
+</code></p>
+
+<p>The value is the full path to the CFC we will create to define our CET. Note that the value is passed to createObject, so use whatever paths you would normally use.</p>
+
+<p>Ok, so the CFC. As you can see I used an events folder above. This was based on Joe&rsquo;s sample apps and as it made sense, I&rsquo;m going to pretend it was all my idea and take credit for it.</p>
+
+<p>Your CFC will begin by extending the core EventHandler from Model-Glue. Here is an empty CET:</p>
+
+<p><code>
+&lt;cfcomponent extends=&ldquo;ModelGlue.gesture.eventhandler.EventHandler&rdquo;&gt;</p>
+
+<p>&lt;/cfcomponent&gt;
+</code></p>
+
+<p>It&rsquo;s empty - but boy does it run fast. So out of the box there are 2 built-in events that you potentially will want to use:</p>
+
+<ul>
+<li>beforeConfiguration: This is run while the event is starting up. This is where you would add broadcasts. So for a security CET, you would broadcast a message to check authorization/authentication.
+<li>afterCongifuration: This is run when the event is ending. This is where you would add results. Note that CETs support named and unnamed results. Now to be clear - you can also broadcast stuff as well. But this would run after other broadcasts so if you need to broadcast something that later messages need, you want to use beforeConfiguration.
+</ul>
+
+<p>So first off - those CFC names are a bit oddly named in my book. I just bugged Joe about this. To me, &ldquo;configuration&rdquo; implies one time while in reality, these guys are always run, much like onRequestStart/End. This confused me so I&rsquo;m just sharing it if other folks get confused by it as well. (FYI, Joe is IMing right now, so don&rsquo;t be surprised if it changes. Actually, it&rsquo;s done. It may not be in the zip yet, but it is changing to beforeEvent and afterEvent.)</p>
+
+<p>The second thing that confused me was that I couldn&rsquo;t figure out how to get access to the Event object. After speaking with Joe, I was able to wrap my head around the idea that this CFC code is basically replacing XML. You aren&rsquo;t going to be doing Event checks here - just basically just adding to the XML (via CF) that would have been hard coded in the event normally.</p>
+
+<p>So - so once I got things working, I needed something to code. I wanted to build upon the <a href="http://www.raymondcamden.com/index.cfm/2008/5/7/Ask-a-Jedi-Multiple-templates-and-ModelGlue">article</a> I wrote a few days ago concerning multiple templates. The idea there was - how do I support different templates. The answer I used there was to simply have multiple results. Here is sample XML I used from that entry:</p>
+
+<p><code>
+&lt;event-handler name=&ldquo;page.index&rdquo;&gt;
+   &lt;broadcasts /&gt;
+   &lt;results&gt;
+      &lt;result name=&ldquo;print&rdquo; do=&ldquo;view.printtemplate&rdquo; /&gt;
+      &lt;result do=&ldquo;view.template&rdquo; /&gt;
+   &lt;/results&gt;
+   &lt;views&gt;
+      &lt;include name=&ldquo;body&rdquo; template=&ldquo;dspIndex.cfm&rdquo; /&gt;
+   &lt;/views&gt;
+&lt;/event-handler&gt;</p>
+
+<p>&lt;event-handler name=&ldquo;view.template&rdquo;&gt;
+   &lt;broadcasts /&gt;
+   &lt;results /&gt;
+   &lt;views&gt;
+      &lt;include name=&ldquo;template&rdquo; template=&ldquo;dspTemplate.cfm&rdquo; /&gt;
+   &lt;/views&gt;
+&lt;/event-handler&gt;</p>
+
+<p>&lt;event-handler name=&ldquo;view.printtemplate&rdquo;&gt;
+   &lt;broadcasts /&gt;
+   &lt;results /&gt;
+   &lt;views&gt;
+      &lt;include name=&ldquo;template&rdquo; template=&ldquo;dspPrintTemplate.cfm&rdquo; /&gt;
+   &lt;/views&gt;
+&lt;/event-handler&gt;
+</code></p>
+
+<p>This turns out to be very easy in CET. Here is the code I used for afterConfiguration:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;afterConfiguration&rdquo; access=&ldquo;public&rdquo; returntype=&ldquo;void&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;Called after configuring the event handler.  Subclasses can use this to add messages, results, or views after they&rsquo;re added by something like a ModelGlue XML file.&rdquo;&gt;
+    &lt;cfset var result = createObject(&ldquo;component&rdquo;, &ldquo;ModelGlue.gesture.eventhandler.Result&rdquo;) /&gt;
+    &lt;cfset var secondresult = createObject(&ldquo;component&rdquo;, &ldquo;ModelGlue.gesture.eventhandler.Result&rdquo;) /&gt;</p>
+
+<pre><code>&amp;lt;cfset super.afterConfiguration() /&amp;gt;
+
+&amp;lt;cfset result.event = &quot;template.main&quot; /&amp;gt;
+&amp;lt;cfset addResult(result) /&amp;gt;
+
+&amp;lt;cfset secondresult.name=&quot;printformat&quot;&amp;gt;
+&amp;lt;cfset secondresult.event=&quot;template.printmain&quot;&amp;gt;
+&amp;lt;cfset addResult(secondresult)&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>I create two results. The first is unnamed and represents my default template. The second is named printformat. To use this new event type, I first specify it in my XML:</p>
+
+<p><code>
+&lt;event-handler name=&ldquo;page.index&rdquo; type=&ldquo;mg3app1.events.customLayoutEvent&rdquo;&gt;
+    &lt;broadcasts /&gt;
+    &lt;results /&gt;
+    &lt;views&gt;
+        &lt;include name=&ldquo;body&rdquo; template=&ldquo;pages/index.cfm&rdquo; /&gt;
+    &lt;/views&gt;
+&lt;/event-handler&gt;
+</code></p>
+
+<p>And I&rsquo;m done. I made it so that in my application, if &ldquo;print&rdquo; exists in the Event (url or form obviously), the printformat result is added. I did this via onRequestEnd in my main controller:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;onRequestEnd&rdquo; access=&ldquo;public&rdquo; output=&ldquo;false&rdquo; returnType=&ldquo;void&rdquo;&gt;
+    &lt;cfargument name=&ldquo;event&rdquo; type=&ldquo;any&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfif arguments.event.valueExists(&quot;print&quot;)&amp;gt;
+    &amp;lt;cfset arguments.event.addResult(&quot;printformat&quot;)&amp;gt;
+&amp;lt;/cfif&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>So - this <i>would</i> have been the end of the story. Unfortunately, it didn&rsquo;t work. I bugged Joe again, and he came up with the answer. Unfortunately, the reason it doesn&rsquo;t work is rather low level. The simplest explanation is that onRequestEnd (an automatic broadcast in MG) is actually consdiered <i>another</i> event: modelglue.onRequestEnd.</p>
+
+<p>Joe came up with a solution that isn&rsquo;t quite as short as my previous example, but works ok. Now what we do is simply broadcast a message that will do the same check as my onRequestEnd code above. Take a look at the new version on afterConfiguration:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;afterConfiguration&rdquo; access=&ldquo;public&rdquo; returntype=&ldquo;void&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;Called after configuring the event handler.  Subclasses can use this to add messages, results, or views after they&rsquo;re added by something like a ModelGlue XML file.&rdquo;&gt;
+    &lt;cfset var result = createObject(&ldquo;component&rdquo;, &ldquo;ModelGlue.gesture.eventhandler.Result&rdquo;) /&gt;
+    &lt;cfset var secondresult = createObject(&ldquo;component&rdquo;, &ldquo;ModelGlue.gesture.eventhandler.Result&rdquo;) /&gt;
+    &lt;cfset var message = createObject(&ldquo;component&rdquo;, &ldquo;ModelGlue.gesture.eventhandler.Message&rdquo;) /&gt;</p>
+
+<pre><code>&amp;lt;cfset super.afterConfiguration() /&amp;gt;
+
+&amp;lt;cfset message.name = &quot;checkFormat&quot; /&amp;gt;
+&amp;lt;cfset addMessage(message) /&amp;gt;
+
+&amp;lt;cfset result.name=&quot;mainformat&quot;&amp;gt;
+&amp;lt;cfset result.event = &quot;template.main&quot; /&amp;gt;
+&amp;lt;cfset addResult(result) /&amp;gt;
+
+&amp;lt;cfset secondresult.name=&quot;printformat&quot;&amp;gt;
+&amp;lt;cfset secondresult.event=&quot;template.printmain&quot;&amp;gt;
+&amp;lt;cfset addResult(secondresult)&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>As you can see, I now broadcast checkFormat. I won&rsquo;t show the code for that as it&rsquo;s the exact same as the onRequestEnd above.</p>
+
+<p>Alright - so hopefully that wasn&rsquo;t <i>too</i> confusing! I&rsquo;ve attached a zip of my application. Please note that Joe will be updating the MG3 alpha zip fairly shortly so this code may not work right this very second.<p><a href='enclosures/D%3A%5Chosts%5Cwww%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fmg3app1%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2008\/05\/09\/ModelGlue-3-Example-of-Custom-Event-Types'; 
+this.page.identifier = '/?p=2818'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/05/09/ModelGlue-3-Example-of-Custom-Event-Types" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Model-Glue 3 - Example of Custom Event Types" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/05/09/ModelGlue-3-Example-of-Custom-Event-Types" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/05/09/ModelGlue-3-Example-of-Custom-Event-Types" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Model-Glue 3 - Example of Custom Event Types" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/05/09/ModelGlue-3-Example-of-Custom-Event-Types" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/05/09/ModelGlue-3-Example-of-Custom-Event-Types" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

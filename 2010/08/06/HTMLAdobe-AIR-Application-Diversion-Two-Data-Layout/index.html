@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>HTML/Adobe AIR Application Diversion Two - Data Layout &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="HTML/Adobe AIR Application Diversion Two - Data Layout" />
+<meta property="og:description" content="The same reader who prompted my last diversion (HTML/Adobe AIR Application Diversion One - User Login) also spurred me into another late night of coding. This time his question involved how you could display data loaded via Ajax. While certainly not just an AIR concern (any Ajax application has to worry about this), my experiments focused on the AIR side. Before going any further, let me discuss how I handle this issue now.
+
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/08/06/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout" />
+
+
+<meta property="og:updated_time" content="2010-08-06T14:08:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="HTML/Adobe AIR Application Diversion Two - Data Layout">
+<meta itemprop="description" content="The same reader who prompted my last diversion (HTML/Adobe AIR Application Diversion One - User Login) also spurred me into another late night of coding. This time his question involved how you could display data loaded via Ajax. While certainly not just an AIR concern (any Ajax application has to worry about this), my experiments focused on the AIR side. Before going any further, let me discuss how I handle this issue now.
+
+
+">
+
+
+<meta itemprop="dateModified" content="2010-08-06T14:08:00&#43;06:00" />
+<meta itemprop="wordCount" content="1279">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="HTML/Adobe AIR Application Diversion Two - Data Layout"/>
+<meta name="twitter:description" content="The same reader who prompted my last diversion (HTML/Adobe AIR Application Diversion One - User Login) also spurred me into another late night of coding. This time his question involved how you could display data loaded via Ajax. While certainly not just an AIR concern (any Ajax application has to worry about this), my experiments focused on the AIR side. Before going any further, let me discuss how I handle this issue now.
+
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/08/06/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout">
+    <h1 class="article-title" itemprop="name">
+        HTML/Adobe AIR Application Diversion Two - Data Layout
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-08-06 14:08:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-08-06</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>The same reader who prompted my last diversion (<a href="http://www.raymondcamden.com/index.cfm/2010/8/5/HTMLAdobe-AIR-Application-Diversion-One--User-Login">HTML/Adobe AIR Application Diversion One - User Login</a>) also spurred me into another late night of coding. This time his question involved how you could display data loaded via Ajax. While certainly not just an AIR concern (any Ajax application has to worry about this), my experiments focused on the AIR side. Before going any further, let me discuss how I handle this issue now.</p>
+
+<p>
+
+I've done "data display" now three ways:
+
+<p>
+
+<ol>
+<li>When I first began doing Ajax devleopment I made use of <a href="http://labs.adobe.com/technologies/spry/">Adobe Spry</a>. As much as I'm a jQuery fan boy now I've yet to see a JavaScript framework do display of Ajax data as nicely as Spry. It's incredibly simple and practical. I no longer use Spry as I feel more productive in jQuery, but I still think it's a great model.
+<li>More recently I discovered jQuery templates (see my <a href="http://www.coldfusionjedi.com/index.cfm/2010/7/9/Quick-example-of-jQuery-Templates">post</a> on it). I really dig this - but it has an issue in AIR. I'm not going to go into why just yet - but it's coming up in my AIR series.
+<li>So outside of the two methods above, most of the time I simply loop over the data, create a big ass string (that's the technical term, honest), and inject it into the DOM.
+</ol>
+
+<p>
+
+So that's what I've done so far. I'm sure there are other options, but these have worked great for me so far. My reader though threw me for a loop and asked about doing layout using XSLT. XSLT stands for XSL transformations. I won't go into the complete description here (if you want more detail, see <a href="http://www.w3schools.com/xsl/">this page</a>), but it's essentially a way to take some XML, combine it with a XML document that describes layout, and generate HTML. It's kinda cool. ColdFusion supports it. But honestly? I've never used it. The thought of using it for Ajax though was quite intriguing. 
+
+<p>
+
+I did some research and discovered that you can actually do XSLT on the client. This tutorial, <a href="http://www.w3schools.com/xsl/xsl_client.asp/">XSLT on the Client</a>, talks about how you can load both an XML and XSL file via Ajax and then combine them to create layout. I took their code and simplified it to make it work with AIR. (Since we don't have to worry about IE we can remove some code.)
+
+<p>
+
+<code>
+
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;New Adobe AIR Project&lt;/title&gt;
+        &lt;script type="text/javascript" src="lib/air/AIRAliases.js"&gt;&lt;/script&gt;
+        &lt;script src="lib/jquery/jquery-1.4.2.min.js"&gt;&lt;/script&gt;
+
+        &lt;script&gt;
+        function loadXMLDoc(dname) {
+            xhttp=new XMLHttpRequest();
+            xhttp.open("GET",dname,false);
+            xhttp.send("");
+            return xhttp.responseXML;
+        }
+        
+        function displayResult() {
+            xml=loadXMLDoc("data.xml");
+            xsl=loadXMLDoc("test.xsl");
+            xsltProcessor=new XSLTProcessor();
+            xsltProcessor.importStylesheet(xsl);
+            resultDocument = xsltProcessor.transformToFragment(xml,document);
+            $("#example").html(resultDocument);
+        }           
+
+
+        $(document).ready(function() {
+
+            displayResult();
+
+        });
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="example"&gt;&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p>
+
+I won't go into detail about this code since it is just a simplified version of the tutorial I linked above, but I think you can get an idea about just how simple this stuff is. Taking this and running it within AIR results in pretty much what you would expect:
+
+<p>
+
+<img src="http://www.coldfusionjedi.com/images/Screen shot 2010-08-06 at 12.41.19 PM.png" />
+
+<p>
+
+Cool, right? XSL is a pretty intense language (syntax? framework? whatever). You can do looping (obviously) and other stuff too - even conditionals. So all of this took just a few minutes. What took me a few hours was deciding to turn this little experiment into a full fledged application. 
+
+<p>
+
+I began by digging up an XML service. Yahoo has a nice <a href="http://developer.yahoo.com/traffic/rest/V1/index.html">Traffic API</a> that spits out XML so I thought it would be a good starting point. I thought I'd design an application that would prompt you for your address and display the results. Here is a screen shot.
+
+<p>
+
+<img src="http://www.coldfusionjedi.com/images/Screen shot 2010-08-06 at 12.45.46 PM.png" />
+
+<p>
+
+I'll paste the code and - like normal - walk you guys through it. There was some <b>extremely</b> painful parts of this application - mainly because I was unaware of some things that jQuery did for us.
+
+<p>
+
+<code>
+
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;New Adobe AIR Project&lt;/title&gt;
+        &lt;script type="text/javascript" src="lib/air/AIRAliases.js"&gt;&lt;/script&gt;
+        &lt;script src="/lib/jquery/jquery-1.4.2.min.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+        //simple func to read in a complete file
+        function fileRead(fileob) {
+            var fileStream = new air.FileStream();
+            fileStream.open(fileob,air.FileMode.READ);
+            var contents = fileStream.readMultiByte(fileob.size,"utf-8");
+            fileStream.close();
+            return contents;            
+        }
+        
+        function lookup(evt) {
+            var street = $("#street").val();
+            var city = $("#city").val();
+            var state = $("#state").val();
+            
+            if(street == '' || city == '' || state == '') {
+                alert('Please enter all values.');
+                return ;
+            }
+            
+            var url = "http://local.yahooapis.com/MapsService/V1/trafficData?appid=YdnDemo&street=" + escape(street);
+            url += "&city="+escape(city) + "&state="+escape(state);
+
+            $.get(url, {}, function(res,status) {
+                $("#log").html("");
+                var resultDocument = xsltProcessor.transformToFragment(res,document);
+                $("#display").html(resultDocument);
+            });
+
+        }
+
+        $(document).ready(function() {
+            var xslFile = air.File.applicationDirectory.resolvePath("design.xsl");
+            var xsl = fileRead(xslFile);
+            xsl = (new DOMParser()).parseFromString(xsl, "text/xml");
+
+            xsltProcessor=new XSLTProcessor();
+            xsltProcessor.importStylesheet(xsl);
+
+            $("#trafficBtn").click(lookup);
+            
+            $('#log').ajaxError(function(e,xhr) {
+                var msg = xhr.responseXML.getElementsByTagName("Message")[0].firstChild.textContent;
+                $(this).text(msg);
+            });
+            
+        });
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    
+    Enter your street: &lt;input type="text" id="street"&gt;&lt;br/&gt;
+    Enter your city: &lt;input type="text" id="city"&gt;&lt;br/&gt;
+    Enter your state: &lt;input type="state" id="state"&gt;&lt;br/&gt;
+    &lt;input type="button" value="Get Traffic Report" id="trafficBtn"&gt;
+    &lt;div id="log"&gt;&lt;/div&gt;
+    &lt;p/&gt;
+    
+    &lt;div id="display"&gt;&lt;/div&gt;
+    
+    &lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p>
+
+Ok, so we can pretty much ignore the HTML at the bottom. It's basically a form, a div used for status messages (log), and a display area. Let's go to the fun code. 
+
+<p>
+
+When the document loads, I begin by loading in my XSL sheet. Notice the use of File.applicationDirectory. This basically means "same place as my app". The fileRead function simply handles doing a synchronous file read using AIR File APIs. I convert my XSL text into a proper XML document. (Don't ask me how I learned that line - thank Google.) I then create my XSL processor object and pass in the XSL. Ignore the error handler for now. 
+
+<p>
+
+So now let's look at the form handler. I start off grabbing my form values and doing a quick validation on them. Next I create my URL. This just follows the API directions from Yahoo. Finally I fire off the request and when I get my data back, I pass it to my XSL processor. That's it! So what took me so long? I struggled for quite some time because I didn't realize that jQuery had recognized the XML and turned it into an XML object for me. My original code was "re-XMLing" the result. Ugh. (And let me just say. This is the second time in two weeks I've done XML in JavaScript and so far I fracking hate it. ColdFusion handles XML much nicer!) So what about the XSL?
+
+<p>
+
+<code>
+&lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt; 
+ 
+&lt;xsl:template match="/"&gt; 
+  &lt;html&gt; 
+  &lt;body&gt; 
+  &lt;h2&gt;Traffic Report&lt;/h2&gt; 
+    &lt;table border="1" width="100%"&gt; 
+      &lt;tr bgcolor="#9acd32"&gt; 
+        &lt;th&gt;Type&lt;/th&gt;
+        &lt;th&gt;Incident&lt;/th&gt; 
+      &lt;/tr&gt; 
+      &lt;xsl:for-each select="//*[local-name()='Result']"&gt; 
+      &lt;tr&gt; 
+        &lt;td&gt;&lt;xsl:value-of select="@type"/&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;xsl:value-of select="//*[local-name()='Title']"/&gt;&lt;/td&gt; 
+      &lt;/tr&gt;
+      &lt;tr bgcolor="yellow"&gt;
+        &lt;td colspan="2"&gt;
+            &lt;xsl:value-of select="//*[local-name()='Description']"/&gt;
+            &lt;br/&gt;&lt;b&gt;Severity:&lt;/b&gt; 
+        &lt;xsl:choose&gt;
+          &lt;xsl:when test="//*[local-name()='Severity']='1'"&gt;
+            Not very
+          &lt;/xsl:when&gt;
+          &lt;xsl:when test="//*[local-name()='Severity']='2'"&gt;
+            Mildly Annoying
+          &lt;/xsl:when&gt;
+          &lt;xsl:when test="//*[local-name()='Severity']='3'"&gt;
+            Annoying
+          &lt;/xsl:when&gt;
+          &lt;xsl:when test="//*[local-name()='Severity']='4'"&gt;
+            Pain in the Rear
+          &lt;/xsl:when&gt;
+          &lt;xsl:when test="//*[local-name()='Severity']='5'"&gt;
+            You ain't going nowhere
+          &lt;/xsl:when&gt;
+          &lt;xsl:otherwise&gt;
+            Unknown. Consult Fringe department.
+          &lt;/xsl:otherwise&gt;
+        &lt;/xsl:choose&gt;
+        &lt;/td&gt; 
+      &lt;/tr&gt; 
+      &lt;/xsl:for-each&gt; 
+    &lt;/table&gt; 
+  &lt;/body&gt; 
+  &lt;/html&gt; 
+&lt;/xsl:template&gt; 
+&lt;/xsl:stylesheet&gt;
+</code>
+
+<p>
+
+This was also a bit painful, but mainly because of the namespaces. Everywhere you see: //*[local-name() you can thank namespaces. I wish there was a way to ignore them. If a tag is &lt;foo&gt; then I want my path to just use foo. Google seemed to imply that it may be possible to tell the XSL processor to ignore the namespaces but I wasn't able to get it to work. It's not horrible - but I think it makes the XSL harder to read. 
+
+<p>
+
+Anyway - most of the above is just the loop. The only "fancy" part is my conditional. As you can see - I do some basic branching based on the severity of the traffic report. I could have used graphics instead of text, but I think you get the idea.
+
+<p>
+
+So... what do you think? If you want to play with this application I've attached it to the blog entry. Unfortunately Yahoo didn't seem to have traffic data for my home town, but perhaps that's because of the overabundance of swamp, vampires, and werewolves. Your results may vary.<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fxslttest%2Eair'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/08\/06\/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout'; 
+this.page.identifier = '/?p=3901'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/08/06/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="HTML/Adobe AIR Application Diversion Two - Data Layout" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/08/06/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/08/06/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="HTML/Adobe AIR Application Diversion Two - Data Layout" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/08/06/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/08/06/HTMLAdobe-AIR-Application-Diversion-Two-Data-Layout" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

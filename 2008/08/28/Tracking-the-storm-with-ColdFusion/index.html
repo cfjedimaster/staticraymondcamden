@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Tracking the storm (with ColdFusion!) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Tracking the storm (with ColdFusion!)" />
+<meta property="og:description" content="Ok, so yesterday I joked a bit about Gustav (which, by the way, is now tracking closer to Lafayette) and about writing some ColdFusion code to track the hurricane. Being the OCD-natured kind of boy I am, I whipped up something in ColdFusion that seems to work well. Here is what I did&hellip;
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2008/08/28/Tracking-the-storm-with-ColdFusion" />
+
+
+<meta property="og:updated_time" content="2008-08-28T10:08:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Tracking the storm (with ColdFusion!)">
+<meta itemprop="description" content="Ok, so yesterday I joked a bit about Gustav (which, by the way, is now tracking closer to Lafayette) and about writing some ColdFusion code to track the hurricane. Being the OCD-natured kind of boy I am, I whipped up something in ColdFusion that seems to work well. Here is what I did&hellip;
+">
+
+
+<meta itemprop="dateModified" content="2008-08-28T10:08:00&#43;06:00" />
+<meta itemprop="wordCount" content="1196">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Tracking the storm (with ColdFusion!)"/>
+<meta name="twitter:description" content="Ok, so yesterday I joked a bit about Gustav (which, by the way, is now tracking closer to Lafayette) and about writing some ColdFusion code to track the hurricane. Being the OCD-natured kind of boy I am, I whipped up something in ColdFusion that seems to work well. Here is what I did&hellip;
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2008/08/28/Tracking-the-storm-with-ColdFusion">
+    <h1 class="article-title" itemprop="name">
+        Tracking the storm (with ColdFusion!)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2008-08-28 10:08:00 &#43;0600 &#43;0600" itemprop="datePublished">2008-08-28</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Ok, so yesterday I <a href="http://www.raymondcamden.com/index.cfm/2008/8/27/Death-is-a-giant-brightlycovered-slug-heading-your-way">joked</a> a bit about Gustav (which, by the way, is now <a href="http://www.nhc.noaa.gov/refresh/graphics_at2+shtml/111213.shtml?hwind120#contents">tracking</a> closer to Lafayette) and about writing some ColdFusion code to track the hurricane. Being the OCD-natured kind of boy I am, I whipped up something in ColdFusion that seems to work well. Here is what I did&hellip;</p>
+
+<p>I began by grabbing the feed data for Gustav:</p>
+
+<p><code>
+&lt;cfset gustavXML = &ldquo;<a href="http://www.nhc.noaa.gov/nhc_at2.xml&quot;&gt;">http://www.nhc.noaa.gov/nhc_at2.xml&quot;&gt;</a>
+&lt;cffeed source=&ldquo;#gustavXML#&rdquo; query=&ldquo;results&rdquo;&gt;
+</code></p>
+
+<p>Next (and I should be clear, the full code is at the bottom and has more error checking in it) I used query of query to find the first entry with <i>Tropical Storm GUSTAV Public Advisory Number</i> in the title:</p>
+
+<p><code>
+&lt;!&mdash; find &ldquo;Public Advisory&rdquo; &mdash;&gt;
+&lt;cfquery name=&ldquo;pa&rdquo; dbtype=&ldquo;query&rdquo; maxrows=&ldquo;1&rdquo;&gt;
+select  rsslink, content, title
+from    results
+where   title like &lsquo;Tropical Storm GUSTAV Public Advisory Number%&rsquo;
+&lt;/cfquery&gt;
+</code></p>
+
+<p>NOAA&rsquo;s RSS feed entries don&rsquo;t have much content in them - they mainly just link to the full text, so I retrieve the content next:</p>
+
+<p><code>
+&lt;cfhttp url=&ldquo;#pa.rsslink#&rdquo; result=&ldquo;result&rdquo;&gt;
+&lt;cfset text = result.fileContent&gt;
+</code></p>
+
+<p>Ok, now comes the pain in the rear part. If the feed looks like I assume it will (and that&rsquo;s <b>not</b> a good assumption) then it will have this text:</p>
+
+<blockquote>
+<p>CENTER OF TROPICAL STORM GUSTAV WAS LOCATED NEAR LATITUDE</p>
+</blockquote>
+
+<p>So I wrote up a regex that attempts to find the longitude and latitude from the text:</p>
+
+<p><code>
+&lt;!&mdash; strip extra white space &mdash;&gt;
+&lt;cfset text = reReplace(text, &ldquo;[\r\n]+&ldquo;, &rdquo; &ldquo;, &ldquo;all&rdquo;)&gt;</p>
+
+<p>&lt;cfset regex = &ldquo;CENTER OF TROPICAL STORM GUSTAV WAS LOCATED NEAR LATITUDE ([[:digit:].]+)[[:space:]]<em>([NORTH|SOUTH|EAST|WEST]+)&hellip;LONGITUDE ([[:digit:].]+)[[:space:]]</em>([NORTH|SOUTH|EAST|WEST]+)&rdquo;&gt;</p>
+
+<p>&lt;!&mdash; now look for: THE CENTER OF TROPICAL STORM GUSTAV WAS LOCATED NEAR LATITUDE 19.1 NORTH&hellip;LONGITUDE 74.4 WEST &mdash;&gt;
+&lt;cfset match = reFind(regex, text, 1, true)&gt;
+&lt;cfif arrayLen(match.pos) is 5&gt;
+    &lt;cfset long = mid(text, match.pos[2], match.len[2])&gt;
+    &lt;cfset longdir = mid(text, match.pos[3], match.len[3])&gt;
+    &lt;cfset lat = mid(text, match.pos[4], match.len[4])&gt;
+    &lt;cfset latdir = mid(text, match.pos[5], match.len[5])&gt;</p>
+
+<pre><code>&amp;lt;cfoutput&amp;gt;
+Gustav Lat: #lat# #latdir#&amp;lt;br /&amp;gt;
+Gustav Long: #long# #longdir#&amp;lt;br /&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p></code></p>
+
+<p>So there isn&rsquo;t anything too complex in here. You can see I&rsquo;m using subexpressions to grab the values I want. I get the directions too but they aren&rsquo;t really necessary since the numeric values tell you all you need. Again, ignore the fact that I have a missing &lt;cfelse&gt; there - I&rsquo;m just skipping over the error handling for now.</p>
+
+<p>Ok, so that was the hard part. Now I need the longitude and latitude for Lafayette. I could use the Yahoo <a href="http://developer.yahoo.com/weather/">Weather API</a> for this. The weather results include longitude and latitude information. Since they use a simple REST interface (hey Google, Yahoo called, they want to talk about writing APIs that developers actually enjoy using) I could have just opened up the feed in my browser and copied the values. Instead though I made it dynamic:</p>
+
+<p><code>
+&lt;cfset zip = 70508&gt;
+&lt;cfoutput&gt;&lt;p/&gt;Getting #zip#&lt;br /&gt;&lt;/cfoutput&gt;
+&lt;cfflush&gt;
+&lt;cfhttp url=&ldquo;<a href="http://weather.yahooapis.com/forecastrss?p=#zip#&quot;">http://weather.yahooapis.com/forecastrss?p=#zip#&quot;</a> result=&ldquo;result&rdquo;&gt;
+&lt;cfset content = xmlParse(result.fileContent)&gt;
+&lt;cfset geo = xmlSearch(content, &ldquo;//geo:*&ldquo;)&gt;
+&lt;cfloop index=&ldquo;g&rdquo; array=&ldquo;#geo#&rdquo;&gt;
+    &lt;cfif g.xmlName is &ldquo;geo:lat&rdquo;&gt;
+        &lt;cfset myLat = g.xmlText&gt;
+    &lt;cfelseif g.xmlName is &ldquo;geo:long&rdquo;&gt;
+        &lt;cfset myLong = g.xmlText&gt;
+    &lt;/cfif&gt;
+&lt;/cfloop&gt;
+</code></p>
+
+<p>This is fairly typical XML parsing using xmlSearch. I could have used my <a href="http://cfyahoo.riaforge.org">CFYahoo</a> package but I wanted a quick and dirty script.</p>
+
+<p>Ok, now all the hard work is done. Serious! All I need to do is get a function to generate the distance between two zips. Once again, CFLib comes to the rescue: <a href="http://www.cflib.org/udf/LatLonDist">LatLonDist</a>. So the last portion is rather simple:</p>
+
+<p><code>
+&lt;cfset distance = latLonDist(lat,long,myLat,myLong,&ldquo;sm&rdquo;)&gt;</p>
+
+<p>&lt;cfoutput&gt;&lt;p/&gt;&lt;b&gt;Distance:&lt;/b&gt; #numberFormat(distance,&ldquo;9.99&rdquo;)# miles&lt;/cfoutput&gt;
+</code></p>
+
+<p>Surprisingly, the code actually works, and worked fine from last night till tonight. My main concern is the string parsing, but so far, so good. Now for the real fun part. I added some simple logging to the script. I&rsquo;m going to use my localhost scheduler to run the script every 4 hours. I&rsquo;ll then write a script to parse the log and see how the distance changes between now and Tuesday, or as I call it, Get the Hell Out of Dodge Day.</p>
+
+<p>Anyway, here is the final script with error handling, logging, etc. Enjoy.</p>
+
+<p><code>
+&lt;cfscript&gt;
+/**
+ * Calculates the distance between two latitudes and longitudes.
+ * This funciton uses forumlae from Ed Williams Aviation Foundry website at <a href="http://williams.best.vwh.net/avform.htm">http://williams.best.vwh.net/avform.htm</a>.
+ *
+ * @param lat1   Latitude of the first point in degrees. (Required)
+ * @param lon1   Longitude of the first point in degrees. (Required)
+ * @param lat2   Latitude of the second point in degrees. (Required)
+ * @param lon2   Longitude of the second point in degrees. (Required)
+ * @param units      Unit to return distance in. Options are: km (kilometers), sm (statute miles), nm (nautical miles), or radians.  (Required)
+ * @return Returns a number or an error string.
+ * @author Tom Nunamaker (&#116;&#111;&#109;&#64;&#116;&#111;&#115;&#104;&#111;&#112;&#46;&#99;&#111;&#109;)
+ * @version 1, May 14, 2002
+ */
+function LatLonDist(lat1,lon1,lat2,lon2,units) {
+  // Check to make sure latitutdes and longitudes are valid
+  if(lat1 GT 90 OR lat1 LT -90 OR
+     lon1 GT 180 OR lon1 LT -180 OR
+     lat2 GT 90 OR lat2 LT -90 OR
+     lon2 GT 280 OR lon2 LT -280) {
+    Return (&ldquo;Incorrect parameters&rdquo;);
+  }</p>
+
+<p>lat1 = lat1 * pi()/180;
+  lon1 = lon1 * pi()/180;
+  lat2 = lat2 * pi()/180;
+  lon2 = lon2 * pi()/180;
+  UnitConverter = 1.150779448;  //standard is statute miles
+  if(units eq &lsquo;nm&rsquo;) {
+    UnitConverter = 1.0;
+  }</p>
+
+<p>if(units eq &lsquo;km&rsquo;) {
+    UnitConverter = 1.852;
+  }</p>
+
+<p>distance = 2*asin(sqr((sin((lat1-lat2)/2))^2 + cos(lat1)<em>cos(lat2)</em>(sin((lon1-lon2)/2))^2));  //radians</p>
+
+<p>if(units neq &lsquo;radians&rsquo;){
+    distance = UnitConverter * 60 * distance * 180/pi();
+  }</p>
+
+<p>Return (distance) ;
+}</p>
+
+<p>&lt;/cfscript&gt;
+&lt;!&mdash; quickie log func &mdash;&gt;
+&lt;cffunction name=&ldquo;logit&rdquo; output=&ldquo;false&rdquo; returnType=&ldquo;void&rdquo;&gt;
+    &lt;cfargument name=&ldquo;str&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cflog file=&ldquo;gustav&rdquo; text=&ldquo;#arguments.str#&rdquo;&gt;
+&lt;/cffunction&gt;</p>
+
+<p>&lt;!&mdash; Lafayette, LA &mdash;&gt;
+&lt;cfset zip = 70508&gt;</p>
+
+<p>&lt;cfset gustavXML = &ldquo;<a href="http://www.nhc.noaa.gov/nhc_at2.xml&quot;&gt;">http://www.nhc.noaa.gov/nhc_at2.xml&quot;&gt;</a>
+&lt;cffeed source=&ldquo;#gustavXML#&rdquo; query=&ldquo;results&rdquo;&gt;</p>
+
+<p>&lt;cfif not results.recordCount&gt;
+    &lt;cfset logit(&ldquo;Error - no feed entries&rdquo;)&gt;
+    &lt;cfoutput&gt;No feed entries.&lt;/cfoutput&gt;
+    &lt;cfabort&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;!&mdash; find &ldquo;Public Advisory&rdquo; &mdash;&gt;
+&lt;cfquery name=&ldquo;pa&rdquo; dbtype=&ldquo;query&rdquo; maxrows=&ldquo;1&rdquo;&gt;
+select  rsslink, content, title
+from    results
+where   title like &lsquo;Tropical Storm GUSTAV Public Advisory Number%&rsquo;
+&lt;/cfquery&gt;</p>
+
+<p>&lt;cfif not pa.recordCount&gt;
+    &lt;cfset logit(&ldquo;Error - cound&rsquo;t find a matching entry&rdquo;)&gt;
+    &lt;cfoutput&gt;Couldn&rsquo;t find an entry that matched my criteria.&lt;/cfoutput&gt;
+    &lt;cfabort&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfoutput&gt;
+Parsing data from: &lt;b&gt;#pa.title#&lt;/b&gt;&lt;br /&gt;
+&lt;/cfoutput&gt;
+&lt;cfflush /&gt;
+&lt;cfhttp url=&ldquo;#pa.rsslink#&rdquo; result=&ldquo;result&rdquo;&gt;
+&lt;cfset text = result.fileContent&gt;</p>
+
+<p>&lt;!&mdash; strip extra white space &mdash;&gt;
+&lt;cfset text = reReplace(text, &ldquo;[\r\n]+&ldquo;, &rdquo; &ldquo;, &ldquo;all&rdquo;)&gt;</p>
+
+<p>&lt;cfset regex = &ldquo;CENTER OF TROPICAL STORM GUSTAV WAS LOCATED NEAR LATITUDE ([[:digit:].]+)[[:space:]]<em>([NORTH|SOUTH|EAST|WEST]+)&hellip;LONGITUDE ([[:digit:].]+)[[:space:]]</em>([NORTH|SOUTH|EAST|WEST]+)&rdquo;&gt;</p>
+
+<p>&lt;!&mdash; now look for: THE CENTER OF TROPICAL STORM GUSTAV WAS LOCATED NEAR LATITUDE 19.1 NORTH&hellip;LONGITUDE 74.4 WEST &mdash;&gt;
+&lt;cfset match = reFind(regex, text, 1, true)&gt;
+&lt;cfif arrayLen(match.pos) is 5&gt;
+    &lt;cfset long = mid(text, match.pos[2], match.len[2])&gt;
+    &lt;cfset longdir = mid(text, match.pos[3], match.len[3])&gt;
+    &lt;cfset lat = mid(text, match.pos[4], match.len[4])&gt;
+    &lt;cfset latdir = mid(text, match.pos[5], match.len[5])&gt;</p>
+
+<pre><code>&amp;lt;cfoutput&amp;gt;
+Gustav Lat: #lat# #latdir#&amp;lt;br /&amp;gt;
+Gustav Long: #long# #longdir#&amp;lt;br /&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;
+    &lt;cfset logit(&ldquo;Error - couldn&rsquo;t find my matches in the string&rdquo;)&gt;
+    &lt;cfoutput&gt;Couldn&rsquo;t find my matches in the string.&lt;/cfoutput&gt;
+    &lt;cfabort&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfoutput&gt;&lt;p/&gt;Getting #zip#&lt;br /&gt;&lt;/cfoutput&gt;
+&lt;cfflush&gt;
+&lt;cfhttp url=&ldquo;<a href="http://weather.yahooapis.com/forecastrss?p=#zip#&quot;">http://weather.yahooapis.com/forecastrss?p=#zip#&quot;</a> result=&ldquo;result&rdquo;&gt;
+&lt;cfset content = xmlParse(result.fileContent)&gt;
+&lt;cfset geo = xmlSearch(content, &ldquo;//geo:*&ldquo;)&gt;
+&lt;cfloop index=&ldquo;g&rdquo; array=&ldquo;#geo#&rdquo;&gt;
+    &lt;cfif g.xmlName is &ldquo;geo:lat&rdquo;&gt;
+        &lt;cfset myLat = g.xmlText&gt;
+    &lt;cfelseif g.xmlName is &ldquo;geo:long&rdquo;&gt;
+        &lt;cfset myLong = g.xmlText&gt;
+    &lt;/cfif&gt;
+&lt;/cfloop&gt;</p>
+
+<p>&lt;!&mdash; only continue if we have our own stuff &mdash;&gt;
+&lt;cfif not isDefined(&ldquo;myLat&rdquo;) or not isDefined(&ldquo;myLong&rdquo;)&gt;
+    &lt;cfset logit(&ldquo;Error - no geo data for #zip#&rdquo;)&gt;<br />
+    &lt;cfoutput&gt;No data for #zip#&lt;/cfoutput&gt;
+    &lt;cfabort /&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;cfoutput&gt;
+#zip# lat: #myLat#&lt;br /&gt;
+#zip# long: #myLong#&lt;br /&gt;
+&lt;/cfoutput&gt;</p>
+
+<p>&lt;cfset distance = latLonDist(lat,long,myLat,myLong,&ldquo;sm&rdquo;)&gt;</p>
+
+<p>&lt;cfset logit(&ldquo;distance:#distance#&ldquo;)&gt;
+&lt;cfoutput&gt;&lt;p/&gt;&lt;b&gt;Distance:&lt;/b&gt; #numberFormat(distance,&ldquo;9.99&rdquo;)# miles&lt;/cfoutput&gt;
+</code></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2008\/08\/28\/Tracking-the-storm-with-ColdFusion'; 
+this.page.identifier = '/?p=2992'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/08/28/Tracking-the-storm-with-ColdFusion" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Tracking the storm (with ColdFusion!)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/08/28/Tracking-the-storm-with-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/08/28/Tracking-the-storm-with-ColdFusion" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Tracking the storm (with ColdFusion!)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/08/28/Tracking-the-storm-with-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2008/08/28/Tracking-the-storm-with-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

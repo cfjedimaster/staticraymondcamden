@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Bug with CFDUMP/output, impacts XML/JSON services &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Bug with CFDUMP/output, impacts XML/JSON services" />
+<meta property="og:description" content="While working on a ColdFusion Builder extension (no, not that one) I ran into a bug that caused the response dialog to constantly return an &lsquo;invalid XML&rsquo; error. An Adobe engineer discovered that the issue was with the cfdump tag I had in the extension code, but didn&rsquo;t explain why that was the cause. I did a quick test and saw what the problem was.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/01/27/Bug-with-CFDUMPoutput-impacts-XMLJSON-services" />
+
+
+<meta property="og:updated_time" content="2010-01-27T11:01:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Bug with CFDUMP/output, impacts XML/JSON services">
+<meta itemprop="description" content="While working on a ColdFusion Builder extension (no, not that one) I ran into a bug that caused the response dialog to constantly return an &lsquo;invalid XML&rsquo; error. An Adobe engineer discovered that the issue was with the cfdump tag I had in the extension code, but didn&rsquo;t explain why that was the cause. I did a quick test and saw what the problem was.
+">
+
+
+<meta itemprop="dateModified" content="2010-01-27T11:01:00&#43;06:00" />
+<meta itemprop="wordCount" content="1184">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Bug with CFDUMP/output, impacts XML/JSON services"/>
+<meta name="twitter:description" content="While working on a ColdFusion Builder extension (no, not that one) I ran into a bug that caused the response dialog to constantly return an &lsquo;invalid XML&rsquo; error. An Adobe engineer discovered that the issue was with the cfdump tag I had in the extension code, but didn&rsquo;t explain why that was the cause. I did a quick test and saw what the problem was.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/01/27/Bug-with-CFDUMPoutput-impacts-XMLJSON-services">
+    <h1 class="article-title" itemprop="name">
+        Bug with CFDUMP/output, impacts XML/JSON services
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-01-27 11:01:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-01-27</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>While working on a ColdFusion Builder extension (no, not <a href="http://www.raymondcamden.com/index.cfm/2010/1/27/The-last-ColdFusion-Builder-Extension-you-will-install">that one</a>) I ran into a bug that caused the response dialog to constantly return an &lsquo;invalid XML&rsquo; error. An Adobe engineer discovered that the issue was with the cfdump tag I had in the extension code, but didn&rsquo;t explain <i>why</i> that was the cause. I did a quick test and saw what the problem was.</p>
+
+<p><p></p>
+
+<p>First, consider the following simple template:</p>
+
+<p><p></p>
+
+<p><code>
+-&lt;cfdump var=&ldquo;#url#&rdquo; output=&ldquo;/Users/ray/Desktop/dump.html&rdquo; format=&ldquo;html&rdquo;&gt;-</p>
+
+<p>done
+</code></p>
+
+<p><p></p>
+
+<p>As you can see, I&rsquo;ve got a cfdump that is directed to the file system. This is a handy trick when you are working with CFM files that are Ajax bound, or in the case of ColdFusion Builder, happen between the IDE and the server. When you view this in the browser, you should see &ndash; and done, right? (With some whitespace of course.) However, this is what you get:</p>
+
+<p><p></p>
+
+<p><code>
+- &lt;style&gt;</p>
+
+<pre><code>table.cfdump_wddx,
+table.cfdump_xml,
+table.cfdump_struct,
+table.cfdump_varundefined,
+table.cfdump_array,
+table.cfdump_query,
+table.cfdump_cfc,
+table.cfdump_object,
+table.cfdump_binary,
+table.cfdump_udf,
+table.cfdump_udfbody,
+table.cfdump_udfarguments {
+    font-size: xx-small;
+    font-family: verdana, arial, helvetica, sans-serif;
+    cell-spacing: 2px;
+}
+
+table.cfdump_wddx th,
+table.cfdump_xml th,
+table.cfdump_struct th,
+table.cfdump_varundefined th,
+table.cfdump_array th,
+table.cfdump_query th,
+table.cfdump_cfc th,
+table.cfdump_object th,
+table.cfdump_binary th,
+table.cfdump_udf th,
+table.cfdump_udfbody th,
+table.cfdump_udfarguments th {
+    text-align: left;
+    color: white;
+    padding: 5px;
+}
+
+table.cfdump_wddx td,
+table.cfdump_xml td,
+table.cfdump_struct td,
+table.cfdump_varundefined  td,
+table.cfdump_array td,
+table.cfdump_query td,
+table.cfdump_cfc td,
+table.cfdump_object td,
+table.cfdump_binary td,
+table.cfdump_udf td,
+table.cfdump_udfbody td,
+table.cfdump_udfarguments td {
+    padding: 3px;
+    background-color: #ffffff;
+    vertical-align : top;
+}
+
+table.cfdump_wddx {
+    background-color: #000000;
+}
+table.cfdump_wddx th.wddx {
+    background-color: #444444;
+}
+
+
+table.cfdump_xml {
+    background-color: #888888;
+}
+table.cfdump_xml th.xml {
+    background-color: #aaaaaa;
+}
+table.cfdump_xml td.xml {
+    background-color: #dddddd;
+}
+
+table.cfdump_struct {
+    background-color: #0000cc ;
+}
+table.cfdump_struct th.struct {
+    background-color: #4444cc ;
+}
+table.cfdump_struct td.struct {
+    background-color: #ccddff;
+}
+
+table.cfdump_varundefined {
+    background-color: #CC3300 ;
+}
+table.cfdump_varundefined th.varundefined {
+    background-color: #CC3300 ;
+}
+table.cfdump_varundefined td.varundefined {
+    background-color: #ccddff;
+}
+
+table.cfdump_array {
+    background-color: #006600 ;
+}
+table.cfdump_array th.array {
+    background-color: #009900 ;
+}
+table.cfdump_array td.array {
+    background-color: #ccffcc ;
+}
+
+table.cfdump_query {
+    background-color: #884488 ;
+}
+table.cfdump_query th.query {
+    background-color: #aa66aa ;
+}
+table.cfdump_query td.query {
+    background-color: #ffddff ;
+}
+
+
+table.cfdump_cfc {
+    background-color: #ff0000;
+}
+table.cfdump_cfc th.cfc{
+    background-color: #ff4444;
+}
+table.cfdump_cfc td.cfc {
+    background-color: #ffcccc;
+}
+
+
+table.cfdump_object {
+    background-color : #ff0000;
+}
+table.cfdump_object th.object{
+    background-color: #ff4444;
+}
+
+table.cfdump_binary {
+    background-color : #eebb00;
+}
+table.cfdump_binary th.binary {
+    background-color: #ffcc44;
+}
+table.cfdump_binary td {
+    font-size: x-small;
+}
+table.cfdump_udf {
+    background-color: #aa4400;
+}
+table.cfdump_udf th.udf {
+    background-color: #cc6600;
+}
+table.cfdump_udfarguments {
+    background-color: #dddddd;
+    cell-spacing: 3;
+}
+table.cfdump_udfarguments th {
+    background-color: #eeeeee;
+    color: #000000;
+}
+</code></pre>
+
+<p>&lt;/style&gt; &lt;script language=&ldquo;javascript&rdquo;&gt;</p>
+
+<p>// for queries we have more than one td element to collapse/expand
+    var expand = &ldquo;open&rdquo;;</p>
+
+<pre><code>dump = function( obj ) {
+    var out = &quot;&quot; ;
+    if ( typeof obj == &quot;object&quot; ) {
+        for ( key in obj ) {
+            if ( typeof obj[key] != &quot;function&quot; ) out += key + ': ' + obj[key] + '&amp;lt;br&amp;gt;' ;
+        }
+    }
+}
+
+
+cfdump_toggleRow = function(source) {
+    //target is the right cell
+    if(document.all) target = source.parentElement.cells[1];
+    else {
+        var element = null;
+        var vLen = source.parentNode.childNodes.length;
+        for(var i=vLen-1;i&amp;gt;0;i--){
+            if(source.parentNode.childNodes[i].nodeType == 1){
+                element = source.parentNode.childNodes[i];
+                break;
+            }
+        }
+        if(element == null)
+            target = source.parentNode.lastChild;
+        else
+            target = element;
+    }
+    //target = source.parentNode.lastChild ;
+    cfdump_toggleTarget( target, cfdump_toggleSource( source ) ) ;
+}
+
+cfdump_toggleXmlDoc = function(source) {
+
+    var caption = source.innerHTML.split( ' [' ) ;
+
+    // toggle source (header)
+    if ( source.style.fontStyle == 'italic' ) {
+        // closed -&amp;gt; short
+        source.style.fontStyle = 'normal' ;
+        source.innerHTML = caption[0] + ' [short version]' ;
+        source.title = 'click to maximize' ;
+        switchLongToState = 'closed' ;
+        switchShortToState = 'open' ;
+    } else if ( source.innerHTML.indexOf('[short version]') != -1 ) {
+        // short -&amp;gt; full
+        source.innerHTML = caption[0] + ' [long version]' ;
+        source.title = 'click to collapse' ;
+        switchLongToState = 'open' ;
+        switchShortToState = 'closed' ;
+    } else {
+        // full -&amp;gt; closed
+        source.style.fontStyle = 'italic' ;
+        source.title = 'click to expand' ;
+        source.innerHTML = caption[0] ;
+        switchLongToState = 'closed' ;
+        switchShortToState = 'closed' ;
+    }
+
+    // Toggle the target (everething below the header row).
+    // First two rows are XMLComment and XMLRoot - they are part
+    // of the long dump, the rest are direct children - part of the
+    // short dump
+    if(document.all) {
+        var table = source.parentElement.parentElement ;
+        for ( var i = 1; i &amp;lt; table.rows.length; i++ ) {
+            target = table.rows[i] ;
+            if ( i &amp;lt; 3 ) cfdump_toggleTarget( target, switchLongToState ) ;
+            else cfdump_toggleTarget( target, switchShortToState ) ;
+        }
+    }
+    else {
+        var table = source.parentNode.parentNode ;
+        var row = 1;
+        for ( var i = 1; i &amp;lt; table.childNodes.length; i++ ) {
+            target = table.childNodes[i] ;
+            if( target.style ) {
+                if ( row &amp;lt; 3 ) {
+                    cfdump_toggleTarget( target, switchLongToState ) ;
+                } else {
+                    cfdump_toggleTarget( target, switchShortToState ) ;
+                }
+                row++;
+            }
+        }
+    }
+}
+
+cfdump_toggleTable = function(source) {
+
+    var switchToState = cfdump_toggleSource( source ) ;
+    if(document.all) {
+        var table = source.parentElement.parentElement ;
+        for ( var i = 1; i &amp;lt; table.rows.length; i++ ) {
+            target = table.rows[i] ;
+            cfdump_toggleTarget( target, switchToState ) ;
+        }
+    }
+    else {
+        var table = source.parentNode.parentNode ;
+        for ( var i = 1; i &amp;lt; table.childNodes.length; i++ ) {
+            target = table.childNodes[i] ;
+            if(target.style) {
+                cfdump_toggleTarget( target, switchToState ) ;
+            }
+        }
+    }
+}
+
+cfdump_toggleSource = function( source ) {
+    if ( source.style.fontStyle == 'italic' || source.style.fontStyle == null) {
+        source.style.fontStyle = 'normal' ;
+        source.title = 'click to collapse' ;
+        return 'open' ;
+    } else {
+        source.style.fontStyle = 'italic' ;
+        source.title = 'click to expand' ;
+        return 'closed' ;
+    }
+}
+
+cfdump_toggleTarget = function( target, switchToState ) {
+    if ( switchToState == 'open' )  target.style.display = '' ;
+    else target.style.display = 'none' ;
+}
+
+// collapse all td elements for queries
+cfdump_toggleRow_qry = function(source) {
+    expand = (source.title == &quot;click to collapse&quot;) ? &quot;closed&quot; : &quot;open&quot;;
+    if(document.all) {
+        var nbrChildren = source.parentElement.cells.length;
+        if(nbrChildren &amp;gt; 1){
+            for(i=nbrChildren-1;i&amp;gt;0;i--){
+                target = source.parentElement.cells[i];
+                cfdump_toggleTarget( target,expand ) ;
+                cfdump_toggleSource_qry(source);
+            }
+        }
+        else {
+            //target is the right cell
+            target = source.parentElement.cells[1];
+            cfdump_toggleTarget( target, cfdump_toggleSource( source ) ) ;
+        }
+    }
+    else{
+        var target = null;
+        var vLen = source.parentNode.childNodes.length;
+        for(var i=vLen-1;i&amp;gt;1;i--){
+            if(source.parentNode.childNodes[i].nodeType == 1){
+                target = source.parentNode.childNodes[i];
+                cfdump_toggleTarget( target,expand );
+                cfdump_toggleSource_qry(source);
+            }
+        }
+        if(target == null){
+            //target is the last cell
+            target = source.parentNode.lastChild;
+            cfdump_toggleTarget( target, cfdump_toggleSource( source ) ) ;
+        }
+    }
+}
+
+cfdump_toggleSource_qry = function(source) {
+    if(expand == &quot;closed&quot;){
+        source.title = &quot;click to expand&quot;;
+        source.style.fontStyle = &quot;italic&quot;;
+    }
+    else{
+        source.title = &quot;click to collapse&quot;;
+        source.style.fontStyle = &quot;normal&quot;;
+    }
+}
+</code></pre>
+
+<p>&lt;/script&gt; -</p>
+
+<p>done
+</code></p>
+
+<p><p></p>
+
+<p>As you can see, the CSS and JavaScript used by cfdump &ldquo;leaked&rdquo; out into the page result. It is <i>also</i> correctly stored in the HTML file so that part isn&rsquo;t broken. This only involves the HTML format of the dump. If you switch the format to text, then nothing is output (except one white space character).</p>
+
+<p><p></p>
+
+<p>If you want to make use of cfdump like this and are building anything that is supposed to return only XML or JSON, then you can wrap your dump in cfsilent tags. It doesn&rsquo;t impact the output to the file and it correctly hides the CSS/JavaScript.</p>
+
+<p><p></p>
+
+<p>I reported this as bug <a href="http://cfbugs.adobe.com/cfbugreport/flexbugui/cfbugtracker/main.html#bugId=81819">81819</a>. Please vote for it!</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/01\/27\/Bug-with-CFDUMPoutput-impacts-XMLJSON-services'; 
+this.page.identifier = '/?p=3698'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/01/27/Bug-with-CFDUMPoutput-impacts-XMLJSON-services" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Bug with CFDUMP/output, impacts XML/JSON services" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/01/27/Bug-with-CFDUMPoutput-impacts-XMLJSON-services" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/01/27/Bug-with-CFDUMPoutput-impacts-XMLJSON-services" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Bug with CFDUMP/output, impacts XML/JSON services" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/01/27/Bug-with-CFDUMPoutput-impacts-XMLJSON-services" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/01/27/Bug-with-CFDUMPoutput-impacts-XMLJSON-services" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

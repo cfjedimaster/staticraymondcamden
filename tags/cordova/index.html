@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Cordova &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Cordova" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://www.raymondcamden.com/tags/cordova/" />
+
+
+<meta property="og:updated_time" content="2016-02-17T08:41:00-07:00"/>
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Cordova">
+<meta itemprop="description" content="">
+
+
+    
+</head>
+<body>
+<div class="container">
+ <header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+    <div class="outer">
+        <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+        <section id="main">
+            <section class="archives-wrap">
+                <div class="archive-category-wrap">
+                    <span class="archive-category">Cordova</span>
+                </div>
+                <div class="archives">
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="thumbnail">
+                <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="My PhoneGap Day 2016 Presentation" class="thumbnail-image"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation">My PhoneGap Day 2016 Presentation</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova" class="thumbnail">
+                <span style="background-image:url(http://www.raymondcamden.com//images/2016/01/taco.png)" alt="Visual Studio Code extension for Cordova" class="thumbnail-image"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova">Visual Studio Code extension for Cordova</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2016-01-28 17:27:24 -0700 -0700" itemprop="datePublished">2016-01-28</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change" class="thumbnail">
+                <span style="background-image:url(http://www.raymondcamden.com//images/2016/01/apache-cordova.opt.png)" alt="Apache Cordova SplashScreen Change" class="thumbnail-image"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change">Apache Cordova SplashScreen Change</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2016-01-25 16:16:10 -0600 CST" itemprop="datePublished">2016-01-25</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2016/01/21/speaking-at-phonegap-day" class="thumbnail">
+                <span style="background-image:url(http://www.raymondcamden.com//images/2016/01/PhoneGap_Day_2016.png)" alt="Speaking at PhoneGap Day" class="thumbnail-image"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2016/01/21/speaking-at-phonegap-day">Speaking at PhoneGap Day</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2016-01-21 08:02:27 -0600 CST" itemprop="datePublished">2016-01-21</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/12/03/ioniccordova-demo-where-did-i-take-that-picture" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/12/03/ioniccordova-demo-where-did-i-take-that-picture">Ionic/Cordova Demo: Where did I take that picture?</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-12-03 10:38:31 &#43;0600 &#43;0600" itemprop="datePublished">2015-12-03</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/30/how-to-tell-if-a-cordova-application-is-running-in-the-simulator" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/30/how-to-tell-if-a-cordova-application-is-running-in-the-simulator">How to tell if a Cordova application is running in the simulator</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-30 16:04:19 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-30</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/25/important-update-for-apache-cordova-and-android" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/25/important-update-for-apache-cordova-and-android">Important update for Apache Cordova and Android</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-25 08:58:59 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-25</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/13/using-authorization-tokens-for-ibm-watson-services" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/13/using-authorization-tokens-for-ibm-watson-services">Using Authorization Tokens for IBM Watson services</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-13 10:53:48 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-13</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/11/working-with-the-clipboard-in-cordova-apps" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/11/working-with-the-clipboard-in-cordova-apps">Working with the Clipboard in Cordova apps</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-11 14:14:51 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-11</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/10/demo-of-the-ionic-resources-command" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/10/demo-of-the-ionic-resources-command">Demo of the Ionic Resources command</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-10 10:54:39 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-10</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/09/cordova-ios-and-orientation-wondering-why-it-is-locked" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/09/cordova-ios-and-orientation-wondering-why-it-is-locked">Cordova, iOS, and Orientation - wondering why it is locked?</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-09 10:49:07 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-09</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/05/cordova-demo-apple-tv-hd-video-viewer" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/05/cordova-demo-apple-tv-hd-video-viewer">Cordova Demo - Apple TV HD Video Viewer</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-05 17:27:39 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-05</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/11/04/checking-for-platform-and-plugin-updates-in-your-cordova-project" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/11/04/checking-for-platform-and-plugin-updates-in-your-cordova-project">Checking for platform and plugin updates in your Cordova project</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-11-04 14:31:55 &#43;0600 &#43;0600" itemprop="datePublished">2015-11-04</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/10/30/building-a-hybrid-mobile-app-avoid-using-cdns-for-your-libraries" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/10/30/building-a-hybrid-mobile-app-avoid-using-cdns-for-your-libraries">Building a hybrid mobile app? Avoid using CDNs for your libraries</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-10-30 10:50:21 &#43;0600 &#43;0600" itemprop="datePublished">2015-10-30</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/10/29/strongloop-ionic-and-ibm-bluemix" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/10/29/strongloop-ionic-and-ibm-bluemix">StrongLoop, Ionic, and IBM Bluemix</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-10-29 13:26:02 &#43;0600 &#43;0600" itemprop="datePublished">2015-10-29</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/10/23/getting-an-error-running-a-cordova-project-to-ios" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/10/23/getting-an-error-running-a-cordova-project-to-ios">Getting an error running a Cordova project to iOS?</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-10-23 14:15:34 &#43;0600 &#43;0600" itemprop="datePublished">2015-10-23</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/10/22/quick-tip-for-cordova-and-the-browser-platform" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/10/22/quick-tip-for-cordova-and-the-browser-platform">Quick tip for Cordova and the Browser platform - Setting a custom port</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-10-22 09:10:44 &#43;0600 &#43;0600" itemprop="datePublished">2015-10-22</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/10/14/adding-localization-to-your-ionic-application-with-ibm-bluemix" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/10/14/adding-localization-to-your-ionic-application-with-ibm-bluemix">Adding localization to your Ionic application with IBM Bluemix</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-10-14 13:16:26 &#43;0600 &#43;0600" itemprop="datePublished">2015-10-14</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/10/13/important-note-for-targeting-ios-emulators-in-cordova" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/10/13/important-note-for-targeting-ios-emulators-in-cordova">Important note for targeting iOS Emulators in Cordova</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-10-13 09:39:16 &#43;0600 &#43;0600" itemprop="datePublished">2015-10-13</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/09/22/another-cordova-mashup-pixelatize" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/09/22/another-cordova-mashup-pixelatize">Another Cordova Mashup - Pixelatize</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-09-22 13:35:56 &#43;0600 &#43;0600" itemprop="datePublished">2015-09-22</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/09/03/speaking-on-cordova-ionic-and-mobilefirstbluemix-in-manilla" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/09/03/speaking-on-cordova-ionic-and-mobilefirstbluemix-in-manilla">Speaking on Cordova, Ionic, and MobileFirst/Bluemix in Manilla</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-09-03 11:30:09 &#43;0600 &#43;0600" itemprop="datePublished">2015-09-03</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/08/31/upcoming-ionicbluemix-presentations-in-asia" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/08/31/upcoming-ionicbluemix-presentations-in-asia">Upcoming Ionic/Bluemix Presentations in Asia</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-08-31 13:05:59 &#43;0600 &#43;0600" itemprop="datePublished">2015-08-31</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/08/20/speaking-down-under-next-week" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/08/20/speaking-down-under-next-week">Speaking Down Under Next Week</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-08-20 08:31:26 &#43;0600 &#43;0600" itemprop="datePublished">2015-08-20</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/08/19/developing-ionic-apps-with-mobilefirst-7-1" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/08/19/developing-ionic-apps-with-mobilefirst-7-1">Developing Ionic Apps with MobileFirst 7.1</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-08-19 15:27:30 &#43;0600 &#43;0600" itemprop="datePublished">2015-08-19</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1">Developing Hybrid Mobile Apps with IBM MobileFirst 7.1</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-08-18 14:40:32 &#43;0600 &#43;0600" itemprop="datePublished">2015-08-18</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/08/10/processing-multiple-simultaneous-uploads-with-cordova" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/08/10/processing-multiple-simultaneous-uploads-with-cordova">Processing multiple simultaneous uploads with Cordova</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-08-10 17:29:30 &#43;0600 &#43;0600" itemprop="datePublished">2015-08-10</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic">A real world app with IBM Bluemix, Node, Cordova, and Ionic</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-08-05 17:01:10 &#43;0600 &#43;0600" itemprop="datePublished">2015-08-05</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/30/cordovaionic-sample-app-my-sound-board" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/30/cordovaionic-sample-app-my-sound-board">Cordova/Ionic Sample App: My Sound Board</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-30 10:18:16 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-30</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/29/saucedb-writing-data-back" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/29/saucedb-writing-data-back">SauceDB: Writing data back</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-29 17:28:48 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-29</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/27/recording-and-saving-audio-in-cordova-applications" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/27/recording-and-saving-audio-in-cordova-applications">Recording and saving audio in Cordova applications</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-27 14:02:15 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-27</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix">SauceDB - Building the back end with IBM Bluemix</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-20 14:40:36 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-20</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end">SauceDB - Working on the front end</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-15 16:04:07 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-15</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/15/fyi-cordova-events-must-be-run-after-deviceready" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/15/fyi-cordova-events-must-be-run-after-deviceready">FYI - Cordova events must be run after deviceReady</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-15 08:53:36 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-15</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb">New Demo Project: SauceDB</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-14 10:27:56 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-14</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/03/using-angular-and-a-content-security-policy-watch-out-for-this" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/03/using-angular-and-a-content-security-policy-watch-out-for-this">Using Angular and a Content Security Policy? Watch out for this...</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-03 08:57:16 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-03</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/07/02/ionic-push-example-supporting-state-changes" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/07/02/ionic-push-example-supporting-state-changes">Ionic Push example supporting State Changes</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-07-02 14:51:19 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-02</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/06/24/working-with-ionic-box-and-ibm-mobilefirst" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/06/24/working-with-ionic-box-and-ibm-mobilefirst">Working with Ionic, Box, and IBM MobileFirst</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-06-24 09:02:30 &#43;0600 &#43;0600" itemprop="datePublished">2015-06-24</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/06/09/using-cloud-code-mobile-application-security-node-js-and-bluemix">Using Cloud Code, Mobile Application Security, Node.js and Bluemix</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-06-09 13:35:13 &#43;0600 &#43;0600" itemprop="datePublished">2015-06-09</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/06/05/cordova-sample-capture-and-display-video" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/06/05/cordova-sample-capture-and-display-video">Cordova Sample: Capture and Display Video</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-06-05 10:16:09 &#43;0600 &#43;0600" itemprop="datePublished">2015-06-05</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/25/important-information-about-cordova-5" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/25/important-information-about-cordova-5">Important information about Cordova 5</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-25 08:51:57 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-25</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/21/getting-initial-console-messages-you-missed-with-remote-debug" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/21/getting-initial-console-messages-you-missed-with-remote-debug">Getting initial console messages you missed with remote debug</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-21 10:09:18 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-21</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/19/looking-at-the-javascript-api-in-hybrid-mobilefirst-apps-2" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/19/looking-at-the-javascript-api-in-hybrid-mobilefirst-apps-2">Looking at the JavaScript API in Hybrid MobileFirst Apps (2)</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-19 15:19:16 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-19</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/19/working-with-the-new-phonegapcordova-contentsync-plugin" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/19/working-with-the-new-phonegapcordova-contentsync-plugin">Working with the new PhoneGap/Cordova ContentSync Plugin</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-19 11:38:11 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-19</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/18/tracking-and-notifying-geolocation-status-with-ionic" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/18/tracking-and-notifying-geolocation-status-with-ionic">Tracking and notifying geolocation status with Ionic</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-18 08:42:04 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-18</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/17/a-simple-cordova-task-runner-for-visual-studio-code" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/17/a-simple-cordova-task-runner-for-visual-studio-code">A simple Cordova task runner for Visual Studio Code</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-17 10:32:35 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-17</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/15/suggestions-for-database-syncing-with-phonegapcordova" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/15/suggestions-for-database-syncing-with-phonegapcordova">Suggestions for Database Syncing with PhoneGap/Cordova</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-15 07:55:54 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-15</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/05/01/working-with-mp3s-id3-and-phonegapcordova-3" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/05/01/working-with-mp3s-id3-and-phonegapcordova-3">Working with MP3s, ID3, and PhoneGap/Cordova (3)</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-05-01 14:40:53 &#43;0600 &#43;0600" itemprop="datePublished">2015-05-01</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/04/30/working-with-mp3s-id3-and-phonegapcordova-2" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/04/30/working-with-mp3s-id3-and-phonegapcordova-2">Working with MP3s, ID3, and PhoneGap/Cordova (2)</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-04-30 16:24:24 &#43;0600 &#43;0600" itemprop="datePublished">2015-04-30</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/04/30/my-cordova-book-is-on-sale-again" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/04/30/my-cordova-book-is-on-sale-again">My Cordova book is on sale again</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-04-30 08:37:32 &#43;0600 &#43;0600" itemprop="datePublished">2015-04-30</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/04/29/working-with-mp3s-id3-and-phonegapcordova" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/04/29/working-with-mp3s-id3-and-phonegapcordova">Working with MP3s, ID3, and PhoneGap/Cordova</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-04-29 17:06:44 &#43;0600 &#43;0600" itemprop="datePublished">2015-04-29</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                        <article class="archive-article archive-type-post">
+    <div class="archive-article-inner">
+        <div class="archive-article-thumbnail">
+            
+            <a href="http://www.raymondcamden.com/2015/04/29/cant-find-cordova-plugin-docs" class="thumbnail">
+                <span class="thumbnail-image thumbnail-none"></span>
+            </a>
+            
+        </div>
+        <header class="archive-article-header">
+            <h1 itemprop="name">
+            <a class="archive-article-title" href="http://www.raymondcamden.com/2015/04/29/cant-find-cordova-plugin-docs">Can&#39;t find Cordova plugin docs?</a>
+            </h1>
+            <div class="archive-article-date">
+                <i class="fa fa-calendar"></i>
+                <time datetime="2015-04-29 08:33:39 &#43;0600 &#43;0600" itemprop="datePublished">2015-04-29</time>
+            </div>
+        </header>
+    </div>
+</article> 
+                    
+                </div>
+            </section>
+            
+        </section>
+        <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/tags/cordova/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Cordova" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/tags/cordova/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/tags/cordova/" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Cordova" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/tags/cordova/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/tags/cordova/" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+    </div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

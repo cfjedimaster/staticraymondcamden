@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Blackberry version of Hangman &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Blackberry version of Hangman" />
+<meta property="og:description" content="Many months ago, I wrote a simple version of Hangman as a desktop Adobe AIR application. It was built using HTML and jQuery and supported a one thousand word database of word choices. This week I looked into porting the application to the Blackberry Playbook. This is what I came up with.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/12/16/Blackberry-version-of-Hangman" />
+
+
+<meta property="og:updated_time" content="2010-12-16T08:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Blackberry version of Hangman">
+<meta itemprop="description" content="Many months ago, I wrote a simple version of Hangman as a desktop Adobe AIR application. It was built using HTML and jQuery and supported a one thousand word database of word choices. This week I looked into porting the application to the Blackberry Playbook. This is what I came up with.
+">
+
+
+<meta itemprop="dateModified" content="2010-12-16T08:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="1106">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Blackberry version of Hangman"/>
+<meta name="twitter:description" content="Many months ago, I wrote a simple version of Hangman as a desktop Adobe AIR application. It was built using HTML and jQuery and supported a one thousand word database of word choices. This week I looked into porting the application to the Blackberry Playbook. This is what I came up with.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/12/16/Blackberry-version-of-Hangman">
+    <h1 class="article-title" itemprop="name">
+        Blackberry version of Hangman
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-12-16 08:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-12-16</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/flex">Flex</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Many months ago, I wrote a simple version of <a href="http://insideria.com/2009/11/jquery-and-air---moving-from-w-2.html">Hangman</a> as a desktop Adobe AIR application. It was built using HTML and jQuery and supported a one thousand word database of word choices. This week I looked into porting the application to the Blackberry Playbook. This is what I came up with.</p>
+
+<p/>
+
+First - I had assumed the port would be simple. The game itself is trivial so I wasn't expecting much trouble. Then something occurred to me. My desktop application listened for key presses to handle letter guesses. As far as I know, that type of setup doesn't make sense on a mobile device. Sure you can get 'keyboard' input, but from what I know it can only be done by using a form field of some sort. To get around this I decided to simply use buttons. Here is an example:
+
+<p/>
+
+
+<img src="http://www.raymondcamden.com/images/ScreenClipwon.png" />
+
+<p/>
+
+As you can see, the buttons look rather nice. I don't have a physical Playbook yet (no one does outside of RIM I guess), but it looks like it would work well. I'm not happy with "Z" hanging there by itself and would <i>love</i> some suggestions on how it could be improved. I built out this "keyboard" by hand:
+
+<p/>
+
+<code>
+&lt;s:TileGroup id="tileLayoutView" requestedColumnCount="5" click="letterButtonClicked(event)"&gt;
+    &lt;s:Button id="btnA" label="A" /&gt;
+    &lt;s:Button id="btnB" label="B" /&gt;
+    &lt;s:Button id="btnC" label="C" /&gt;
+(I deleted some lines here.)
+    &lt;s:Button id="btnX" label="X" /&gt;
+    &lt;s:Button id="btnY" label="Y" /&gt;
+    &lt;s:Button id="btnZ" label="Z" /&gt;
+&lt;/s:TileGroup&gt;
+</code>
+
+<p/>
+
+After a suggestion by Joe Rinehart I tried using a Datagroup, but ran into issues updating the UI controls on the inside. (I'll happily go into details about the issues i ran into if anyone wants to hear more.) 
+
+<p/>
+
+Outside of that the other big change was how the application was laid out. I don't have CSS, but frankly Flex's layout controls are a lot easier for me to work with. Not to offend anyone's delicate sensibilities but laying stuff out in a Flex application reminds me of tables. Using CSS reminds me more of visiting a sadistic dentist. Sorry. Anyway, let me share the code. Here is the initial view which simply sets up the database connection:
+
+<p/>
+
+<code>
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;s:MobileApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+                     xmlns:s="library://ns.adobe.com/flex/spark" firstView="views.HangmanHome" initialize="init()"&gt;
+    &lt;fx:Declarations&gt;
+        &lt;!-- Place non-visual elements (e.g., services, value objects) here --&gt;
+    &lt;/fx:Declarations&gt;
+    
+    &lt;fx:Script&gt;
+    &lt;![CDATA[
+    protected var dbConnection:SQLConnection = new SQLConnection;
+        
+    private function init():void {
+        var dbFile:File = File.applicationDirectory.resolvePath("install/words.db");
+        dbConnection.open(dbFile);      
+        navigator.firstViewData = {dbCon:dbConnection};
+    }
+            
+    ]]&gt;
+    &lt;/fx:Script&gt;
+
+&lt;/s:MobileApplication&gt;
+</code>
+
+<p/>
+
+Here is the main view where of the logic occurs. Note that one feature I did not port was updating the game history. I figured that was pretty trivial and I'd add it later if I wanted.
+
+<p/>
+
+<code>
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+        xmlns:s="library://ns.adobe.com/flex/spark" 
+        title="Hangman" xmlns:mx="library://ns.adobe.com/flex/mx" viewActivate="init(event)"&gt;
+    &lt;fx:Declarations&gt;
+        &lt;!-- Place non-visual elements (e.g., services, value objects) here --&gt;
+    &lt;/fx:Declarations&gt;
+
+    &lt;fx:Style&gt;
+    @namespace s "library://ns.adobe.com/flex/spark";
+    @namespace mx "library://ns.adobe.com/flex/mx";
+        
+    #blankWord {
+        font-size:70px;
+        font-weight: bold;
+    }
+    
+    #gameStatus {
+        font-weight: bold;
+    }
+    &lt;/fx:Style&gt;
+    
+    &lt;fx:Script&gt;
+    &lt;![CDATA[
+    import model.Game;
+        
+    import mx.collections.ArrayCollection;
+    import mx.core.IVisualElement;
+    
+    import spark.components.BorderContainer;
+
+    private var game:Game;
+        
+    [Embed (source="images/Hangman-1.png" )]
+    public static const H1:Class;
+    [Embed (source="images/Hangman-2.png" )]
+    public static const H2:Class;
+    [Embed (source="images/Hangman-3.png" )]
+    public static const H3:Class;
+    [Embed (source="images/Hangman-4.png" )]
+    public static const H4:Class;
+    [Embed (source="images/Hangman-5.png" )]
+    public static const H5:Class;
+    [Embed (source="images/Hangman-6.png" )]
+    public static const H6:Class;
+    [Embed (source="images/Hangman-7.png" )]
+    public static const H7:Class;
+    [Embed (source="images/Hangman-8.png" )]
+    public static const H8:Class;
+    [Embed (source="images/Hangman-9.png" )]
+    public static const H9:Class;
+    [Embed (source="images/Hangman-10.png" )]
+    public static const H10:Class;
+                
+    private function init(event:Event):void {
+        trace('init in view called');
+        initGame();
+    }   
+
+        
+    private function letterButtonClicked( event : Event ):void {
+        if(!game.isGameOver()) {
+            var button : Button = event.target as Button;
+            if(button) {
+                trace("clicked: " + button.label);
+                game.pickLetter(button.label);
+                button.enabled = false;
+                drawWord();
+                drawHangman();
+                if(game.isGameOver()) {
+                    handleGameOver();               
+                }
+            }
+        }
+    }
+
+    private function initGame():void {
+
+        gameStatus.text = "";
+        newGameButton.visible = false;
+        for(var i:int=65; i&lt;91; i++) {
+            var s:String = String.fromCharCode(i);
+            trace(s);
+            this["btn"+s].enabled=true;
+        }
+        
+        game = new Game();
+        
+        //begin by picking a word
+        game.setChosenWord(pickRandomWord());
+        
+        //draws the blank/letters
+        drawWord();
+        
+        //draws the hangman 
+        drawHangman();
+    }
+
+    private function drawHangman():void {
+        var misses:int = game.getMisses();
+        if(misses == 0) hangmanImage.source = null;
+        else {
+            hangmanImage.source = HangmanHome["H"+(misses+1)];
+        }
+    }
+
+    private function drawWord():void {
+        blankWord.text = game.drawWord();
+    }
+
+    private function handleGameOver():void {
+        if(game.playerWon()) {
+            gameStatus.text = "Congratulations, you won the game!";         
+        } else {
+            gameStatus.text = "Sorry, but you lost the game!";
+        }
+        newGameButton.visible = true;
+    }
+
+    private function pickRandomWord():String {
+        var sql:SQLStatement = new SQLStatement();
+        sql.text = "select word from words order by random() limit 1";
+        sql.sqlConnection = data.dbCon;
+        sql.execute();
+        var sqlResult:SQLResult = sql.getResult();
+        trace('random word is '+sqlResult.data[0].word);
+        return sqlResult.data[0].word.toUpperCase();
+        
+    }
+    ]]&gt;
+    &lt;/fx:Script&gt;
+    &lt;s:actionContent&gt;
+        &lt;s:Button height="100%" label="Exit" click="NativeApplication.nativeApplication.exit()" /&gt;
+    &lt;/s:actionContent&gt;
+
+    &lt;s:layout&gt;
+        &lt;s:HorizontalLayout paddingTop="10" paddingLeft="10" paddingRight="10" gap="10"/&gt;
+    &lt;/s:layout&gt;
+        
+    &lt;s:TileGroup id="tileLayoutView" requestedColumnCount="5" click="letterButtonClicked(event)"&gt;
+        &lt;s:Button id="btnA" label="A" /&gt;
+        &lt;s:Button id="btnB" label="B" /&gt;
+        &lt;s:Button id="btnC" label="C" /&gt;
+        &lt;s:Button id="btnD" label="D" /&gt;
+        &lt;s:Button id="btnE" label="E" /&gt;
+        &lt;s:Button id="btnF" label="F" /&gt;
+        &lt;s:Button id="btnG" label="G" /&gt;
+        &lt;s:Button id="btnH" label="H" /&gt;
+        &lt;s:Button id="btnI" label="I" /&gt;
+        &lt;s:Button id="btnJ" label="J" /&gt;
+        &lt;s:Button id="btnK" label="K" /&gt;
+        &lt;s:Button id="btnL" label="L" /&gt;
+        &lt;s:Button id="btnM" label="M" /&gt;
+        &lt;s:Button id="btnN" label="N" /&gt;
+        &lt;s:Button id="btnO" label="O" /&gt;
+        &lt;s:Button id="btnP" label="P" /&gt;
+        &lt;s:Button id="btnQ" label="Q" /&gt;
+        &lt;s:Button id="btnR" label="R" /&gt;
+        &lt;s:Button id="btnS" label="S" /&gt;
+        &lt;s:Button id="btnT" label="T" /&gt;
+        &lt;s:Button id="btnU" label="U" /&gt;
+        &lt;s:Button id="btnV" label="V" /&gt;
+        &lt;s:Button id="btnW" label="W" /&gt;
+        &lt;s:Button id="btnX" label="X" /&gt;
+        &lt;s:Button id="btnY" label="Y" /&gt;
+        &lt;s:Button id="btnZ" label="Z" /&gt;
+    &lt;/s:TileGroup&gt;
+
+    &lt;!-- block 2 is a v block, top row is pic + instruction block, row 2 is word --&gt;
+    &lt;s:VGroup width="67%" height="100%"&gt;
+        
+        &lt;s:HGroup width="100%" height="80%" horizontalAlign="center"&gt;
+
+            &lt;!-- hangman goes here --&gt;
+            &lt;s:Image id="hangmanImage"  width="50%" /&gt;
+            
+            &lt;!-- nstructions, status,e tc --&gt;
+            &lt;s:VGroup id="rightGroup" width="50%" paddingLeft="5" paddingRight="5" gap="10"&gt;
+                
+                &lt;s:Label width="100%" text="To begin, simply type the letter you would like to guess. Right answers will help reveal the mystery word. Wrong answers will lead to your untimely demise!" /&gt;
+                &lt;s:Label id="gameStatus" width="100%" /&gt;
+                &lt;s:Button id="newGameButton" label="New Game" visible="false" click="initGame()" /&gt;
+            &lt;/s:VGroup&gt;
+    
+        &lt;/s:HGroup&gt;
+    
+        &lt;s:Label id="blankWord" width="100%" /&gt;   
+
+    &lt;/s:VGroup&gt;
+        
+&lt;/s:View&gt;
+</code>
+
+<p>
+
+And finally - the simple Game object I created. 
+
+<p>
+
+<code>
+package model {
+
+    public class Game {
+
+        private var _chosenWord:String;
+        private var _usedLetters:Object = new Object();
+        private var _misses:int = 0;
+        
+        public function Game() {
+        }
+
+        public function drawWord():String {
+            var s:String = "";
+            for(var i:int=0; i&lt;_chosenWord.length; i++) {
+                var thisLetter:String = _chosenWord.substr(i, 1);
+                if(_usedLetters[thisLetter]) s+= thisLetter;
+                else s+= "-";
+            }
+            return s;
+        }
+        
+        public function getMisses():int {
+            return _misses;
+        }
+        
+        public function isGameOver():Boolean {
+            if(_misses == 9 || drawWord() == _chosenWord) return true;
+            return false;
+        }
+
+        public function pickLetter(s:String):void {
+            _usedLetters[s] = 1;
+            if(_chosenWord.indexOf(s) == -1) _misses++;
+        }
+
+        public function playerWon():Boolean {
+            return (isGameOver() && drawWord() == _chosenWord);
+        }
+
+        public function setChosenWord(s:String):void {
+            _chosenWord = s;
+        }
+
+    }
+
+}
+</code>
+
+<p/>
+
+And a final screen shot so you can see the result you don't want to see:
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenCliplost.png" />
+
+I've attached a zip of the project to the blogentry.<p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2FHangman1%2Ezip'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/12\/16\/Blackberry-version-of-Hangman'; 
+this.page.identifier = '/?p=4055'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/12/16/Blackberry-version-of-Hangman" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Blackberry version of Hangman" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/12/16/Blackberry-version-of-Hangman" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/12/16/Blackberry-version-of-Hangman" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Blackberry version of Hangman" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/12/16/Blackberry-version-of-Hangman" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/12/16/Blackberry-version-of-Hangman" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

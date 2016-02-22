@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Simple introduction to Google Maps Part 2 - Markers &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Simple introduction to Google Maps Part 2 - Markers" />
+<meta property="og:description" content="Back in February I wrote a simple introduction to using Google Maps. ColdFusion makes this relatively easy, but there are times when you may want to use the Google Map service natively. It&rsquo;s also important to note that CFMAP makes use of the previous version of Google Maps. If you want to make use of the new hotness, you have to do it &ldquo;by hand.&rdquo; As my blog post (hopefully) showed, this isn&rsquo;t terribly difficult at all. I thought I&rsquo;d post a sequel that dealt with another part of the puzzle - markers. ColdFusion makes this really easy as well with the cfmapitem tag. Here&rsquo;s what I found when digging into the docs.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/04/13/Simple-introduction-to-Google-Maps-Part-2-Markers" />
+
+
+<meta property="og:updated_time" content="2011-04-13T19:04:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Simple introduction to Google Maps Part 2 - Markers">
+<meta itemprop="description" content="Back in February I wrote a simple introduction to using Google Maps. ColdFusion makes this relatively easy, but there are times when you may want to use the Google Map service natively. It&rsquo;s also important to note that CFMAP makes use of the previous version of Google Maps. If you want to make use of the new hotness, you have to do it &ldquo;by hand.&rdquo; As my blog post (hopefully) showed, this isn&rsquo;t terribly difficult at all. I thought I&rsquo;d post a sequel that dealt with another part of the puzzle - markers. ColdFusion makes this really easy as well with the cfmapitem tag. Here&rsquo;s what I found when digging into the docs.
+">
+
+
+<meta itemprop="dateModified" content="2011-04-13T19:04:00&#43;06:00" />
+<meta itemprop="wordCount" content="1542">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Simple introduction to Google Maps Part 2 - Markers"/>
+<meta name="twitter:description" content="Back in February I wrote a simple introduction to using Google Maps. ColdFusion makes this relatively easy, but there are times when you may want to use the Google Map service natively. It&rsquo;s also important to note that CFMAP makes use of the previous version of Google Maps. If you want to make use of the new hotness, you have to do it &ldquo;by hand.&rdquo; As my blog post (hopefully) showed, this isn&rsquo;t terribly difficult at all. I thought I&rsquo;d post a sequel that dealt with another part of the puzzle - markers. ColdFusion makes this really easy as well with the cfmapitem tag. Here&rsquo;s what I found when digging into the docs.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/04/13/Simple-introduction-to-Google-Maps-Part-2-Markers">
+    <h1 class="article-title" itemprop="name">
+        Simple introduction to Google Maps Part 2 - Markers
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-04-13 19:04:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-04-13</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Back in February I wrote a <a href="http://www.raymondcamden.com/index.cfm/2011/2/15/Simple-introduction-to-Google-Maps">simple introduction</a> to using Google Maps. ColdFusion makes this relatively easy, but there are times when you may want to use the Google Map service natively. It&rsquo;s also important to note that CFMAP makes use of the previous version of Google Maps. If you want to make use of the new hotness, you have to do it &ldquo;by hand.&rdquo; As my blog post (hopefully) showed, this isn&rsquo;t terribly difficult at all. I thought I&rsquo;d post a sequel that dealt with another part of the puzzle - markers. ColdFusion makes this really easy as well with the cfmapitem tag. Here&rsquo;s what I found when digging into the docs.</p>
+
+<p><p></p>
+
+<p>Google groups markers into an area they called <a href="http://code.google.com/apis/maps/documentation/javascript/overlays.html">overlays</a>. Overlays include:</p>
+
+<p><p></p>
+
+<ul>
+<li>Markers (duh)
+<li>Lines
+<li>Polygons (you see - Math is important)
+<li>Circles
+<li>and finally - "Info Windows"
+</ul>
+
+<p><p></p>
+
+<p>The last item, &ldquo;Info Windows&rdquo;, is actually something you have already seen if you&rsquo;ve played with cfmap. When you create a marker with cfmapitem and supply a value for markerwindowcontent, you are actually creating both a marker <i>and</i> an Info Window. The info window is the little &ldquo;cartoon voice&rdquo; window that pops up when you click on the marker. Let&rsquo;s look at a simple example that creates a map and then puts a marker on top of it:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;style type=&ldquo;text/css&rdquo;&gt;
+  #map_canvas { width: 450px; height: 450px; }
+&lt;/style&gt;
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;<a href="http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;">http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;</a>
+&lt;script type=&ldquo;text/javascript&rdquo;&gt;</p>
+
+<p>function initialize() {
+    var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+    var myOptions = {
+        zoom: 4,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+    }
+    var map = new google.maps.Map(document.getElementById(&ldquo;map_canvas&rdquo;), myOptions);</p>
+
+<pre><code>var marker = new google.maps.Marker({
+  position: myLatlng,
+  title:&quot;Hello World!&quot;
+});
+
+// To add the marker to the map, call setMap();
+marker.setMap(map);  
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body onload=&ldquo;initialize()&rdquo;&gt;</p>
+
+<p>&lt;div id=&ldquo;map_canvas&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>So I assume you read the <a href="http://www.coldfusionjedi.com/index.cfm/2011/2/15/Simple-introduction-to-Google-Maps">previous entry</a> and I don&rsquo;t need to explain the code that initializes the map. Immediately after this code is the marker code, let&rsquo;s focus on that:</p>
+
+<p><p></p>
+
+<p><code>
+var marker = new google.maps.Marker({
+  position: myLatlng,
+  title:&ldquo;Hello World!&rdquo;
+});</p>
+
+<p>// To add the marker to the map, call setMap();
+marker.setMap(map);<br />
+</code></p>
+
+<p><p></p>
+
+<p>I create the marker object with with a position (a longitude and latitude - we&rsquo;ve all memorized our long/lat values, right?) and a title. There&rsquo;s more options to the marker object, but this will give you a basic marker with a title. The setMap function simply allows me to set the map for the marker. You can also provide it when you create the marker:</p>
+
+<p><p></p>
+
+<p><code>
+var marker = new google.maps.Marker({
+  position: myLatlng,
+  title:&ldquo;Hello World!&rdquo;,
+  map:map
+});
+</code></p>
+
+<p><p></p>
+
+<p>You can run this yourself here: <a href="http://www.coldfusionjedi.com/demos/april132011/test1.html">http://www.coldfusionjedi.com/demos/april132011/test1.html</a></p>
+
+<p><p></p>
+
+<p>That works - but let&rsquo;s get some ColdFusion involved - check out this next example:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getorders&rdquo; datasource=&ldquo;cfartgallery&rdquo; maxrows=&ldquo;10&rdquo;&gt;
+select  orderid, total, orderdate, address, city, state, postalcode
+from    orders
+&lt;/cfquery&gt;</p>
+
+<p>&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;style type=&ldquo;text/css&rdquo;&gt;
+  #map_canvas { width: 450px; height: 450px; }
+&lt;/style&gt;
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;<a href="http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;">http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;</a>
+&lt;script type=&ldquo;text/javascript&rdquo;&gt;
+var map;
+function initialize() {
+    var latlng = new google.maps.LatLng(38, -90);
+    var myOptions = {
+        zoom: 3,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById(&ldquo;map_canvas&rdquo;),myOptions);</p>
+
+<pre><code>geocoder = new google.maps.Geocoder();
+&amp;lt;cfoutput query=&quot;getorders&quot;&amp;gt;
+geocoder.geocode( { 'address': '#address#'}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        var marker = new google.maps.Marker({
+            map: map, 
+            position: results[0].geometry.location,
+            title: &quot;Order #orderid# for #dollarFormat(total)#&quot;
+        });
+    } else {
+        alert(&quot;Geocode was not successful for the following reason: &quot; + status);
+    }
+});
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body onload=&ldquo;initialize()&rdquo;&gt;</p>
+
+<p>&lt;div id=&ldquo;map_canvas&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>First - I added a query on top to get order information from the database. This includes address information for each order. Now look into our JavaScript. Because my order data isn&rsquo;t geocoded, I have to ask Google to geocode the data for me. I loop over each order and request such data and when I get it back, I use it to create a marker. Note the title includes a bit of information about the order itself. Not terribly complex but closer to a real application. You can see this one here: <a href="http://www.coldfusionjedi.com/demos/april132011/test2.cfm">http://www.coldfusionjedi.com/demos/april132011/test2.cfm</a> In case it isn&rsquo;t obvious, the title for the marker shows on mouse over.</p>
+
+<p><p></p>
+
+<p>Ok - so what about the cute little info windows? Let&rsquo;s look at our next example:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getorders&rdquo; datasource=&ldquo;cfartgallery&rdquo; maxrows=&ldquo;10&rdquo;&gt;
+select  orderid, total, orderdate, address, city, state, postalcode
+from    orders
+&lt;/cfquery&gt;</p>
+
+<p>&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;style type=&ldquo;text/css&rdquo;&gt;
+  #map_canvas { width: 450px; height: 450px; }
+&lt;/style&gt;
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;<a href="http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;">http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;</a>
+&lt;script type=&ldquo;text/javascript&rdquo;&gt;
+var map;
+function initialize() {
+    var latlng = new google.maps.LatLng(38, -90);
+    var myOptions = {
+        zoom: 3,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById(&ldquo;map_canvas&rdquo;),myOptions);</p>
+
+<pre><code>geocoder = new google.maps.Geocoder();
+&amp;lt;cfoutput query=&quot;getorders&quot;&amp;gt;
+geocoder.geocode( { 'address': '#address# #city# #state# #postalcode#'}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        var marker = new google.maps.Marker({
+            map: map, 
+            position: results[0].geometry.location,
+            title: &quot;Order #orderid# for #dollarFormat(total)#&quot;
+        });
+        var infowindow = new google.maps.InfoWindow({
+            content: &quot;&amp;lt;h3&amp;gt;Order #orderid#&amp;lt;/h3&amp;gt;Address: #address#, #city#, #state# #postalcode#&amp;lt;br/&amp;gt;Ordered: #dateFormat(orderdate)#&quot;
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+        });
+
+    } else {
+        alert(&quot;Geocode was not successful for the following reason: &quot; + status);
+    }
+});
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>}
+&lt;/script&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body onload=&ldquo;initialize()&rdquo;&gt;</p>
+
+<p>&lt;div id=&ldquo;map_canvas&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>I&rsquo;m going to focus on what&rsquo;s new here and that&rsquo;s the code right after the marker creation. You can see I make a new infowindow object. The content here is totally arbitrary, but I figured order details would be nice. Finally we add a click event to make it open when the marker is clicked. Still relatively simple, right? You can run this one here: <a href="http://www.coldfusionjedi.com/demos/april132011/test3.cfm">http://www.coldfusionjedi.com/demos/april132011/test3.cfm</a></p>
+
+<p><p></p>
+
+<p>Time for our final demo. What spurred this blog post was a request from someone for the ability to center a map based on a click elsewhere in the page. Here&rsquo;s how I solved that - and note - there is probably a much nicer way to do this.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfquery name=&ldquo;getorders&rdquo; datasource=&ldquo;cfartgallery&rdquo; maxrows=&ldquo;10&rdquo;&gt;
+select  orderid, total, orderdate, address, city, state, postalcode
+from    orders
+where orderid != 4
+&lt;/cfquery&gt;</p>
+
+<p>&lt;!DOCTYPE html&gt;
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;<a href="http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;">http://maps.google.com/maps/api/js?sensor=false&quot;&gt;&lt;/script&gt;</a>
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;<a href="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;">http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;</a>
+&lt;script type=&ldquo;text/javascript&rdquo;&gt;
+var map;
+var markers = [];
+var lastinfowindow;</p>
+
+<p>function initialize() {
+    var latlng = new google.maps.LatLng(38, -90);
+    var myOptions = {
+        zoom: 3,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById(&ldquo;map_canvas&rdquo;),myOptions);</p>
+
+<pre><code>geocoder = new google.maps.Geocoder();
+&amp;lt;cfoutput query=&quot;getorders&quot;&amp;gt;
+geocoder.geocode( { 'address': '#address# #city# #state# #postalcode#'}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        var marker = new google.maps.Marker({
+            map: map, 
+            position: results[0].geometry.location,
+            title: &quot;Order #orderid# for #dollarFormat(total)#&quot;
+        });
+        var infowindow = new google.maps.InfoWindow({
+            content: &quot;&amp;lt;h3&amp;gt;Order #orderid#&amp;lt;/h3&amp;gt;Address: #address#, #city#, #state# #postalcode#&amp;lt;br/&amp;gt;Ordered: #dateFormat(orderdate)#&quot;
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+        });
+        marker.orderid = #orderid#;
+        marker.infowindow = infowindow;
+        markers[markers.length] = marker;
+    } else {
+        //alert(&quot;Geocode was not successful for the following reason: &quot; + status);
+    }
+});
+&amp;lt;/cfoutput&amp;gt;
+
+$(&quot;.order&quot;).click(function() {
+    var thisorder = $(this).data(&quot;orderid&quot;);
+    for(var i=0; i&amp;lt;markers.length; i++) {
+        if(markers[i].orderid == thisorder) {
+            console.log(&quot;found my match&quot;);
+            //get the latlong
+            if(lastinfowindow instanceof google.maps.InfoWindow) lastinfowindow.close();
+            console.dir(markers[i]);
+            map.panTo(markers[i].getPosition());
+            markers[i].infowindow.open(map, markers[i]);
+            lastinfowindow = markers[i].infowindow;
+        }
+    }
+});
+</code></pre>
+
+<p>}</p>
+
+<p>&lt;/script&gt;
+&lt;style&gt;
+#map_canvas {
+ width: 450px; height: 450px;
+ float:left;
+}
+#orders {
+    margin-top: 0px;
+    padding-top: 0px;
+    margin-left: 10px;
+    float:left;
+    height: 450px;
+    overflow-y: scroll;
+}
+.order {
+        border-style:solid;<br />
+        border-width:thin;
+        width: 300px;
+        padding: 5px;<br />
+        cursor:pointer;
+        margin-top:0px;
+}
+&lt;/style&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body onload=&ldquo;initialize()&rdquo;&gt;</p>
+
+<p>&lt;div id=&ldquo;map_canvas&rdquo;&gt;&lt;/div&gt;</p>
+
+<p>&lt;div id=&ldquo;orders&rdquo;&gt;
+&lt;cfloop query=&ldquo;getorders&rdquo;&gt;
+    &lt;cfoutput&gt;
+    &lt;p class=&ldquo;order&rdquo; data-orderid=&ldquo;#orderid#&rdquo;&gt;
+    &lt;b&gt;Order #orderid#&lt;/b&gt;&lt;br/&gt;
+    #address#, #city#, #state# #postalcode#
+    &lt;/p&gt;
+    &lt;/cfoutput&gt;
+&lt;/cfloop&gt;
+&lt;/div&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+</code></p>
+
+<p><p></p>
+
+<p>So first a quick note - I modified my query to not get orderid 4. That order was consistently not geolocating so I thought i&rsquo;d just remove it. Right away you may notice something new - I&rsquo;ve created an array called markers and a variable called lastinfowindow. The reason why for this will become evident real quick like.</p>
+
+<p><p></p>
+
+<p>Scroll down a bit to where I create the marker. I wanted a way to associate the order ID with the marker (and again, why will be made clear), so I kinda cheated a bit. Objects in JavaScript can be manipulated much like CFCs in ColdFusion. I can add an arbitrary value - as I&rsquo;ve done here - to store the order id. That <i>kind</i> of bugs me. I could have create a new object instead and stuffed the marker as one key and the value as another - but this works. I also store a copy of the infowindow object. Finally this is appended to my array. The end result is that I&rsquo;ve now got a global object that contains a reference to all my markers. Apparently (and I could be wrong), Google Maps do not provide an easy way to get all the markers in a map. From what I see they recommend exactly this approach - storing them within an array.</p>
+
+<p><p></p>
+
+<p>So - next up is a click handler defined using jQuery syntax. If you look down a bit you can see I&rsquo;m outputting the orders in a set of P blocks. I&rsquo;ve asked jQuery to set up a click handler on those paragraphs. When you click, I grab the order id (I <b>love</b> data-* properties!) and then look for it within my markers array. If I find it - I first see if I need to close an existing infowindow. I then pan the map to the location and open the infowindow. All in all - rather simple? If you want to demo this, please be aware of the console.log messages I used to debug. Use in a Chrome browser or Firebug-enabled Firefox.</p>
+
+<p><p></p>
+
+<p><a href="http://www.coldfusionjedi.com/demos/april132011/test4.cfm"><img src="http://www.coldfusionjedi.com/images/icon_128.png" title="Demo, Baby" border="0"></a></p>
+
+<p><p></p>
+
+<p>A big thank you to <a href="http://www.cfsilence.com">Todd Sharp</a> for help with the CSS.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/04\/13\/Simple-introduction-to-Google-Maps-Part-2-Markers'; 
+this.page.identifier = '/?p=4195'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/04/13/Simple-introduction-to-Google-Maps-Part-2-Markers" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Simple introduction to Google Maps Part 2 - Markers" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/04/13/Simple-introduction-to-Google-Maps-Part-2-Markers" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/04/13/Simple-introduction-to-Google-Maps-Part-2-Markers" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Simple introduction to Google Maps Part 2 - Markers" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/04/13/Simple-introduction-to-Google-Maps-Part-2-Markers" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/04/13/Simple-introduction-to-Google-Maps-Part-2-Markers" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>The Complete Guide to Adding Error Handling to Your ColdFusion Application &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="The Complete Guide to Adding Error Handling to Your ColdFusion Application" />
+<meta property="og:description" content="I&rsquo;ve done more than a few posts recently about error handling and robust exception information, so I thought I&rsquo;d write up one blog entry that can serve as a nice guide for folks to bookmark. By using &ldquo;Complete&rdquo; in the title, I&rsquo;ve also virtually assured that I will forget something critical, so please, send suggestions for what I&rsquo;ve missed. Let&rsquo;s get started.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2007/12/05/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application" />
+
+
+<meta property="og:updated_time" content="2007-12-05T15:12:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="The Complete Guide to Adding Error Handling to Your ColdFusion Application">
+<meta itemprop="description" content="I&rsquo;ve done more than a few posts recently about error handling and robust exception information, so I thought I&rsquo;d write up one blog entry that can serve as a nice guide for folks to bookmark. By using &ldquo;Complete&rdquo; in the title, I&rsquo;ve also virtually assured that I will forget something critical, so please, send suggestions for what I&rsquo;ve missed. Let&rsquo;s get started.
+">
+
+
+<meta itemprop="dateModified" content="2007-12-05T15:12:00&#43;06:00" />
+<meta itemprop="wordCount" content="2151">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="The Complete Guide to Adding Error Handling to Your ColdFusion Application"/>
+<meta name="twitter:description" content="I&rsquo;ve done more than a few posts recently about error handling and robust exception information, so I thought I&rsquo;d write up one blog entry that can serve as a nice guide for folks to bookmark. By using &ldquo;Complete&rdquo; in the title, I&rsquo;ve also virtually assured that I will forget something critical, so please, send suggestions for what I&rsquo;ve missed. Let&rsquo;s get started.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2007/12/05/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application">
+    <h1 class="article-title" itemprop="name">
+        The Complete Guide to Adding Error Handling to Your ColdFusion Application
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2007-12-05 15:12:00 &#43;0600 &#43;0600" itemprop="datePublished">2007-12-05</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I&rsquo;ve done more than a few posts recently about error handling and robust exception information, so I thought I&rsquo;d write up one blog entry that can serve as a nice guide for folks to bookmark. By using &ldquo;Complete&rdquo; in the title, I&rsquo;ve also virtually assured that I will forget something critical, so please, send suggestions for what I&rsquo;ve missed. Let&rsquo;s get started.</p>
+
+<p>What is the point of this guide? Unless you are a perfect code, there is a chance that your ColdFusion application will have errors in it. The question is - what are you doing with your errors? What was the last error that occurred on your site? If I asked you how many errors your site threw yesterday, could you answer with 100% complete accuracy? I&rsquo;d be willing to bet most people would say no. Shoot, I know I couldn&rsquo;t answer that. So what do we do to help resolve this issue?</p>
+
+<p>The first thing I want you to do is to create an error. Create a new CFM file named errortest.cfm. Insert one line into it:</p>
+
+<p><code>
+&lt;cfoutput&gt;#xfhdshsdhj#&lt;/cfoutput&gt;
+</code></p>
+
+<p>The point of this template is to create an error. Unless you actually have a variable defined with that ugly name, the template will error out. Upload it to your server and run it with your browser.</p>
+
+<p>One of three things will happen:</p>
+
+<p>1) You will get an error with the full path shown, like below. This shows that you have not added error management to your application, and that you have Enabled Robust Exception information in your ColdFusion Administrator. Stop reading this blog entry, go to your Admin, and disable it. Now. (Please note that this guide is intended for a production machine environment. Obviously you can keep this setting on in development. I do.)</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/eshot1.png"></p>
+
+<p>2) You will get an error with no path shown. This is slightly better. It still shows that you haven&rsquo;t added error management to your application though.</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/eshow2.png"></p>
+
+<p>3) You get an &ldquo;error page&rdquo;. By &ldquo;error page&rdquo; I mean a page saying that an error occurred, but displayed in your standard site layout, or close to it. That&rsquo;s good. You should still continue to read though as I&rsquo;m going to discuss things that should normally be in an error handler.</p>
+
+<p>Ok, before going on - delete the page you just uploaded. I&rsquo;d be willing to bet a good 40-50% of us upload test.cfm type files to our servers and forget to delete them. I&rsquo;ve never done that. Really.</p>
+
+<p>So - lets talk error handling now. You have two high level options. The first is to set an error template in the ColdFusion administrator:</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/eshot3.png"></p>
+
+<p>If you specify a template here, than ColdFusion will run the template when an error occurs. In general though I wouldn&rsquo;t recommend setting the template here.</p>
+
+<p>Your second option - and what I recommend - is to the handle the errors specifically in your application. How? If you are on an older ColdFusion server and only have access to Application.cfm, then you want to the use the CFERROR tag. You <i>can</i> use these tags in Application.cfc as well, but I recommend onError for that. I&rsquo;m going to cover both though.</p>
+
+<p>A full description of cferror may be found in the <a href="http://www.cfquickdocs.com/cf8/?getDoc=cferror">docs</a>. I&rsquo;m going to give you the Ray Camden quickie guide to it. The cferror basically lets you specify an template to run when a type of error occurs. There are 3 main types of errors it monitors: Exception, Request, and Validation. Forget about validation. Don&rsquo;t use it. Exception is the type of error we are most familiar with. It is what I call the &lsquo;basic&rsquo; error. Request is the more serious error. It can occur when your error handler itself screws up. I call this the &ldquo;Oh S***&rdquo; error (seriously). It has special restrictions on it I&rsquo;ll discuss in a second. First though, let&rsquo;s look at the syntax you would use in your Application.cfm file:</p>
+
+<p><code>
+&lt;cfapplication name=&ldquo;rayrules&rdquo;&gt;</p>
+
+<p>&lt;cferror type=&ldquo;exception&rdquo; template=&ldquo;error.cfm&rdquo;&gt;
+&lt;cferror type=&ldquo;request&rdquo; template=&ldquo;error_request.cfm&rdquo;&gt;
+</code></p>
+
+<p>As you can see - it&rsquo;s pretty simple stuff. I basically said - for the Exception (again, think &lsquo;normal&rsquo; error), run error.cfm. For the Oh Crap error, run error_request.cfm.</p>
+
+<p>If you run any CFM again - you will immediately get an error stating that these files do not exist. You should create blank ones for the time being.</p>
+
+<p>Now for the details. The error.cfm template is a normal CFM page. But it has access to a special variable: ERROR. This variable is a structure that contains a lot of information about the error. What you get there will also depend on the error. SQL errors for example will have different values in the structure than a simple runtime error. Let&rsquo;s just do a quick dump.</p>
+
+<p><code>
+&lt;cfdump var=&ldquo;#error#&rdquo;&gt;
+</code></p>
+
+<p>If you run your error test again (you may have to reupload it if you deleted it like I suggested, just don&rsquo;t forget to remove it later!), you will see something like this:</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/eshot4.png"></p>
+
+<p>I&rsquo;m not going to list every field - again, check the <a href="http://www.cfquickdocs.com/cf8/?getDoc=cferror">cferror syntax doc</a> for that. The item you will most care about normal is cferror.message. This is the simplest representation of the error and will be most useful for logging. The diagnostics value gives more detail including a line number which is handy during development.</p>
+
+<p>So what now? Well first off - you probably don&rsquo;t want your public site showing a dump. Let&rsquo;s begin by outputting a nice message to the user. Here is the new version of error.cfm:</p>
+
+<p><code>
+We are so sorry. Something went wrong. We are working on it now.
+</code></p>
+
+<p>Obviously you can mark that up with nice HTML, use your custom tag layout wrapper, etc. This handles letting the user know something bad happened. At bare minimum, this is better than showing naked errors to the user, but we should do something with the error. I recommend two things.</p>
+
+<p><b>Log the error.</b> For some odd reason, ColdFusion will nicely log an unhandled error, but will not log a handled error. I believe Blue Dragon logs the error anyway. Since ColdFusion won&rsquo;t log it, we should:</p>
+
+<p><code>
+&lt;cflog file=&ldquo;myapperrorlog&rdquo; text=&ldquo;#error.message# - #error.diagnostics#&rdquo;&gt;
+</code></p>
+
+<p>Note that I&rsquo;ve specified the message and diagnostics variable. This is a bit of a duplication since diagnostics information will have the same information as message, but I like the shortness of the message value. You could log more than this obviously, but since this is a log file, we don&rsquo;t want to overdue it here.</p>
+
+<p>THe next thing we should do is email the error. This is something I&rsquo;ve covered before on the blog, so some of you may know my feelings on this already, but what I typically do is email me the entire error structure. I also include other structures so I can see what else was going on:</p>
+
+<p><code>
+&lt;cfsavecontent variable=&ldquo;errortext&rdquo;&gt;
+&lt;cfoutput&gt;
+An error occurred: http://#cgi.server_name##cgi.script_name#?#cgi.query_string#&lt;br /&gt;
+Time: #dateFormat(now(), &ldquo;short&rdquo;)# #timeFormat(now(), &ldquo;short&rdquo;)#&lt;br /&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#error#&rdquo; label=&ldquo;Error&rdquo;&gt;
+&lt;cfdump var=&ldquo;#form#&rdquo; label=&ldquo;Form&rdquo;&gt;
+&lt;cfdump var=&ldquo;#url#&rdquo; label=&ldquo;URL&rdquo;&gt;</p>
+
+<p>&lt;/cfoutput&gt;
+&lt;/cfsavecontent&gt;</p>
+
+<p>&lt;cfmail to=&ldquo;bugs@myproject.com&rdquo; from=&ldquo;root@myproject.com&rdquo; subject=&ldquo;Error: #error.message#&rdquo; type=&ldquo;html&rdquo;&gt;
+    #errortext#
+&lt;/cfmail&gt;
+</code></p>
+
+<p>I create my message within a cfsavecontent (more on why in a second), and then mail it. Don&rsquo;t forget the type=html. Now as you can guess, this creates a pretty big email. If you get a 1000 of these, you will be suffering, but consider it incentive to fix the darn bug ASAP. You could also add a dump of the session scope if you wanted, or CGI. Basically, it is better to send more information then you need then to be wanting for more. Having all this detail gives you a better idea of what is going on when the error occurred.</p>
+
+<p>So why the cfsavecontent? One trick I&rsquo;ll often do is to skip the email if I&rsquo;m currently logged in as an admin on the site. I&rsquo;ll do a quick check, and if I&rsquo;m an admin, I&rsquo;ll display the error on screen. This lets me see the error more quickly than waiting for an email.</p>
+
+<p>So all together now, here is the error.cfm file:</p>
+
+<p><code>
+We are so sorry. Something went wrong. We are working on it now.</p>
+
+<p>&lt;cflog file=&ldquo;myapperrorlog&rdquo; text=&ldquo;#error.message# - #error.diagnostics#&rdquo;&gt;</p>
+
+<p>&lt;cfsavecontent variable=&ldquo;errortext&rdquo;&gt;
+&lt;cfoutput&gt;
+An error occurred: http://#cgi.server_name##cgi.script_name#?#cgi.query_string#&lt;br /&gt;
+Time: #dateFormat(now(), &ldquo;short&rdquo;)# #timeFormat(now(), &ldquo;short&rdquo;)#&lt;br /&gt;</p>
+
+<p>&lt;cfdump var=&ldquo;#error#&rdquo; label=&ldquo;Error&rdquo;&gt;
+&lt;cfdump var=&ldquo;#form#&rdquo; label=&ldquo;Form&rdquo;&gt;
+&lt;cfdump var=&ldquo;#url#&rdquo; label=&ldquo;URL&rdquo;&gt;</p>
+
+<p>&lt;/cfoutput&gt;
+&lt;/cfsavecontent&gt;</p>
+
+<p>&lt;cfmail to=&ldquo;bugs@myproject.com&rdquo; from=&ldquo;root@myproject.com&rdquo; subject=&ldquo;Error: #error.message#&rdquo; type=&ldquo;html&rdquo;&gt;
+    #errortext#
+&lt;/cfmail&gt;
+</code></p>
+
+<p>Now for fun, try modifying your error.cfm. Change the first cfdump tag to a cfpoo tag. If you rerun your template, you will see a blank page. Remember that we created a blank error_request.cfm file earlier? This is what is running now. Basically, ColdFusion has noticed that we had an error, and then our error management had an error, and it&rsquo;s thrown it&rsquo;s hands up in the air and given up. We are now in the request template. The request template has special rules - the most important being - no CFML. That&rsquo;s right - you can&rsquo;t cflog. You can&rsquo;t email the error. You can - however - output error variables. You don&rsquo;t use cfoutput, you just include them. Consider this sample:</p>
+
+<p><code>
+This went wrong: #error.diagnostics#
+</code></p>
+
+<p>This will display:</p>
+
+<blockquote>
+This went wrong: Unknown tag: cfpoo. ColdFusion cannot determine how to process the tag cfpoo because the tag is unknown and not in any imported tag libraries. The tag name might be misspelled.
+The error occurred on line -1. 
+</blockquote>
+
+<p>That&rsquo;s all you can do really. But guess what - I wouldn&rsquo;t do that. Remember - we don&rsquo;t want to reveal any sensitive information to our users, including what caused an error. So what do I recommend?</p>
+
+<p>Go to your site and view source. This will give you the HTML result of one of your pages. Find the content and replace it with a &ldquo;We&rsquo;re sorry&rdquo; type message like we used in error.cfm. Then save that HTML. Basically you are creating a static page. This means that if you change your layout, you have to regenerate your error_request.cfm page. Of course, you could just not use any layout at all, but most people want their pages to have a standard look and feel.</p>
+
+<p>Unfortunately, nothing is logged when this error happens. So what can you do? One thing to consider is checking the web server log files to see when the file is run. If you see it running often, then double check your error.cfm file for possible errors. If worse comes to worse, temporarily wrap your error.cfm itself in a try/catch and see what shows up when you dump cfcatch. I&rsquo;m open to suggestions here - but there is a reason they (ok, I) call this the &ldquo;Oh Crap&rdquo; error.</p>
+
+<p>Ok, so I&rsquo;ve covered quite a bit of information here, but it applies to Application.cfm and CFERROR. What if you are using Application.cfc? Well one thing to remember is that you can just as easily put CFERROR tags inside your Application.cfc file. That is allowed, and I&rsquo;ve done that before. But what if you want to use the onError method?</p>
+
+<p>In general - a lot of what I said about the Exception type for CFERROR applies here. You want to present a nice message to your user. You want to log the error. You want to email the error to yourself. But there are some subtle differences.</p>
+
+<p>Consider this very simple onError:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;onError&rdquo; returnType=&ldquo;void&rdquo; output=&ldquo;true&rdquo;&gt;
+    &lt;cfargument name=&ldquo;exception&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfargument name=&ldquo;eventname&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfdump var=&ldquo;#arguments#&rdquo;&gt;&lt;cfabort&gt;
+&lt;/cffunction&gt;
+</code></p>
+
+<p>All I&rsquo;ve done here is dump all the arguments sent in. Now go back to your error file (the one you made to throw errors) and change it to this:</p>
+
+<p><code>
+&lt;h1&gt;Hellow World&lt;/h1&gt;
+&lt;cfoutput&gt;#xfhdshsdhj#&lt;/cfoutput&gt;
+</code></p>
+
+<p>Run it in your browser, and you will see this:</p>
+
+<p><img src="http://www.raymondcamden.com/images/cfjedi/eshot5.png"></p>
+
+<p>Notice that the HTML before the error is displayed in the browser. If we had used a nice error message instead of the dump, the user would see both. This can result in oddly formatted pages. What you can do instead is simply handle the error and cflocate to the a nicer page:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;onError&rdquo; returnType=&ldquo;void&rdquo; output=&ldquo;true&rdquo;&gt;
+    &lt;cfargument name=&ldquo;exception&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfargument name=&ldquo;eventname&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfset var errortext = &ldquo;&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cflog file=&quot;myapperrorlog&quot; text=&quot;#arguments.exception.message#&quot;&amp;gt;
+
+&amp;lt;cfsavecontent variable=&quot;errortext&quot;&amp;gt;
+&amp;lt;cfoutput&amp;gt;
+An error occurred: http://#cgi.server_name##cgi.script_name#?#cgi.query_string#&amp;lt;br /&amp;gt;
+Time: #dateFormat(now(), &quot;short&quot;)# #timeFormat(now(), &quot;short&quot;)#&amp;lt;br /&amp;gt;
+
+&amp;lt;cfdump var=&quot;#arguments.exception#&quot; label=&quot;Error&quot;&amp;gt;
+&amp;lt;cfdump var=&quot;#form#&quot; label=&quot;Form&quot;&amp;gt;
+&amp;lt;cfdump var=&quot;#url#&quot; label=&quot;URL&quot;&amp;gt;
+
+&amp;lt;/cfoutput&amp;gt;
+&amp;lt;/cfsavecontent&amp;gt;
+
+&amp;lt;cfmail to=&quot;bugs@myproject.com&quot; from=&quot;root@myproject.com&quot; subject=&quot;Error: #arguments.exception.message#&quot; type=&quot;html&quot;&amp;gt;
+    #errortext#
+&amp;lt;/cfmail&amp;gt;
+
+&amp;lt;cflocation url=&quot;error.cfm&quot;&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>All I did was take the code from my original error.cfm file and place it in here. The Exception argument here looks a bit different. No diagnostics key. So I just logged the message for now. My error.cfm file now only contains the message:</p>
+
+<p><code>
+We are so sorry. Something went wrong. We are working on it now.
+</code></p>
+
+<p>Lets recap:</p>
+
+<ul>
+<li>Do a quick test to figure out how your application responds to errors. 
+<li>If robust exeception information is displayed, turn it off.
+<li>Use CFERROR or onError to handle errors.
+<li>Do your own logging, and email yourself a detailed report.
+</ul>
+
+<p>I hope you find this guide useful, and please let me know how I can improve it.<p><a href='/enclosures/print.pdf'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2007\/12\/05\/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application'; 
+this.page.identifier = '/?p=2517'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/05/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="The Complete Guide to Adding Error Handling to Your ColdFusion Application" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/05/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/05/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="The Complete Guide to Adding Error Handling to Your ColdFusion Application" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/05/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2007/12/05/the-complete-guide-to-adding-error-handling-to-your-coldfusion-application" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

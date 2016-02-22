@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mobile on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/mobile/</link>
+    <description>Recent content in Mobile on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 11 Feb 2016 15:53:00 -0700</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/mobile/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Time for Ionic 2</title>
+      <link>http://www.raymondcamden.com/2016/02/11/time-for-ionic-2</link>
+      <pubDate>Thu, 11 Feb 2016 15:53:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/11/time-for-ionic-2</guid>
+      <description>&lt;p&gt;A few weeks ago I wrote about my experience looking into Angular 2 (&lt;a href=&#34;http://www.raymondcamden.com/2016/01/18/time-for-angular-2/&#34;&gt;Time for Angular 2?&lt;/a&gt;). I haven&amp;rsquo;t had a chance to dig deeper into Angular 2 since then but it is still high on my list to get more familiar with over the year. About a week and a half ago I had pleasure of meeting &lt;a href=&#34;http://mhartington.io/&#34;&gt;Mike Hartington&lt;/a&gt; from the Ionic team at PhoneGap Day. I sat in his Ionic 2 workshop and came out convinced it was time to give it a try as well. And of course, just a few days later the Ionic folks released the &lt;a href=&#34;http://blog.ionic.io/announcing-ionic-framework-2-beta/&#34;&gt;beta version of 2.0&lt;/a&gt;. It is definitely beta, but I was able to build an &lt;em&gt;incredibly&lt;/em&gt; simple app with it (after some help from Mike and others) and I thought I&amp;rsquo;d share my experience.&lt;/p&gt;
+
+&lt;p&gt;One of the most important things to note is that you can install Ionic V2 &lt;em&gt;without&lt;/em&gt; screwing up your ability to do Ionic V1 apps or work with existing projects. It may sound silly, but as easy as &lt;code&gt;npm&lt;/code&gt; can be, I didn&amp;rsquo;t want to have to worry about switching back and forth to work with existing projects. Heck, the CLI even defaults to V1 anyway so in case you forget, are in a rush, or whatever, it will continue to work the way you expect it to.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll want to spend some time in the &lt;a href=&#34;http://ionicframework.com/docs/v2/&#34;&gt;docs&lt;/a&gt; of course, and specifically the &lt;a href=&#34;http://ionicframework.com/docs/v2/getting-started/&#34;&gt;Getting Started&lt;/a&gt; guide. Note that there are mistakes in the guide (hey, it &lt;em&gt;is&lt;/em&gt; a beta) that may trip you up. Specifically it seems like some of the code samples are a bit out of date. For the most part I think you can figure it out, but these issues have been reported and may be corrected by the time you get to it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-1.gif&#34; class=&#34;imgborder&#34; title=&#34;Ionic V2 Docs&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Working through the Getting Started guide gets you through a simple application and will give you a &lt;em&gt;super&lt;/em&gt;
+basic idea of what&amp;rsquo;s going on, but I&amp;rsquo;d strongly urge you to go through the &lt;a href=&#34;https://angular.io/docs/ts/latest/quickstart.html&#34;&gt;Angular 2 quickstart&lt;/a&gt; first just so things aren&amp;rsquo;t completely alien to you.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll also want to peruse the &lt;a href=&#34;http://ionicframework.com/docs/v2/components&#34;&gt;components&lt;/a&gt; docs. From my quick look through it, things look quite a bit simpler to use, but again, this is still in development. A notable missing component currently is the loading widget. Be sure to notice that the component examples
+give you a quick way to toggle between Android and iOS views, and specifically that Android now has a Material look that is &lt;em&gt;really&lt;/em&gt; freaking sweet. As an example, here are tabs in iOS:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-2.gif&#34; alt=&#34;iOS Tabs Ionic 2&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now compare it to the Android version:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-3.gif&#34; alt=&#34;Android Tabs Ionic 2&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s damn spiffy.&lt;/p&gt;
+
+&lt;p&gt;So what&amp;rsquo;s the code like? As I said before, Angular 2 is different. Not bad different, just&amp;hellip; &lt;em&gt;different.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/pikacat.jpg&#34; alt=&#34;Like this...&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While working on my first demo, I ran into things I immediately liked. For example, I love that my &amp;ldquo;page&amp;rdquo; template and controller are in a folder nicely packaged together. I could have easily done that in Ionic/Angular1 too I guess, but I like the organization.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m also really liking working with ES6. I&amp;rsquo;m barely scratching the surface of course, and probably doing it wrong, but even stuff I thought was overblown, like fat arrows, are &lt;em&gt;really&lt;/em&gt; growing on me.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, some things I ran into felt&amp;hellip; wrong. I got over it. I also know there were things like that in Angular1 as well. But sometimes I just bit my tongue and went with it. So without further ado, here is an Ionic 2 version of my RSS Reader app. I did not build it out completely like the version I have on the Ionic market (&lt;a href=&#34;https://market.ionic.io/starters/rssviewer&#34;&gt;RSS Reader&lt;/a&gt;), but I built in basic list/detail support. I&amp;rsquo;ll share the code, but I want to give big thanks to Mike Hartington (again), @adbella on the Ionic slack, and others.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Please do not treat this as good code!&lt;/strong&gt; Treat this code like a slightly drunk cat walked over your keyboard and then had a little &amp;ldquo;accident&amp;rdquo;. It works - and the part that @abdella helped me with is elegant, but I&amp;rsquo;m sure I could have done things better. With that out of the way, let&amp;rsquo;s first look at the home page. It simply lists items from the RSS feed. First I&amp;rsquo;ll show the view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-navbar *navbar&amp;gt;
+&amp;lt;ion-title&amp;gt;
+Home
+&amp;lt;&amp;#x2F;ion-title&amp;gt;
+&amp;lt;&amp;#x2F;ion-navbar&amp;gt;
+
+&amp;lt;ion-content&amp;gt;
+&amp;lt;ion-list inset&amp;gt;
+&amp;lt;ion-item *ngFor=&amp;quot;#entry of entries&amp;quot; (click)=&amp;quot;openPage(entry)&amp;quot;&amp;gt;{{entry.title}}&amp;lt;&amp;#x2F;ion-item&amp;gt;
+&amp;lt;&amp;#x2F;ion-list&amp;gt;
+&amp;lt;&amp;#x2F;ion-content&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing really weird here except the new way Angular 2 does attributes/code/etc. But I&amp;rsquo;m assuming you can figure out what is happening here. Now let&amp;rsquo;s look at the code for this page.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Page,NavController} from &#39;ionic/ionic&#39;;
+import {RssService} from &#39;../../providers/rss-service/rss-service&#39;;
+import {DetailPage} from &#39;../detail-page/detail-page&#39;;
+
+@Page({
+  templateUrl: &#39;build/pages/home/home.html&#39;,
+  providers:[RssService]
+})
+export class HomePage {
+  constructor(public rssService:RssService, nav:NavController) {
+      this.nav = nav;
+      
+      this.entries = [];
+
+      this.rssService.load().subscribe(
+          data =&amp;gt; {
+              this.entries = data;
+          }
+      );
+
+  }
+  
+  openPage(entry) {
+      console.log(&#39;open page called with &#39;+entry.title);
+      this.nav.push(DetailPage, {selectedEntry:entry});
+  }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So yeah - this is where things got a bit weird. One of the new things in the Angular 2 world is the idea of Observables. These replace (ok, not replace, but my understanding is that they are &lt;em&gt;preferred&lt;/em&gt;) Promises and are supposed to be quite a bit more powerful. You can&amp;rsquo;t really see the Observable, but see the subscribe() call? That&amp;rsquo;s using it. Part of what makes them powerful is that they would support live updates. That doesn&amp;rsquo;t really come into play with RSS parsing, but if it ever were added to my project, in theory it would just plain work. (Note to self - I&amp;rsquo;m going to try to make a demo of a live updating Ionic 2 app soon!)&lt;/p&gt;
+
+&lt;p&gt;Also note the navigation in openPage. I don&amp;rsquo;t have to build an app router now. I just load the page and pass data. I really, really appreciate that.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at the service now.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Injectable} from &#39;angular2/core&#39;;
+import {Http} from &#39;angular2/http&#39;;
+import {Observable} from &#39;rxjs/Observable&#39;;
+import &#39;rxjs/add/observable/from&#39;;
+import &#39;rxjs/add/operator/map&#39;;
+
+/*
+  Generated class for the RssService provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular 2 DI.
+*/
+
+//Credit for latest version is @abdella from the Ionic Slack
+@Injectable()
+export class RssService {
+
+    url = &#39;https://query.yahooapis.com/v1/public/yql?q=select%20title%2Clink%2Cdescription%20from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&#39;;
+    
+    constructor(http: Http) {
+        this.http = http;
+    }
+    
+    load() {
+ 
+        return this.http.get(this.url)
+            .map(res =&amp;gt; res.json())
+            .map(data =&amp;gt; data.query.results.item);
+          
+      /* v2
+      return Observable.create(s =&amp;gt; {
+
+        this.http.get(&#39;https://query.yahooapis.com/v1/public/yql?q=select%20title%2Clink%2Cdescription%20from%20rss%20where%20url%3D%22http%3A%2F%2Ffeeds.feedburner.com%2Fraymondcamdensblog%3Fformat%3Dxml%22&amp;amp;format=json&amp;amp;diagnostics=true&amp;amp;callback=&#39;).subscribe(res =&amp;gt; {
+            console.log(&#39;in sub&#39;);
+            console.dir(s);
+            var result = res.json().query.results.item;
+            result.forEach(i=&amp;gt;s.next(i));
+            s.complete();
+            
+        });
+
+      });
+    */  
+
+    // Static version     
+    //    let data = [{title:&amp;quot;do one&amp;quot;},{title:&amp;quot;do two&amp;quot;},{title:&amp;quot;three&amp;quot;}];
+    //    return Observable.from(data);
+
+    
+  }
+}
+&lt;/pre&gt;&lt;/code&gt;
+
+I apologize for the large blocks of commented out code, but I wanted to keep a record of my previous versions for reference later. The slick http.get().map().map() syntax is an example of Oberservables in action and is thanks to @abdella. The basic idea here is we&#39;re fetching the remote data, converting it from a JSON string into an object, and then specifying a precise part of the result to work with (data.query.results.item).
+
+The imports on top are a bit weird. Specifically the fact that we have to import specific parts of Observable. It seems to me that if I want to use a library, I don&#39;t want to have to worry about parts of it being &#34;optional&#34;, and basic functionality like I used doesn&#39;t seem like it should be optional. This is one of those parts that bugged me and I just got over for now. 
+
+The detail page is pretty trivial as well. Here is the view:
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-navbar *navbar&amp;gt;
+  &amp;lt;ion-title&amp;gt;{{entry.title}}&amp;lt;/ion-title&amp;gt;
+&amp;lt;/ion-navbar&amp;gt;
+
+&amp;lt;ion-content padding class=&amp;quot;detail-page&amp;quot;&amp;gt;
+    &amp;lt;div [innerHTML]=&amp;quot;entry.description&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;/ion-content&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That last bit, &lt;code&gt;[innerHTML]=&lt;/code&gt;, is how you handle rendering HTML in Angular since it is &lt;em&gt;still&lt;/em&gt; a pain in the rear about it. (Yes, I know there are reasons, and yes, it still bugs me.) The code for the page just picks up the passed in data. Again - this is really super easy I think.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+import {Page,NavController,NavParams} from &#39;ionic/ionic&#39;;
+
+@Page({
+  templateUrl: &#39;build/pages/detail-page/detail-page.html&#39;
+})
+export class DetailPage {
+    constructor(nav: NavController,navParams:NavParams) {
+        console.log(&#39;run&#39;);
+        this.nav = nav;
+        this.entry = navParams.get(&#39;selectedEntry&#39;);
+        console.log(&#39;my entry is &#39;+this.entry.title);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the home page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-4.png&#34; class=&#34;imgborder&#34; title=&#34;Home Page&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;And one detail page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/ionic2-5.png&#34; class=&#34;imgborder&#34; title=&#34;Detail Page&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Not exactly rocket science, but you get the idea. So far, I&amp;rsquo;m digging it. I&amp;rsquo;ve got a lot of research to do, and I&amp;rsquo;m really looking forward to when things hit a firm release and stop changing, but I&amp;rsquo;d definitely take some time to look into it. As a reminder, you can, and should, join the &lt;a href=&#34;http://ionicworldwide.herokuapp.com/&#34;&gt;Ionic Slack&lt;/a&gt; channel. It is the best place to get support and help others.&lt;/p&gt;
+
+&lt;p&gt;If you want a copy of my app, you can find it on my GitHub repo here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_ionic_v2&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/rssreader_ionic_v2&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Visual Studio Code extension for Cordova</title>
+      <link>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</link>
+      <pubDate>Thu, 28 Jan 2016 17:27:24 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</guid>
+      <description>&lt;p&gt;Earlier today Microsoft released a set of updates for &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt;. TACO stands
+for &amp;ldquo;Tools for Apache Cordova&amp;rdquo; and has been around for a little while yet, but I&amp;rsquo;ve not had a chance to give it proper review on the blog. I still plan on doing so, but I wanted to specifically call out part of what was released today - &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=vsmobile.cordova-tools&#34;&gt;tooling support&lt;/a&gt; for Visual Studio Code.&lt;/p&gt;
+
+&lt;p&gt;Obviously this only helps you if you are a Visual Studio Code user, and if you are not, I highly suggest you take a look at the rest of the &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt; site to look at the other parts of the suite. As I said - there is some impressive stuff here. If you do use Visual Studio Code though you&amp;rsquo;ll want to grab this extension right away.&lt;/p&gt;
+
+&lt;p&gt;The extension provides three main features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, you get a debugger for iOS and Android. You can debug applications running on both the simulator and a real device.&lt;/li&gt;
+&lt;li&gt;Second, you get Cordova commands in the command palette. Right now this is just Build and Run, but it&amp;rsquo;s something.&lt;/li&gt;
+&lt;li&gt;Third, and my favorite, you get intellisense for the plugin APIs. This provides code completion for Cordova plugins. Even cooler - the extension is smart enough to know what plugins you have installed in the current project. So if you don&amp;rsquo;t have the Camera plugin installed, you won&amp;rsquo;t get code completion. How does it look? Here is a quick example:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/cordovaext1.png&#34; alt=&#34;Visual Studio Code completion&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To give you an idea of how the debugger looks, I did a quick video. I&amp;rsquo;m coming down with a bit of a cold, so forgive the somewhat scratchy voice.&lt;/p&gt;
+
+&lt;iframe width=&#34;480&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/9o-U0vH-5DI&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Apache Cordova SplashScreen Change</title>
+      <link>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</link>
+      <pubDate>Mon, 25 Jan 2016 16:16:10 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</guid>
+      <description>&lt;p&gt;A few days ago I began to notice something odd with my Apache Cordova tests. When the application would launch, the splash screen would fade away as opposed to just disappearing. I thought this seemed familiar so I double checked the Apache Cordova blog and re-read the last &lt;a href=&#34;http://cordova.apache.org/news/2016/01/19/plugins-release.html&#34;&gt;plugins release&lt;/a&gt; post. I had read it when it was published, but not terribly closely. In it, it mentions that the SplashScreen plugin was updated to 3.1.0. In the notes, you can see &amp;ldquo;Implementing FadeSplashScreen feature for Android&amp;rdquo; and something similar for iOS.&lt;/p&gt;
+
+&lt;p&gt;If you head over to the &lt;a href=&#34;https://github.com/apache/cordova-plugin-splashscreen&#34;&gt;SplashScreen plugin&lt;/a&gt; doc though, this update isn&amp;rsquo;t mentioned in the main Preferences section. Rather, you have to scroll down to &amp;ldquo;Android and iOS Quirks&amp;rdquo; to see that both a FadeSplashScreen and FadeSplashScreenDuration preference were added. (I&amp;rsquo;ve logged a bug about documenting this up in the top preferences section.)&lt;/p&gt;
+
+&lt;p&gt;As the docs say - the default is true, so if for some reason you don&amp;rsquo;t like this new behavior, you&amp;rsquo;ll need to add this to your config.xml:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;preference name=&#34;FadeSplashScreen&#34; value=&#34;false&#34; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Want to see what this new feature looks like in action? Check out the video I created.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/F1yrrvgbyJc&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking at PhoneGap Day</title>
+      <link>http://www.raymondcamden.com/2016/01/21/speaking-at-phonegap-day</link>
+      <pubDate>Thu, 21 Jan 2016 08:02:27 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/21/speaking-at-phonegap-day</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m a bit late on announcing this, but next week I&amp;rsquo;ll be speaking at the 2016 &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap Day&lt;/a&gt; in Lehi, Utah. Unfortunately tickets are sold out, but if get a chance to attend next year, I highly recommend it. PhoneGap Day is an
+incredibly casual, fun, and just plain exciting way to learn more about Apache Cordova and hybrid mobile development. There&amp;rsquo;s also a full day of deep workshops before the event where you can learn both basics and advanced topics. This year I&amp;rsquo;m giving a presentation
+concerning internationalization of data and I hope folks find it useful.&lt;/p&gt;
+
+&lt;p&gt;While the US PhoneGap Day is sold out, the &lt;a href=&#34;http://pgday.phonegap.com/eu2016/&#34;&gt;European one&lt;/a&gt; in Amsterdam is &lt;em&gt;not&lt;/em&gt; sold out.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>What happens when you screw up an Ionic Deployment?</title>
+      <link>http://www.raymondcamden.com/2016/01/20/what-happens-when-you-screw-up-an-ionic-deployment</link>
+      <pubDate>Wed, 20 Jan 2016 09:48:27 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/20/what-happens-when-you-screw-up-an-ionic-deployment</guid>
+      <description>&lt;p&gt;Last week I had the honor of presenting at the &lt;a href=&#34;http://www.meetup.com/Ionic-NYC-Meetup/&#34;&gt;Ionic NYC&lt;/a&gt; meetup. While talking about the &lt;a href=&#34;http://docs.ionic.io/docs/deploy-overview&#34;&gt;Deploy&lt;/a&gt; service, someone asked what would happen if you sent bad code to the deployment. I thought that was a great question and I did exactly that in front of the audience so we could all see.&lt;/p&gt;
+
+&lt;p&gt;For folks not familiar with what Ionic&amp;rsquo;s Deploy service does, it basically lets you push updates to your application without doing a formal app store approval. There are restrictions of course. You can&amp;rsquo;t add (or remove) plugins. But basically anything under the www is fair game. Things like typo fixing, new images, audio assets will work fine. You can even add completely new features by updating your app&amp;rsquo;s JavaScript and templates.&lt;/p&gt;
+
+&lt;p&gt;And yes - this &lt;strong&gt;is allowed&lt;/strong&gt; by both Apple and Google. You don&amp;rsquo;t want to abuse this though. If your app is a &amp;ldquo;Kitten Viewer&amp;rdquo; and you push an update that changes it to a post-apocalyptic shooter (still involving kittens) then you will most likely get a slap down. (If someone has created a post-apocalyptic kitten game, please let me know.)&lt;/p&gt;
+
+&lt;p&gt;There is a bit of a setup to enable this feature (fully documented via the link above) that takes roughly five minutes, and the code is really simple considering how complex the actions are. Here is an example taken from the docs that demonstrates how to check for and actually do an update.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var deploy = new Ionic.Deploy();
+  
+// Update app code with new release from Ionic Deploy
+$scope.doUpdate = function() {
+  deploy.update().then(function(res) {
+    console.log(&#39;Ionic Deploy: Update Success! &#39;, res);
+  }, function(err) {
+    console.log(&#39;Ionic Deploy: Update error! &#39;, err);
+  }, function(prog) {
+    console.log(&#39;Ionic Deploy: Progress... &#39;, prog);
+  });
+};
+
+// Check Ionic Deploy for new code
+$scope.checkForUpdates = function() {
+  console.log(&#39;Ionic Deploy: Checking for updates&#39;);
+  deploy.check().then(function(hasUpdate) {
+    console.log(&#39;Ionic Deploy: Update available: &#39; + hasUpdate);
+    $scope.hasUpdate = hasUpdate;
+  }, function(err) {
+    console.error(&#39;Ionic Deploy: Unable to check for updates&#39;, err);
+  });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In general, it just plain works, and works really well! Using the code above, if you run doUpdate(), then the app will grab the assets and automatically reload the app. (And if you are curious, you can also get an update and &lt;i&gt;not&lt;/i&gt; automatically reload. You&amp;rsquo;ve got a lot of options actually - check the docs!)&lt;/p&gt;
+
+&lt;p&gt;So what happens when you screw up? Like - skip testing? No one ever skips testing, right? I built an incredible simple app with the grand total of two buttons:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/Simulator-Screen-Shot-Jan-20-2016-9.27.09-AM.png&#34; alt=&#34;Simulator Screen Shot Jan 20, 2016, 9.27.09 AM&#34; width=&#34;375&#34; height=&#34;307&#34; class=&#34;aligncenter size-full wp-image-7407 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The red button handles both checking, and installing, an update. The green button calls a service.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+angular.module(&#39;starter&#39;, [&#39;ionic&#39;,&#39;ionic.service.core&#39;,&#39;appService&#39;])
+
+.controller(&#39;MainCtrl&#39;, function($scope,cowbellService) {
+
+    $scope.doUpdate = function() {
+        
+        //automatically deploy
+        var deploy = new Ionic.Deploy();
+        
+        // Check Ionic Deploy for new code
+        deploy.check().then(function(hasUpdate) {     
+            console.log(&#39;Ionic Deploy: Update available: &#39; + hasUpdate);
+            if(hasUpdate) {
+                console.log(&#39;Ok, lets do an update.&#39;);
+                deploy.update().then(function(res) {
+                    console.log(&#39;Ionic Deploy: Update Success! &#39;, res);
+                }, function(err) {
+                    console.log(&#39;Ionic Deploy: Update error! &#39;, err);
+                }, function(prog) {
+                    console.log(&#39;Ionic Deploy: Progress... &#39;, prog);
+                });
+                                
+            }
+        }, function(err) {
+            console.error(&#39;Ionic Deploy: Unable to check for updates&#39;, err);
+        });
+    };
+        
+    $scope.doCowbell = function() {
+        alert(cowbellService.getCowbell()); 
+    };
+})
+
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    if(window.cordova &amp;amp;&amp;amp; window.cordova.plugins.Keyboard) {
+      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      // for form inputs)
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+
+      // Don&#39;t remove this line unless you know what you are doing. It stops the viewport
+      // from snapping when text inputs are focused. Ionic handles this internally for
+      // a much nicer keyboard experience.
+      cordova.plugins.Keyboard.disableScroll(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By the way - I used an alert in the code because it was quick and dirty. In a real app, avoid alert and use the Dialog plugin. The service is incredibly simple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+angular.module(&#39;appService&#39;, [])
+.factory(&#39;cowbellService&#39;, function($http,$q) {
+    
+    return {
+
+        getCowbell: function() {
+            return &#34;You rang the cowbell!&#34;;
+        }
+        
+    };
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Alright - so as a first test, let&amp;rsquo;s break the service.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+angular.module(&#39;appService&#39;, [])
+.factory(&#39;cowbellService&#39;, function($http,$q) {
+    
+    return {
+
+        getCowbell: function() {
+            return &#34;You rang the cowbell!&#34;+x;
+        }
+        
+    };
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the code above, I&amp;rsquo;ve added a runtime error to the service that will only be a problem when the user clicks the button. I deployed via the CLI: &lt;code&gt;ionic upload &amp;ndash;note=&amp;ldquo;screw up&amp;rdquo; &amp;ndash;deploy=&amp;ldquo;production&amp;rdquo;&lt;/code&gt;. I then clicked the red button, noted the update in my console, and tried the green button. As expected, clicking the green button will no longer work, and in the console, the error is clearly visible.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot1-3.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;286&#34; class=&#34;aligncenter size-full wp-image-7408&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so in theory, not the end of the world. You can deploy a fix, or roll back, and life goes on. But what if you &lt;i&gt;really&lt;/i&gt; screw up? In my main JavaScript file, I added a syntax error on top. I then deployed that - ran the update - and&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2016/01/shot2-2.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;619&#34; class=&#34;aligncenter size-full wp-image-7409&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So yeah, at this point, you&amp;rsquo;re screwed. You can&amp;rsquo;t do an update anymore as the core functionality of the entire app is broken. You would need to do a &amp;ldquo;real&amp;rdquo; app store update to correct it.&lt;/p&gt;
+
+&lt;p&gt;To be absolutely clear - this is not any kind of bug on Ionic&amp;rsquo;s side. This is completely my fault. That being said, I can say that the Ionic folks are looking into ways to help prevent stuff like this from happening. Or you could actually just test your code. Just an idea - not trying to be pushy.&lt;/p&gt;
+
+&lt;p&gt;Another option to consider is making use of &lt;a href=&#34;http://docs.ionic.io/docs/deploy-channels&#34;&gt;deploy channels&lt;/a&gt;. As you can guess, these are &amp;lsquo;groups&amp;rsquo; that let you specify who should get an update. You could make a channel just for yourself and your own device and send it just there.&lt;/p&gt;
+
+&lt;p&gt;Anyway, I hope this was interesting, and between you and me, I like breaking stuff. Here is a video where I go through the same process and you can see everything in action.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/H9f4Q5kzobk&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;p.s. Thanks again to &lt;a href=&#34;http://twitter.com/ericbobbitt&#34;&gt;@ericbobbitt&lt;/a&gt; for help with this post and my understanding of Ionic services in general!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>DefinitelyTyped project for IBM MobileFirst and Hybrid Mobile Apps</title>
+      <link>http://www.raymondcamden.com/2016/01/19/definitelytyped-project-for-ibm-mobilefirst-and-hybrid-mobile-apps</link>
+      <pubDate>Tue, 19 Jan 2016 10:48:55 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/19/definitelytyped-project-for-ibm-mobilefirst-and-hybrid-mobile-apps</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve blogged before about the client-side API for hybrid mobile apps built on &lt;a href=&#34;
+https://ibm.biz/IBM-MobileFirst&#34;&gt;IBM MobileFirst&lt;/a&gt;. One of the things I&amp;rsquo;ve discovered recently is the library of &lt;a href=&#34;http://definitelytyped.org/&#34;&gt;DefinitlyTyped&lt;/a&gt; definition files for TypeScript developers. These files provide intellisense for a huge set of various frameworks and client-side code written in TypeScript. Turns out though that you can also use them in regular old JavaScript files too. My editor of choice (Visual Studio Code) has &lt;a href=&#34;https://code.visualstudio.com/docs/languages/javascript&#34;&gt;great support&lt;/a&gt; for this. You can simply get the file, drop it into your project, and go to town.&lt;/p&gt;
+
+&lt;p&gt;So with that in mind - I started working on a DefinitelyTyped file for MobileFirst. I had to guess a bit at exactly how to do it, and I probably did a few things wrong, but you can get the work in progress here: &lt;a href=&#34;https://github.com/cfjedimaster/MobileFirst-Typings&#34;&gt;https://github.com/cfjedimaster/MobileFirst-Typings&lt;/a&gt;. As you will see in the ReadMe, I&amp;rsquo;ve covered a few of the main classes in the WL namespace (this is the core namespace for the API). I&amp;rsquo;m looking for feedback on how I built it as well as volunteers to help complete the library with a pull request.&lt;/p&gt;
+
+&lt;p&gt;In case your curious as to how well this works, check out the video below:&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/wre69RYbDnA&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;As a side note - you can get definition files for Apache Cordova and Ionic as well!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Going from static to dynamic with Ionic Creator</title>
+      <link>http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator</link>
+      <pubDate>Mon, 11 Jan 2016 14:28:32 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/11/going-from-static-to-dynamic-with-ionic-creator</guid>
+      <description>&lt;p&gt;As I&amp;rsquo;ve mentioned more than once now, I&amp;rsquo;m &lt;i&gt;really&lt;/i&gt; happy with how much &lt;a href=&#34;http://creator.ionic.io&#34;&gt;Ionic Creator&lt;/a&gt; has improved recently. For this blog post, I thought it might be useful to demonstrate how you could go from a &amp;ldquo;static&amp;rdquo; Ionic Creator proof of concept to a dynamic one that made use of a real API. For hard core developers, this is probably not going to be very helpful. But I imagine Creator will attract folks who may not have a lot of experience working with JavaScript and APIs so I thought a concrete example would be helpful. As always, if anything doesn&amp;rsquo;t make sense, leave me a comment and I&amp;rsquo;ll try my best to help out.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s begin by discussing the type of application we&amp;rsquo;re going to build. It will be a simple &amp;ldquo;Master/Detail&amp;rdquo; example where the initial page is a list of items and the detail provides - well - detail. As a completely random &amp;ldquo;not related to anything recent&amp;rdquo; idea, let&amp;rsquo;s use Star Wars films for our data.&lt;/p&gt;
+
+&lt;p&gt;It just so happens that an API exists, &lt;a href=&#34;https://swapi.co/&#34;&gt;SWAPI&lt;/a&gt;, that provides information about Star Wars films. In fact, I&amp;rsquo;ve already released a helper library for this API: &lt;a href=&#34;https://github.com/cfjedimaster/SWAPI-Wrapper&#34;&gt;SWAPI-Wrapper&lt;/a&gt;. We won&amp;rsquo;t be using that helper in this blog post, but just remember it if you decide to actually use this data in a real application.&lt;/p&gt;
+
+&lt;h2&gt;Creating the Static Proof of Concept&lt;/h2&gt;
+
+&lt;p&gt;We&amp;rsquo;ll start off by creating a new application in Ionic Creator. Remember that this is 100% free to try. You only need to pay if you want additional projects. (You can find more detail on their &lt;a href=&#34;http://ionic.io/products/creator/pricing&#34;&gt;Pricing Page&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Begin by creating a new project, the name doesn&amp;rsquo;t matter, and use the Blank template:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot1-3.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;602&#34; class=&#34;aligncenter size-full wp-image-7287&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This will drop you into the editing interface with a blank page. On this page we&amp;rsquo;ll do two things. First, we&amp;rsquo;ll edit the title to give it something that makes sense for the app.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot2-4.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7288 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then we&amp;rsquo;ll drag a List component onto the page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot3-2.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7289 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice how it adds 3 list items automatically. If you want, you can remove some, or add some, but for now, three is just fine. If you click each one, you can give them a unique text value. While not necessary, I&amp;rsquo;d go ahead and do that just so you mentally keep in mind what we&amp;rsquo;re actually building.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot4-2.png&#34; alt=&#34;shot4&#34; width=&#34;750&#34; height=&#34;603&#34; class=&#34;aligncenter size-full wp-image-7290 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice that the list items have a &amp;ldquo;Link&amp;rdquo; attribute. We can use that to add basic interaction to our demo, but for now, we don&amp;rsquo;t have a page to actually target for that link. Let&amp;rsquo;s fix that by adding a new page. Be sure to use the Blank template again. I gave it a simple title too:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot5-1.png&#34; alt=&#34;shot5&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7291 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This page represents the detail view of the film. Right now we don&amp;rsquo;t necessarily know what we&amp;rsquo;re going to show, so let&amp;rsquo;s keep it simple and imagine we&amp;rsquo;ll just show the opening crawl. On the off chance that my readers have never seen a Star Wars film (for shame), this is an example of what I mean:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/crawl.png&#34; alt=&#34;crawl&#34; width=&#34;750&#34; height=&#34;319&#34; class=&#34;aligncenter size-full wp-image-7292&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For now, let&amp;rsquo;s just use a bit of static text. Drag the Paragraph component onto the page and then edit the content to be something that describes the purpose of the text block.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot6.png&#34; alt=&#34;shot6&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7294 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s hook up the list from the first page to the detail. Now, in the real application, each list item would link to a page showing different text based on the selection. However, the dynamic aspect will be handled by code we add later on. If you were to demonstrate this dummy app to a client, you may need to make 3 distinct pages so they don&amp;rsquo;t get confused. If you do, don&amp;rsquo;t forget that you can select the page in the left hand nav and click the &amp;ldquo;Duplicate&amp;rdquo; icon.&lt;/p&gt;
+
+&lt;p&gt;For now, click back to the first page, and select the first list item. Note that you can now select a link that points to the new page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot7.png&#34; alt=&#34;shot7&#34; width=&#34;750&#34; height=&#34;605&#34; class=&#34;aligncenter size-full wp-image-7295 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Go ahead and do that for all three list items (and again, you don&amp;rsquo;t &lt;i&gt;really&lt;/i&gt; need to) and then click the Preview icon on top to test out your beautiful, if fake, application.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot8.png&#34; alt=&#34;shot8&#34; width=&#34;750&#34; height=&#34;604&#34; class=&#34;aligncenter size-full wp-image-7296&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Woot! We&amp;rsquo;re done with the prototype!&lt;/p&gt;
+
+&lt;h2&gt;Creating the Application - Part 1&lt;/h2&gt;
+
+&lt;p&gt;Ok, so at this point, we&amp;rsquo;ve got a working prototype. The first thing we need to do is get a copy of the code. You can use the Export menu option to open a window showing you four different ways of working with the code. I recommend using the Zip File. While we can create a new application from the code of the prototype directly with the CLI, I think it would be nice to have a copy of the prototype locally to compare and contrast while working on the new version.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;750&#34; height=&#34;603&#34; class=&#34;aligncenter size-full wp-image-7297&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I recommend creating a new folder for this project, and then extracting the zip into a folder. (All of my code for this blog entry is in GitHub, and that&amp;rsquo;s the way I laid out stuff there as well.) Assuming you&amp;rsquo;ve done this in a folder called &lt;code&gt;creator_version&lt;/code&gt;, we can use the Ionic CLI to create a new application based on the contents. That command is:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ionic start v1 ./creator_version&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The &amp;ldquo;v1&amp;rdquo; part there is the name of the subdirectory. As you can guess, we&amp;rsquo;re going to iterate a bit from the original Creator version to our final version. Why?&lt;/p&gt;
+
+&lt;p&gt;We currently have a static version of the application. It doesn&amp;rsquo;t use any &amp;ldquo;real&amp;rdquo; data. Our first iteration is going to make the application dynamic, but it is going to use fake, static data.&lt;/p&gt;
+
+&lt;p&gt;Ok, that probably sounds confusing. Let me explain again.&lt;/p&gt;
+
+&lt;p&gt;Right now, our list of films is a hard coded list of 3 films.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;re going to create a &amp;ldquo;Service&amp;rdquo; in our application responsible for returning the list of films. Our plan is to use SWAPI remote service, but to keep it simple for now we&amp;rsquo;ll build a service that returns 3 &amp;lsquo;fake&amp;rsquo; films. We&amp;rsquo;ll then edit the first page to render those films as if they had come from some remote service. Essentially we will go from static to &amp;ldquo;Dynamic with Fake Data&amp;rdquo;. After we have this running well, we&amp;rsquo;ll then use the &amp;ldquo;real&amp;rdquo; service. (This part of the process is very important. So if it doesn&amp;rsquo;t make sense, let me know in the comments.)&lt;/p&gt;
+
+&lt;p&gt;Ok, so go into the v1 folder and open it with your favorite editor. We need to modify three things to make the initial page dynamic. Let&amp;rsquo;s start with the template. Right now it is hard coded for three films:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view title=&amp;quot;Star Wars Films&amp;quot;&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;ion-list&amp;gt;
+            &amp;lt;ion-item href=&amp;quot;#/page4&amp;quot;&amp;gt;A New Hope&amp;lt;/ion-item&amp;gt;
+            &amp;lt;ion-item href=&amp;quot;#/page4&amp;quot;&amp;gt;The Empire Strikes Back&amp;lt;/ion-item&amp;gt;
+            &amp;lt;ion-item href=&amp;quot;#/page4&amp;quot;&amp;gt;Return of the Jedi&amp;lt;/ion-item&amp;gt;
+        &amp;lt;/ion-list&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ll begin by removing two of the ion-items and making the third dynamic.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view title=&amp;quot;Star Wars Films&amp;quot;&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;ion-list&amp;gt;
+            &amp;lt;ion-item ng-repeat=&amp;quot;film in films&amp;quot; ui-sref=&amp;quot;filmTitle({id:film.id})&amp;quot;&amp;gt;{{film.title}}&amp;lt;/ion-item&amp;gt;
+        &amp;lt;/ion-list&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;rsquo;s two important things here. First, we are repeating &amp;ldquo;film&amp;rdquo; over &amp;ldquo;films&amp;rdquo;. We don&amp;rsquo;t have that data yet, but I know when I build it I&amp;rsquo;ll have it return an array of films. I also guess that I&amp;rsquo;ll have a title value and an ID that uniquely identifies it. (This is actually going to be a mistake, but that&amp;rsquo;s ok, it&amp;rsquo;s a good mistake!)&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at the controller. By default Creator made a blank one for us called starWarsFilmCtrl. We need to edit this to work with data.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.controller(&#39;starWarsFilmsCtrl&#39;, function($scope,FilmService) {
+    $scope.films = [];
+    
+    FilmService.getFilms().then(function(res) {
+        $scope.films = res;     
+    });
+    
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so what in the heck is FilmService? We haven&amp;rsquo;t written it yet! Basically we&amp;rsquo;re setting up the controller to work with a service we&amp;rsquo;ll write later that&amp;rsquo;s going to return our array of data. Note we use $scope.films to set the initial, empty array. We can then call the service and set the result.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s go ahead and update the other view first. The detail page begins like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view title=&amp;quot;Film Title&amp;quot;&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;p&amp;gt;The opening crawl would go here.&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We need to make the title and text dynamic. Here is the updated version:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view&amp;gt;
+    &amp;lt;ion-nav-title&amp;gt;{{film.title}}&amp;lt;/ion-nav-title&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;p&amp;gt;{{film.crawl}}&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Why did we switch to ion-nav-title? See &lt;a href=&#34;http://www.raymondcamden.com/2015/12/18/is-your-ionic-view-title-not-updating&#34;&gt;this blog post&lt;/a&gt; for an explanation. Basically we need to use that directive to handle dynamic titles.&lt;/p&gt;
+
+&lt;p&gt;Ok, so now let&amp;rsquo;s go and update the controller.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.controller(&#39;filmTitleCtrl&#39;, function($scope,$stateParams,FilmService) {
+    $scope.film = {};
+    
+    FilmService.getFilm($stateParams.id).then(function(res) {
+        $scope.film = res;  
+    });
+    
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As before, we&amp;rsquo;re using a FilmService that doesn&amp;rsquo;t exist yet. I&amp;rsquo;m calling the service in a way that makes sense to me (first GetFilms then GetFilm). The $stateParams part relates back to how we handle navigation. In the first view, make note of the ui-sref part. This handles changing to a new state and passing a unique id. In order to make that work, we need to do a small change to the routes.js file. Right now it has this hard coded route:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+    .state(&#39;filmTitle&#39;, {
+      url: &#39;/page4&#39;,
+      templateUrl: &#39;templates/filmTitle.html&#39;,
+      controller: &#39;filmTitleCtrl&#39;
+    })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to handle recognizing an ID, we modify it to this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+    .state(&#39;filmTitle&#39;, {
+      url: &#39;/page4/:id&#39;,
+      templateUrl: &#39;templates/filmTitle.html&#39;,
+      controller: &#39;filmTitleCtrl&#39;
+    })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Alright - so now for the final part, we build the service. We&amp;rsquo;re going to write it to &amp;ldquo;agree with&amp;rdquo; what the controller was expecting. Here&amp;rsquo;s the complete code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+angular.module(&#39;app.services&#39;, [])
+
+.factory(&#39;FilmService&#39;, [&#39;$q&#39;,function($q){
+
+    return {
+        getFilms:function() {
+            var deferred = $q.defer();
+            
+            //temp 
+            var films = [
+                {
+                    id:1,
+                    title:&#34;A New Hope&#34;,
+                    crawl:&#34;ANH crawl&#34;
+                },
+                {
+                    id:2,
+                    title:&#34;The Empire Strikes Back&#34;,
+                    crawl:&#34;ESB crawl&#34;
+                },
+                {
+                    id:3,
+                    title:&#34;Return of the Jedi&#34;,
+                    crawl:&#34;ROTJ crawl&#34;
+                }
+            ];
+                
+            deferred.resolve(films);
+            return deferred.promise;
+        },
+        getFilm:function(id) {
+            var deferred = $q.defer();
+            
+            //temp
+            var film = {
+                id:id,
+                title:&#34;Film &#34;+id,
+                crawl:&#34;Crawl for &#34;+id
+            };
+
+            deferred.resolve(film);
+            return deferred.promise;
+            
+            
+            
+        }   
+    };
+
+}]);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So let&amp;rsquo;s quickly review what we did here. We updated the completely static application to be &lt;i&gt;partially&lt;/i&gt; dynamic. Both the initial page (the list) and the detail are now dynamic. The controller speaks to the service to ask for data, returns it and makes it available to the templates. The data itself may be static, but every other aspect of the application is now dynamic! Woot.&lt;/p&gt;
+
+&lt;p&gt;At this point, I recommend taking the app for test drive just to ensure it is working correctly. Here is it running with &lt;code&gt;ionic serve -l&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot10.png&#34; alt=&#34;shot10&#34; width=&#34;750&#34; height=&#34;606&#34; class=&#34;aligncenter size-full wp-image-7298 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you want, edit the services file to add a new film. When you reload, you&amp;rsquo;ll see the new item show up.&lt;/p&gt;
+
+&lt;h2&gt;Creating the Application - Part 2&lt;/h2&gt;
+
+&lt;p&gt;Alright - so in theory now the only thing we need to is update the services file to use SWAPI. In theory. As I kind of alluded to before, we&amp;rsquo;re going to run into a small issue but that&amp;rsquo;s ok - we&amp;rsquo;re professionals and we can handle it. Using SWAPI is pretty easy (and you can read the &lt;a href=&#34;https://swapi.co/documentation&#34;&gt;docs&lt;/a&gt; for a full explanation), so let&amp;rsquo;s begin by making the call to get films use real data.&lt;/p&gt;
+
+&lt;p&gt;Here is the updated version:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+getFilms:function() {
+    var deferred = $q.defer();
+            
+    $http.get(&#34;http://swapi.co/api/films&#34;).then(function(res) {
+        //console.dir(res.data.results);
+        deferred.resolve(res.data.results);
+    });
+    return deferred.promise;
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yeah, that&amp;rsquo;s it. Literally just a call to a URL. As a quick note, we modified the services injected into the file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+.factory(&#39;FilmService&#39;, [&#39;$http&#39;,&#39;$q&#39;,function($http,$q){
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So in theory, as soon as you test this, it works. You should see a complete list of films:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot11-1.png&#34; alt=&#34;shot11&#34; width=&#34;696&#34; height=&#34;493&#34; class=&#34;aligncenter size-full wp-image-7300 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However, clicking to the detail won&amp;rsquo;t work. Why? The SWAPI doesn&amp;rsquo;t actually return an &amp;ldquo;id&amp;rdquo; value. Notice the console.dir on the results in the code snippet above? It&amp;rsquo;s currently commented out, but if you remove the comments, you can see the data yourself. This is also fully documented as well.&lt;/p&gt;
+
+&lt;p&gt;So what do we do? We need a &amp;ldquo;unique&amp;rdquo; way to identify the film so we can fetch the details. Turns out there is a &lt;code&gt;url&lt;/code&gt; property on the film. That points to the film&amp;rsquo;s detail on the API. We have two options here. We can actually modify the data in the service file so that id &lt;i&gt;does&lt;/i&gt; exist and uses the URL. Or we can simply modify the template to use the new property. I prefer to keep the template as is and modify the service. Basically my code gets to pretend that SWAPI returned the data as I expected:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+$http.get(&#34;http://swapi.co/api/films&#34;).then(function(res) {
+    //console.dir(res.data.results);
+    var results = res.data.results.map(function(result) {
+        result.id = result.url;
+        return result;
+    });
+    deferred.resolve(results);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The last modification is to get film details. We&amp;rsquo;re passing in the URL value so the code here is rather simple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+getFilm:function(url) {
+    var deferred = $q.defer();
+            
+    $http.get(url).then(function(res) {
+        //console.dir(res.data);
+        deferred.resolve(res.data);
+    });
+
+    return deferred.promise;
+            
+}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the result:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot12-1.png&#34; alt=&#34;shot12&#34; width=&#34;696&#34; height=&#34;624&#34; class=&#34;aligncenter size-full wp-image-7301 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Wrap Up&lt;/h2&gt;
+
+&lt;p&gt;Obviously every application will be different and our API was especially simple, but I hope this demonstration was useful. If you want to look at the code, you can find it here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/statictodynamic&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/statictodynamic&lt;/a&gt;. As I said, please let me know if anything didn&amp;rsquo;t make sense.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ve read the post, now watch the video!&lt;/p&gt;
+
+&lt;p&gt;&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/R9UwlFu56Wo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+Ok, while not necessarily required reading, here are a few quick notes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Sharp readers may notice that the initial getFilms call actually returns &lt;strong&gt;all&lt;/strong&gt; the data. We could make the application better if we stored that data in the service. Calls to getFilm would just return the appropriate portion of the stored data. What&#39;s cool is we can make this modification in the service and nothing else needs to change. This is basic MVC architecture stuff, but again, for folks who may be new to development, this is &lt;i&gt;exactly&lt;/i&gt; the reason we use setups like this. It allows for optimizations later that are confined to one file and don&#39;t break other parts.
+&lt;li&gt;Since our application is performing HTTP requests, we really should provide feedback to the user. I&#39;d suggest the Ionic Loading widget. I talked about that here: &lt;a href=&#34;http://www.raymondcamden.com/2015/12/17/a-quick-example-of-the-ionic-loading-widget&#34;&gt;A quick example of the Ionic Loading Widget&lt;/a&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking on Ionic in NYC Next Week</title>
+      <link>http://www.raymondcamden.com/2016/01/04/speaking-on-ionic-in-nyc-next-week</link>
+      <pubDate>Mon, 04 Jan 2016 08:13:47 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/04/speaking-on-ionic-in-nyc-next-week</guid>
+      <description>&lt;p&gt;Live in NYC? Want to hear me speak about &lt;a href=&#34;http:///www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; services? Want to just heckle me instead? Come check out my presentation to the Ionic NYC meetup group next Wednesday:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.meetup.com/Ionic-NYC-Meetup/events/227161281/&#34;&gt;Ionic Services - Raymond Camden&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This is my first time presenting to this group and I plan on bringing some schwag as well as a copy of my Apache Cordova book to give away. See you there!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Is your Ionic View title not updating?</title>
+      <link>http://www.raymondcamden.com/2015/12/18/is-your-ionic-view-title-not-updating</link>
+      <pubDate>Fri, 18 Dec 2015 15:21:11 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/18/is-your-ionic-view-title-not-updating</guid>
+      <description>&lt;p&gt;Ok, so I run into this once a month or so. I&amp;rsquo;m writing this just so I can - hopefully - remember it this time. This isn&amp;rsquo;t a bug or anything in Ionic - but I&amp;rsquo;m wondering if it should be documented a bit more clearly for people like me. (AKA old dense people.)&lt;/p&gt;
+
+&lt;p&gt;Alright - so given an Ionic app where templates are a dynamic title, this is not going to work:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view title=&amp;quot;{{film.title]}&amp;quot;&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;p&amp;gt;The opening crawl would go here.&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Oddly - it will work sometimes - like if you happen to reload on that page itself - but not consistently. I&amp;rsquo;m sure there are Good&amp;trade; reasons for this that make perfect sense, and I bet it revolves around Scope. I love Angular. Scope makes me want to push needles into my eyes though.&lt;/p&gt;
+
+&lt;p&gt;So how do you fix it? Switch to using &lt;code&gt;&amp;lt;ion-nav-title&amp;amp;gt&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;ion-view&amp;gt;
+    &amp;lt;ion-nav-title&amp;gt;{{film.title}}&amp;lt;/ion-nav-title&amp;gt;
+    &amp;lt;ion-content overflow-scroll=&amp;quot;true&amp;quot; padding=&amp;quot;true&amp;quot; class=&amp;quot;has-header&amp;quot;&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;p&amp;gt;The opening crawl would go here.&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-view&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As I said - this is documented. Kinda. The &lt;a href=&#34;http://ionicframework.com/docs/api/directive/ionView/&#34;&gt;docs for ion-view&lt;/a&gt; say:&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;A text-only title to display on the parent ionNavBar. For an HTML title, such as an image, see ionNavTitle instead.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;But in my mind, {{film.title}} resolves to &amp;ldquo;Foo&amp;rdquo; which is text only, so it should work. I looked at the &lt;a href=&#34;http://ionicframework.com/docs/api/directive/ionNavTitle/&#34;&gt;docs for ionNavTitle&lt;/a&gt; too and nothing there really seems to make it obvious. Maybe the ionView docs should have a callout/note/etc about this situation? Like I said - I swear I hit this once a month - but admittedly my memory is crap and I tend to repeat mistakes all the time.&lt;/p&gt;
+
+&lt;p&gt;Thoughts?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>A quick example of the Ionic Loading Widget</title>
+      <link>http://www.raymondcamden.com/2015/12/17/a-quick-example-of-the-ionic-loading-widget</link>
+      <pubDate>Thu, 17 Dec 2015 09:36:46 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/17/a-quick-example-of-the-ionic-loading-widget</guid>
+      <description>&lt;p&gt;One of the things I love most about &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; is how rapidly you can build applications. Many of the cooler features are simple things that can be quickly implemented for an easy win. I like easy wins. Here is a great example of that - the &lt;a href=&#34;http://ionicframework.com/docs/api/service/$ionicLoading/&#34;&gt;Ionic Loading&lt;/a&gt; widget.&lt;/p&gt;
+
+&lt;p&gt;Imagine you&amp;rsquo;ve got a simple service method runs over HTTP. This process can be fast or slow based on network conditions, size of the data, and other factors. (Like the Force. Hey, it can happen.) Your code probably looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.controller(&#39;SearchCtrl&#39;, function($scope,DataService) {
+    $scope.search = {property:&#39;&#39;};
+    $scope.results = [];
+    
+    $scope.doSearch = function() {
+        if($scope.search.property === &#39;&#39;) return;
+        $scope.results = [];
+        DataService.searchProperties($scope.search.property).then(function(res) {
+            $scope.results = res;
+        });
+    }
+    
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;re not concerned about the service itself. It returns a promise and will take &amp;ldquo;some time&amp;rdquo; to return. So if that service happens to be slow today, it could look like this:&lt;/p&gt;
+
+&lt;iframe width=&#34;420&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/uDyax91JkBU&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Notice on click there is no visual feedback to the user that anything is happening. If they are impatient (and what user isn&amp;rsquo;t), they could click multiple times and fire off numerous Ajax requests. Let&amp;rsquo;s fix that:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.controller(&#39;SearchCtrl&#39;, function($scope,DataService,$ionicLoading) {
+    $scope.search = {property:&#39;&#39;};
+    $scope.results = [];
+    
+    $scope.doSearch = function() {
+        if($scope.search.property === &#39;&#39;) return;
+        $scope.results = [];
+        $ionicLoading.show();
+        DataService.searchProperties($scope.search.property).then(function(res) {
+            $scope.results = res;
+            $ionicLoading.hide();
+        });
+    }
+    
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are precisely three changes here. I added $ionicLoading to the controller - I ran the show() method on it before I began the async process - and finally I hid it using hide(). That&amp;rsquo;s it. I could customize the widget with a message if I was feeling fancy, but today isn&amp;rsquo;t a fancy day. Here is the change:&lt;/p&gt;
+
+&lt;iframe width=&#34;420&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/UOuUD_lEfm0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Ok, so this isn&amp;rsquo;t exactly rocket science, but for about 30 seconds of coding I got a much improved experience.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Deals on my Cordova book and JavaScript videos</title>
+      <link>http://www.raymondcamden.com/2015/12/16/deals-on-my-cordova-book-and-javascript-videos</link>
+      <pubDate>Wed, 16 Dec 2015 08:08:22 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/16/deals-on-my-cordova-book-and-javascript-videos</guid>
+      <description>&lt;p&gt;Just a quick note to let folks know about two deals regarding my content. First, you can get &lt;strong&gt;half&lt;/strong&gt; off of my &lt;a href=&#34;http://www.manning.com/camden&#34;&gt;Apache Cordova&lt;/a&gt; book with the following code: dotd121615au. Other books are included in that deal including their &lt;a href=&#34;https://www.manning.com/books/ionic-in-action&#34;&gt;Ionic book&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The other deal I want to share is that two of my JavaScript videos (JavaScript Templating and Client-Side Data Storage) are now bundled in a larger collection called &lt;a href=&#34;http://shop.oreilly.com/category/learning-path/intro-modern-front-end-web.do?imm_mid=0ddc40&amp;cmp=em-web-books-videos-lp-promo_lp_modern_frontend_web_20151216&#34;&gt;Introduction to the Modern Front-End Web&lt;/a&gt;. This bundle includes 5 different videos and over 10 hours of content for just 99 dollars. That&amp;rsquo;s virtually free! (Ok, maybe not&amp;hellip;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Ionic Creator with MobileFirst 7.1</title>
+      <link>http://www.raymondcamden.com/2015/12/15/using-ionic-creator-with-mobilefirst-7-1</link>
+      <pubDate>Tue, 15 Dec 2015 08:35:14 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/15/using-ionic-creator-with-mobilefirst-7-1</guid>
+      <description>&lt;p&gt;A few months ago I wrote a post discussing how to use &lt;a href=&#34;https://ibm.biz/BluemixMobileFirst&#34;&gt;IBM MobileFirst&lt;/a&gt; 7.1 with Ionic (&lt;a href=&#34;http://www.raymondcamden.com/2015/08/19/developing-ionic-apps-with-mobilefirst-7-1&#34;&gt;Developing Ionic Apps with MobileFirst 7.1&lt;/a&gt;). Recently, the Ionic folks have done some darn good improvements to &lt;a href=&#34;https://creator.ionic.com&#34;&gt;Ionic Creator&lt;/a&gt;. Not only is the app more powerful to use, but more importantly, the &lt;i&gt;output&lt;/i&gt; of Ionic Creator is, in my not so humble opinion, a heck of lot better. I&amp;rsquo;m still struggling to become &amp;ldquo;Angular-literate&amp;rdquo; so I&amp;rsquo;m not sure if I&amp;rsquo;m the best judge of Angular code, but I find the output from Creator to be a lot easier to work with, and more importantly, closer to the default code you get when you create Ionic applications with the CLI. So in this post, I thought I&amp;rsquo;d quickly demonstrate how to go from an app designed and created in Ionic Creator to a MobileFirst-enabled hybrid application.&lt;/p&gt;
+
+&lt;p&gt;First, I assume you&amp;rsquo;ve got a project up on Ionic Creator already. How it looks, what it does, etc. doesn&amp;rsquo;t really matter. But it has to include a picture of a cat.&lt;/p&gt;
+
+&lt;p&gt;To begin, you&amp;rsquo;ll want to grab the zip download. First hit the export link:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/Ionic_Creator.png&#34; alt=&#34;Ionic_Creator&#34; width=&#34;750&#34; height=&#34;543&#34; class=&#34;aligncenter size-full wp-image-7241&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then select the zip tab:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/Ionic_Creator2.png&#34; alt=&#34;Ionic_Creator2&#34; width=&#34;750&#34; height=&#34;544&#34; class=&#34;aligncenter size-full wp-image-7242&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Extract the zip someplace - it doesn&amp;rsquo;t matter where, we&amp;rsquo;ll be moving it in a second.&lt;/p&gt;
+
+&lt;p&gt;Ok, next, create a new MobileFirst Cordova application with: &lt;code&gt;mfp cordova create&lt;/code&gt;. Just name it whatever you want and accept the defaults. (Or change them if you know what you&amp;rsquo;re doing.)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot1-1.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;674&#34; class=&#34;aligncenter size-full wp-image-7243&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now - I assume you&amp;rsquo;ve already got a working MobileFirst development server, but I like to be sure. So before going any further, go ahead and push the app to the server (&lt;code&gt;mfp push&lt;/code&gt;) and then send it to your emulator (&lt;code&gt;mfp cordova emulate -p ios&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/Simulator-Screen-Shot-Dec-14-2015-10.36.27-AM.png&#34; alt=&#34;Simulator Screen Shot Dec 14, 2015, 10.36.27 AM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7244 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so now lets get in your Ionic Creator code. Open the directory containing your MobileFirst Cordova project. Find the www folder and either delete it or rename it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot2-1.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;425&#34; class=&#34;aligncenter size-full wp-image-7246&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then, copy the assets from your Creator zip export into a new &lt;code&gt;www&lt;/code&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot3.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;847&#34; class=&#34;aligncenter size-full wp-image-7247&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so you&amp;rsquo;re almost done actually. First, be sure to add in Ionic&amp;rsquo;s keyboard plugin: &lt;code&gt;mfp cordova plugin add ionic-plugin-keyboard&lt;/code&gt;. &lt;strong&gt;NOTICE: &lt;/strong&gt; At the time I write this, a bug in the mfp CLI will report &lt;code&gt;Error adding plugin &amp;ldquo;ionic-plugin-keyboard&amp;rdquo;&lt;/code&gt;. But if you &lt;code&gt;mfp cordova plugin ls&lt;/code&gt; you will see that the plugin was added. This bug is known and will be fixed in a future release.&lt;/p&gt;
+
+&lt;p&gt;Next you need to prepare the app to &amp;ldquo;speak&amp;rdquo; to MobileFirst. I covered this process in depth in my earlier article: &lt;a href=&#34;http://www.raymondcamden.com/2015/08/18/developing-hybrid-mobile-apps-with-ibm-mobilefirst-7-1&#34;&gt;Developing Hybrid Mobile Apps with IBM MobileFirst 7.1&lt;/a&gt;. But if you want to quickly just see your app running, open up app.js and simply add this to the end:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var wlInitOptions = {
+    // Options to initialize with the WL.Client object.
+    // For initialization options please refer to IBM MobileFirst Platform Foundation Knowledge Center.
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then simply emulate. (Note, previously you needed to &lt;code&gt;mfp push&lt;/code&gt; before every emulation. Now that is unnecessary.)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot4-1.png&#34; alt=&#34;shot4&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7248 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. Let me know if you&amp;rsquo;ve got any questions about this process by leaving a comment below.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ionic/Cordova Demo: Where did I take that picture?</title>
+      <link>http://www.raymondcamden.com/2015/12/03/ioniccordova-demo-where-did-i-take-that-picture</link>
+      <pubDate>Thu, 03 Dec 2015 10:38:31 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/03/ioniccordova-demo-where-did-i-take-that-picture</guid>
+      <description>&lt;p&gt;Every now and then I think of an idea for a cool (aka useless and pointless but fun) app that I think will take me one hour and let me grow my small little empire of demos. Sometimes those &amp;ldquo;quick little demos&amp;rdquo; end up turning into multi-hour sessions as I pull my hair out trying to find out why this or that isn&amp;rsquo;t working. That&amp;rsquo;s frustrating as heck &lt;i&gt;while&lt;/i&gt; I&amp;rsquo;m working on it, but in the end it makes me as happy.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/smile-kitten-large.jpg&#34; alt=&#34;smile-kitten-large&#34; width=&#34;400&#34; height=&#34;276&#34; class=&#34;aligncenter size-full wp-image-7197&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Why? Because if I run into problems with my little &amp;ldquo;toy&amp;rdquo; demo, most likely you, the poor reader who has to put up with my silly demos, will run into it in a production app. And if my pain helps you avoid issues, then this blog will earn its keep. Ok, so what was the idea?&lt;/p&gt;
+
+&lt;p&gt;A few weeks ago I was shopping with my wife. It was the type of store where pretty much nothing in it interests me so I was just kind of mindlessly following along. But when my wife pointed out something she liked, I discretely snapped a picture of the item so I&amp;rsquo;d remember it as a possible present for her birthday or Christmas. Unfortunately, I couldn&amp;rsquo;t remember the name of the store. I knew roundabout where it was, of course, but not the actual store.&lt;/p&gt;
+
+&lt;p&gt;Turns out that many pictures automatically include data that relates to the location where the picture was taken. You can - with a few clicks - get the latitude and longitude of the picture. That&amp;rsquo;s nice - but frankly, I can&amp;rsquo;t translate those values into a &amp;lsquo;real&amp;rsquo; location off the top of my head. I&amp;rsquo;m sure web apps exist to help with that, but I thought, wouldn&amp;rsquo;t it be nice if I could just select a picture and have it tell me where it was taken - in English? For example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7198&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For my demo, I decided to build the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Let the user select a picture.&lt;/li&gt;
+&lt;li&gt;Attempt to read the EXIF data and get a location.&lt;/li&gt;
+&lt;li&gt;Try to Foursquare the location. I figured that would work great for businesses.&lt;/li&gt;
+&lt;li&gt;If that fails, try to reverse geocode it to an address at least.&lt;/li&gt;
+&lt;li&gt;If that fails too, show it on a map at least.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Right away I ran into some interesting issues. First, I needed to read the EXIF data. I found a Cordova plugin for it, but it had not been updated in two years, and I saw multiple issues reported that were not being addressed. So then I simply Googled for &amp;ldquo;exif javascript&amp;rdquo; and came across this project: &lt;a href=&#34;https://github.com/exif-js/exif-js&#34;&gt;exif-js&lt;/a&gt;. This project was also old with outstanding PRs, but I thought it might be safer to try.&lt;/p&gt;
+
+&lt;p&gt;For the most part, it just works. Here is a snippet showing it in action:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt; 
+$scope.selectPicture = function() {
+    navigator.camera.getPicture(gotPic, errHandler, {
+        sourceType:Camera.PictureSourceType.PHOTOLIBRARY,
+        destinationType:Camera.DestinationType.NATIVE_URI
+    });
+};
+    
+var errHandler = function(e) {
+    alert(&#39;Error with Camera: &#39;+e); 
+};
+    
+//utility funct based on https://en.wikipedia.org/wiki/Geographic_coordinate_conversion
+var convertDegToDec = function(arr) {
+    return (arr[0].numerator + arr[1].numerator/60 + (arr[2].numerator/arr[2].denominator)/3600).toFixed(4);
+};
+    
+var gotPic = function(u) {
+    console.log(&#39;Got image &#39;+u);
+    $scope.img.url = u;
+    //scope.apply can KMA
+    $scope.$apply();
+    
+};
+
+var img = document.querySelector(&#34;#selImage&#34;);  
+
+img.addEventListener(&#34;load&#34;, function() {
+    console.log(&#34;load event for image &#34;+(new Date()));
+    $scope.status.text = &#34;Loading EXIF data for image.&#34;;
+    EXIF.getData(document.querySelector(&#34;#selImage&#34;), function() {
+        console.log(&#34;in exif&#34;);
+            
+        //console.dir(EXIF.getAllTags(img));
+        var long = EXIF.getTag(img,&#34;GPSLongitude&#34;);
+        var lat = EXIF.getTag(img,&#34;GPSLatitude&#34;);
+        if(!long || !lat) {
+            $scope.status.text = &#34;Unfortunately, I can&#39;t find GPS info for the picture&#34;;
+            return; 
+        }
+        long = convertDegToDec(long);
+        lat = convertDegToDec(lat);
+        //handle W/S
+        if(EXIF.getTag(this,&#34;GPSLongitudeRef&#34;) === &#34;W&#34;) long = -1 * long;
+        if(EXIF.getTag(this,&#34;GPSLatitudeRef&#34;) === &#34;S&#34;) lat = -1 * lat;
+        console.log(long,lat);
+        locateAddress(long,lat);
+    });         
+}, false);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;First thing I discovered was that when you select an image in Cordova, the EXIF data is stripped down to about 4 or so different tags. Turns out this is a known bug (&lt;a href=&#34;https://issues.apache.org/jira/browse/CB-1285&#34;&gt;CF-1285&lt;/a&gt;) due to the fact that the plugin copies the original image and in that process removes the data. The bug is marked resolved, but obviously it isn&amp;rsquo;t. However, if you switch the camera source to NATIVE_URI then the problem goes away.&lt;/p&gt;
+
+&lt;p&gt;So far so good. To work with the code, you need to point it to an image in the DOM, and wait for the image to finish loading. That by itself isn&amp;rsquo;t hard, although I feel dirty when I use the DOM in Angular controllers. (I got over it.) I then discovered an issue with the library. When it loads the EXIF data, it copies the values to the DOM item for caching. I&amp;rsquo;m using the same image every time you select a new photo, so this meant the tag data was cached. I filed a bug report and in the meantime I simply edited the library to remove the cache check. That&amp;rsquo;s bad - but I got over that too.&lt;/p&gt;
+
+&lt;p&gt;The next thing I had to work with was the location stuff. As I said, the idea was to first check Foursquare, fall back to reverse geocoding, and fall back again to a static map. Let&amp;rsquo;s look at the controller code first.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var locateAddress = function(long,lat) {
+
+    $scope.status.text = &#34;Trying to locate the photo.&#34;;
+
+    Location.getInfo(long, lat).then(function(result) {
+        console.log(&#39;Result was &#39;+JSON.stringify(result));
+        if(result.type === &#39;foursquare&#39;) {
+            $scope.status.text = &#39;Your photo was taken at &#39; + result.name + &#39; located at &#39; + result.address;
+        } else if (result.type === &#39;geocode&#39;) {
+            $scope.status.text = &#39;Your photo appears to have been taken at &#39; + result.address;
+        } else {
+            var map = &#39;https://maps.googleapis.com/maps/api/staticmap?center=&#39;+lat+&#39;,&#39;+long+&#39;zoom=13&amp;size=300x300&amp;maptype=roadmap&amp;markers=color:blue%7Clabel:X%7C&#39;+lat+&#39;,&#39;+long;
+            $scope.status.text = &#39;Sorry, I\&#39;ve got nothing. But here is a map!&lt;br&gt;&lt;img class=&#34;map&#34; src=&#34;&#39; + map + &#39;&#34;&gt;&#39;; 
+        }
+    });
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not too complex, right? I just run my service and deal with the result. The service is a bit complex, but really just makes use of the various APIs I&amp;rsquo;m hitting.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;angular.module(&#39;starter.services&#39;, [])
+
+.factory(&#39;Foursquare&#39;, function($http) {
+
+    var CLIENT_ID = &#39;mahsecretismahsecret&#39;;
+    var CLIENT_SECRET = &#39;soylentgreenispeople&#39;;
+    
+    function whatsAt(long,lat) {
+        return $http.get(&#39;https://api.foursquare.com/v2/venues/search?ll=&#39;+lat+&#39;,&#39;+long+&#39;&amp;amp;intent=browse&amp;amp;radius=30&amp;amp;client_id=&#39;+CLIENT_ID+&#39;&amp;amp;client_secret=&#39;+CLIENT_SECRET+&#39;&amp;amp;v=20151201&#39;);     
+    }
+
+    return {
+        whatsAt:whatsAt
+    };
+})
+.factory(&#39;Geocode&#39;, function($http) {
+    var KEY = &#39;google should let me geocode for free&#39;;
+    
+    function lookup(long,lat) {
+        return $http.get(&#39;https://maps.googleapis.com/maps/api/geocode/json?latlng=&#39;+lat+&#39;,&#39;+long+&#39;&amp;amp;key=&#39;+KEY);
+    }
+    
+    return {
+        lookup:lookup   
+    };
+
+})
+.factory(&#39;Location&#39;, function($q,Foursquare,Geocode) {
+    
+    function getInfo(long,lat) {
+        console.log(&#39;ok, in getInfo with &#39;+long+&#39;,&#39;+lat);
+        var deferred = $q.defer();
+        Foursquare.whatsAt(long,lat).then(function(result) {
+            //console.log(&#39;back from fq with &#39;+JSON.stringify(result));
+            if(result.status === 200 &amp;amp;&amp;amp; result.data.response.venues.length &amp;gt;= 1) {
+                var bestMatch = result.data.response.venues[0];
+                //convert the result to something the caller can use consistently
+                var result = {
+                    type:&amp;quot;foursquare&amp;quot;,
+                    name:bestMatch.name,
+                    address:bestMatch.location.formattedAddress.join(&amp;quot;, &amp;quot;)
+                }
+                console.dir(bestMatch);
+                deferred.resolve(result);
+            } else {
+                //ok, time to try google
+                Geocode.lookup(long,lat).then(function(result) {
+                    console.log(&#39;back from google with &#39;);
+                    if(result.data &amp;amp;&amp;amp; result.data.results &amp;amp;&amp;amp; result.data.results.length &amp;gt;= 1) {
+                        console.log(&#39;did i come in here?&#39;);
+                        var bestMatch = result.data.results[0];
+                        console.log(JSON.stringify(bestMatch)); 
+                        var result = {
+                            type:&amp;quot;geocode&amp;quot;,
+                            address:bestMatch.formatted_address 
+                        }
+                        deferred.resolve(result);
+                    }
+                }); 
+            }
+        });
+        
+        return deferred.promise;    
+    }
+    return {
+        getInfo:getInfo 
+    };
+    
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In both cases, I&amp;rsquo;m assuming the first result from the API is the best result. That may not always be true, but it works for now. You&amp;rsquo;ve seen an example of Foursquare working, here is an example of the reverse geocode.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/geocode.png&#34; alt=&#34;geocode&#34; width=&#34;750&#34; height=&#34;779&#34; class=&#34;aligncenter size-full wp-image-7199 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And here it is with the last fallback. Yes, this is the same picture, I just temporarily disabled the Geocode service for a quick test.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/map.png&#34; alt=&#34;map&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7200 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;All in all, this was a fun little app to build, and as I said, I&amp;rsquo;m glad I ran into the EXIF issues. I know I&amp;rsquo;ll need that in the future. You can find the complete source code for this demo here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/photolocate&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/photolocate&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Book Review: Ionic Cookbook</title>
+      <link>http://www.raymondcamden.com/2015/12/02/book-review-ionic-cookbook</link>
+      <pubDate>Wed, 02 Dec 2015 09:20:00 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/02/book-review-ionic-cookbook</guid>
+      <description>&lt;iframe style=&#34;width:120px;height:240px;float:left;margin-right:10px&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;OneJS=1&amp;Operation=GetAdHtml&amp;MarketPlace=US&amp;source=ac&amp;ref=qf_sp_asin_til&amp;ad_type=product_link&amp;tracking_id=raymondcamden-20&amp;marketplace=amazon&amp;region=US&amp;placement=1785287974&amp;asins=1785287974&amp;linkId=P7BLQIK2B6F342SD&amp;show_border=true&amp;link_opens_in_new_window=false&#34;&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;I&amp;rsquo;ve mentioned now multiple times that I&amp;rsquo;m a huge fan of &amp;ldquo;cookbook&amp;rdquo; style technical books. After I&amp;rsquo;ve learned the basics of a language, I love to see real, if small, examples of applications built in a language so I can get a feel for what it&amp;rsquo;s like to actually develop with a particular platform. I was happy to get a review copy of what I believe is the first such book for the &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic framework&lt;/a&gt;, Hoc Phan&amp;rsquo;s &amp;ldquo;Ionic Cookbook.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;It has over 250 pages of recipes covering a huge range of topics, demonstrating everything from different UI components of the Ionic framework to handling data storage for proper offline support. To be honest, much of what is covered in this book would be incredibly useful outside of Ionic as well. For example, the discussions on Firebase would be useful in a vanilla Cordova application.&lt;/p&gt;
+
+&lt;p&gt;Typically a &amp;ldquo;cookbook&amp;rdquo; style book assumes you know the platform already, but this book spends time at the beginning introducing you to the basics of Ionic as well, so it would actually help someone who is new to Ionic as well. (Although I&amp;rsquo;d try to have some basic Cordova knowledge first.) At the end, Hoc even discusses how to publish your apps to the app stores, which is yet again a topic that will be useful to folks using Ionic or some other UI/UX platform.&lt;/p&gt;
+
+&lt;p&gt;While reading, I did find a few things I thought were done wrong, but honestly, those were more &amp;ldquo;I&amp;rsquo;d do it this way&amp;rdquo; type things than real disagreements. Even better, I learned a few things as well. I definitely recommend picking it up!&lt;/p&gt;
+
+&lt;p&gt;In case you&amp;rsquo;re curious, here is the table of contents:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;CREATING OUR FIRST APP WITH IONIC
+&lt;li&gt;MANAGING STATES AND NAVIGATION
+&lt;li&gt;ADDING DEVICE FEATURES SUPPORT
+&lt;li&gt;OFFLINE DATA STORAGE
+&lt;li&gt;HANDLING GESTURES AND EVENTS
+&lt;li&gt;APP THEME CUSTOMIZATION
+&lt;li&gt;EXTENDING IONIC WITH YOUR OWN COMPONENTS
+&lt;li&gt;USER REGISTRATION AND AUTHENTICATION
+&lt;li&gt;SAVING AND LOADING DATA USING FIREBASE
+&lt;li&gt;FINALIZING YOUR APPS FOR DIFFERENT PLATFORMS
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to tell if a Cordova application is running in the simulator</title>
+      <link>http://www.raymondcamden.com/2015/11/30/how-to-tell-if-a-cordova-application-is-running-in-the-simulator</link>
+      <pubDate>Mon, 30 Nov 2015 16:04:19 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/30/how-to-tell-if-a-cordova-application-is-running-in-the-simulator</guid>
+      <description>&lt;p&gt;Just a quick note here but the most recent &lt;a href=&#34;http://cordova.apache.org/news/2015/11/24/plugins-release.html&#34;&gt;plugins release&lt;/a&gt; included a cool little update to the &lt;a href=&#34;https://www.npmjs.com/package/cordova-plugin-device&#34;&gt;Device&lt;/a&gt; plugin. If you&amp;rsquo;ve never used it before, the plugin provides basic information about the app&amp;rsquo;s current working environment, including operating system and device model. In the most recent version, a new property was added: &lt;code&gt;isVirtual&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;As you can probably guess, this property will tell you if you&amp;rsquo;re running on a simulator or a real device. Now while I wouldn&amp;rsquo;t recommend &lt;i&gt;shipping&lt;/i&gt; code that uses this normally, during testing it could be real useful. As an example, here is code that simply toggles what kind of camera should be used - the device camera or the photo gallery:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var sourceType = device.isVirtual ? Camera.PictureSourceType.PHOTOLIBRARY:Camera.PictureSourceType.CAMERA;
+    
+navigator.camera.getPicture(picDone, picFail, {
+    sourceType: sourceType,
+    destinationType:Camera.DestinationType.FILE_URI
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not rocket science, but useful. Just to be complete, here is a screen shot of the same code running on my device and simulator.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot24.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;714&#34; class=&#34;aligncenter size-full wp-image-7174&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And if you want, you can grab the source for this demo here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/checkforsim&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/checkforsim&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;For folks curious, running this on Genymotion actually shows that it is considered a simulator, not a real device, even though you run it from the command line like a real device. Surprising.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

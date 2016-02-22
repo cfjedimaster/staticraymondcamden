@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Creating a Mailing List in ColdFusion (Part 5) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Creating a Mailing List in ColdFusion (Part 5)" />
+<meta property="og:description" content="Welcome to the final entry in the &ldquo;Mailing List&rdquo; series. To be honest, all the previous entries covered what you absolutely need. This entry isn&rsquo;t exactly required, but comes highly recommended. Why? The previous code let anyone subscribe an email address. This is nice and simple, but it also means that I could enter your email address and you would never know it until you began to get email from my site. I did build a simple way to unsubscribe, but that isn&rsquo;t good enough. What I really need to add is a simple verification service. This is how I will do that:
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2006/06/06/Creating-a-Mailing-List-in-ColdFusion-Part-5" />
+
+
+<meta property="og:updated_time" content="2006-06-06T17:06:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Creating a Mailing List in ColdFusion (Part 5)">
+<meta itemprop="description" content="Welcome to the final entry in the &ldquo;Mailing List&rdquo; series. To be honest, all the previous entries covered what you absolutely need. This entry isn&rsquo;t exactly required, but comes highly recommended. Why? The previous code let anyone subscribe an email address. This is nice and simple, but it also means that I could enter your email address and you would never know it until you began to get email from my site. I did build a simple way to unsubscribe, but that isn&rsquo;t good enough. What I really need to add is a simple verification service. This is how I will do that:
+">
+
+
+<meta itemprop="dateModified" content="2006-06-06T17:06:00&#43;06:00" />
+<meta itemprop="wordCount" content="1025">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Creating a Mailing List in ColdFusion (Part 5)"/>
+<meta name="twitter:description" content="Welcome to the final entry in the &ldquo;Mailing List&rdquo; series. To be honest, all the previous entries covered what you absolutely need. This entry isn&rsquo;t exactly required, but comes highly recommended. Why? The previous code let anyone subscribe an email address. This is nice and simple, but it also means that I could enter your email address and you would never know it until you began to get email from my site. I did build a simple way to unsubscribe, but that isn&rsquo;t good enough. What I really need to add is a simple verification service. This is how I will do that:
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2006/06/06/Creating-a-Mailing-List-in-ColdFusion-Part-5">
+    <h1 class="article-title" itemprop="name">
+        Creating a Mailing List in ColdFusion (Part 5)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2006-06-06 17:06:00 &#43;0600 &#43;0600" itemprop="datePublished">2006-06-06</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Welcome to the final entry in the &ldquo;Mailing List&rdquo; series. To be honest, all the previous entries covered what you absolutely need. This entry isn&rsquo;t exactly required, but comes highly recommended. Why? The previous code let anyone subscribe an email address. This is nice and simple, but it also means that I could enter your email address and you would never know it until you began to get email from my site. I did build a simple way to unsubscribe, but that isn&rsquo;t good enough. What I really need to add is a simple verification service. This is how I will do that:</p>
+
+<ol>
+<li>On subscribing, send an email to the person. The email will contain a link that must be clicked to finish the subscription.
+<li>When sending email to the subscribers, only send to those that actually clicked the link.
+</ol>
+
+<p>Nice and simple, right? Let&rsquo;s start with how the application will know that a person is verified. The first thing I&rsquo;m going to do is add a simple verified column to my database table. Now that this is done, let&rsquo;s modify the CFC&rsquo;s subscribe method to properly set the verified value to false. I&rsquo;m not going to paste the entire method, but just the modified query:</p>
+
+<p><code>
+&lt;cfquery datasource=&ldquo;#variables.dsn#&rdquo;&gt;
+insert into subscribers(email,token,verified)
+values(&lt;cfqueryparam cfsqltype=&ldquo;cf_sql_varchar&rdquo; value=&ldquo;#arguments.email#&rdquo;&gt;,
+&lt;cfqueryparam cfsqltype=&ldquo;cf_sql_varchar&rdquo; value=&ldquo;#createUUID()#&rdquo;&gt;,
+&lt;cfqueryparam cfsqltype=&ldquo;cf_sql_bit&rdquo; value=&ldquo;0&rdquo;&gt;
+)
+&lt;/cfquery&gt;
+</code></p>
+
+<p>Next I need to send an email to the potential subscriber. I&rsquo;ve added a new method that will fetch one subscriber from the mailing list:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;getSubscriber&rdquo; returnType=&ldquo;struct&rdquo; output=&ldquo;false&rdquo; access=&ldquo;public&rdquo;
+            hint=&ldquo;Returns a subscrier.&rdquo;&gt;
+    &lt;cfargument name=&ldquo;email&rdquo; type=&ldquo;string&rdquo; required=&ldquo;true&rdquo;&gt;
+    &lt;cfset var q = &ldquo;&rdquo;&gt;
+    &lt;cfset var s = structNew()&gt;
+    &lt;cfset var col = &ldquo;&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfquery name=&quot;q&quot; datasource=&quot;#variables.dsn#&quot;&amp;gt;
+select      email, token, verified
+from        subscribers
+where       email = &amp;lt;cfqueryparam cfsqltype=&quot;cf_sql_varchar&quot; value=&quot;#arguments.email#&quot;&amp;gt;
+order by    email asc
+&amp;lt;/cfquery&amp;gt;
+
+&amp;lt;cfloop index=&quot;col&quot; list=&quot;#q.columnlist#&quot;&amp;gt;
+    &amp;lt;cfset s[col] = q[col]&amp;gt;
+&amp;lt;/cfloop&amp;gt;
+
+&amp;lt;cfreturn s&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>There isn&rsquo;t anything particularly interesting about this method, but you may want to pay attention to how I translate the query to a structure. I use an automatic method instead of setting each column manually. I&rsquo;ve modified the subscribe file to handle this new logic. Let&rsquo;s take a look at the whole thing, and I&rsquo;ll then discuss what specifically changed since the first version.</p>
+
+<p><code>
+&lt;cfparam name=&ldquo;form.emailaddress&rdquo; default=&ldquo;&rdquo;&gt;
+&lt;cfset showForm = true&gt;</p>
+
+<p>&lt;cfif structKeyExists(form, &ldquo;subscribe&rdquo;)&gt;
+    &lt;cfif isValid(&ldquo;email&rdquo;, form.emailAddress)&gt;
+        &lt;cfif application.maillist.subscribe(form.emailaddress)&gt;
+            &lt;cfset token = application.maillist.getsubscriber(form.emailaddress).token&gt;
+            &lt;cfmail to=&ldquo;#form.emailaddress#&rdquo; from=&ldquo;#application.maillistfrom#&rdquo; subject=&ldquo;Mail List Verification&rdquo;&gt;
+You have requested to join our mailing list. To verify this subscription, please click the link below:</p>
+
+<p><a href="http://192.168.1.113/testingzone/mailinglist/verify.cfm?token=#token#">http://192.168.1.113/testingzone/mailinglist/verify.cfm?token=#token#</a></p>
+
+<p>If you did not want to subcribe, please ignore this email.
+            &lt;/cfmail&gt;
+        &lt;/cfif&gt;
+        &lt;cfset showForm = false&gt;
+    &lt;cfelse&gt;
+        &lt;cfset error = &ldquo;Your email address isn&rsquo;t valid.&rdquo;&gt;
+    &lt;/cfif&gt;
+&lt;/cfif&gt;</p>
+
+<p>&lt;h2&gt;Subscribe to Foo&lt;/h2&gt;</p>
+
+<p>&lt;cfif showForm&gt;</p>
+
+<pre><code>&amp;lt;cfif structKeyExists(variables, &quot;error&quot;)&amp;gt;
+    &amp;lt;cfoutput&amp;gt;
+    &amp;lt;p&amp;gt;
+    &amp;lt;b&amp;gt;#error#&amp;lt;/b&amp;gt;
+    &amp;lt;/p&amp;gt;
+    &amp;lt;/cfoutput&amp;gt;
+&amp;lt;/cfif&amp;gt;
+
+&amp;lt;p&amp;gt;
+&amp;lt;form action=&quot;subscribe.cfm&quot; method=&quot;post&quot;&amp;gt;
+&amp;lt;table&amp;gt;
+    &amp;lt;tr&amp;gt;
+        &amp;lt;td&amp;gt;Your Email Address&amp;lt;/td&amp;gt;
+        &amp;lt;cfoutput&amp;gt;&amp;lt;td&amp;gt;&amp;lt;input type=&quot;text&quot; name=&quot;emailaddress&quot; value=&quot;#form.emailaddress#&quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/cfoutput&amp;gt;
+    &amp;lt;/tr&amp;gt;
+    &amp;lt;tr&amp;gt;
+        &amp;lt;td&amp;gt; &amp;lt;/td&amp;gt;
+        &amp;lt;td&amp;gt;&amp;lt;input type=&quot;submit&quot; name=&quot;subscribe&quot; value=&quot;Subscribe&quot;&amp;gt;&amp;lt;/td&amp;gt;
+    &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
+&amp;lt;/form&amp;gt;
+&amp;lt;/p&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;</p>
+
+<pre><code>&amp;lt;p&amp;gt;
+Thank you for subscribing! A verification email has been sent to your address.
+&amp;lt;/p&amp;gt;
+</code></pre>
+
+<p>&lt;/cfif&gt;
+</code></p>
+
+<p>The first thing you may notice different is that once I&rsquo;ve subscribed a person, I check the result of that method. I didn&rsquo;t use to do that before. The method will return true if the email address did not exist in the list. I need to know this otherwise I&rsquo;ll be sending a verification email more than once (potentially). Next I call the new method, getSubscriber. This returns a structure of member information, but all I need is the token. Notice the shorthand method of grabbing the value:</p>
+
+<p><code>
+&lt;cfset token = application.maillist.getsubscriber(form.emailaddress).token&gt;
+</code></p>
+
+<p>I could have written that in two lines, but this is simpler. The last thing I do is send an email to the subscriber. Notice how I include his token in the email. This will be used to verify the user. I don&rsquo;t need to include his email address since the token (as a UUID) is unique enough. I made one more change as well. At the very end of the file where I had previously told the user that he was subscribed, I added a note saying that I have sent a verification email.</p>
+
+<p>Now I need to build the file that will actually handle the verification:</p>
+
+<p><code>
+&lt;!&mdash; Must have url.t &mdash;&gt;
+&lt;cfif structKeyExists(url, &ldquo;token&rdquo;) and isValid(&ldquo;uuid&rdquo;, url.token)&gt;</p>
+
+<pre><code>&amp;lt;cfset application.maillist.verify(url.token)&amp;gt;
+
+&amp;lt;cfoutput&amp;gt;
+Your subscription has been verified. Thank you and have a nice day.
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>&lt;cfelse&gt;</p>
+
+<pre><code>&amp;lt;cfoutput&amp;gt;
+You have &amp;lt;b&amp;gt;not&amp;lt;/b&amp;gt; been verified. Please ensure that you have copied the URL correctly from your mail program.
+&amp;lt;/cfoutput&amp;gt;
+</code></pre>
+
+<p>&lt;/cfif&gt;
+</code></p>
+
+<p>This is a short file. All it does is check for the url variable &ldquo;token&rdquo; and if it both exists and is a valid UUID, I call the verify method of the CFC. Now let&rsquo;s take a look at that method:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;verify&rdquo; returnType=&ldquo;void&rdquo; output=&ldquo;false&rdquo; access=&ldquo;public&rdquo;
+        hint=&ldquo;Verifies a user.&rdquo;&gt;
+&lt;cfargument name=&ldquo;token&rdquo; type=&ldquo;uuid&rdquo; required=&ldquo;true&rdquo;&gt;
+&lt;cfquery datasource=&ldquo;#variables.dsn#&rdquo;&gt;</p>
+
+<p>update  subscribers</p>
+
+<p>set verified = 1</p>
+
+<p>where   token = &lt;cfqueryparam cfsqltype=&ldquo;cf_sql_varchar&rdquo; value=&ldquo;#arguments.token#&rdquo;&gt;</p>
+
+<p>&lt;/cfquery&gt;</p>
+
+<p>&lt;/cffunction&gt;</p>
+
+<p></code></p>
+
+<p>All I&rsquo;m doing here is setting the verified flag to true where the token matches the value passed in. Ok - so I&rsquo;m almost there. The page I built for the admin, sendmail.cfm, was using getSubscribers to both get a count of how many people to mail, as well as knowing who to mail to. I&rsquo;ve modified this template to now call getVerifiedSubscribers. This method is also rather simple as you can imagine:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;getVerifiedSubscribers&rdquo; returnType=&ldquo;query&rdquo; output=&ldquo;false&rdquo; access=&ldquo;public&rdquo;
+            hint=&ldquo;Returns a query of everyone subscribed.&rdquo;&gt;
+    &lt;cfset var q = &ldquo;&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfquery name=&quot;q&quot; datasource=&quot;#variables.dsn#&quot;&amp;gt;
+select      email, token, verified
+from        subscribers
+where       verified = 1
+order by    email asc
+&amp;lt;/cfquery&amp;gt;
+
+&amp;lt;cfreturn q&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>That&rsquo;s it. I hope you enjoyed this series and sorry the last part took so long to get out. A note about the files - I used the Make Archive funtion on my Mac, and it made a zip, but I have no idea if it will play well with PCs. So let me know. I also didn&rsquo;t modify the DB script since the change was simple and I&rsquo;m on the Mac using MySQL. I didn&rsquo;t want folks to get confused as to why the format changed so radically. If folks really need it I can post it later.<p><a href='enclosures/D%3A%5Cwebsites%5Ccamdenfamily%5Csource%5Cmorpheus%5Cblog%5Cenclosures%2FArchive%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2006\/06\/06\/Creating-a-Mailing-List-in-ColdFusion-Part-5'; 
+this.page.identifier = '/?p=1320'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/06/06/Creating-a-Mailing-List-in-ColdFusion-Part-5" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Creating a Mailing List in ColdFusion (Part 5)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/06/06/Creating-a-Mailing-List-in-ColdFusion-Part-5" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/06/06/Creating-a-Mailing-List-in-ColdFusion-Part-5" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Creating a Mailing List in ColdFusion (Part 5)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/06/06/Creating-a-Mailing-List-in-ColdFusion-Part-5" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/06/06/Creating-a-Mailing-List-in-ColdFusion-Part-5" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

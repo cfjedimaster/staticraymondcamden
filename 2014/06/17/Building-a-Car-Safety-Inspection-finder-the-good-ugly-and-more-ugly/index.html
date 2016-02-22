@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Building a Car Safety Inspection Finder (the good, ugly, and more ugly) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Building a Car Safety Inspection Finder (the good, ugly, and more ugly)" />
+<meta property="og:description" content="
+Earlier this week I came across a person looking to find a local (to Louisiana) car safety inspection location. I think most states require this but they differ on schedules. Louisiana recently moved to letting you pay more for a two-year sticker which is nice, but it is still a bit of a hassle if you don&#39;t know where an inspection location can be found. Turns out - there is a web page for it: http://www.dps.state.la.us/safetydirections.nsf/f3f91999370ccaed862574a20074b158?OpenView.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly" />
+
+
+<meta property="og:updated_time" content="2014-06-17T20:06:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Building a Car Safety Inspection Finder (the good, ugly, and more ugly)">
+<meta itemprop="description" content="
+Earlier this week I came across a person looking to find a local (to Louisiana) car safety inspection location. I think most states require this but they differ on schedules. Louisiana recently moved to letting you pay more for a two-year sticker which is nice, but it is still a bit of a hassle if you don&#39;t know where an inspection location can be found. Turns out - there is a web page for it: http://www.dps.state.la.us/safetydirections.nsf/f3f91999370ccaed862574a20074b158?OpenView.
+
+">
+
+
+<meta itemprop="dateModified" content="2014-06-17T20:06:00&#43;06:00" />
+<meta itemprop="wordCount" content="1306">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Building a Car Safety Inspection Finder (the good, ugly, and more ugly)"/>
+<meta name="twitter:description" content="
+Earlier this week I came across a person looking to find a local (to Louisiana) car safety inspection location. I think most states require this but they differ on schedules. Louisiana recently moved to letting you pay more for a two-year sticker which is nice, but it is still a bit of a hassle if you don&#39;t know where an inspection location can be found. Turns out - there is a web page for it: http://www.dps.state.la.us/safetydirections.nsf/f3f91999370ccaed862574a20074b158?OpenView.
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly">
+    <h1 class="article-title" itemprop="name">
+        Building a Car Safety Inspection Finder (the good, ugly, and more ugly)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2014-06-17 20:06:00 &#43;0600 &#43;0600" itemprop="datePublished">2014-06-17</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>
+Earlier this week I came across a person looking to find a local (to Louisiana) car safety inspection location. I think most states require this but they differ on schedules. Louisiana recently moved to letting you pay more for a two-year sticker which is nice, but it is still a bit of a hassle if you don't know where an inspection location can be found. Turns out - there is a web page for it: <a href="http://www.dps.state.la.us/safetydirections.nsf/f3f91999370ccaed862574a20074b158?OpenView">http://www.dps.state.la.us/safetydirections.nsf/f3f91999370ccaed862574a20074b158?OpenView</a>.
+</p>
+
+<p>
+I looked at this and thought - wouldn't it be cool if we could find the <i>nearest</i> station based on your current location. Turns out it was possible - just not very pretty. I've split this blog entry into two parts - getting the data - and using the data. If you don't care how I scraped the site, feel free to scroll down to the next part.
+</p>
+
+<h2>Scraping the Data</h2>
+
+<p>
+I had <i>hoped</i> the site was using fancy Ajax Ninja stuff with cool JSON-based data sources, but I quickly discovered that it was not. It was pure HTML. Lots, and lots, and, oh my god, lots of HTML. I began by figuring out how the site was set up. The home page contains a list of all the parishes:
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s115.png" />
+</p>
+
+<p>
+Clicking a triangle (but oddly, not the parish name) opens a list of places where you can get your car inspected.
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s213.png" />
+</p>
+
+<p>
+This gives you the location name and address. But to get hours of operation you need to click for details.
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s36.png" />
+</p>
+
+<p>
+All in all, this gave me two things to scrape. First was a list of the locations, which can only be found by first getting all the parishes. Then for each location we needed to get the detail page for the hours of operation. Finally, I could take all those addresses and do a geocode on them to get precise locations.
+</p>
+
+<p>
+What follows is a set of ColdFusion scripts I wrote to perform this task. These files are ugly. The HTML used on these pages were messy as hell. The phone numbers had multiple spans/font tags etc. It was a mess. I also took the opportunity to try some fancy ColdFusion 11 updates as well. All in all, this code is quite disgusting, but I'll share it so you can use it to scare away monsters.
+</p>
+
+<p>
+First, open up all the parishes and save the location data.
+</p>
+
+<pre><code class="language-javascript">&lt;cfscript&gt;
+
+rootUrl = &quot;http:&#x2F;&#x2F;www.dps.state.la.us&#x2F;safetydirections.nsf&#x2F;f3f91999370ccaed862574a20074b158?OpenView&amp;Start=1&amp;Count=1200&quot;;
+
+&#x2F;&#x2F;&lt;cfset links = rematch(&quot;&#x2F;safetydirections.nsf&#x2F;.*?Expand=.*?&quot;&quot;&quot;,cfhttp.fileContent)&gt;
+&#x2F;&#x2F;&lt;cfdump var=&quot;#links#&quot;&gt;
+&#x2F;&#x2F;&#x2F;safetydirections.nsf&#x2F;f3f91999370ccaed862574a20074b158?OpenView&amp;amp;Start=1&amp;amp;Count=1200&amp;amp;Expand=2#2&quot; target=&quot;_self&quot;&gt;
+
+&#x2F;&#x2F;number of parishes but I call it pages, because.
+totalPages = 62;
+&#x2F;&#x2F;totalPages = 3;
+locations = [];
+for(i=1; i&lt;= totalPages; i++) {
+    theUrl = rootUrl &amp; &quot;&amp;Expand=#i#&quot;;
+    writeoutput(theUrl &amp; &quot;&lt;br&#x2F;&gt;&lt;hr&gt;&quot;);
+    cfhttp(url=theUrl);
+&#x2F;&#x2F;writeoutput(&quot;&lt;pre&gt;#htmlEditFormat(cfhttp.filecontent)#&lt;&#x2F;pre&gt;&quot;);
+    matches = reMatch(&quot;&lt;font color=&quot;&quot;##0000ff&quot;&quot;&gt;.*?&lt;&#x2F;tr&gt;&quot;,cfhttp.fileContent);
+
+    matches.each(function(m) {
+        var location = {};
+        var linkre = reFind(&quot;&lt;a href=&quot;&quot;(.*?)&quot;&quot;&gt;&quot;, m, 1, true);
+        location[&quot;link&quot;] = m.mid(linkre.pos[2], linkre.len[2]);
+        var namere = reFind(&quot;&lt;a href=&quot;&quot;.*?&quot;&quot;&gt;(.*?)&lt;&#x2F;a&gt;&quot;, m, 1, true);
+        location[&quot;name&quot;] = m.mid(namere.pos[2], namere.len[2]);
+        var tds = reMatch(&quot;&lt;td&gt;(.*?)&lt;&#x2F;td&gt;&quot;, m);
+        var address = rereplace(tds[1], &quot;&lt;td&gt;&lt;b&gt;&lt;font color=&quot;&quot;##0000ff&quot;&quot;&gt;(.*?)&lt;&#x2F;font&gt;&lt;&#x2F;b&gt;&lt;&#x2F;td&gt;&quot;, &quot;\1&quot;);
+        address = address.replace(&quot;&lt;br&gt;&quot;,&quot;&quot;);
+        location[&quot;address&quot;] = address;
+
+        location[&quot;types&quot;] = [];
+        var typeList = rereplace(tds[3], &quot;&lt;td&gt;&lt;b&gt;&lt;font color=&quot;&quot;##0000ff&quot;&quot;&gt;(.*?)&lt;&#x2F;font&gt;&lt;&#x2F;b&gt;&lt;&#x2F;td&gt;&quot;,&quot;\1&quot;);
+        typeList = typeList.replace(&quot;&lt;br&gt;&quot;, &quot;,&quot;, &quot;all&quot;);
+        typeList.each(function(t) {
+            t = trim(t);
+            location[&quot;types&quot;].append(t);          
+        });
+&#x2F;&#x2F;writedump(location);
+&#x2F;&#x2F;        writedump(m);
+        locations.append(location);
+    });
+&#x2F;&#x2F;    writedump(matches);
+}
+
+writedump(locations.len());
+fileWrite(expandPath(&quot;.&#x2F;data1.json&quot;), serializeJSON(locations));
+&lt;&#x2F;cfscript&gt;
+
+</code></pre>
+
+<p>
+Next, get the details. This includes the hours of operation I mentioned earlier, as well as the phone number.
+</p>
+
+<pre><code class="language-javascript">&lt;cfscript&gt;
+rootUrl = &quot;http:&#x2F;&#x2F;www.dps.state.la.us&#x2F;&quot;;
+
+data = deserializeJSON(fileRead(expandPath(&quot;data1.json&quot;)));
+&#x2F;&#x2F;filter by items w&#x2F;o a phone number
+writeoutput(&quot;There are #data.len()# items.&lt;br&#x2F;&gt;&quot;);
+
+&#x2F;*
+filtered = data.filter(function(x) {
+    return !structKeyExists(x, &quot;phoneNumber&quot;);
+});
+
+writeoutput(&quot;There are #data.len()# items to process.&lt;br&#x2F;&gt;&quot;);
+*&#x2F;
+
+counter=0;
+data.each(function(l) {
+    counter++;
+
+    if(counter mod 100 is 0) {
+        writeoutput(&quot;#counter#&lt;br&#x2F;&gt;&quot;);
+        cfflush();
+    }
+
+    &#x2F;&#x2F;Only get if we don&#x27;t have the data already
+    if(structKeyExists(l, &quot;phoneNumber&quot;)) continue;
+
+    cfhttp(url=&quot;#rootUrl#&#x2F;#l.link#&quot;);
+    var content = cfhttp.fileContent;
+
+    var found = reMatch(&#x27;Area Code&lt;&#x2F;font&gt;&lt;&#x2F;b&gt;&lt;b&gt;&lt;font color=&quot;##0000FF&quot; face=&quot;HandelGotDLig&quot;&gt; &lt;&#x2F;font&gt;&lt;&#x2F;b&gt;&lt;b&gt;&lt;font color=&quot;##ff0000&quot; face=&quot;HandelGotDLig&quot;&gt;.*?&lt;&#x2F;font&gt;&#x27;, content);
+    var areaCode = found[1].rereplace(&quot;.*&gt;([0-9]{3})&lt;&#x2F;font&gt;&quot;, &quot;\1&quot;);
+    
+    found = reMatch(&#x27;Phone Number&lt;&#x2F;font&gt;&lt;&#x2F;b&gt;&lt;b&gt;&lt;font color=&quot;##FF0000&quot; face=&quot;HandelGotDLig&quot;&gt; &lt;&#x2F;font&gt;&lt;&#x2F;b&gt;&lt;b&gt;&lt;font color=&quot;##ff0000&quot; face=&quot;HandelGotDLig&quot;&gt;.*?&lt;&#x2F;td&gt;&#x27;, content);
+    var phoneFirst = found[1].rereplace(&quot;.*&gt;([0-9]{3})&lt;&#x2F;font&gt;.*&quot;, &quot;\1&quot;);
+    var phoneSecond = found[1].rereplace(&quot;.*&gt;([0-9]{4})&lt;&#x2F;font&gt;.*&quot;, &quot;\1&quot;);
+    var phoneNumber = &quot;(&quot; &amp; areaCode &amp; &quot;) &quot; &amp; phoneFirst &amp; &quot;-&quot; &amp; phoneSecond;
+
+&#x2F;&#x2F;    writeoutput(&quot;&lt;b&gt;#phoneNumber#&lt;&#x2F;b&gt;&lt;p&gt;&quot;);
+
+    found = content.reMatch(&#x27;Hours of Operation.*?&lt;&#x2F;tr&gt;&#x27;);
+    var hoo = found[1].rereplace(&quot;.*?&lt;&#x2F;td&gt;&lt;td width=&quot;&quot;536&quot;&quot;&gt;(.*?)&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&quot;, &quot;\1&quot;);
+    hoo = hoo.rereplace(&quot;&lt;.*?&gt;&quot;, &quot; &quot;, &quot;all&quot;);
+    hoo = hoo.rereplace(&quot;[[:space:]]{2,}&quot;, &quot; &quot;);
+
+&#x2F;&#x2F;    writedump(found);
+&#x2F;&#x2F;    writeOutput(&quot;&lt;pre&gt;&quot;&amp;htmlEditFormat(cfhttp.fileContent)&amp;&quot;&lt;&#x2F;pre&gt;&quot;);
+&#x2F;&#x2F;    abort;
+    l[&quot;phoneNumber&quot;] = phoneNumber;
+    l[&quot;hours&quot;] = hoo;
+    fileWrite(expandPath(&quot;data1.json&quot;), serializeJSON(data));
+});
+
+writeoutput(&quot;&lt;p&gt;Done!&lt;&#x2F;p&gt;&quot;);
+&lt;&#x2F;cfscript&gt;</code></pre>
+
+<p>
+Finally, do the geocoding.
+</p>
+
+<pre><code class="language-javascript">&lt;cfscript&gt;
+geo = new googlegeocoder3();
+
+data = deserializeJSON(fileRead(expandPath(&quot;data1.json&quot;)));
+writeoutput(&quot;There are #data.len()# items.&lt;br&#x2F;&gt;&quot;);
+
+counter=0;
+data.each(function(l) {
+    counter++;
+
+    if(counter mod 100 is 0) {
+        writeoutput(&quot;#counter#&lt;br&#x2F;&gt;&quot;);
+        cfflush();
+    }
+
+    &#x2F;&#x2F;Only get if we don&#x27;t have the data already
+    if(structKeyExists(l, &quot;long&quot;)) continue;
+
+    var res = geo.googlegeocoder3(address = l.address);
+    l[&quot;long&quot;] = res.longitude[1];
+    l[&quot;lat&quot;] = res.latitude[1];
+    
+    fileWrite(expandPath(&quot;data1.json&quot;), serializeJSON(data));
+});
+
+writeoutput(&quot;&lt;p&gt;Done!&lt;&#x2F;p&gt;&quot;);
+
+
+&lt;&#x2F;cfscript&gt;</code></pre>
+
+<p>
+Note - I used one more script to remove the link property from my data file to make it a bit smaller. So at this point, I had a data.json file containing every location in Louisiana where you can get your car inspected. I also had their phone numbers, hours of operation, and longitude and latitude. Woot! Now for the fun stuff - the front end!
+</p>
+
+<h2>Using the Data</h2>
+
+<p>
+For my front end, I decided to go simple. No bootstrap. No UI framework at all. Just a simple div to display dynamic data. I could make this pretty, but why bother?
+</p>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;
+        &lt;title&gt;&lt;&#x2F;title&gt;
+        &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+    &lt;&#x2F;head&gt;
+    &lt;body&gt;
+
+    &lt;div id=&quot;status&quot;&gt;&lt;&#x2F;div&gt;
+
+    &lt;script type=&quot;text&#x2F;javascript&quot; src=&quot;http:&#x2F;&#x2F;ajax.googleapis.com&#x2F;ajax&#x2F;libs&#x2F;jquery&#x2F;2.1.1&#x2F;jquery.min.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;script src=&quot;app.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;&#x2F;body&gt;
+&lt;&#x2F;html&gt;
+</code></pre>
+
+<p>
+The real fun happens in app.js. I'll share the entire file, then describe what each part does.
+</p>
+
+<pre><code class="language-javascript">var $status;
+var geoData;
+var myLong;
+var myLat;
+
+$(document).ready(function() {
+
+    $status = $(&quot;#status&quot;);
+
+    &#x2F;&#x2F;Do we have the data locally?
+    geoData = localStorage[&quot;geocache&quot;];
+    if(!geoData) {
+        $status.html(&quot;&lt;i&gt;Fetching initial data set. Please stand by. This data will be cached for future operations.&lt;&#x2F;i&gt;&quot;);
+        $.getJSON(&quot;data1.json&quot;).done(function(res) {
+            console.log(&quot;Done&quot;);
+            localStorage[&quot;geocache&quot;] = JSON.stringify(res);
+            geoData = res;
+            $status.html(&quot;&quot;);
+            getLocation();
+        });
+    } else {
+        geoData = JSON.parse(geoData);
+        getLocation();
+    }
+});
+
+function getLocation() {
+    $status.html(&quot;&lt;i&gt;Getting your location.&lt;&#x2F;i&gt;&quot;);
+    navigator.geolocation.getCurrentPosition(gotLocation, failedLocation);
+}
+
+function failedLocation() {
+    $status.html(&quot;&lt;b&gt;Sorry, but we were unable to get your location.&lt;&#x2F;b&gt;&quot;);
+}
+
+function gotLocation(l) {
+    myLong = l.coords.longitude;
+    myLat = l.coords.latitude;
+    appReady();
+}
+
+function appReady() {
+    $status.html(&quot;&lt;i&gt;Now searching for nearby locations.&lt;&#x2F;i&gt;&quot;);
+    for(var i=0;i&lt;geoData.length;i++) {
+        var dist = getDistanceFromLatLonInKm(myLat, myLong, geoData[i].lat, geoData[i].long);
+        geoData[i].dist = dist;
+    }
+
+    geoData.sort(function(x,y) {
+        if(x.dist &gt; y.dist) return 1;
+        if(x.dist &lt; y.dist) return -1;
+        return 0;
+    });
+
+
+    var s = &quot;&lt;h2&gt;Nearby Locations&lt;&#x2F;h2&gt;&quot;;
+    for(var i=0;i&lt;Math.min(9, geoData.length); i++) {
+        s+= &quot;&lt;p&gt;&lt;b&gt;&quot;+geoData[i].name+&quot;&lt;&#x2F;b&gt;&lt;br&#x2F;&gt;&quot;;
+        s+= geoData[i].address+&quot; &quot;+Math.round(geoData[i].dist)+&quot; km away&lt;br&#x2F;&gt;&quot;;
+        s+= &quot;&lt;a href=&#x27;tel:&quot;+geoData[i].phoneNumber+&quot;&#x27;&gt;&quot;+geoData[i].phoneNumber+&quot;&lt;&#x2F;a&gt;&lt;br&#x2F;&gt;&quot;;
+        s+= &quot;Hours: &quot;+geoData[i].hours+&quot;&lt;br&#x2F;&gt;&quot;;
+        s+= &quot;Types: &quot;+geoData[i].types.join(&quot;, &quot;)+&quot;&lt;br&#x2F;&gt;&quot;;
+        s+= &quot;&lt;&#x2F;p&gt;&quot;;
+    }
+
+    $status.html(s);
+
+}
+
+&#x2F;&#x2F;Credit: http:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;27943&#x2F;52160
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; &#x2F;&#x2F; Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  &#x2F;&#x2F; deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat&#x2F;2) * Math.sin(dLat&#x2F;2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon&#x2F;2) * Math.sin(dLon&#x2F;2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; &#x2F;&#x2F; Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI&#x2F;180)
+}</code></pre>
+
+<p>
+So, the first thing I wondered was - how do I handle the data? It was 700K, which isn't <i>too</i> big, but isn't tiny either. I decided to simply store the data in LocalStorage. I could also store an "update date" key so I knew when to refresh the data, but for now, what I have is sufficient. Get it - store it - and carry on. 
+</p>
+
+<p>
+Once we have the data file, we then simply detect where you are. This is boilerplate geolocation stuff so it isn't terribly fancy.
+</p>
+
+<p>
+Next - we need to determine the distance between you and each location. There were quite a few locations (1,916) so I was concerned about the timing, but this portion ran <i>very</i> quickly as well. Then it was simply a matter of a sort operation. I display the closest 10 locations and that's it. Of course, these numbers are a bit high as I'm in San Francisco. ;)
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s5.png" />
+</p>
+
+<p>
+If you want to try this yourself, just hit the demo link below. Enjoy!
+</p>
+
+<p><a href="http://raymondcamden.com/demos/2014/jun/17/report.html"><img src="http://www.raymondcamden.com/images/icon_128.png" title="Demo, Baby" border="0"></a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2014\/06\/17\/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly'; 
+this.page.identifier = '/?p=5246'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Building a Car Safety Inspection Finder (the good, ugly, and more ugly)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Building a Car Safety Inspection Finder (the good, ugly, and more ugly)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/06/17/Building-a-Car-Safety-Inspection-finder-the-good-ugly-and-more-ugly" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>jQuery Mobile - adding Local Storage &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="jQuery Mobile - adding Local Storage" />
+<meta property="og:description" content="So about a week or so ago I had an idea about a simple jQuery Mobile application that would make use of Local Storage. That was a week ago. Turns out - the &ldquo;simple&rdquo; application turned out to be a royal pain in the rear. Not because of Local Storage, but because of some misconceptions and lack of knowledge on my part in jQuery Mobile. What followed was a couple painful days (and more than a few curse words) but after all of that, I feel like I&rsquo;ve got a better understanding of jQuery Mobile and got to play with some new features. So with that being said, let&rsquo;s get to the app.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/07/13/jQuery-Mobile-adding-Local-Storage" />
+
+
+<meta property="og:updated_time" content="2011-07-13T23:07:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="jQuery Mobile - adding Local Storage">
+<meta itemprop="description" content="So about a week or so ago I had an idea about a simple jQuery Mobile application that would make use of Local Storage. That was a week ago. Turns out - the &ldquo;simple&rdquo; application turned out to be a royal pain in the rear. Not because of Local Storage, but because of some misconceptions and lack of knowledge on my part in jQuery Mobile. What followed was a couple painful days (and more than a few curse words) but after all of that, I feel like I&rsquo;ve got a better understanding of jQuery Mobile and got to play with some new features. So with that being said, let&rsquo;s get to the app.
+">
+
+
+<meta itemprop="dateModified" content="2011-07-13T23:07:00&#43;06:00" />
+<meta itemprop="wordCount" content="2037">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="jQuery Mobile - adding Local Storage"/>
+<meta name="twitter:description" content="So about a week or so ago I had an idea about a simple jQuery Mobile application that would make use of Local Storage. That was a week ago. Turns out - the &ldquo;simple&rdquo; application turned out to be a royal pain in the rear. Not because of Local Storage, but because of some misconceptions and lack of knowledge on my part in jQuery Mobile. What followed was a couple painful days (and more than a few curse words) but after all of that, I feel like I&rsquo;ve got a better understanding of jQuery Mobile and got to play with some new features. So with that being said, let&rsquo;s get to the app.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/07/13/jQuery-Mobile-adding-Local-Storage">
+    <h1 class="article-title" itemprop="name">
+        jQuery Mobile - adding Local Storage
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-07-13 23:07:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-07-13</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/mobile">Mobile</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>So about a week or so ago I had an idea about a simple jQuery Mobile application that would make use of Local Storage. That was a week ago. Turns out - the &ldquo;simple&rdquo; application turned out to be a royal pain in the rear. Not because of Local Storage, but because of some misconceptions and lack of knowledge on my part in jQuery Mobile. What followed was a couple painful days (and more than a few curse words) but after all of that, I feel like I&rsquo;ve got a better understanding of jQuery Mobile and got to play with some new features. So with that being said, let&rsquo;s get to the app.</p>
+
+<p>
+
+My idea was a rather simple one. Given a collection of art, allow the user to browse categories and view individual pieces of art. I've done this before as a jQuery Mobile example. But what I thought would be interesting is to add a simple "Favorites" system. As you browse through the art you can select a piece you like, add it to your favorites, and then later have a quicker way to access them. To make things even more interesting, I thought I'd make use of Local Storage. Local Storage is an HTML5 feature, and unfortunately, it isn't quite as sexy as Canvas so it doesn't get as many cool demos. But it's one of those - you know - <b>useful</b> things that is actually pretty well supported. Local Storage is basically a key system of data. You can store, on the browse, a key and a value. Like name="Raymond". Unlike cookies, this data is <b>not</b> sent to the server on every request. Rather, it just sits there on the client ready to be used by JavaScript. You've got access to both a permanent (localStorage) and session based (sessionStorage) API. The excellent DiveIntoHTML5 talks about Local Storage <a href="http://diveintohtml5.org/storage.html">here</a>. I won't talk any more about the API as it's rather quite simple and the Dive site explains it more than well enough. Before getting into this version though, let's quickly look at the initial, simpler version.
+
+<p/>
+
+My application consists of three HTML files, all powered by ColdFusion. The home page will list categories, the category page will list art, and the detail page will show just an art piece. Let's start with the index page.
+
+<p/>
+
+<code>
+&lt;cfset categories = application.artservice.getMediaTypes()&gt;
+
+&lt;!DOCTYPE html&gt; 
+&lt;html&gt; 
+    &lt;head&gt; 
+    &lt;title&gt;Art Browser&lt;/title&gt; 
+    &lt;link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" /&gt;
+    &lt;script src="http://code.jquery.com/jquery-1.6.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt; 
+&lt;body&gt; 
+
+&lt;div data-role="page"&gt;
+
+    &lt;div data-role="header"&gt;
+        &lt;h1&gt;Art Browser&lt;/h1&gt;
+    &lt;/div&gt;
+
+    &lt;div data-role="content"&gt; 
+        &lt;ul data-role="listview" data-inset="true"&gt;
+            &lt;cfoutput query="categories"&gt;
+                &lt;li&gt;&lt;a href="category.cfm?id=#mediaid#&media=#urlEncodedFormat(mediatype)#"&gt;#mediatype#&lt;/a&gt; &lt;span class="ui-li-count"&gt;#total#&lt;/span&gt;&lt;/li&gt;
+            &lt;/cfoutput&gt;
+        &lt;/ul&gt;        
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p/>
+
+Note that I begin by asking for media types. Our database categories art by a media type and I'll be considering that my categories. The getMediaTypes method returns a query which means I can simply loop over it in my content. 
+
+<p/>
+
+<img src="http://www.raymondcamden.com/images/ScreenClip139.png" />
+
+<p/>
+
+Next up we have the category page - which is really just a slightly different version of the last one. Note though the use of the Home icon.
+
+<p/>
+
+<code>
+&lt;cfparam name="url.media" default=""&gt;
+&lt;cfparam name="url.id" default=""&gt;
+&lt;cfset art = application.artservice.getArt(mediatype=url.id)&gt;
+
+&lt;!DOCTYPE html&gt; 
+&lt;html&gt; 
+    &lt;head&gt; 
+    &lt;cfoutput&gt;&lt;title&gt;Art Category - #url.media#&lt;/title&gt;&lt;/cfoutput&gt;
+    &lt;link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" /&gt;
+    &lt;script src="http://code.jquery.com/jquery-1.6.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt; 
+&lt;body&gt; 
+
+&lt;div data-role="page"&gt;
+
+    &lt;cfoutput&gt;
+    &lt;div data-role="header"&gt;
+        &lt;a href="index.cfm" data-icon="home" data-iconpos="notext"&gt;Home&lt;/a&gt;
+        &lt;h1&gt;#url.media#&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;/cfoutput&gt;
+
+    &lt;div data-role="content"&gt; 
+        &lt;cfif art.recordCount&gt;
+            &lt;ul data-role="listview" data-inset="true"&gt;
+                &lt;cfoutput query="art"&gt;
+                    &lt;li&gt;&lt;a href="art.cfm?id=#artid#"&gt;#artname#&lt;/a&gt;&lt;/li&gt;
+                &lt;/cfoutput&gt;
+            &lt;/ul&gt;        
+        &lt;cfelse&gt;
+            Sorry, no art in this category.
+        &lt;/cfif&gt;
+    &lt;/div&gt;
+
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip140.png" />
+
+<p/>
+
+And finally, let's look at our detail page.
+
+<p/>
+
+<code>
+&lt;cfparam name="url.id"&gt;
+&lt;cfset art = application.artservice.getArtPiece(url.id)&gt;
+
+&lt;!DOCTYPE html&gt; 
+&lt;html&gt; 
+    &lt;head&gt; 
+    &lt;cfoutput&gt;&lt;title&gt;Art - #art.name#&lt;/title&gt;&lt;/cfoutput&gt;
+    &lt;link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" /&gt;
+    &lt;script src="http://code.jquery.com/jquery-1.6.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt; 
+&lt;body&gt; 
+
+&lt;div data-role="page"&gt;
+
+    &lt;cfoutput&gt;
+    &lt;div data-role="header"&gt;
+        &lt;a href="index.cfm" data-icon="home" data-iconpos="notext"&gt;Home&lt;/a&gt;
+        &lt;h1&gt;#art.name#&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;/cfoutput&gt;
+
+    &lt;cfoutput&gt;
+    &lt;div data-role="content"&gt; 
+        &lt;b&gt;Artist: &lt;/b&gt; #art.artist#&lt;br/&gt;
+        &lt;b&gt;Price: &lt;/b&gt; #dollarFormat(art.price)#&lt;br/&gt;
+        #art.description#
+        &lt;p/&gt;
+        &lt;img src="#art.image#"&gt;
+    &lt;/div&gt;
+    &lt;/cfoutput&gt;
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p/>
+
+This page is even simpler. We just get the art detail and render it within the page. Nothing fancy at all - not yet anyway.
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip141.png" />
+
+<p/>
+
+You can demo this here: <a href="http://www.coldfusionjedi.com/demos/artbrowser/v1/">http://www.coldfusionjedi.com/demos/artbrowser/v1/</a>
+
+<p/>
+
+Ok, ready to go crazy? I decided on two main changes to my application. First, art pieces would have a new button, Add to Favorites (or Remove from Favorites). Once clicked, I'd use a jQuery Mobile dialog to prompt the user if they were sure. (Normally I hate crap like that. Don't second guess me. But I wanted to try dialogs in jQuery Mobile.) If the user confirms the action, I then simply update local storage to store the value. Since you can only store simple values, I used built in JSON features to store complex data about the art piece (really just the ID and name).
+
+<p/>
+
+On the home page, I had, what I thought, was a simple thing to do. When the page loads, simply fill out a dynamic list of the user favorites. Here's where things really took a turn for the worst for me. I want to give a huge shout out to user <a href="http://forum.jquery.com/user/aaronpadoshek">aaraonpadoshek</a> who helped me out on the jQuery Mobile forums. I'll show the new home page and explain what changed.
+
+<p/>
+
+<code>
+&lt;cfset categories = application.artservice.getMediaTypes()&gt;
+
+&lt;!DOCTYPE html&gt; 
+&lt;html&gt; 
+    &lt;head&gt; 
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt; 
+    &lt;title&gt;Art Browser&lt;/title&gt; 
+    &lt;link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" /&gt;
+    &lt;script src="http://code.jquery.com/jquery-1.6.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+    //Credit: http://diveintohtml5.org/storage.html
+    function supports_html5_storage() {
+      try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+      } catch (e) {
+        return false;
+      }
+    }
+    function supports_json() {
+      try {
+        return 'JSON' in window && window['JSON'] !== null;
+      } catch (e) {
+        return false;
+      }
+    }
+    
+    $(document).ready(function() {
+
+        //only bother if we support storage
+        if (supports_html5_storage() && supports_json()) {
+
+            //when art detail pages load, show button
+            $('div.artDetail').live('pageshow', function(event, ui){
+                //which do we show?
+                var id = $(this).data("artid");
+                if (!hasInStorage(id)) {
+                    $(".addToFavoritesDiv").show();
+                    $(".removeFromFavoritesDiv").hide();
+                }
+                else {
+                    $(".addToFavoritesDiv").hide();
+                    $(".removeFromFavoritesDiv").show();
+                }
+            });
+
+            //When clicking the link in details pages to add to fav
+            $(".addToFavoritesDiv a").live('vclick', function(event) {
+                var id=$(this).data("artid");
+                $.mobile.changePage("addtofav.cfm", {role:"dialog",data:{"id":id}});
+            });
+
+            //When clicking the link in details pages to add to fav
+            $(".removeFromFavoritesDiv a").live('vclick', function(event) {
+                var id=$(this).data("artid");
+                $.mobile.changePage("removefromfav.cfm", {role:"dialog",data:{"id":id}});
+            });
+
+            //When confirming the add to fav
+            $('.addToFavoritesButton').live('vclick', function(event, ui){
+                var id=$(this).data("artid");
+                var label=$(this).data("artname");
+                addToStorage(id,label);
+                $("#addToFavoritesDialog").dialog("close");
+            });
+
+            //When confirming the remove from fav
+            $('.removeFromFavoritesButton').live('vclick', function(event, ui){
+                var id=$(this).data("artid");
+                var label=$(this).data("artname");
+                removeFromStorage(id,label);
+                $("#removeFromFavoritesDialog").dialog("close");
+            });
+            
+
+            $('#homePage').live('pagebeforeshow', function(event, ui){
+                //get our favs
+                var favs = getStorage();
+                var $favoritesList = $("#favoritesList");
+                if (!$.isEmptyObject(favs)) {
+                    if ($favoritesList.size() == 0) {
+                        $favoritesList = $('&lt;ul id="favoritesList" data-inset="true"&gt;&lt;/ul&gt;');
+                        
+                        var s = "&lt;li data-role=\"list-divider\"&gt;Favorites&lt;/li&gt;";
+                        for (var key in favs) {
+                            s+= "&lt;li&gt;&lt;a href=\"art.cfm?id="+key+"\"&gt;"+favs[key]+"&lt;/a&gt;&lt;/li&gt;";
+                        }
+                        $favoritesList.append(s);
+                        $("#homePageContent").append($favoritesList);
+                        $favoritesList.listview();
+                    } else {
+                        $favoritesList.empty();
+                        var s = "&lt;li data-role=\"list-divider\"&gt;Favorites&lt;/li&gt;";
+                        for (var key in favs) {
+                            s+= "&lt;li&gt;&lt;a href=\"art.cfm?id="+key+"\"&gt;"+favs[key]+"&lt;/a&gt;&lt;/li&gt;";
+                        }
+                        $favoritesList.append(s);
+                        $favoritesList.listview("refresh");
+                    }
+                } else {
+                    // remove list if it exists and there are no favs
+                    if($favoritesList.size() &gt; 0) $favoritesList.remove();
+                }
+            });     
+                    
+            //Adding to storage
+            function addToStorage(id,label){
+                if (!hasInStorage(id)) {
+                    var data = getStorage();
+                    data[id] = label;
+                    saveStorage(data);
+                }
+            }   
+            
+            //loading from storage
+            function getStorage(){
+                var current = localStorage["favorites"];
+                var data = {};
+                if(typeof current != "undefined") data=window.JSON.parse(current);
+                return data;
+            }
+            
+            //Checking storage
+            function hasInStorage(id){
+                return (id in getStorage());
+            }       
+
+            //Adding to storage
+            function removeFromStorage(id,label){
+                if (hasInStorage(id)) {
+                    var data = getStorage();
+                    delete data[id];
+                    console.log('removed '+id);
+                    saveStorage(data);
+                }
+            }   
+            
+            //save storage
+            function saveStorage(data){
+                console.log("To store...");
+                console.dir(data);
+                localStorage["favorites"] = window.JSON.stringify(data);
+            }
+    
+        }       
+
+    });
+    &lt;/script&gt;
+
+&lt;/head&gt; 
+&lt;body&gt; 
+
+&lt;div data-role="page" id="homePage"&gt;
+
+    &lt;div data-role="header"&gt;
+        &lt;h1&gt;Art Browser&lt;/h1&gt;
+    &lt;/div&gt;
+
+    &lt;div data-role="content" id="homePageContent"&gt;    
+        &lt;ul data-role="listview" data-inset="true"&gt;
+            &lt;cfoutput query="categories"&gt;
+                &lt;li&gt;&lt;a href="category.cfm?id=#mediaid#&media=#urlEncodedFormat(mediatype)#"&gt;#mediatype#&lt;/a&gt; &lt;span class="ui-li-count"&gt;#total#&lt;/span&gt;&lt;/li&gt;
+            &lt;/cfoutput&gt;
+        &lt;/ul&gt;  
+        
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p/>
+
+Ok - a bit more going on here. I'll take it step by step. On top I've got two utility functions taken based on code from the DiveIntoHTML5 site. One checks for local storage support and one for JSON. It's probably overkill for mobile, but it doesn't hurt. Notice that I check both of these functions before I do anything else. It occurs to me that I wrapped up a lot of code in that IF and I should have simply exited the document.ready event handler instead. 
+
+<p/>
+
+I begin by using the "pageshow" event for my art detail page to decide if I should show the "Add to" or "Remove from" buttons. The hasInStorage function is defined later on and is just a utility I wrote for my code to quickly see if a particular art piece is favorited. I'll show that art page in a bit so you can see the HTML differences.
+
+<p/>
+
+The next two functions listen for clicks on the new buttons. Notice the "vclick" listener. This is not - as far as I know - actually documented. At least 5 of my gray hairs this week came from this. Apparently this is the new way to listen in for click events on multiple devices. It's in the jQuery Mobile blog, but again, it isn't documented. When I went live and tested my code, it had worked fine in Chrome but not at all in iOS or Android. Apparently this is why. <b>Very frustrating!</b> Notice - when you click, I use the built in changePage utility to load a page. But this is the cool thing - I can turn this into a dialog by adding a role attribute. So basically - addtofav.cfm and removefromfav.cfm are normal pages - but because of how I tell jQuery Mobile to load them, turn turn into dialogs. Sweet.
+
+<p/>
+
+Moving down - the next two event handlers are for the actual confirmations. Nothing special there. They call my utility functions defined later on to change local storage values.
+
+<p/>
+
+Ok - so here is the part I <i>really</i> struggled with and where aaraonpadoshek helped. I needed a way to say, "When the page loads, write out the list." Unfortunately, the pageshow event, which runs every time, <i>also runs before the page initializes</i>. Read that again - it runs every time the page shows and also before it's even fully drawn. There's a pageinit method which does run after the page initializes but only runs once. So when I used pageshow and tried to change my list, I got an error because jQuery Mobile hadn't added the magical unicorn dust yet to make it pretty. When I used pageinit it worked... once. Here's where Aaron's code helped. Notice we have pagebeforeshow being listened for now. It now detects in the list exists in the DOM. If it doesn't, we create it and initialize it ourselves as a list view. If it does exist, we update it using refresh. I'll be honest and say this still is a bit... fuzzy... in my mind. But it works! And that's good enough for me. I've got a bit of DRY going on there with the display but I'll fix that later.
+
+<p/>
+
+Moving down - you can now see my functions for working with local storage. To be honest, it's all pretty trivial. I've got a function to add and remove, to check for existence, and to get and persist. I added wrappers for them because I'm using JSON to store the data. Now let's look at the update to art.cfm:
+
+<p/>
+
+<code>
+&lt;div class="addToFavoritesDiv" style="display:none"&gt;&lt;a href="" data-role="button" data-artid="#art.id#"&gt;Add to Favorites&lt;/a&gt;&lt;/div&gt;
+&lt;div class="removeFromFavoritesDiv" style="display:none"&gt;&lt;a href="" data-role="button" data-artid="#art.id#"&gt;Remove from Favorites&lt;/a&gt;&lt;/div&gt;
+</code>
+
+<p/>
+
+That's the two buttons. Notice they are both hidden by default. Also note the use of data-artid to store in the primary key I'll use later. Now let's look at addtofav.cfm. I won't bother with the remove as it's pretty much the same.
+
+<p/>
+
+<code>
+&lt;cfparam name="url.id"&gt;
+&lt;cfset art = application.artservice.getArtPiece(url.id)&gt;
+
+&lt;!DOCTYPE html&gt; 
+&lt;html&gt; 
+    &lt;head&gt; 
+    &lt;title&gt;Add to Favorites?&lt;/title&gt; 
+    &lt;link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" /&gt;
+    &lt;script src="http://code.jquery.com/jquery-1.6.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt; 
+&lt;body&gt; 
+
+&lt;div data-role="page" id="addToFavoritesDialog"&gt;
+
+    &lt;div data-role="header"&gt;
+        &lt;h1&gt;Add to Favorites?&lt;/h1&gt;
+    &lt;/div&gt;
+
+    &lt;div data-role="content"&gt; 
+        &lt;p&gt;
+        &lt;cfoutput&gt;
+        &lt;a href="" data-role="button" data-theme="b" data-artid="#url.id#" data-artname="#art.name#" class="addToFavoritesButton"&gt;Yes!&lt;/a&gt;
+        &lt;a href="art.cfc?id=#url.id#" data-rel="back" data-role="button"&gt;No thank you&lt;/a&gt;
+        &lt;/cfoutput&gt;
+        &lt;/p&gt;  
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+
+<p/>
+
+Nothing fancy here either. Just simple content with some buttons. Here's a shot of the art view:
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip142.png" />
+
+<p/>
+
+And here's a shot of the dialog.
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip143.png" />
+
+<p/>
+
+And finally - the new home page:
+
+<p/>
+
+<img src="http://www.coldfusionjedi.com/images/ScreenClip144.png" />
+
+<p/>
+
+Whew! Done. By the way, I'll also point out another issue I had. When I first tested on a mobile device, the text was incredibly small. I got a nice tweet from @jquerymobile pointing out that in beta1, you need to include a new meta tag in your page templates:
+
+<p/>
+
+<code>
+&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;  
+</code>
+
+<p/>
+
+Adding that helped right away. Ok - that's it. I've included a zip below and you can play with this yourself via the uber Demo button. Enjoy.
+
+<p/>
+
+<a href="http://www.coldfusionjedi.com/demos/artbrowser/v4"><img src="http://www.coldfusionjedi.com/images/icon_128.png" title="Demo, Baby" border="0"></a><p><a href='enclosures/C%3A%5Chosts%5C2009%2Ecoldfusionjedi%2Ecom%5Cenclosures%2Fartbrowser%2Ezip'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/07\/13\/jQuery-Mobile-adding-Local-Storage'; 
+this.page.identifier = '/?p=4305'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/07/13/jQuery-Mobile-adding-Local-Storage" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="jQuery Mobile - adding Local Storage" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/07/13/jQuery-Mobile-adding-Local-Storage" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/07/13/jQuery-Mobile-adding-Local-Storage" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="jQuery Mobile - adding Local Storage" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/07/13/jQuery-Mobile-adding-Local-Storage" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/07/13/jQuery-Mobile-adding-Local-Storage" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Phonegap on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/tags/phonegap/</link>
+    <description>Recent content in Phonegap on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 May 2015 14:40:53 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/tags/phonegap/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Working with MP3s, ID3, and PhoneGap/Cordova (3)</title>
+      <link>http://www.raymondcamden.com/2015/05/01/working-with-mp3s-id3-and-phonegapcordova-3</link>
+      <pubDate>Fri, 01 May 2015 14:40:53 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/01/working-with-mp3s-id3-and-phonegapcordova-3</guid>
+      <description>&lt;p&gt;This week I&amp;rsquo;ve done a few blog posts (&lt;a href=&#34;http://www.raymondcamden.com/2015/04/29/working-with-mp3s-id3-and-phonegapcordova&#34;&gt;part one&lt;/a&gt; and &lt;a href=&#34;http://www.raymondcamden.com/2015/04/30/working-with-mp3s-id3-and-phonegapcordova-2&#34;&gt;part two&lt;/a&gt;) about MP3 and ID3 parsing in PhoneGap/Cordova applications. Today I&amp;rsquo;m updating the application again - this time to support album art. Let&amp;rsquo;s look at the results in the simulator first and then I&amp;rsquo;ll walk you through the code.&lt;/p&gt;
+
+&lt;p&gt;First - I updated my sample music a bit. My 5 year old &lt;i&gt;loves&lt;/i&gt; the Daisy Chainsaw track:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-01-at-2.25.27-PM.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-01-at-2.25.27-PM.png&#34; alt=&#34;Screen Shot 2015-05-01 at 2.25.27 PM&#34; width=&#34;527&#34; height=&#34;850&#34; class=&#34;alignnone size-full wp-image-6103&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;And here is the detail view - now with album art:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-01-at-2.26.14-PM.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-01-at-2.26.14-PM.png&#34; alt=&#34;Screen Shot 2015-05-01 at 2.26.14 PM&#34; width=&#34;527&#34; height=&#34;850&#34; class=&#34;alignnone size-full wp-image-6104&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-01-at-2.26.24-PM1.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-01-at-2.26.24-PM1.png&#34; alt=&#34;Screen Shot 2015-05-01 at 2.26.24 PM&#34; width=&#34;527&#34; height=&#34;850&#34; class=&#34;alignnone size-full wp-image-6107&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so how did I do this? While ID3 data can actually include album art (see the &lt;a href=&#34;https://github.com/aadsm/JavaScript-ID3-Reader&#34;&gt;docs&lt;/a&gt; for the JavaScript library I use), it didn&amp;rsquo;t seem like any of my files actually had this data. I made the call that - probably - most files do not. I don&amp;rsquo;t have any scientific data to back this up, but I decided to make use of the &lt;a href=&#34;http://www.last.fm&#34;&gt;last.fm&lt;/a&gt; API. The API was super easy to use. Like - &amp;ldquo;Wait, it worked on my first try?&amp;rdquo; easy. Given that you know an artist and an album, you can use the &lt;a href=&#34;http://www.last.fm/api/show/album.getInfo&#34;&gt;album.getInfo&lt;/a&gt; call to fetch data about the album. This includes multiple different sized images.&lt;/p&gt;
+
+&lt;p&gt;Of course, the issue is that each of these API calls is asynchronous. Our MP3 service is already handling the ID3 lookup asynchronously. If you remember, I had to single thread it due to memory issues. But the API calls are jut http calls so running multiple in parallel shouldn&amp;rsquo;t be a problem.&lt;/p&gt;
+
+&lt;p&gt;&lt;i&gt;However&amp;hellip;&lt;/i&gt;&lt;/p&gt;
+
+&lt;p&gt;Given that you may have multiple MP3s from the same album, we can improve performance by not requesting the same album cover once we&amp;rsquo;ve made one initial request for it.&lt;/p&gt;
+
+&lt;p&gt;Ok&amp;hellip; so let&amp;rsquo;s take a look at the new services file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;angular.module(&#39;starter.services&#39;, [])
+
+.factory(&#39;MP3Service&#39;, function($q,$cordovaFile,$http) {
+    
+    //root of where my stuff is
+    console.log(&#39;running service&#39;);
+    var items = [];
+
+    function getAll() {
+        var rootFolder = cordova.file.applicationDirectory;
+        var mp3Loc = &#39;music/&#39;;
+        //where the music is
+        var mp3Folder = rootFolder + &#39;www/&#39; + mp3Loc;
+        console.log(mp3Folder);
+
+        var deferred = $q.defer();
+
+        window.resolveLocalFileSystemURL(mp3Folder, function(dir) {
+            var reader = dir.createReader();
+            //read it
+            reader.readEntries(function(entries) {
+                    console.log(&amp;quot;readEntries&amp;quot;);
+                    console.dir(entries);
+
+                    var data = [];
+
+                    var process = function(index, cb) {
+                        var entry = entries[index];
+                        var name = entry.name;
+                        entry.file(function(file) {
+
+                            ID3.loadTags(entry.name,function() {
+                                var tags = ID3.getAllTags(name);
+                                //default to filename
+                                var title = entry.name;
+                                if(tags.title) title = tags.title;
+                                //for now - not optimal to include music here, will change later
+                                data.push({name:title, tags:tags, url:mp3Loc+entry.name});
+                                if(index+1 &amp;lt; entries.length) {
+                                    process(++index, cb);
+                                } else {
+                                    cb(data);
+                                }
+                            },{
+                                dataReader:FileAPIReader(file)
+                            });
+
+                        });
+
+                    };
+
+                    process(0, function(data) {
+                        console.log(&amp;quot;Done processing&amp;quot;);
+                        console.dir(data[0]);
+                        items = data;
+                        // New logic - now we get album art
+                        var defs = [];
+                        //remember artist + album
+                        var albums = {};
+                        
+                        for(var i=0;i&amp;lt;items.length;i++) {
+                            var album = items[i].tags.album;
+                            var artist = items[i].tags.artist;
+                            console.log(&amp;quot;album=&amp;quot;+album+&amp;quot; artist=&amp;quot;+artist);
+                            if(albums[album+&amp;quot; &amp;quot;+artist]) {
+                                console.log(&amp;quot;get from album cache&amp;quot;);
+                                var def =  $q.defer();
+                                def.resolve({cache:album+&amp;quot; &amp;quot;+artist});
+                                defs.push(def.promise);
+                            } else {
+                                albums[album+&amp;quot; &amp;quot;+artist] = 1;
+                                defs.push($http.get(&amp;quot;http://ws.audioscrobbler.com/2.0/?method=album.getinfo&amp;amp;artist=&amp;quot;+encodeURI(artist)+&amp;quot;&amp;amp;album=&amp;quot;+encodeURI(album)+&amp;quot;&amp;amp;api_key=5poo53&amp;amp;format=json&amp;quot;));
+                            }
+                        }
+                        $q.all(defs).then(function(res) {
+                            console.log(&amp;quot;in the q all&amp;quot;);
+                            for(var i=0;i&amp;lt;res.length;i++) {
+                                console.log(i, res[i]);
+                                //if we marked it as &#39;from cache&#39;, check cache
+                                if(res[i].cache) {
+                                    console.log(&#39;setting from cache &#39;+albums[res[i].cache])
+                                    items[i].image = albums[res[i].cache];
+                                } else {
+                                    var result = res[i].data;
+                                    //potential match at result.album.image
+                                    if(result.album &amp;amp;&amp;amp; result.album.image) {
+                                        items[i].image = result.album.image[3][&amp;quot;#text&amp;quot;];
+                                    } else {
+                                        items[i].image = &amp;quot;&amp;quot;;
+                                    }
+                                    albums[items[i].tags.album+&amp;quot; &amp;quot;+items[i].tags.artist] = items[i].image;
+                                }
+                            }
+                            
+                            deferred.resolve(items);
+                        });
+                    });
+
+
+            });
+
+        }, function(err) {
+            deferred.reject(err);
+        });
+
+
+        return deferred.promise;
+        
+    }
+
+    function getOne(id) {
+        var deferred = $q.defer();
+        deferred.resolve(items[id]);
+
+        return deferred.promise;
+    }
+
+    var media;
+    function play(l) {
+        if(media) { media.stop(); media.release(); }
+        media = new Media(l,function() {}, function(err) { console.dir(err);});
+        media.play();
+    }
+    
+    return {
+        getAll:getAll,
+        getOne:getOne,
+        play:play
+    };
+  
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Normally I trim out the console.log messages as noise, but I kept them in due to the complexity of this service. The important bits begin in the &lt;code&gt;process(0, function(data))&lt;/code&gt; callback. The general idea is this:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Loop over all the MP3s.
+&lt;li&gt;Get the album and artist. (This needs to be improved to see if the tags exist.)
+&lt;li&gt;Check the albums object to see if we have already fetched it. &lt;strong&gt;Note&lt;/strong&gt; - at this moment, the cache object is just a flag. The initial request isn&#39;t actually done yet. But we want to know that we&#39;ve already done a request for that album.
+&lt;li&gt;If we aren&#39;t, hit last.fm. Note that the API key should be stripped out and put into a constants block. I&#39;ve temporarily changed the key above to a non-legit value.
+&lt;li&gt;We&#39;ve created an array of deferred objects. These represent the async operations (and yes, some aren&#39;t async, which is ok, we can still use deferreds for them). I can then use $q.all to say, &#34;Do this crap when ALL of them are done.&#34;
+&lt;li&gt;In that handler, I see if I&#39;ve marked this as an item that should use the cache. In theory, this will never be run before an item that used the cache, so I check the albums object, which now has a real value in it, and use that.
+&lt;li&gt;If this isn&#39;t a &#34;use the cache item&#34;, I fetch out the image from the result data from last.fm and store the cache.
+&lt;/ol&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. I then just updated the view to make use of the image. I&amp;rsquo;ve updated the GitHub repo with this version: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/mp3reader&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/mp3reader&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>PhoneGap CLI and Templates</title>
+      <link>http://www.raymondcamden.com/2015/05/01/phonegap-cli-and-templates</link>
+      <pubDate>Fri, 01 May 2015 09:33:09 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/01/phonegap-cli-and-templates</guid>
+      <description>&lt;p&gt;A few days ago the PhoneGap team announced an update to the CLI: &lt;a href=&#34;http://phonegap.com/blog/2015/04/28/phonegap-cli-5.0.0-0.27.0/&#34;&gt;PhoneGap CLI 5.0.0 Released!&lt;/a&gt;. To be honest, I don&amp;rsquo;t typically make use of the PhoneGap CLI as I mostly use either Cordova or Ionic. However, I missed an earlier update that I think is pretty cool (and it is one I was able to help out with) - template support.&lt;/p&gt;
+
+&lt;p&gt;When creating a PhoneGap project, you can request a template to be used instead of the default PhoneGap project. You&amp;rsquo;ve been able to copy from a directory for a while now (using &amp;ndash;copy-from or &amp;ndash;link-to), but this new feature lets you specify from a set of templates that might be useful for seeding a new project.&lt;/p&gt;
+
+&lt;p&gt;To see what templates exist, you execute: &lt;code&gt;phonegap template list&lt;/code&gt; (you can also replace &lt;code&gt;template&lt;/code&gt; with &lt;code&gt;recipe&lt;/code&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot1.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;850&#34; height=&#34;152&#34; class=&#34;alignnone size-full wp-image-6099&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;There are only four templates so far, but more will be coming in the future. I&amp;rsquo;ve said before that I&amp;rsquo;m &lt;i&gt;not&lt;/i&gt; a fan of the default template used by both Cordova and PhoneGap, so I&amp;rsquo;m happy to see &lt;code&gt;blank&lt;/code&gt; as an option. The jQuery Mobile template is one I built. To use a template, you simply use &lt;code&gt;&amp;ndash;template name&lt;/code&gt; when creating your application.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot2.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/05/shot2.png&#34; alt=&#34;shot2&#34; width=&#34;850&#34; height=&#34;69&#34; class=&#34;alignnone size-full wp-image-6100&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;My template includes the latest jQuery Mobile assets, and includes JavaScript code that will fire a method when both jQuery Mobile &lt;i&gt;and&lt;/i&gt; PhoneGap is ready to run. If you&amp;rsquo;re curious, you can see the repo here: &lt;a href=&#34;https://github.com/cfjedimaster/jQuery-Mobile-Starter&#34;&gt;https://github.com/cfjedimaster/jQuery-Mobile-Starter&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

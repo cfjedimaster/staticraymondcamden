@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Using a server, or session storage, to persist form values &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Using a server, or session storage, to persist form values" />
+<meta property="og:description" content="Yesterday on Twitter docwisdom asked me about using AJAX to persist form values while you edited data. This is something I&rsquo;ve talked about before. I thought though it would be a great example to a) blog it again (I&rsquo;m a believer in multiple examples, and worse case, the more I work on the client side the more comfortable I get) and b) a great time to compare a server based example versus a completely client side version using HTML5 technology.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2012/01/10/Using-a-server-or-session-storage-to-persist-form-values" />
+
+
+<meta property="og:updated_time" content="2012-01-10T17:01:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Using a server, or session storage, to persist form values">
+<meta itemprop="description" content="Yesterday on Twitter docwisdom asked me about using AJAX to persist form values while you edited data. This is something I&rsquo;ve talked about before. I thought though it would be a great example to a) blog it again (I&rsquo;m a believer in multiple examples, and worse case, the more I work on the client side the more comfortable I get) and b) a great time to compare a server based example versus a completely client side version using HTML5 technology.
+">
+
+
+<meta itemprop="dateModified" content="2012-01-10T17:01:00&#43;06:00" />
+<meta itemprop="wordCount" content="1453">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Using a server, or session storage, to persist form values"/>
+<meta name="twitter:description" content="Yesterday on Twitter docwisdom asked me about using AJAX to persist form values while you edited data. This is something I&rsquo;ve talked about before. I thought though it would be a great example to a) blog it again (I&rsquo;m a believer in multiple examples, and worse case, the more I work on the client side the more comfortable I get) and b) a great time to compare a server based example versus a completely client side version using HTML5 technology.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2012/01/10/Using-a-server-or-session-storage-to-persist-form-values">
+    <h1 class="article-title" itemprop="name">
+        Using a server, or session storage, to persist form values
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2012-01-10 17:01:00 &#43;0600 &#43;0600" itemprop="datePublished">2012-01-10</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Yesterday on Twitter <a href="https://twitter.com/#!/docwisdom">docwisdom</a> asked me about using AJAX to persist form values while you edited data. This is something I&rsquo;ve talked about before. I thought though it would be a great example to a) blog it again (I&rsquo;m a believer in multiple examples, and worse case, the more I work on the client side the more comfortable I get) and b) a great time to compare a server based example versus a completely client side version using HTML5 technology.</p>
+
+<p>Before we begin, it makes sense to talk about why you would want to persist a form before submission anyway. While it (luckily) doesn&rsquo;t happen too often, crashes do occur. It&rsquo;s also possible for a user to simply close a tab by accident. (Not that - um - I&rsquo;ve ever done this.)</p>
+
+<p>
+
+Let's begin with the first example. In this one, we're going to make use of ColdFusion, HTML, and jQuery. jQuery will be used to notice form changes and will pass it off to the server. The server will simply copy this data to the session scope. The form will be made so that it notices this session information and will make use of it. With me so far? While this is ColdFusion specific, it could be done in other languages using the same techniques I'll employ here. First, the form. It's a bit big, so after the code I'll explain whats going on.
+
+<p>
+
+<code>
+&lt;!--- Default if we have our session vars ---&gt;
+&lt;cfif not structKeyExists(form, "save") and structKeyExists(session, "formdata")&gt;
+    &lt;cfif structKeyExists(session.formdata, "name")&gt;
+        &lt;cfset form.name = session.formdata.name&gt;
+    &lt;cfelse&gt;
+        &lt;cfset form.name = ""&gt;
+    &lt;/cfif&gt;
+    &lt;cfif structKeyExists(session.formdata, "email")&gt;
+        &lt;cfset form.email = session.formdata.email&gt;
+    &lt;cfelse&gt;
+        &lt;cfset form.email = ""&gt;
+    &lt;/cfif&gt;
+    &lt;cfif structKeyExists(session.formdata, "genre")&gt;
+        &lt;cfif isArray(session.formdata.genre)&gt;
+            &lt;cfset form.genre = arrayToList(session.formdata.genre)&gt;
+        &lt;cfelse&gt;
+            &lt;cfset form.genre = session.formdata.genre&gt;
+        &lt;/cfif&gt;
+    &lt;cfelse&gt;
+        &lt;cfset form.genre = ""&gt;
+    &lt;/cfif&gt;
+&lt;cfelse&gt;
+    &lt;cfparam name="form.name" default=""&gt;
+    &lt;cfparam name="form.email" default=""&gt;
+    &lt;cfparam name="form.genre" default=""&gt;
+&lt;/cfif&gt;
+
+&lt;!DOCTYPE html&gt;    
+&lt;html&gt;    
+&lt;head&gt;    
+    &lt;title&gt;&lt;/title&gt;    
+    &lt;meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1" /&gt;     
+    &lt;meta name="description" content="" /&gt;    
+    &lt;meta name="keywords" content="" /&gt;    
+
+    &lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css"&gt;    
+    &lt;!--[if lt IE 9]&gt;&lt;script src="http://html5shim.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;&lt;![endif]--&gt;    
+    &lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"&gt;&lt;/script&gt;    
+    &lt;script type="text/javascript"&gt;    
+        $(function() {    
+
+            //listen for changes to the form
+            $("input").change(function() {
+                console.log("A change has occurred...");
+                //first grab a packet of the form
+                var info = $("#theform").serializeArray();
+                var jsonInfo = JSON.stringify(info);
+                $.post("formsaver.cfc?method=preserve",{data:jsonInfo}, function () { });
+            });             
+        });     
+    &lt;/script&gt;    
+&lt;/head&gt;    
+&lt;body&gt;    
+
+    &lt;div class="container"&gt;    
+
+        &lt;form method="post" id="theform"&gt;
+        &lt;fieldset&gt;
+          &lt;legend&gt;Registration Form&lt;/legend&gt;
+
+          &lt;cfoutput&gt;
+          &lt;div class="clearfix"&gt;
+            &lt;label for="name"&gt;Name&lt;/label&gt;
+            &lt;div class="input"&gt;
+              &lt;input class="xlarge" id="name" name="name" size="30" type="text" value="#form.name#" /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div class="clearfix"&gt;
+            &lt;label for="email"&gt;Email&lt;/label&gt;
+            &lt;div class="input"&gt;
+              &lt;input class="xlarge" id="email" name="email" size="30" type="email" value="#form.email#" /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div class="clearfix"&gt;
+            &lt;label id="genrelist"&gt;Genres&lt;/label&gt;
+            &lt;div class="input"&gt;
+              &lt;ul class="inputs-list"&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="scifi" &lt;cfif listFindNoCase(form.genre,"scifi")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Science Fiction&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="horror" &lt;cfif listFindNoCase(form.genre,"horror")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Horror&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="fantasy" &lt;cfif listFindNoCase(form.genre,"fantasy")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Fantasy&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="crime" &lt;cfif listFindNoCase(form.genre,"crime")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Crime&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+            &lt;/cfoutput&gt;
+          &lt;/div&gt;
+           &lt;div class="actions"&gt;
+            &lt;input type="submit" class="btn primary" name="save" value="Save changes"&gt;&nbsp;&lt;button type="reset" class="btn"&gt;Cancel&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/fieldset&gt;
+        &lt;/form&gt;
+
+    &lt;/div&gt;    
+
+&lt;/body&gt;    
+&lt;/html&gt;
+
+&lt;cfdump var="#session#" label="For Testing..." expand="false"&gt;
+</code>
+
+<p>
+
+Let's talk about the bottom half of this template first. The very last line is simply a debugging tag, cfdump. Since I'm storing information in the Session scope, I wanted a quick way to actually look at it while testing. I decided to keep it in the demo that you guys will play with. Above this is the form. Nothing special here, but do note the use of ColdFusion values for the form fields. This is mostly just simple values, but for the Genre field we check against a list of data.
+
+<p>
+
+Move up a bit into the JavaScript. I've added an input event handler for change events. My form only has inputs, but if it had a select or textarea I could add it in there as well. I make use of a jQuery utility, serializeArray, that converts all the form data into a nice little array. Arrays can't be passed as is - so I then convert that to JSON and pass it to ColdFusion. 
+
+<p>
+
+Finally, the top portion of the code is what's handling the initial defaults. It's a bit more verbose then I'd like, but essentially we look into the Session scope for our values, and if there, set our defaults. Real quick, let's look at the CFC that handles storage.
+
+<p>
+
+<code>
+component {
+
+
+    remote void function preserve(string data) {
+        if(!isJSON(arguments.data)) return;
+        arguments.data = deserializeJSON(arguments.data);
+
+        //convert the array into a name based struct
+        var s = {};
+        for(var i=1; i&lt;=arrayLen(arguments.data); i++) {
+            var name = arguments.data[i].name;
+            if(!structKeyExists(s, name)) {
+                s[name] = arguments.data[i].value;  
+            } else {
+                //convert into an array
+                if(!isArray(s[name])) {
+                    s[name] = [s[name]];
+                }
+                arrayAppend(s[name], arguments.data[i].value);
+            }   
+        }
+        session.formdata = s;   
+        
+    }
+
+
+}
+</code>
+
+<p>
+
+Initially I had something much simpler - convert from JSON to native data and store. It was 2 lines of logic. But the array is a bit hard to deal with on the flip side. We have N items since our user may fill out one or more genre fields. Converting to a structure allows me to have a nicer way to access the data. The only "weird" part perhaps is the logic that says, "If I store more than one value for a key, turn it into an array." I could have used a List, but didn't want to assume commas wouldn't exist.
+
+<p>
+
+Demo this version here: <a href="http://www.raymondcamden.com/demos/2012/jan/10/draft1/form.cfm">http://www.raymondcamden.com/demos/2012/jan/10/draft1/form.cfm</a>
+
+<p>
+
+Ok - that's draft 1. How about a version that requires no server (for persistence) but instead makes use of SessionStorage? (In case folks don't know, SessionStorage is the version of LocalStorage that doesn't last. Think of LocalStorage as fruitcake and SessionStorage as milk.) I've reduced this form just to one file now.
+
+<p>
+
+<code>
+
+&lt;cfparam name="form.name" default=""&gt;
+&lt;cfparam name="form.email" default=""&gt;
+&lt;cfparam name="form.genre" default=""&gt;
+
+&lt;!DOCTYPE html&gt;    
+&lt;html&gt;    
+&lt;head&gt;    
+    &lt;title&gt;&lt;/title&gt;    
+    &lt;meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1" /&gt;     
+    &lt;meta name="description" content="" /&gt;    
+    &lt;meta name="keywords" content="" /&gt;    
+
+    &lt;link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css"&gt;    
+    &lt;!--[if lt IE 9]&gt;&lt;script src="http://html5shim.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;&lt;![endif]--&gt;    
+    &lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"&gt;&lt;/script&gt;    
+    &lt;script type="text/javascript"&gt;    
+        $(function() {    
+
+            //check for savedform only one
+            if (sessionStorage["savedform"]) {
+                console.log("yes, have something in the session to load...");
+                var data = JSON.parse(sessionStorage["savedform"]);
+                console.dir(data);
+                for (var i = 0; i &lt; data.length; i++) {
+                    if(data[i].name == "name") $("#name").val(data[i].value);
+                    if(data[i].name == "email") $("#email").val(data[i].value);
+                    if (data[i].name == "genre") {
+                        var checked = data[i].value;
+                        $("input[value='"+checked+"']").attr("checked","checked");
+                    }
+                }
+                sessionStorage.removeItem("savedform");
+            }
+            
+            //listen for changes to the form
+            $("input").change(function() {
+                console.log("A change has occurred...");
+                //first grab a packet of the form
+                var info = $("#theform").serializeArray();              
+                var jsonInfo = JSON.stringify(info);
+                sessionStorage["savedform"] = jsonInfo;
+            });             
+        });     
+    &lt;/script&gt;    
+&lt;/head&gt;    
+&lt;body&gt;    
+
+    &lt;div class="container"&gt;    
+
+        &lt;form method="post" id="theform"&gt;
+        &lt;fieldset&gt;
+          &lt;legend&gt;Registration Form&lt;/legend&gt;
+
+          &lt;cfoutput&gt;
+          &lt;div class="clearfix"&gt;
+            &lt;label for="name"&gt;Name&lt;/label&gt;
+            &lt;div class="input"&gt;
+              &lt;input class="xlarge" id="name" name="name" size="30" type="text" value="#form.name#" /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div class="clearfix"&gt;
+            &lt;label for="email"&gt;Email&lt;/label&gt;
+            &lt;div class="input"&gt;
+              &lt;input class="xlarge" id="email" name="email" size="30" type="email" value="#form.email#" /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div class="clearfix"&gt;
+            &lt;label id="genrelist"&gt;Genres&lt;/label&gt;
+            &lt;div class="input"&gt;
+              &lt;ul class="inputs-list"&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="scifi" &lt;cfif listFindNoCase(form.genre,"scifi")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Science Fiction&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="horror" &lt;cfif listFindNoCase(form.genre,"horror")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Horror&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="fantasy" &lt;cfif listFindNoCase(form.genre,"fantasy")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Fantasy&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;label&gt;
+                    &lt;input type="checkbox" name="genre" value="crime" &lt;cfif listFindNoCase(form.genre,"crime")&gt;checked&lt;/cfif&gt; /&gt;
+                    &lt;span&gt;Crime&lt;/span&gt;
+                    &lt;/label&gt;
+                &lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+            &lt;/cfoutput&gt;
+          &lt;/div&gt;
+           &lt;div class="actions"&gt;
+            &lt;input type="submit" class="btn primary" name="save" value="Save changes"&gt;&nbsp;&lt;button type="reset" class="btn"&gt;Cancel&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/fieldset&gt;
+        &lt;/form&gt;
+
+    &lt;/div&gt;    
+
+&lt;/body&gt;    
+&lt;/html&gt;
+</code>
+
+<p>
+
+The primary area you want to look at is the code block. Let's look first at the second section - our event handler. It's been modified now to simply store the JSON string into sessionStorage. In theory I should check to see if that exists, but almost all browsers support local/sessionStorage, even IE. Yes, even IE. And shoot, if IE supports a feature you almost <i>have</i> to use it. 
+
+<p>
+
+Now scroll up a bit. The block of code there will run when the page loads (and the DOM is ready). If we see a sessionStorage value, we then grab it, convert it, and update our form. I'm not terribly happy with the code in the loop there as it's very specific. You would have to update this for another form, but I'm not building a plugin here so I'm ok with hard coded values. 
+
+<p>
+
+You can demo this version here: <a href="http://www.raymondcamden.com/demos/2012/jan/10/draft2/form.cfm">http://www.raymondcamden.com/demos/2012/jan/10/draft2/form.cfm</a>
+
+<p>
+
+So - which version is better? The HTML5 one, right? 
+
+<p>
+
+<img src="http://www.raymondcamden.com/images/HTML5_Badge_256.png" />
+
+<p>
+
+Well, it definitely has in it's favor less server side code. Disabling JavaScript would break both versions so that's not something that leads us to one solution or another. It's also going to require less network activity. But we've also put the work of storage into the hands of the client too, whereas before we had a 'fire and forget' logic for storage. Not to be creepy, but the first version could also be used to persist and be used for tracking and analysis. 
+
+<p>
+
+So - thoughts? (Note - you can get all the code by clicking the download link below.)<p><a href='enclosures/C%3A%5Chosts%5C2012%2Eraymondcamden%2Ecom%5Cenclosures%2Fsaveform%2Ezip'>Download attached file.</a></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2012\/01\/10\/Using-a-server-or-session-storage-to-persist-form-values'; 
+this.page.identifier = '/?p=4491'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/10/Using-a-server-or-session-storage-to-persist-form-values" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Using a server, or session storage, to persist form values" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/10/Using-a-server-or-session-storage-to-persist-form-values" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/10/Using-a-server-or-session-storage-to-persist-form-values" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Using a server, or session storage, to persist form values" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/10/Using-a-server-or-session-storage-to-persist-form-values" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2012/01/10/Using-a-server-or-session-storage-to-persist-form-values" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

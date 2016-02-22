@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>SauceDB - Building the back end with IBM Bluemix &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="SauceDB - Building the back end with IBM Bluemix" />
+<meta property="og:description" content="Welcome to another post detailing my efforts to build an Ionic-based mobile app backed by Node.js and Cloudant on IBM Bluemix. In my last post, I focused on the front end of the application. I talked about the various screens I built and how my service layer used mock data to generate data. In today&rsquo;s post, I&rsquo;m going to setup, design, and connect a back end server to start replacing some of that mock data with real information. As a reminder, you can find the initial post in this series here,
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix" />
+
+
+<meta property="og:updated_time" content="2015-07-20T14:40:36&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="SauceDB - Building the back end with IBM Bluemix">
+<meta itemprop="description" content="Welcome to another post detailing my efforts to build an Ionic-based mobile app backed by Node.js and Cloudant on IBM Bluemix. In my last post, I focused on the front end of the application. I talked about the various screens I built and how my service layer used mock data to generate data. In today&rsquo;s post, I&rsquo;m going to setup, design, and connect a back end server to start replacing some of that mock data with real information. As a reminder, you can find the initial post in this series here,
+">
+
+
+<meta itemprop="dateModified" content="2015-07-20T14:40:36&#43;06:00" />
+<meta itemprop="wordCount" content="1789">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="SauceDB - Building the back end with IBM Bluemix"/>
+<meta name="twitter:description" content="Welcome to another post detailing my efforts to build an Ionic-based mobile app backed by Node.js and Cloudant on IBM Bluemix. In my last post, I focused on the front end of the application. I talked about the various screens I built and how my service layer used mock data to generate data. In today&rsquo;s post, I&rsquo;m going to setup, design, and connect a back end server to start replacing some of that mock data with real information. As a reminder, you can find the initial post in this series here,
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix">
+    <h1 class="article-title" itemprop="name">
+        SauceDB - Building the back end with IBM Bluemix
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2015-07-20 14:40:36 &#43;0600 &#43;0600" itemprop="datePublished">2015-07-20</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/html5">HTML5</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-tags"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/bluemix">bluemix</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/cordova">cordova</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/tags/ionic">ionic</a>
+                
+                
+            </div>
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Welcome to another post detailing my efforts to build an <a href="http://ionicframework.com">Ionic</a>-based mobile app backed by Node.js and Cloudant on <a href="https://ibm.biz/IBM-Bluemix">IBM Bluemix</a>. In my <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end">last post</a>, I focused on the front end of the application. I talked about the various screens I built and how my service layer used mock data to generate data. In today&rsquo;s post, I&rsquo;m going to setup, design, and connect a back end server to start replacing some of that mock data with real information. As a reminder, you can find the initial post in this series <a href="http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb">here</a>,</p>
+
+<p>Alright - so as I mentioned, I&rsquo;m going to use <a href="https://ibm.biz/IBM-Bluemix">IBM Bluemix</a> to host the application. I&rsquo;ve talked about Bluemix before, but let me give you a quick refresher on what it offers.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/Bluemix-logo-right.png" alt="Bluemix-logo-right" width="450" height="167" class="aligncenter size-full wp-image-6429" /></p>
+
+<p>Bluemix is a PaaS offering. If you aren&rsquo;t up to date on the latest acronyms the cool kids use, this is &ldquo;Platform as a Service&rdquo;. In short, it lets you set up applications and services on the cloud all via a simple dashboard and command line. There&rsquo;s a variety of different services, some I&rsquo;ve already blogged about here before, and a large library of code you can add to your application to make using those services even easier. I&rsquo;ve already set up my application in Bluemix, but let me walk you through what the process was like.</p>
+
+<p>After signing in (and you can sign up for a trial for free), I clicked on Create App:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot16.png" alt="shot1" width="800" height="408" class="aligncenter size-full wp-image-6430" /></p>
+
+<p>Then selected Mobile:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot23.png" alt="shot2" width="800" height="341" class="aligncenter size-full wp-image-6431" /></p>
+
+<p>And then the option for Hybrid:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot31.png" alt="shot3" width="800" height="404" class="aligncenter size-full wp-image-6432" /></p>
+
+<p>I clicked continue on the detail and then named the app. Note that in the screen shot below I used a slightly different name so as to not conflict with the app I already created.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot42.png" alt="shot4" width="800" height="386" class="aligncenter size-full wp-image-6433" /></p>
+
+<p>After you hit finish, your application is going to be staged and a number of default services assigned to it.</p>
+
+<p>At this point, you have a few options. You can take an existing Node.js app and configure to work with Bluemix services, or you can take their boilerplate code and work with that. Since this is a new app, I recommend getting the boilerplate. You can find that by clicking &ldquo;Start coding&rdquo; in the left hand nav:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot6.png" alt="shot6" width="350" height="317" class="aligncenter size-full wp-image-6435" /></p>
+
+<p>This leads you to a documentation page where you can download both the command line interface, something you&rsquo;ll only need to do once, and the boilerplate. As I said, I recommend getting the boilerplate as it has the required modules to work with Bluemix already defined in the package.json. It also includes some sample code that you&rsquo;ll probably want to remove. For example, I&rsquo;m not using the Mobile Application Security service so I don&rsquo;t need the package. But it is a good place to start.</p>
+
+<p>In case your curious, the &ldquo;Enable Node.js app&rdquo; you&rsquo;ll see on top&hellip;</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot5.png" alt="shot5" width="800" height="463" class="aligncenter size-full wp-image-6434" /></p>
+
+<p>is just another link to documentation that you can read later. Whenever I see this UI I assume that is a <i>required</i> link, but it is not. To be clear, your Bluemix app itself is ready to kick butt right away, you don&rsquo;t need to flip some toggle. You do need to upload your code using the cf command line. That &ldquo;Start coding&rdquo; link I just mentioned explains how to do that. It&rsquo;s fairly simple and I won&rsquo;t repeat it here.</p>
+
+<p>For SauceDB, I needed to modify the services set up by Bluemix. Here is what you get by default:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot7.png" alt="shot7" width="800" height="322" class="aligncenter size-full wp-image-6436" /></p>
+
+<p>Since I&rsquo;m not using them, I removed both Mobile Application Security and Mobile Data. You can do that using the little gear icon in the upper right side of each service. To add in support for Cloudant, you simply click &ldquo;Add a Service or API&rdquo; and find the Cloudant service on the next page. As I said, Bluemix provides access to a bunch of services, so you can use the search form on top to filter them out:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot8.png" alt="shot8" width="600" height="550" class="aligncenter size-full wp-image-6437" /></p>
+
+<p>Ok, so that was a lot, so let me quickly review. I use Bluemix to setup a new mobile application, gave it a new name, and then added a Cloudant service. I can now start building my Node.js app (again, using their boilerplate as a starting point), and then push to Bluemix when I want to deploy. For everything I&rsquo;ve done with SauceDB so far, I have yet to actually push my app to Bluemix, which is good because I can work much quicker locally during development.</p>
+
+<p>So, enough with the consoles and crap, let&rsquo;s talk code. First off, everything I&rsquo;m showing below is available up on the Github project: <a href="https://github.com/cfjedimaster/SauceDB">https://github.com/cfjedimaster/SauceDB</a>.</p>
+
+<p>One of the first things I did was look for a npm module for cloudant. Here&rsquo;s the one I used: <a href="https://www.npmjs.com/package/cloudant">https://www.npmjs.com/package/cloudant</a>. After adding it to my package.json and installing, I added the library to my app.js code and pointed to a database.</p>
+
+<pre><code class="language-javascript">var cloudant = require('cloudant')(credentials.cloudant_access_url);
+var db = cloudant.use("sauces");</code></pre>
+
+<p>The URL value you see there, which comes from a credentials.json file that will <i>not</i> be in Github, comes from the service description in the Bluemix console. You can see it by simply clicking the &ldquo;Show credentials&rdquo; link:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot9.png" alt="shot9" width="443" height="600" class="aligncenter size-full wp-image-6438" /></p>
+
+<p>Alright&hellip; so I&rsquo;m connecting to a database called sauces, which doesn&rsquo;t actually exist yet. If you click the Cloudant service &hellip; um&hellip; &ldquo;box&rdquo; I suppose, the detail page will include a link to launch the Cloudant console:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot10.png" alt="shot10" width="800" height="473" class="aligncenter size-full wp-image-6439 imgborder" /></p>
+
+<p>At this point, you can use the &ldquo;Add New Database&rdquo; button to add a new database. I did this for &ldquo;sauces&rdquo;:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot111.png" alt="shot11" width="800" height="407" class="aligncenter size-full wp-image-6440" /></p>
+
+<p>My goal now was to create some data so that my Node.js app could pick it up and send it back to the mobile app. If you remember the <a href="http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end">last post</a>, my application begins with a &ldquo;feed&rdquo; of reviews. Every review is made by a user and involves a sauce. Cloudant lets you create new docs by hand, so I built a sauce object to start off with:</p>
+
+<pre><code class="language-javascript">{
+  "_id": "786fe8d99eaf2c7e5927afe9d2afe44c",
+  "name": "Sauce 1",
+  "company": "Company 1",
+  "reviews": [
+    {
+      "posted": "2014/05/21 10:00:00",
+      "rating": 2,
+      "text": "This was a bad sauce.",
+      "user": {
+        "name": "Joe",
+        "img": "http://placekitten.com/g/40/40"
+      }
+    },
+    {
+      "posted": "2014/12/21 10:00:00",
+      "rating": 2,
+      "text": "December This was a bad sauce.",
+      "user": {
+        "name": "Joe",
+        "img": "http://placekitten.com/g/40/40"
+      }
+    },
+    {
+      "posted": "2015/6/1 10:00:00",
+      "rating": 2,
+      "text": "NO IM MORE RECENT This was a bad sauce.",
+      "user": {
+        "name": "Joe",
+        "img": "http://placekitten.com/g/40/40"
+      }
+    }
+  ]
+}</code></pre>
+
+<p>User&rsquo;s should probably be a look up reference, but I just wanted some sample data. This data represents one sauce with three reviews. I created a second sauce with one review. At this point I realized I had a problem. It isn&rsquo;t difficult to get all the documents in a database. But that&rsquo;s not what I want. In my case, I need the <i>reviews</i> from the objects, and I need to sort them. I spent a good few hours in the <a href="https://docs.cloudant.com/">Cloudant docs</a>, and I discovered that a &ldquo;View&rdquo; could do what I needed. I&rsquo;m not going to pretend that this is the <strong>best</strong> answer, but it seemed to work well.</p>
+
+<p>I set up a new design document, and using the Cloudant dashboard, I was able to both write my view and test it interactively, which was a big help. Here&rsquo;s the code I used:</p>
+
+<pre><code class="language-javascript">function(doc) {
+  if(doc.reviews.length === 0) return;
+  for(var i=0;i&lt;doc.reviews.length;i++) {
+      var review = doc.reviews[i];
+      emit(review.posted, {review:review,sauce_name:doc.name,sauce_company:doc.company});
+  }
+}</code></pre>
+
+<p>And here it is in the dashboard with the output to the right.</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/shot121.png" alt="shot12" width="800" height="408" class="aligncenter size-full wp-image-6441" /></p>
+
+<p>What&rsquo;s cool is - using the Cloudant npm library, it was incredibly trivial to get this view:</p>
+
+<pre><code class="language-javascript">db.view("Reviews", "reviews", {descending:true}, function(err, body) {</code></pre>
+
+<p>That&rsquo;s simple as heck - but there&rsquo;s one more aspect to this whole thing that I needed to setup. One of the features you can use with your hybrid mobile application is called <a href="https://hub.jazz.net/project/bluemixmobilesdk/ibmcloudcode-javascript/overview">Cloud Code</a>. While it offers a couple features, in general, you can think of it as way to &ldquo;short cut&rdquo; your calls to your Node.js application. Using this requires a few changes in your hybrid application. Obviously you have to get the JavaScript library and include it in your HTML.</p>
+
+<p>Next, you need to initialize Bluemix from within your code. Mine is in app.js, inside $ionicPlatform.ready:</p>
+
+<pre><code class="language-javascript">.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+    
+    var config = {
+      applicationId:'38a0a550-b018-4a10-b879-aec68868c249',
+      applicationRoute:'http://saucedb.mybluemix.net',
+      applicationSecret:'735c7d0de828ab956bae772e996a55620676ff05'
+    };
+    
+    IBMBluemix.initialize(config).then(function() {
+      console.log('ok maybe?');
+    }, function(err) {
+       console.log('crap your pants time');
+    });
+    
+    
+  });
+})</code></pre>
+
+<p>Obviously I&rsquo;m not actually handling the error case here, but it&rsquo;s something I&rsquo;ll worry about later. (Famous last words.) That sets up basic configuration - and this is where Cloud Code comes in. I can hit my Node.js app with the following code:</p>
+
+<pre><code class="language-javascript">var cc = IBMCloudCode.initializeService();
+cc.get("/feed").then(function(data){
+    data = JSON.parse(data);
+},function(err){
+    console.log(err);
+});</code></pre>
+
+<p>Note how I just request /feed and nothing more. Because of the earlier configuration code where I specified my application tokens, the Bluemix code knows how to route my requests to my Node.js application on Bluemix. But I just said I was running locally - so how do I fix that?</p>
+
+<pre><code class="language-javascript">var cc = IBMCloudCode.initializeService();
+cc.setBaseUrl('http://localhost:3000');
+cc.get("/feed").then(function(data){
+    data = JSON.parse(data);
+},function(err){
+    console.log(err);
+});</code></pre>
+
+<p>Here is the actual full call now in my services.js file:</p>
+
+<pre><code class="language-javascript">var getFeed = function() {
+    var deferred = $q.defer();
+    
+    //fake it till we make it
+    var feed = [];
+
+        //now try the app
+        var cc = IBMCloudCode.initializeService();
+        cc.setBaseUrl('http://localhost:3000');
+        cc.get("/feed").then(function(data){
+            data = JSON.parse(data);
+            for(var i=0;i&lt;data.length;i++) {
+                var result = data[i];
+                console.log('did i run');
+                var item = {
+                    id:result.id,
+                    posted:result.review.posted,
+                    sauce:{
+                        name:result.sauce_name,
+                        company:result.sauce_company
+                    },
+                    rating:result.review.rating,
+                    avgrating:0,
+                    text:result.review.text,
+                    user:{
+                        img:result.review.user.img,
+                        name:result.review.user.name
+                    }
+                };
+                feed.push(item);
+            }
+            console.log('sending '+feed);
+            deferred.resolve(feed);
+            
+        },function(err){
+            console.log(err);
+        });
+
+    
+    return deferred.promise;
+}</code></pre>
+
+<p>On the server side, I have to slightly modify how I create my route. Instead of just app.get(&lsquo;&hellip;.&rsquo;), I do something slightly different:</p>
+
+<pre><code class="language-javascript">var ibmconfig = ibmbluemix.getConfig();
+app.get(ibmconfig.getContextRoot()+'/feed',  function(req, res) {
+    console.log('Requesting feed');
+
+    db.view("Reviews", "reviews", {descending:true}, function(err, body) {
+        //stuff cut out here to keep the code snippet simpler
+    });
+});</code></pre>
+
+<p>I get an instance of the ibmbluemix config object and grab the context root. This essentially creates a special path that is coordinated (may not be the best word) with the mobile side.</p>
+
+<p>Whew! That was a lot. Did it feel like a lot to you? To be fair, this post covered a <i>lot</i> of setup. We got a server up and running on Bluemix (technically all we did was provision it and we&rsquo;re running code locally), we set up Cloudant, and we created an API to fetch feed data and display it in the mobile app. The end result is real, ok, hand-written essentially, data being driven by Cloudant:</p>
+
+<p><img src="http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-20-2015-2.33.22-PM.png" alt="iOS Simulator Screen Shot Jul 20, 2015, 2.33.22 PM" width="422" height="750" class="aligncenter size-full wp-image-6442 imgborder" /></p>
+
+<p>Remember, you can see all the source code here:  <a href="https://github.com/cfjedimaster/SauceDB">https://github.com/cfjedimaster/SauceDB</a></p>
+
+<p>That&rsquo;s it for now. In the next post, I&rsquo;ll continue to flesh out the views and start writing data from the mobile app back to the server.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2015\/07\/20\/saucedb-building-the-back-end-with-ibm-bluemix'; 
+this.page.identifier = '/?p=6428'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="SauceDB - Building the back end with IBM Bluemix" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="SauceDB - Building the back end with IBM Bluemix" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

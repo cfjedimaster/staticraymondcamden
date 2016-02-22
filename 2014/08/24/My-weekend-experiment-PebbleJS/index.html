@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>My weekend experiment - PebbleJS &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="My weekend experiment - PebbleJS" />
+<meta property="og:description" content="
+Apparently everyone is expecting the announcement of the iWatch in a few weeks, and wearables are going to be &#34;The Thing&#34; for the next few years. But I&#39;ve been rocking a Pebble for a while now and I really dig it. It isn&#39;t as sexy as some of the newer smart watches, and who knows how it will compare to whatever Apple is doing, but it is affordable (reasonably affordable) and simple. If you are considering picking up a smart watch, definitely check it out. 
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2014/08/24/My-weekend-experiment-PebbleJS" />
+
+
+<meta property="og:updated_time" content="2014-08-24T14:08:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="My weekend experiment - PebbleJS">
+<meta itemprop="description" content="
+Apparently everyone is expecting the announcement of the iWatch in a few weeks, and wearables are going to be &#34;The Thing&#34; for the next few years. But I&#39;ve been rocking a Pebble for a while now and I really dig it. It isn&#39;t as sexy as some of the newer smart watches, and who knows how it will compare to whatever Apple is doing, but it is affordable (reasonably affordable) and simple. If you are considering picking up a smart watch, definitely check it out. 
+
+">
+
+
+<meta itemprop="dateModified" content="2014-08-24T14:08:00&#43;06:00" />
+<meta itemprop="wordCount" content="1283">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="My weekend experiment - PebbleJS"/>
+<meta name="twitter:description" content="
+Apparently everyone is expecting the announcement of the iWatch in a few weeks, and wearables are going to be &#34;The Thing&#34; for the next few years. But I&#39;ve been rocking a Pebble for a while now and I really dig it. It isn&#39;t as sexy as some of the newer smart watches, and who knows how it will compare to whatever Apple is doing, but it is affordable (reasonably affordable) and simple. If you are considering picking up a smart watch, definitely check it out. 
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2014/08/24/My-weekend-experiment-PebbleJS">
+    <h1 class="article-title" itemprop="name">
+        My weekend experiment - PebbleJS
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2014-08-24 14:08:00 &#43;0600 &#43;0600" itemprop="datePublished">2014-08-24</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">Development</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>
+Apparently everyone is expecting the announcement of the iWatch in a few weeks, and wearables are going to be "The Thing" for the next few years. But I've been rocking a <a href="https://getpebble.com/">Pebble</a> for a while now and I really dig it. It isn't as sexy as some of the newer smart watches, and who knows how it will compare to whatever Apple is doing, but it is affordable (reasonably affordable) and simple. If you are considering picking up a smart watch, definitely check it out. 
+</p>
+
+<p>
+There has been an SDK for the device since it came out, allowing developers to create watch faces and apps with C. You can read more about that on their <a href="https://developer.getpebble.com/2/guides/">developer guide</a> site. Recently though an alternative way to develop for Pebble was released - <a href="https://github.com/pebble/pebblejs">PebbleJS</a>. As you can imagine, this lets you use JavaScript to create Pebble applications. I thought I'd take it for a spin this weekend.
+</p>
+
+<p>
+For the most part, it works pretty easily, especially if you make use of their <a href="https://cloudpebble.net/">CloudPebble</a> service. (Why, oh why, must everything be "Cloud" something...) I'm not a big fan of browser-based IDEs, but their editor worked decently enough. The editor has JSHint built in so you get real time syntax and best practices warnings. 
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s119.png" />
+</p>
+
+<p>
+Sending the application to your watch is also pretty easy. Remember to enable the developer connection via the mobile app. One thing that tripped me up though was getting CloudPebble to recognize my device. It knew about my <i>original</i> connection via the iPhone app, but it didn't recognize that I had switched to using Android as my primary phone. If you go to the <strong>Compilation</strong> page of CloudPebble, you can enter the IP address of the phone:
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s216.png" />
+</p>
+
+<p>
+But I wasn't sure <i>how</i> to get my IP. I was about to hit one of those "what is my IP" web pages when I checked the mobile app again. On the Developer panel was my IP:
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/Screenshot_2014-08-24-12-33-01.png" />
+</p>
+
+<p>
+Another issue I ran into was random transfer errors. This seemed to get worse as I worked on my project, and it <i>may</i> have been related to my app being selected in the Pebble app on my device. Switching to another app, then running my compilation, seemed to help, but I wasn't able to ever figure out exactly what made the process fail. It just slowed me down a bit though.
+</p>
+
+<p>
+One cool aspect is that you can view console.log messages directly from the web site. This became more and more useful as I went past the starter app and really began to code something.
+</p>
+
+<p>
+For my project I thought I'd build a version of the Death Clock. I figured that kinda made sense on a watch anyway. It is here though that I ran into the biggest problem with PebbleJS - setTimeout and setInterval are discouraged. Now - maybe I'm crazy - but I can't imagine what you could build on Pebble that would actually be useful without having <i>some</i> form of interval based processing. I suppose you could build an app, but any type of watch face or game just wouldn't make sense. There <i>is</i> a good reason for this. From the <a href="https://developer.getpebble.com/2/guides/javascript-guide.html">JavaScript guide</a>:
+</p>
+
+<blockquote>
+The JavaScript code is part of the Pebble app and bundled in your pbw file. The phone extracts and installs this code when you install your app on Pebble.<br/>
+Your JavaScript is executed in a sandbox inside the Pebble mobile app.<br/>
+Your JavaScript is started by a request from the Pebble app. It will be killed when the user exits your application.<br/>
+The Pebble mobile app will attempt to keep your app running as long as your Pebble app is running. However, under certain circumstances, the phone may kill the Pebble app and your app. If this occurs, the Pebble mobile app will be automatically restarted.
+</blockquote>
+
+<p>
+So - yeah - it is actually being run from the mobile app, not the device. This also has one more <strong>huge</strong> issue. Because the app runs from the mobile app, any user who is using iOS for Pebble will not be able to download your application until the company resubmits their app to Apple. I guess that's not really their fault, but, honestly, it is enough for me to <strong>not</strong> recommend using this library. To be clear, I think developing for the Pebble is probably worth your while, but I don't think I can suggest using their JS solution. Maybe for prototyping, but nothing more.
+</p>
+
+<p>
+Despite the fact that setInterval was discouraged, I figured, why not go ahead and build it anyway:
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/pebble-screenshot_2014-08-23_15-34-12.png" />
+</p>
+
+<p>
+You can actually download this right now if you are on Android, and, in up to ten days, iOS as well. Unfortunately, there is no public web interface for the Pebble app library. <strong>That is a mistake.</strong> Hopefully this will be corrected in the future. Other people have made their own libraries though - basically scraping the same data that the mobile app uses. I used this one - <a href="http://pas.cpfx.ca/">http://pas.cpfx.ca/</a>.
+</p>
+
+<p>
+<img src="http://www.raymondcamden.com/images/s38.png" />
+</p>
+
+<p>
+And yes - that looks kinda lame, but that's my fault, not Pebble's. I whipped up the marketing assets in about 2 minutes. In case you're curious, this is what the code looks like. And again, I wrote this rather quickly and this does not demonstrate all the different aspects of what you can do.
+</p>
+
+<pre><code class="language-javascript">&#x2F;**
+ * Welcome to Pebble.js!
+ *
+ * This is where you write your app.
+ *&#x2F;
+
+var UI = require(&#x27;ui&#x27;);
+var Vector2 = require(&#x27;vector2&#x27;);
+var Settings = require(&#x27;settings&#x27;);
+
+var timeLeft = 2022491029;
+var hb;
+
+var wind = new UI.Window();
+var textfield = new UI.Text({
+    position: new Vector2(0, 50),
+    size: new Vector2(144, 30),
+    font: &#x27;gothic-24-bold&#x27;,
+    text: &#x27;Time to Live:\n&#x27;+String(timeLeft),
+    textAlign: &#x27;center&#x27;
+  });
+  wind.add(textfield);
+
+var splash = new UI.Card({
+  title: &#x27;Death Clock&#x27;,
+  body: &quot;&quot;
+});
+splash.show();
+
+function decrCounter() {
+  timeLeft--;
+  if(timeLeft &gt; 0) {
+    textfield.text(&#x27;Time to Live:\n&#x27;+String(timeLeft));
+  } else {
+    textfield.text(&quot;Time is up!&quot;);
+    clearInterval(hb);
+  }
+}
+
+setTimeout(function() {
+  
+  splash.hide();
+  wind.show();
+  var birthDayStr = localStorage[&quot;birthday&quot;];
+  if(birthDayStr) {
+    console.log(&quot;got from local storage&quot;);
+    var bdParts = birthDayStr.split(&quot;&#x2F;&quot;); 
+    var bDate = new Date(bdParts[0], bdParts[1], bdParts[2]);
+    console.log(&#x27;using bdate of &#x27;+bDate);
+    timeLeft = calculateTimeToDie(bDate);
+  }
+  hb = setInterval(decrCounter, 1000);
+  
+}, 2000);
+
+Pebble.addEventListener(&quot;showConfiguration&quot;, function() {
+  console.log(&quot;showing configuration&quot;);
+  Pebble.openURL(&#x27;http:&#x2F;&#x2F;static.raymondcamden.com&#x2F;deathclockform.html&#x27;);
+});
+
+Pebble.addEventListener(&quot;webviewclosed&quot;, function(e) {
+  console.log(&quot;configuration closed&quot;);
+  &#x2F;&#x2F;http:&#x2F;&#x2F;forums.getpebble.com&#x2F;discussion&#x2F;15172&#x2F;pebblejs-cloudpebble-unexpected-token-c-at-object-parse-json-error
+  if(e.response !=&quot;CANCELLED&quot;) {
+      var options = JSON.parse(decodeURIComponent(e.response));
+      console.log(options.day);
+      console.log(&quot;Options = &quot; + JSON.stringify(options));
+      var dayToSave = options.year + &quot;&#x2F;&quot; + options.month + &quot;&#x2F;&quot; + options.day;
+      localStorage[&quot;birthday&quot;] = dayToSave;
+      var bDate = new Date(options.year, options.month, options.day);
+      console.log(&#x27;going to test for &#x27;+bDate);
+      timeLeft = calculateTimeToDie(bDate);
+  }
+});
+
+&#x2F;&#x2F;Given a date, return # of seconds left to live
+function calculateTimeToDie(born) {
+  var now = new Date();
+  var timeAlive = Math.floor((now.getTime() - born.getTime())&#x2F;1000);
+  console.log(&#x27;time alive is &#x27;+timeAlive);
+  &#x2F;&#x2F; 75 years
+  var avgTime = 2365200000;
+  var timeLeft = avgTime - timeAlive;
+  return timeLeft;
+}        
+</code></pre>
+
+<p>
+Again - I'm not sure I can recommend folks use PebbleJS for their "production" apps, but it was an interesting experiment and kinda cool to see something showing up on my watch so quickly. 
+</p>
+
+<p>
+One more quick note - I can say that I was impressed by the developer forums at Pebble. Even on a Saturday I got pretty quick answers to my questions.
+</p>
+
+<p>
+<strong>Edit on August 25:</strong> In regards to my note about how PebbleJS required you to wait for an App Store resubmission, it looks like I was wrong. A few hours ago, Jonathan Stark shared this with me:
+</p>
+
+<p><blockquote class="twitter-tweet" lang="en"><p><a href="https://twitter.com/raymondcamden">@raymondcamden</a> FYI - Even C apps for <a href="https://twitter.com/Pebble">@Pebble</a> have the &quot;wait for next update&quot; limitation on iOS :(</p>&mdash; Jonathan Stark (@jonathanstark) <a href="https://twitter.com/jonathanstark/statuses/504055779855704064">August 26, 2014</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p><p>
+So&hellip; on second thought - maybe my &ldquo;Cool but not recommended&rdquo; summary needs to be amended to &ldquo;Cool and &hellip; maybe!&rdquo; That&rsquo;s a bit wishy washy still but I&rsquo;m more open to the possibility of doing more with it now.</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2014\/08\/24\/My-weekend-experiment-PebbleJS'; 
+this.page.identifier = '/?p=5294'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/08/24/My-weekend-experiment-PebbleJS" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="My weekend experiment - PebbleJS" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/08/24/My-weekend-experiment-PebbleJS" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/08/24/My-weekend-experiment-PebbleJS" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="My weekend experiment - PebbleJS" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/08/24/My-weekend-experiment-PebbleJS" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/08/24/My-weekend-experiment-PebbleJS" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Yet another CFMAP Demo - Bird Report App &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Yet another CFMAP Demo - Bird Report App" />
+<meta property="og:description" content="Last week I wrote a blog entry on how one could get the longitude and latitude of a position clicked on in a map. In my example, I built a simple &ldquo;Bird Sighting Report&rdquo; application. Every time you clicked on the map it got the longitude and latitude and create a form element from it. This worked for a simple demo, but I thought I could expand a bit on it and make it more &ldquo;real world&rdquo;. Here is what I came up with.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2010/03/25/Yet-another-CFMAP-Demo-Bird-Report-App" />
+
+
+<meta property="og:updated_time" content="2010-03-25T21:03:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Yet another CFMAP Demo - Bird Report App">
+<meta itemprop="description" content="Last week I wrote a blog entry on how one could get the longitude and latitude of a position clicked on in a map. In my example, I built a simple &ldquo;Bird Sighting Report&rdquo; application. Every time you clicked on the map it got the longitude and latitude and create a form element from it. This worked for a simple demo, but I thought I could expand a bit on it and make it more &ldquo;real world&rdquo;. Here is what I came up with.
+">
+
+
+<meta itemprop="dateModified" content="2010-03-25T21:03:00&#43;06:00" />
+<meta itemprop="wordCount" content="1276">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Yet another CFMAP Demo - Bird Report App"/>
+<meta name="twitter:description" content="Last week I wrote a blog entry on how one could get the longitude and latitude of a position clicked on in a map. In my example, I built a simple &ldquo;Bird Sighting Report&rdquo; application. Every time you clicked on the map it got the longitude and latitude and create a form element from it. This worked for a simple demo, but I thought I could expand a bit on it and make it more &ldquo;real world&rdquo;. Here is what I came up with.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2010/03/25/Yet-another-CFMAP-Demo-Bird-Report-App">
+    <h1 class="article-title" itemprop="name">
+        Yet another CFMAP Demo - Bird Report App
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2010-03-25 21:03:00 &#43;0600 &#43;0600" itemprop="datePublished">2010-03-25</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Last week I wrote a <a href="http://www.raymondcamden.com/index.cfm/2010/3/16/Ask-a-Jedi-Click-a-CFMAP-to-get-LongitudeLatitude">blog entry</a> on how one could get the longitude and latitude of a position clicked on in a map. In my example, I built a simple &ldquo;Bird Sighting Report&rdquo; application. Every time you clicked on the map it got the longitude and latitude and create a form element from it. This worked for a simple demo, but I thought I could expand a bit on it and make it more &ldquo;real world&rdquo;. Here is what I came up with.</p>
+
+<p><p/></p>
+
+<p>I decided I needed two main changes to my demo. First, I wanted it so that when you clicked on the map, the form created both a hidden text field (to store the longitude and latitude) and a text area so the user could write about the bird they saw. (Or whatever - I actually have no interest in bird watching. Don&rsquo;t ask me why I used that as a demo.) The second change I wanted was the ability to remove a report. That way you can change your mind if you accidentally create an invalid report. The first change was trivial, the second change was, um, &ldquo;Non Trivial&rdquo; (and I&rsquo;m sure my fellow developers know exactly how bad that can be).</p>
+
+<p><p/></p>
+
+<p>Before I go any further, you can view the demo here: <a href="http://www.coldfusionjedi.com/demos/mar252010/test.cfm">http://www.coldfusionjedi.com/demos/mar252010/test.cfm</a> <b>Notice - it uses console.log - I&rsquo;m sorry to you IE users out there! :)</b></p>
+
+<p><p/></p>
+
+<p>If you remember from the previous demo, the code began by grabbing a pointer to the Google Map object and then adding a listener for the click event. That listener created the text field and little else. My first modification was to create a marker. I also updated the click handler to support clicking on <i>existing</i> markers. For those clicks it simply centered the map:</p>
+
+<p><p/></p>
+
+<p><code>
+GEvent.addListener(map, &ldquo;click&rdquo;, function(overlay,latlng) {
+    if(latlng) {
+        //add the marker
+        options = {title:&ldquo;Bird Sighting Report&rdquo;}
+        map.addOverlay(new GMarker(latlng,options))
+        map.setCenter(latlng)
+    } else if(overlay instanceof GMarker) {
+        map.setCenter(overlay.getLatLng())
+    }
+})
+</code></p>
+
+<p><p/></p>
+
+<p>So where did I move the form creation? Overlays like markers are actually added asynchronously. I added a new event handler for marker creation - technically it is the &ldquo;addoverly&rdquo; event so I need to ensure that it is a marker being added.</p>
+
+<p><p/></p>
+
+<p><code>
+GEvent.addListener(map, &ldquo;addoverlay&rdquo;, function(overlay) {
+    if(overlay instanceof GMarker) {
+        markers[markers.length]=overlay
+        index = markers.length
+        var s = &ldquo;
+        s += &lsquo;&lt;div class=&ldquo;sitereportdiv&rdquo; id=&ldquo;sitereportdiv<em>&rsquo; + index + &lsquo;&rdquo;&gt;&lsquo;
+        s += &lsquo;&lt;b&gt;Bird Sighting Report&lt;/b&gt;: &lsquo;
+        s += &lsquo;&lt;input type=&ldquo;hidden&rdquo; name=&ldquo;sitereport</em>&rsquo; + index + &lsquo;&rdquo; value=&ldquo;&rsquo;+overlay.getLatLng()+&lsquo;&rdquo; size=&ldquo;50&rdquo;&gt;&lt;br/&gt;&lsquo;
+        s += &lsquo;&lt;textarea class=&ldquo;sitereportbody&rdquo; name=&ldquo;sitereportbody_&rsquo; + index + &lsquo;&rdquo;&gt;&lt;/textarea&gt;&lt;br/&gt;&lsquo;
+        s += &lsquo;Enter details about the bird sighting, including, um, bird stuff.&lt;br/&gt;&lsquo;
+        s += &lsquo;&lt;a href=&ldquo;&lsquo;+(markers.length-1)+&rsquo;&rdquo; class=&ldquo;killmarker&rdquo;&gt;Remove this Report&lt;/a&gt;&lsquo;
+        s += &lsquo;&lt;/div&gt;&lsquo;
+        console.log(s)
+        $(&ldquo;#submitButton&rdquo;).before(s)
+        $(&ldquo;#submitButton&rdquo;).show()
+    }
+})
+</code></p>
+
+<p><p/></p>
+
+<p>So theres a bit going on here. First off, I&rsquo;m recording the markers in an array. Back in December I <a href="http://www.coldfusionjedi.com/index.cfm/2009/12/12/Working-with-Dynamic-Map-Markers-in-ColdFusion-9">blogged</a> about a way to handle adding and removing markers. Because ColdFusion&rsquo;s addMarker didn&rsquo;t return the marker object, I used this technique to store the markers in an array I could manipulate later. (See note at the end of the blog entry on a thought I just had on how I could simplify this.) For the most part, I&rsquo;m just creating a big old text block. I store the longitude and latitude in the hidden field and create a textarea for the report.</p>
+
+<p><p/></p>
+
+<p>The next piece to the application was supporting removing markers on clicking the special link added below each form field. Now here is where I lost the most time. Originally I had each report numbered. Report 1, Report 2, etc. This meant that when I deleted report 1, I needed to renumber the rest of the reports. I actually got that working, but I then discovered something odd. Google&rsquo;s API does not let you change the title (hover text) of a marker. -boggle-. It let you change other aspects, but not the title. I tried a few things, but eventually gave up. As you see, I now just have a basic text title. I did want to have nicely numbered form fields though. I didn&rsquo;t want the server side code to handle to handle stuff like, Report 1 + Report 4. So I&rsquo;ve got two functions here to handle it. First, the &lsquo;kill marker&rsquo; code:</p>
+
+<p><p/></p>
+
+<p><code>
+$(&ldquo;.killmarker&rdquo;).live(&ldquo;click&rdquo;, function() {
+    //get the array pos which gives us a pointer to the marker
+    var pos = $(this).attr(&lsquo;href&rsquo;)
+    map.removeOverlay(markers[pos])
+    $(this).parent().remove()
+    //update reports so they report the right num
+    updateReports()
+    return false
+})
+</code></p>
+
+<p><p/></p>
+
+<p>This isn&rsquo;t anything new (if you read the earlier blog entry), but the updateReports is what I wrote to handle renaming the form fields:</p>
+
+<p><p/></p>
+
+<p><code>
+function updateReports() {</p>
+
+<pre><code>var divcounter = 0
+$(&quot;.sitereportdiv&quot;).each(function() {
+    divcounter++
+    thisid = $(this).attr(&quot;id&quot;).split(&quot;_&quot;)[1]
+    if(divcounter != thisid) {
+        console.log(&quot;it is &quot;+thisid+&quot; but should be &quot;+divcounter)
+        //Fix the ID
+        $(this).attr(&quot;id&quot;,&quot;sitereportdiv_&quot;+divcounter)
+        //Fix the hidden form field
+        $(&quot;input&quot;, this).attr(&quot;name&quot;,&quot;sitereport_&quot;+divcounter)
+        //Fix the text area
+        $(&quot;textarea&quot;, this).attr(&quot;name&quot;,&quot;sitereportbody_&quot;+divcounter)
+    }
+})
+</code></pre>
+
+<p>}
+</code></p>
+
+<p><p/></p>
+
+<p>It should be pretty self-explanatory. I get the ID of each div and if it&rsquo;s numeric values don&rsquo;t match it&rsquo;s order, then I do an update.</p>
+
+<p><p/></p>
+
+<p>This left me with one last problem. I&rsquo;ve got markers on the map, but they have generic titles. How does one correlate the Nth form field with the markers on the map. I decided I&rsquo;d add a click event to the div. This was done like so:</p>
+
+<p><p/></p>
+
+<p><code>
+$(&ldquo;.sitereportdiv&rdquo;).live(&ldquo;click&rdquo;, function() {
+    //get the array pos which gives us a pointer to the marker
+    console.log(&lsquo;clicked in text area&rsquo;)
+    var markerpos = $(&ldquo;a&rdquo;, this).attr(&ldquo;href&rdquo;)
+    map.setCenter(markers[markerpos].getLatLng())
+    return false
+})
+</code></p>
+
+<p><p/></p>
+
+<p>As you can see, I use the &lsquo;delete&rsquo; link in the div to figure out the marker, and once I have that, I can use it to center my map.</p>
+
+<p><p/></p>
+
+<p>All in all, I think it is a pretty cool little application, but it reminds me yet again how quickly a simple Ajax/JS application can go from &ldquo;simple&rdquo; to &ldquo;scary/non trivial.&rdquo; I&rsquo;ll be leading a session/group discussion on this at <a href="http://www.scotch-on-the-rocks.co.uk/">Scotch on the Rocks</a>. The complete code of the demo is below.</p>
+
+<p><p/></p>
+
+<p><code>
+&lt;html&gt;</p>
+
+<p>&lt;head&gt;
+&lt;script type=&ldquo;text/javascript&rdquo; src=&ldquo;<a href="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;">http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js&quot;&gt;&lt;/script&gt;</a></p>
+
+<p>&lt;script&gt;
+var counter
+var markers = []</p>
+
+<p>function init() {
+    counter = 0
+    map = ColdFusion.Map.getMapObject(&lsquo;mainMap&rsquo;)</p>
+
+<pre><code>GEvent.addListener(map, &quot;addoverlay&quot;, function(overlay) {
+    if(overlay instanceof GMarker) {
+        markers[markers.length]=overlay
+        index = markers.length
+        var s = ''
+        s += '&amp;lt;div class=&quot;sitereportdiv&quot; id=&quot;sitereportdiv_' + index + '&quot;&amp;gt;'
+        s += '&amp;lt;b&amp;gt;Bird Sighting Report&amp;lt;/b&amp;gt;: '
+        s += '&amp;lt;input type=&quot;hidden&quot; name=&quot;sitereport_' + index + '&quot; value=&quot;'+overlay.getLatLng()+'&quot; size=&quot;50&quot;&amp;gt;&amp;lt;br/&amp;gt;'
+        s += '&amp;lt;textarea class=&quot;sitereportbody&quot; name=&quot;sitereportbody_' + index + '&quot;&amp;gt;&amp;lt;/textarea&amp;gt;&amp;lt;br/&amp;gt;'
+        s += 'Enter details about the bird sighting, including, um, bird stuff.&amp;lt;br/&amp;gt;'
+        s += '&amp;lt;a href=&quot;'+(markers.length-1)+'&quot; class=&quot;killmarker&quot;&amp;gt;Remove this Report&amp;lt;/a&amp;gt;'
+        s += '&amp;lt;/div&amp;gt;'
+        console.log(s)
+        $(&quot;#submitButton&quot;).before(s)
+        $(&quot;#submitButton&quot;).show()
+    }
+})
+
+GEvent.addListener(map, &quot;click&quot;, function(overlay,latlng) {
+    if(latlng) {
+        //add the marker
+        options = {title:&quot;Bird Sighting Report&quot;}
+        map.addOverlay(new GMarker(latlng,options))
+        map.setCenter(latlng)
+    } else if(overlay instanceof GMarker) {
+        map.setCenter(overlay.getLatLng())
+    }
+})
+
+$(&quot;.killmarker&quot;).live(&quot;click&quot;, function() {
+    //get the array pos which gives us a pointer to the marker
+    var pos = $(this).attr('href')
+    map.removeOverlay(markers[pos]) 
+    $(this).parent().remove()
+    //update reports so they report the right num
+    updateReports()
+    return false
+})
+
+$(&quot;.sitereportdiv&quot;).live(&quot;click&quot;, function() {
+    //get the array pos which gives us a pointer to the marker
+    console.log('clicked in text area')
+    var markerpos = $(&quot;a&quot;, this).attr(&quot;href&quot;)
+    map.setCenter(markers[markerpos].getLatLng())
+    return false
+})
+</code></pre>
+
+<p>}</p>
+
+<p>function updateReports() {</p>
+
+<pre><code>var divcounter = 0
+$(&quot;.sitereportdiv&quot;).each(function() {
+    divcounter++
+    thisid = $(this).attr(&quot;id&quot;).split(&quot;_&quot;)[1]
+    if(divcounter != thisid) {
+        console.log(&quot;it is &quot;+thisid+&quot; but should be &quot;+divcounter)
+        //Fix the ID
+        $(this).attr(&quot;id&quot;,&quot;sitereportdiv_&quot;+divcounter)
+        //Fix the hidden form field
+        $(&quot;input&quot;, this).attr(&quot;name&quot;,&quot;sitereport_&quot;+divcounter)
+        //Fix the text area
+        $(&quot;textarea&quot;, this).attr(&quot;name&quot;,&quot;sitereportbody_&quot;+divcounter)
+    }
+})
+</code></pre>
+
+<p>}</p>
+
+<p>&lt;/script&gt;</p>
+
+<p>&lt;style&gt;
+.sitereportdiv {
+    background-color: #93cdff;
+    margin-bottom:5px;<br />
+    padding: 5px;
+    width: 500px;
+}
+&lt;/style&gt;
+&lt;/head&gt;</p>
+
+<p>&lt;body&gt;
+&lt;h2&gt;Bird Spotting Form&lt;/h2&gt;</p>
+
+<p>&lt;cfmap name=&ldquo;mainMap&rdquo; centeraddress=&ldquo;Lafayette, LA&rdquo; showcentermarker=&ldquo;false&rdquo; zoomlevel=&ldquo;13&rdquo;&gt;
+&lt;p&gt;
+Click on the map to record where you saw a bird.
+&lt;/p&gt;</p>
+
+<p>&lt;form id=&ldquo;mainForm&rdquo; method=&ldquo;post&rdquo;&gt;
+    &lt;input type=&ldquo;submit&rdquo; value=&ldquo;Send Report&rdquo; id=&ldquo;submitButton&rdquo; style=&ldquo;display:none&rdquo;&gt;
+&lt;/form&gt;</p>
+
+<p>&lt;/body&gt;
+&lt;/html&gt;
+&lt;cfset ajaxOnLoad(&ldquo;init&rdquo;)&gt;</p>
+
+<p>&lt;cfif not structIsEmpty(form)&gt;
+    &lt;cfdump var=&ldquo;#form#&rdquo; label=&ldquo;form&rdquo;&gt;
+&lt;/cfif&gt;
+</code></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2010\/03\/25\/Yet-another-CFMAP-Demo-Bird-Report-App'; 
+this.page.identifier = '/?p=3763'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/25/Yet-another-CFMAP-Demo-Bird-Report-App" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Yet another CFMAP Demo - Bird Report App" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/25/Yet-another-CFMAP-Demo-Bird-Report-App" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/25/Yet-another-CFMAP-Demo-Bird-Report-App" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Yet another CFMAP Demo - Bird Report App" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/25/Yet-another-CFMAP-Demo-Bird-Report-App" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2010/03/25/Yet-another-CFMAP-Demo-Bird-Report-App" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

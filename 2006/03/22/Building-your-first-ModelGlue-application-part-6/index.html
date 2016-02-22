@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Building your first Model-Glue application (part 6) &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Building your first Model-Glue application (part 6)" />
+<meta property="og:description" content="Welcome to (yet another) entry on my series on building a Model-Glue application. I thought I&rsquo;d take a step back and add some spice to the site. What do I mean by spice? Oh how about a decent layout. Not that I have any design skills mind you, in fact, the design you will see was ripped right from Open Source Web Design. This entry will discuss how to apply layout to a Model-Glue site and we will also add one more bit of actual functionality (for those of you who care about such things).
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2006/03/22/Building-your-first-ModelGlue-application-part-6" />
+
+
+<meta property="og:updated_time" content="2006-03-22T07:03:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Building your first Model-Glue application (part 6)">
+<meta itemprop="description" content="Welcome to (yet another) entry on my series on building a Model-Glue application. I thought I&rsquo;d take a step back and add some spice to the site. What do I mean by spice? Oh how about a decent layout. Not that I have any design skills mind you, in fact, the design you will see was ripped right from Open Source Web Design. This entry will discuss how to apply layout to a Model-Glue site and we will also add one more bit of actual functionality (for those of you who care about such things).
+">
+
+
+<meta itemprop="dateModified" content="2006-03-22T07:03:00&#43;06:00" />
+<meta itemprop="wordCount" content="1758">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Building your first Model-Glue application (part 6)"/>
+<meta name="twitter:description" content="Welcome to (yet another) entry on my series on building a Model-Glue application. I thought I&rsquo;d take a step back and add some spice to the site. What do I mean by spice? Oh how about a decent layout. Not that I have any design skills mind you, in fact, the design you will see was ripped right from Open Source Web Design. This entry will discuss how to apply layout to a Model-Glue site and we will also add one more bit of actual functionality (for those of you who care about such things).
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2006/03/22/Building-your-first-ModelGlue-application-part-6">
+    <h1 class="article-title" itemprop="name">
+        Building your first Model-Glue application (part 6)
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2006-03-22 07:03:00 &#43;0600 &#43;0600" itemprop="datePublished">2006-03-22</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>Welcome to (yet another) entry on my series on building a Model-Glue application. I thought I&rsquo;d take a step back and add some spice to the site. What do I mean by spice? Oh how about a decent layout. Not that I have any design skills mind you, in fact, the design you will see was ripped right from <a href="http://www.oswd.org">Open Source Web Design</a>. This entry will discuss how to apply layout to a Model-Glue site and we will also add one more bit of actual functionality (for those of you who care about such things).</p>
+
+<p>One of the questions you may have asked is how a layout template can be applied in Model-Glue. It may help a bit to discuss how layouts are done (or are probably done) in most ColdFusion applications.</p>
+
+<p>If you have built more than one web application, one of the things you figure out pretty early on is that designers are a picky lot and like to tweak things like font sizes, layout, and color schemes. Personally I&rsquo;ve never trusted designers, but hey, we have to work with them, right? So after having had to modify a site layout more than once over every file in a web application, you quickly realize that it makes a <i>lot</i> of sense to abstract a site&rsquo;s layout. This can be done both at the file level and at the HTML level with CSS. I&rsquo;m focusing on the file level for this entry.</p>
+
+<p>Many people probably simply took their site layout, broke it in &ldquo;half&rdquo;, and created a header and footer template. Then all their code looked a bit like the code below:</p>
+
+<p><code>
+&lt;cfinclude template=&ldquo;header.cfm&rdquo;&gt;
+Code for the page.
+&lt;cfinclude template=&ldquo;footer.cfm&rdquo;&gt;
+</code></p>
+
+<p>This works ok, until you realize that while the layout is mostly static, sometimes things change a bit, like the page title for example. You may then do weird things like this:</p>
+
+<p><code>
+&lt;cfset title = &ldquo;Star Wars is Art&rdquo;&gt;
+&lt;cfinclude template=&ldquo;header.cfm&rdquo;&gt;
+Code for the page.
+&lt;cfinclude template=&ldquo;footer.cfm&rdquo;&gt;
+</code></p>
+
+<p>In the example above, you create a variable that header.cfm will look for, and then use, in the HTML title tags. This works, but is problematic. Not only could header.cfm change without you knowing it (if you work with others), but the variables created inside of it could conflict with variables created in your template.)</p>
+
+<p>You may then move to custom tags. This is how I do my layout on all non Model-Glue sites. My pages typically look like this:</p>
+
+<p><code>
+&lt;cfmodule template=&ldquo;/site/customtags/layout.cfm&rdquo; title=&ldquo;Star Wars is Art&rdquo;&gt;
+Code for the page.
+&lt;/cfmodule&gt;
+</code></p>
+
+<p>This creates a nice clear separation from my page and the layout templates. Variables will not conflict with each other. I also like the fact that the layout is all in one file. This makes it a bit easier to diagnose layout issues.</p>
+
+<p>So that&rsquo;s all well and good, but how in the heck do we handle layout in Model-Glue? We have a couple of ways, and let&rsquo;s start with a simple one for today. As you know, any event defined in Model-Glue has a view section. This defines the view to run after any message broadcast. The typical flow of control is:</p>
+
+<ul>
+<li>User requests an event.
+<li>Model-Glue runs any broadcasts for the event.
+<li>These broadcasts may store information in the event.
+<li>If a result doesn't send you away, then the view is run.
+<li>The view then can use data from the view state while rendering. This is the data the controller placed in the event.
+</ul>
+
+<p>This works fine and well with one view, but you can actually put multiple views. Consider our Home event:</p>
+
+<p><code>
+    &lt;event-handler name=&ldquo;Home&rdquo;&gt;
+      &lt;broadcasts&gt;
+        &lt;message name=&ldquo;getAuthenticated&rdquo; /&gt;
+      &lt;/broadcasts&gt;
+      &lt;views&gt;
+        &lt;include name=&ldquo;body&rdquo; template=&ldquo;dspBody.cfm&rdquo; /&gt;
+    &lt;include name=&ldquo;main&rdquo; template=&ldquo;dspTemplate.cfm&rdquo; /&gt;
+      &lt;/views&gt;
+      &lt;results&gt;
+        &lt;result name=&ldquo;notAuthenticated&rdquo; do=&ldquo;Logon&rdquo; /&gt;
+      &lt;/results&gt;
+    &lt;/event-handler&gt;
+</code></p>
+
+<p>In this example, the first view will run a template called dspBody.cfm. Model-Glue will store the result of this view in a variable called body. This variable exists in what is called a viewCollection. You can think of this as just a container for all the views. Then the next view is run. In this case, it&rsquo;s a file called dspTemplate.cfm. Since this is the last view, only it will be displayed. However, each view has access to the viewCollection, and can then fetch the earlier information if it wants. How can we use this for layout? If you open dspTemplate.cfm, you will see the following, and note, I&rsquo;m stripping out all the HTML and junk and just focusing on the Model-Glue portion:</p>
+
+<p><code>
+&lt;cfif viewCollection.exists(&ldquo;body&rdquo;)&gt;
+  &lt;cfoutput&gt;#viewCollection.getView(&ldquo;body&rdquo;)#&lt;/cfoutput&gt;
+&lt;/cfif&gt;
+</code></p>
+
+<p>Basically this code says, check for a &ldquo;body&rdquo; field in the viewCollection, and if it exists, display it. Guess what? That&rsquo;s it. Pretty simple, right? And to be honest, I even prefer this to my custom tag approach. Even though my layout custom tag keeps everything in one file, it is still separated by a CFIF branch for each execution mode. In my Model-Glue template, it simply has the code above in the middle. I find this even easier to read.</p>
+
+<p>Your next question is - how do I set a title, or other dynamic aspects, into the template? I&rsquo;ve talked before about the viewState. This is like a shopping cart where you can place data to be used during the request. <i>Normally</i>, we have used the controller to set this information. However, a view can do so as well. Consider the logon template. It now has this on top:</p>
+
+<p><code>
+&lt;cfset viewState.setValue(&ldquo;title&rdquo;, &ldquo;PhotoGallery Logon&rdquo;)&gt;
+</code></p>
+
+<p>This says, in the view state, create a variable called &ldquo;title&rdquo; with a value of &ldquo;PhotoGallery Logon&rdquo;. Now if we go back to our template file, we can do this:</p>
+
+<p><code>
+&lt;cfset title = viewState.getValue(&ldquo;title&rdquo;, &ldquo;PhotoGallery&rdquo;)&gt;
+</code></p>
+
+<p>This says, look into the view state for a value called title, and if you don&rsquo;t see one, use a default of PhotoGallery. In other words, let&rsquo;s see if an earlier view set a title, and if not, default it to PhotoGallery.</p>
+
+<p>At this point, it may be a good idea to take a look at the <a href="http://pg1.camdenfamily.com">sample application</a> and see the layout in action. For those who registered already, your username and password should still work, or you can just use admin/admin. Before ending this entry, I want to talk a bit more about views to give you something to chew on until the next entry.</p>
+
+<p>First off - in my example, I used views with different names. If you want, you can use two, or more, views with the same name. If you do that, normally, the last view will overwrite any previous view with the same name. You can get around this by using append. This example is stolen from the <a href="http://www.model-glue.com/quickstart/index.html#viewstacking">quick start</a>:</p>
+
+<p><code>
+&lt;include name=&ldquo;content&rdquo; template=&ldquo;dsp.helloworld.cfm&rdquo; /&gt;
+&lt;include name=&ldquo;content&rdquo; template=&ldquo;dsp.helloworld.cfm&rdquo; append=&ldquo;true&rdquo; /&gt;
+&lt;include name=&ldquo;main&rdquo; template=&ldquo;layout.main.cfm&rdquo; /&gt;
+</code></p>
+
+<p>In this example, Model-Glue will first run dsp.helloworld.cfm and store it in a viewCollection variable named content. It will then run the template <i>again</i>, but this time the result will be appended to the content variable. Lastly it will run layout.main.cfm, and if it uses &ldquo;content&rdquo; from the viewCollection, you will see the HTML from that template twice. To be honest, I&rsquo;ve never used this feature and can&rsquo;t imagine doing so. I can see one possible use. You may have multiple pods, for example, and you may want to append them all into a &ldquo;pod&rdquo; viewCollection variable. Your layout file would then simply use that variable, and not need to know how many different pods there were.</p>
+
+<p>Lastly, the way I&rsquo;ve done the layout is not the only way you can do it. I&rsquo;ve talked about using results before. For example, the Home event will fire the Logon event if you are not authenticated. Did you know you can also run an event if no specific value was set in the result? Consider this:</p>
+
+<p><code>
+&lt;result name=&ldquo;DoLogin&rdquo; do=&ldquo;DoLoginRegister&rdquo; redirect=&ldquo;yes&rdquo;/&gt;
+&lt;result do=&ldquo;Layout&rdquo; /&gt;
+</code></p>
+
+<p>This logic says, if a &ldquo;DoLogin&rdquo; flag was added to the event result, run &ldquo;DoLoginRegister.&rdquo; The last result, however, will <i>always</i> fire if the previous one does not. In this case, I&rsquo;ve actually made a Layout event. Why do this? More complex sites may do a lot of logic in the layout. For example, <a href="http://www.cflib.org">CFLib</a> shows information in the pods to the right. By using a Layout event, I can handle this a bit easier since I would only need to update one event in case of a change like this. I can say typically I almost always use this approach, but for simplicity&rsquo;s sake, I&rsquo;m using the approach we have above. As I&rsquo;ve mentioned (multiple times now), I plan a &ldquo;What would I change&rdquo; type article at the end to discuss possible updates we could do to the application.</p>
+
+<p>So, I mentioned above that I&rsquo;d actually add a bit of functionality to the site. You may notice that the menu of the site has three options: Home, Photo Galleries, and Logout. The Photo Galleries event doesn&rsquo;t exist yet, but the Logout event was trivial so I added it. Here is the event from the ModelGlue.xml file:</p>
+
+<p><code>
+    &lt;event-handler name=&ldquo;Logout&rdquo;&gt;
+      &lt;broadcasts&gt;
+        &lt;message name=&ldquo;logout&rdquo; /&gt;
+      &lt;/broadcasts&gt;
+      &lt;views /&gt;
+      &lt;results&gt;
+        &lt;result do=&ldquo;Logon&rdquo; /&gt;
+      &lt;/results&gt;
+    &lt;/event-handler&gt;
+</code></p>
+
+<p>I then added a logout listener to my controller block:</p>
+
+<p><code>
+      &lt;message-listener message=&ldquo;logout&rdquo; function=&ldquo;logout&rdquo; /&gt;
+</code></p>
+
+<p>And finally added a logout method to my controller:</p>
+
+<p><code>
+&lt;cffunction name=&ldquo;logout&rdquo; access=&ldquo;public&rdquo; returntype=&ldquo;void&rdquo; output=&ldquo;false&rdquo; hint=&ldquo;I log the user out.&rdquo;&gt;
+    &lt;cfargument name=&ldquo;event&rdquo; type=&ldquo;ModelGlue.Core.Event&rdquo; required=&ldquo;true&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cfset structDelete(session, &quot;loggedIn&quot;)&amp;gt;
+</code></pre>
+
+<p>&lt;/cffunction&gt;
+</code></p>
+
+<p>As you can see, this was fairly trivial. In the next session will start working with photo galleries.</p>
+
+<p>That&rsquo;s it for this session! As always, you can play with the live application here: <a href="http://pg1.camdenfamily.com"> <a href="http://pg1.camdenfamily.com">http://pg1.camdenfamily.com</a></a>. You can also download the application by clicking the &ldquo;Download&rdquo; link at the end of this article.</p>
+
+<p><b>Summary:</b>
+<ul>
+<li>This entry was all about looks. I call this the Paris Hilton entry. It&rsquo;s shallow and stupid, but somehow consider important by the majority of people.
+<li>I talked about views, and how views can be stacked, and use each other in order to create a layout template.
+<li>I then talked about other ways of using views, and about using a layout event instead of simply using another view.
+<li>Lastly I added a simple logout event. By now you should be getting the hang of how features are added. The normal process is:
+<ol>
+<li>Add event to Model-Glue.xml file.
+<li>Update Controller to &ldquo;speak to&rdquo; the Model if need be.
+<li>Return data to the event to be used by the View if need be.
+</ol>
+<li>As a quick last note, I disabled debugging in the Model-Glue XML file. I&rsquo;ll discuss this change later on though. I just did it to make the layout a bit cleaner while I was testing.
+</ul><p><a href='enclosures/D%3A%5Cwebsites%5Ccamdenfamily%5Csource%5Cmorpheus%5Cblog%5Cenclosures%2Fwwwroot5%2Ezip'>Download attached file.</a></p></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2006\/03\/22\/Building-your-first-ModelGlue-application-part-6'; 
+this.page.identifier = '/?p=1161'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/22/Building-your-first-ModelGlue-application-part-6" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Building your first Model-Glue application (part 6)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/22/Building-your-first-ModelGlue-application-part-6" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/22/Building-your-first-ModelGlue-application-part-6" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Building your first Model-Glue application (part 6)" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/22/Building-your-first-ModelGlue-application-part-6" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2006/03/22/Building-your-first-ModelGlue-application-part-6" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Working with RARs in ColdFusion &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Working with RARs in ColdFusion" />
+<meta property="og:description" content="I&rsquo;ve been meaning to look at RAR files and ColdFusion for some time, mainly as a way to work with CBR files (these are digital comic books stored in RAR format). Unfortunately, ColdFusion&rsquo;s built in Zip functionality only works with Zip and JAR files. After some Googling for a Java based solution, I was only available to find a good RAR list program. I was not able to find anything that would actually list as well as extract files from a RAR file. I decided to tackle the solution via another route - cfexecute. Here is what I came up with.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2011/02/21/Working-with-RARs-in-ColdFusion" />
+
+
+<meta property="og:updated_time" content="2011-02-21T16:02:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Working with RARs in ColdFusion">
+<meta itemprop="description" content="I&rsquo;ve been meaning to look at RAR files and ColdFusion for some time, mainly as a way to work with CBR files (these are digital comic books stored in RAR format). Unfortunately, ColdFusion&rsquo;s built in Zip functionality only works with Zip and JAR files. After some Googling for a Java based solution, I was only available to find a good RAR list program. I was not able to find anything that would actually list as well as extract files from a RAR file. I decided to tackle the solution via another route - cfexecute. Here is what I came up with.
+">
+
+
+<meta itemprop="dateModified" content="2011-02-21T16:02:00&#43;06:00" />
+<meta itemprop="wordCount" content="1274">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Working with RARs in ColdFusion"/>
+<meta name="twitter:description" content="I&rsquo;ve been meaning to look at RAR files and ColdFusion for some time, mainly as a way to work with CBR files (these are digital comic books stored in RAR format). Unfortunately, ColdFusion&rsquo;s built in Zip functionality only works with Zip and JAR files. After some Googling for a Java based solution, I was only available to find a good RAR list program. I was not able to find anything that would actually list as well as extract files from a RAR file. I decided to tackle the solution via another route - cfexecute. Here is what I came up with.
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2011/02/21/Working-with-RARs-in-ColdFusion">
+    <h1 class="article-title" itemprop="name">
+        Working with RARs in ColdFusion
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2011-02-21 16:02:00 &#43;0600 &#43;0600" itemprop="datePublished">2011-02-21</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">ColdFusion</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <p>I&rsquo;ve been meaning to look at RAR files and ColdFusion for some time, mainly as a way to work with CBR files (these are digital comic books stored in RAR format). Unfortunately, ColdFusion&rsquo;s built in Zip functionality only works with Zip and JAR files. After some Googling for a Java based solution, I was only available to find a good RAR list program. I was not able to find anything that would actually list as well as extract files from a RAR file. I decided to tackle the solution via another route - cfexecute. Here is what I came up with.</p>
+
+<p><p></p>
+
+<p>If you&rsquo;ve never used cfexecute before, you can think of it as a way for ColdFusion to work with other programs on your server. cfexecute will run any command line program that the service has access to. There are a few important things to keep in mind though:</p>
+
+<p><p></p>
+
+<p>First - cfexecute does not execute programs on the <i>user&rsquo;s</i> machine. That is impossible.</p>
+
+<p><p></p>
+
+<p>Secondly - while you can run any program via cfexecute, only command line programs make sense. So for example, I can start Firefox at the command line, but it will pop open a window on my machine. ColdFusion can do the same, but if you want to actually run a program and do something with the result, the program must return something to the command line itself.</p>
+
+<p><p></p>
+
+<p>I decided to make use of <a href="http://www.7-zip.org/">7-zip</a>. 7-zip is free, open source software that works with a variety of compression formats, including RAR. It includes both visual as well as command line interfaces. Making use of 7-zip via cfexecute simply comes down to figuring out the proper way to execute the program and dealing with the responses. I began by working on a list interface. To list files in an archive, you can use this set of arguments at the command line:</p>
+
+<p><p></p>
+
+<p><code>
+C:\Program Files\7-Zip\7z.exe l somefile.rar
+</code></p>
+
+<p><p></p>
+
+<p>The &ldquo;l&rdquo; argument means list. So now let&rsquo;s look at the cfexecute version of this:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset sevenZipexe = &ldquo;C:\Program Files\7-Zip\7z.exe&rdquo;&gt;
+&lt;cfset theFile = &ldquo;H:\comics\Guardians of the Galaxy\Guardians of the Galaxy v2 013.cbr&rdquo;&gt;</p>
+
+<p>&lt;cfset args = []&gt;
+&lt;cfset args[1] = &ldquo;l&rdquo;&gt;
+&lt;cfset args[2] = theFile&gt;
+&lt;cfexecute name=&ldquo;#sevenZipExe#&rdquo; arguments=&ldquo;#args#&rdquo; variable=&ldquo;result&rdquo; errorvariable=&ldquo;errorresult&rdquo; timeout=&ldquo;99&rdquo; /&gt;
+</code></p>
+
+<p><p></p>
+
+<p>In the example above I&rsquo;ve created a variable for the 7-Zip command line program and the archive file I want to work with. I&rsquo;ve then passed the arguments into an array. Finally I run cfexecute. Make note of a few things. First, I can ask for ColdFusion to gather any result, or error, into two variables: result and errorresult. Secondly, the default mode of operation for cfexecute is &ldquo;fire and forget&rdquo; - i.e., don&rsquo;t wait for a response. By adding in a specific timeout value I can ensure ColdFusion will wait (for a while anyway) and get the response.</p>
+
+<p><p></p>
+
+<p>Now for the hard part. Some command line programs (like SVN and Git) will actually allow you to get a formatted response. 7-zip does not. It returns a nicely formatted table that looks like this:</p>
+
+<p><p></p>
+
+<p><img src="http://www.raymondcamden.com/images/ScreenClip26.png" /></p>
+
+<p><p></p>
+
+<p>If we are going to work with this we will need to parse that string into something more readable. (I found out later that there is an argument you can pass to make for a slightly more parsed format. I&rsquo;m going to skip mentioning that for now, but do know that a slightly better option exists and I may switch to it in the future.) I whipped up the following code to strip out the header and footer.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;!&mdash; remove header &mdash;&gt;
+&lt;cfset result = trim(rereplace(result, &ldquo;.<em>?&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;- &mdash;&ndash; &mdash;&mdash;&mdash;&mdash; &mdash;&mdash;&mdash;&mdash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ldquo;, &ldquo;&rdquo;))&gt;
+&lt;!&mdash; remove footer &mdash;&gt;
+&lt;cfset result = trim(rereplace(result, &ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;- &mdash;&ndash; &mdash;&mdash;&mdash;&mdash; &mdash;&mdash;&mdash;&mdash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;.</em>&rdquo;, &ldquo;&rdquo;))&gt;
+</code></p>
+
+<p><p></p>
+
+<p>This left me with N lines of text delimited by a space. The final part of the line, the file, could have spaces in it, but everything before that should be safe to treat as space delimited. Here is what I used:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset files = queryNew(&ldquo;compressed,name,size,date,time,attr&rdquo;,&ldquo;double,varchar,double,date,time,varchar&rdquo;)&gt;</p>
+
+<p>&lt;cfloop index=&ldquo;line&rdquo; list=&ldquo;#result#&rdquo; delimiters=&ldquo;#chr(13)##chr(10)#&rdquo;&gt;
+    &lt;cfset queryAddRow(files)&gt;
+    &lt;cfset line = trim(line)&gt;</p>
+
+<pre><code>&amp;lt;cfset date = listFirst(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset querySetCell(files, &quot;date&quot;, date)&amp;gt;
+
+&amp;lt;cfset time = listFirst(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset querySetCell(files, &quot;time&quot;, time)&amp;gt;
+
+&amp;lt;cfset attr = listFirst(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset querySetCell(files, &quot;attr&quot;, attr)&amp;gt;
+
+&amp;lt;cfset size = listFirst(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset querySetCell(files, &quot;size&quot;, size)&amp;gt;
+
+&amp;lt;cfset compressed = listFirst(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+&amp;lt;cfset querySetCell(files, &quot;compressed&quot;, compressed)&amp;gt;
+
+&amp;lt;cfset name = trim(line)&amp;gt;
+&amp;lt;cfset querySetCell(files, &quot;name&quot;, name)&amp;gt;
+</code></pre>
+
+<p>&lt;/cfloop&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Not rocket science but it works ok. So - what about extraction? I was concerned with extracting one file at a time, so I first figured out that syntax:</p>
+
+<p><p></p>
+
+<p><code>
+C:\Program Files\7-Zip\7z.exe e -aoa -oc:\loc somefile.rar somefile.txt
+</code></p>
+
+<p><p></p>
+
+<p>In this example, e stands for extra. -aoa stands for overwrite. -o is the output directory. The next argument is the archive. And the final argument is the specific file you want to extract. With this syntax in place, it was then easy to call it via cfexecute:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset args = []&gt;
+&lt;cfset args[1] = &ldquo;e&rdquo;&gt;
+&lt;cfset args[2] = &ldquo;-aoa&rdquo;&gt;
+&lt;cfset args[3] = &ldquo;-oc:\Users\Raymond\Desktop\&rdquo;&gt;</p>
+
+<p>&lt;cfset args[4] = theFile&gt;
+&lt;cfset args[5] = &ldquo;1602 001 001.jpg&rdquo;&gt;</p>
+
+<p>&lt;cfexecute name=&ldquo;#sevenZip#&rdquo; arguments=&ldquo;#args#&rdquo; variable=&ldquo;result&rdquo; errorvariable=&ldquo;errorresult&rdquo; timeout=&ldquo;99&rdquo; /&gt;
+</code></p>
+
+<p><p></p>
+
+<p>The next logical step was to wrap this up into a nice CFC. Here is my first version of a 7-zip wrapper. It isn&rsquo;t the most stable wrapper, but it fits my needs. I&rsquo;ll post my use case for this in the next blog entry.</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfcomponent output=&ldquo;false&rdquo;&gt;</p>
+
+<pre><code>&amp;lt;cffunction name=&quot;init&quot; access=&quot;public&quot; output=&quot;false&quot;&amp;gt;
+    &amp;lt;cfargument name=&quot;sevenZipExe&quot; type=&quot;string&quot; required=&quot;true&quot;&amp;gt;
+
+    &amp;lt;cfif not fileExists(arguments.sevenZipExe)&amp;gt;
+        &amp;lt;cfthrow message=&quot;Invalid 7Zip executable path: #arguments.sevenZipExe#&quot;&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+
+    &amp;lt;cfset variables.sevenzipexe = arguments.sevenzipexe&amp;gt;
+    &amp;lt;cfreturn this&amp;gt;
+&amp;lt;/cffunction&amp;gt;
+
+&amp;lt;cffunction name=&quot;extract&quot; access=&quot;public&quot; returnType=&quot;boolean&quot; output=&quot;false&quot;&amp;gt;
+    &amp;lt;cfargument name=&quot;archivefile&quot; type=&quot;string&quot; required=&quot;true&quot;&amp;gt;
+    &amp;lt;cfargument name=&quot;file&quot; type=&quot;string&quot; required=&quot;true&quot;&amp;gt;
+    &amp;lt;cfargument name=&quot;destination&quot; type=&quot;string&quot; required=&quot;true&quot;&amp;gt;
+    &amp;lt;cfset var result = &quot;&quot;&amp;gt;
+    &amp;lt;cfset var errorresult = &quot;&quot;&amp;gt;
+
+    &amp;lt;cfif not fileExists(arguments.archivefile)&amp;gt;
+        &amp;lt;cfthrow message=&quot;Unable to work with #arguments.arvhiefile#, it does not exist.&quot;&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+
+    &amp;lt;cfset var args = []&amp;gt;
+    &amp;lt;cfset args[1] = &quot;e&quot;&amp;gt;
+    &amp;lt;cfset args[2] = &quot;-aoa&quot;&amp;gt;
+    &amp;lt;cfset args[3] = &quot;-o#arguments.destination#&quot;&amp;gt;
+    &amp;lt;cfset args[4] = arguments.archivefile&amp;gt;
+    &amp;lt;cfset args[5] = arguments.file&amp;gt;
+
+    &amp;lt;cfexecute name=&quot;#variables.sevenZipexe#&quot; arguments=&quot;#args#&quot; variable=&quot;result&quot; errorvariable=&quot;errorresult&quot; timeout=&quot;99&quot; /&amp;gt;
+
+    &amp;lt;cfif findNoCase(&quot;Everything is ok&quot;, result)&amp;gt;
+        &amp;lt;cfreturn true&amp;gt;
+    &amp;lt;cfelse&amp;gt;
+        &amp;lt;cfreturn false&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+
+&amp;lt;/cffunction&amp;gt;
+
+&amp;lt;cffunction name=&quot;list&quot; access=&quot;public&quot; returnType=&quot;query&quot; output=&quot;false&quot;&amp;gt;
+    &amp;lt;cfargument name=&quot;file&quot; type=&quot;string&quot; required=&quot;true&quot;&amp;gt;
+    &amp;lt;cfset var result = &quot;&quot;&amp;gt;
+    &amp;lt;cfset var errorresult = &quot;&quot;&amp;gt;
+    &amp;lt;cfset files = queryNew(&quot;compressed,name,size,date,time,attr&quot;,&quot;double,varchar,double,date,time,varchar&quot;)&amp;gt;
+    &amp;lt;cfset var line = &quot;&quot;&amp;gt;
+
+    &amp;lt;cfif not fileExists(arguments.file)&amp;gt;
+        &amp;lt;cfthrow message=&quot;Unable to work with #arguments.file#, it does not exist.&quot;&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+
+    &amp;lt;cflog file=&quot;application&quot; text=&quot;Working with #arguments.file#&quot;&amp;gt;
+    &amp;lt;cfset var args = []&amp;gt;
+    &amp;lt;cfset args[1] = &quot;l&quot;&amp;gt;
+    &amp;lt;cfset args[2] = arguments.file&amp;gt;
+    &amp;lt;cfexecute name=&quot;#variables.sevenzipexe#&quot; arguments=&quot;#args#&quot; variable=&quot;result&quot; errorvariable=&quot;errorresult&quot; timeout=&quot;99&quot; /&amp;gt;
+
+    &amp;lt;cfif len(errorresult)&amp;gt;
+        &amp;lt;cfthrow message=&quot;Error from SevenZip: #errorresult#&quot;&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+
+    &amp;lt;cfif find(&quot;is not supported archive&quot;, result)&amp;gt;
+        &amp;lt;cfthrow message=&quot;#arguments.file# was not a supported archive.&quot;&amp;gt;
+    &amp;lt;/cfif&amp;gt;
+
+    &amp;lt;!--- remove header ---&amp;gt;
+    &amp;lt;cfset result = trim(rereplace(result, &quot;.*?------------------- ----- ------------ ------------  ------------------------&quot;, &quot;&quot;))&amp;gt;
+    &amp;lt;!--- remove footer ---&amp;gt;
+    &amp;lt;cfset result = trim(rereplace(result, &quot;------------------- ----- ------------ ------------  ------------------------.*&quot;, &quot;&quot;))&amp;gt;
+
+    &amp;lt;cfloop index=&quot;line&quot; list=&quot;#result#&quot; delimiters=&quot;#chr(13)##chr(10)#&quot;&amp;gt;
+        &amp;lt;cfset queryAddRow(files)&amp;gt;
+        &amp;lt;cfset line = trim(line)&amp;gt;
+        &amp;lt;cfset date = listFirst(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset querySetCell(files, &quot;date&quot;, date)&amp;gt;
+
+        &amp;lt;cfset time = listFirst(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset querySetCell(files, &quot;time&quot;, time)&amp;gt;
+
+        &amp;lt;cfset attr = listFirst(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset querySetCell(files, &quot;attr&quot;, attr)&amp;gt;
+
+        &amp;lt;cfset size = listFirst(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset querySetCell(files, &quot;size&quot;, size)&amp;gt;
+
+        &amp;lt;cfset compressed = listFirst(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset line = listRest(line, &quot; &quot;)&amp;gt;
+        &amp;lt;cfset querySetCell(files, &quot;compressed&quot;, compressed)&amp;gt;
+
+        &amp;lt;cfset name = trim(line)&amp;gt;
+        &amp;lt;cfset querySetCell(files, &quot;name&quot;, name)&amp;gt;
+
+    &amp;lt;/cfloop&amp;gt;
+
+    &amp;lt;cfreturn files&amp;gt;
+&amp;lt;/cffunction&amp;gt;
+</code></pre>
+
+<p>&lt;/cfcomponent&gt;
+</code></p>
+
+<p><p></p>
+
+<p>Finally, here is a quick example of using the zip:</p>
+
+<p><p></p>
+
+<p><code>
+&lt;cfset sevenZipexe = &ldquo;C:\Program Files\7-Zip\7z.exe&rdquo;&gt;
+&lt;cfset sevenzipcfc = new sevenzip(sevenzipexe)&gt;
+&lt;cfset files = sevenzipcfc.list(theFile)&gt;
+&lt;cfdump var=&ldquo;#files#&rdquo;&gt;</p>
+
+<p>&lt;cfset sevenzipcfc.extract(thefile,files.name[1],&ldquo;c:\Users\Raymond\Desktop&rdquo;)&gt;
+</code></p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2011\/02\/21\/Working-with-RARs-in-ColdFusion'; 
+this.page.identifier = '/?p=4131'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/02/21/Working-with-RARs-in-ColdFusion" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Working with RARs in ColdFusion" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/02/21/Working-with-RARs-in-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/02/21/Working-with-RARs-in-ColdFusion" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Working with RARs in ColdFusion" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/02/21/Working-with-RARs-in-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2011/02/21/Working-with-RARs-in-ColdFusion" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

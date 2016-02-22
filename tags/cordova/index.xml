@@ -1,0 +1,993 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cordova on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/tags/cordova/</link>
+    <description>Recent content in Cordova on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 17 Feb 2016 08:41:00 -0700</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/tags/cordova/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>My PhoneGap Day 2016 Presentation</title>
+      <link>http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation</link>
+      <pubDate>Wed, 17 Feb 2016 08:41:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation</guid>
+      <description>&lt;p&gt;I was honored to be chosen to speak at this year&amp;rsquo;s &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap Day&lt;/a&gt;, but honestly, even if I wasn&amp;rsquo;t chosen to speak, I would have tried like heck to get there. I missed last year, but every PhoneGap Day I&amp;rsquo;ve been too has been &lt;em&gt;incredible&lt;/em&gt;. If you missed it, all of the presentations will be available online via the &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap blog&lt;/a&gt;. You can also read their
+excellent &lt;a href=&#34;http://phonegap.com/blog/2016/02/09/recapping-phonegap-day-us-2016/&#34;&gt;recap&lt;/a&gt; of the event too.&lt;/p&gt;
+
+&lt;p&gt;My session is available now, and you can watch it below.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/rmvJzHMQk6U&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In my session, I talked a bit about one of the things PhoneGap/Cordova developers need to keep in mind - internationalization. My focus was specifically on number and date formatting (hey, I only had twenty minutes!) and I demonstrated how you can use the &lt;a href=&#34;https://www.npmjs.com/package/cordova-plugin-globalization&#34;&gt;Globalization&lt;/a&gt; plugin to achieve this.&lt;/p&gt;
+
+&lt;p&gt;If you have any questions about what I demonstrated, just leave me a comment below!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Visual Studio Code extension for Cordova</title>
+      <link>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</link>
+      <pubDate>Thu, 28 Jan 2016 17:27:24 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/28/visual-studio-code-extension-for-cordova</guid>
+      <description>&lt;p&gt;Earlier today Microsoft released a set of updates for &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt;. TACO stands
+for &amp;ldquo;Tools for Apache Cordova&amp;rdquo; and has been around for a little while yet, but I&amp;rsquo;ve not had a chance to give it proper review on the blog. I still plan on doing so, but I wanted to specifically call out part of what was released today - &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=vsmobile.cordova-tools&#34;&gt;tooling support&lt;/a&gt; for Visual Studio Code.&lt;/p&gt;
+
+&lt;p&gt;Obviously this only helps you if you are a Visual Studio Code user, and if you are not, I highly suggest you take a look at the rest of the &lt;a href=&#34;http://taco.tools/index.html&#34;&gt;TACO&lt;/a&gt; site to look at the other parts of the suite. As I said - there is some impressive stuff here. If you do use Visual Studio Code though you&amp;rsquo;ll want to grab this extension right away.&lt;/p&gt;
+
+&lt;p&gt;The extension provides three main features:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First, you get a debugger for iOS and Android. You can debug applications running on both the simulator and a real device.&lt;/li&gt;
+&lt;li&gt;Second, you get Cordova commands in the command palette. Right now this is just Build and Run, but it&amp;rsquo;s something.&lt;/li&gt;
+&lt;li&gt;Third, and my favorite, you get intellisense for the plugin APIs. This provides code completion for Cordova plugins. Even cooler - the extension is smart enough to know what plugins you have installed in the current project. So if you don&amp;rsquo;t have the Camera plugin installed, you won&amp;rsquo;t get code completion. How does it look? Here is a quick example:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/01/cordovaext1.png&#34; alt=&#34;Visual Studio Code completion&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To give you an idea of how the debugger looks, I did a quick video. I&amp;rsquo;m coming down with a bit of a cold, so forgive the somewhat scratchy voice.&lt;/p&gt;
+
+&lt;iframe width=&#34;480&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/9o-U0vH-5DI&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Apache Cordova SplashScreen Change</title>
+      <link>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</link>
+      <pubDate>Mon, 25 Jan 2016 16:16:10 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/25/cordova-splash-screen-change</guid>
+      <description>&lt;p&gt;A few days ago I began to notice something odd with my Apache Cordova tests. When the application would launch, the splash screen would fade away as opposed to just disappearing. I thought this seemed familiar so I double checked the Apache Cordova blog and re-read the last &lt;a href=&#34;http://cordova.apache.org/news/2016/01/19/plugins-release.html&#34;&gt;plugins release&lt;/a&gt; post. I had read it when it was published, but not terribly closely. In it, it mentions that the SplashScreen plugin was updated to 3.1.0. In the notes, you can see &amp;ldquo;Implementing FadeSplashScreen feature for Android&amp;rdquo; and something similar for iOS.&lt;/p&gt;
+
+&lt;p&gt;If you head over to the &lt;a href=&#34;https://github.com/apache/cordova-plugin-splashscreen&#34;&gt;SplashScreen plugin&lt;/a&gt; doc though, this update isn&amp;rsquo;t mentioned in the main Preferences section. Rather, you have to scroll down to &amp;ldquo;Android and iOS Quirks&amp;rdquo; to see that both a FadeSplashScreen and FadeSplashScreenDuration preference were added. (I&amp;rsquo;ve logged a bug about documenting this up in the top preferences section.)&lt;/p&gt;
+
+&lt;p&gt;As the docs say - the default is true, so if for some reason you don&amp;rsquo;t like this new behavior, you&amp;rsquo;ll need to add this to your config.xml:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;preference name=&#34;FadeSplashScreen&#34; value=&#34;false&#34; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Want to see what this new feature looks like in action? Check out the video I created.&lt;/p&gt;
+
+&lt;iframe width=&#34;640&#34; height=&#34;360&#34; src=&#34;https://www.youtube.com/embed/F1yrrvgbyJc&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking at PhoneGap Day</title>
+      <link>http://www.raymondcamden.com/2016/01/21/speaking-at-phonegap-day</link>
+      <pubDate>Thu, 21 Jan 2016 08:02:27 -0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/01/21/speaking-at-phonegap-day</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m a bit late on announcing this, but next week I&amp;rsquo;ll be speaking at the 2016 &lt;a href=&#34;http://pgday.phonegap.com/us2016/&#34;&gt;PhoneGap Day&lt;/a&gt; in Lehi, Utah. Unfortunately tickets are sold out, but if get a chance to attend next year, I highly recommend it. PhoneGap Day is an
+incredibly casual, fun, and just plain exciting way to learn more about Apache Cordova and hybrid mobile development. There&amp;rsquo;s also a full day of deep workshops before the event where you can learn both basics and advanced topics. This year I&amp;rsquo;m giving a presentation
+concerning internationalization of data and I hope folks find it useful.&lt;/p&gt;
+
+&lt;p&gt;While the US PhoneGap Day is sold out, the &lt;a href=&#34;http://pgday.phonegap.com/eu2016/&#34;&gt;European one&lt;/a&gt; in Amsterdam is &lt;em&gt;not&lt;/em&gt; sold out.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ionic/Cordova Demo: Where did I take that picture?</title>
+      <link>http://www.raymondcamden.com/2015/12/03/ioniccordova-demo-where-did-i-take-that-picture</link>
+      <pubDate>Thu, 03 Dec 2015 10:38:31 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/12/03/ioniccordova-demo-where-did-i-take-that-picture</guid>
+      <description>&lt;p&gt;Every now and then I think of an idea for a cool (aka useless and pointless but fun) app that I think will take me one hour and let me grow my small little empire of demos. Sometimes those &amp;ldquo;quick little demos&amp;rdquo; end up turning into multi-hour sessions as I pull my hair out trying to find out why this or that isn&amp;rsquo;t working. That&amp;rsquo;s frustrating as heck &lt;i&gt;while&lt;/i&gt; I&amp;rsquo;m working on it, but in the end it makes me as happy.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/smile-kitten-large.jpg&#34; alt=&#34;smile-kitten-large&#34; width=&#34;400&#34; height=&#34;276&#34; class=&#34;aligncenter size-full wp-image-7197&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Why? Because if I run into problems with my little &amp;ldquo;toy&amp;rdquo; demo, most likely you, the poor reader who has to put up with my silly demos, will run into it in a production app. And if my pain helps you avoid issues, then this blog will earn its keep. Ok, so what was the idea?&lt;/p&gt;
+
+&lt;p&gt;A few weeks ago I was shopping with my wife. It was the type of store where pretty much nothing in it interests me so I was just kind of mindlessly following along. But when my wife pointed out something she liked, I discretely snapped a picture of the item so I&amp;rsquo;d remember it as a possible present for her birthday or Christmas. Unfortunately, I couldn&amp;rsquo;t remember the name of the store. I knew roundabout where it was, of course, but not the actual store.&lt;/p&gt;
+
+&lt;p&gt;Turns out that many pictures automatically include data that relates to the location where the picture was taken. You can - with a few clicks - get the latitude and longitude of the picture. That&amp;rsquo;s nice - but frankly, I can&amp;rsquo;t translate those values into a &amp;lsquo;real&amp;rsquo; location off the top of my head. I&amp;rsquo;m sure web apps exist to help with that, but I thought, wouldn&amp;rsquo;t it be nice if I could just select a picture and have it tell me where it was taken - in English? For example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7198&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For my demo, I decided to build the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Let the user select a picture.&lt;/li&gt;
+&lt;li&gt;Attempt to read the EXIF data and get a location.&lt;/li&gt;
+&lt;li&gt;Try to Foursquare the location. I figured that would work great for businesses.&lt;/li&gt;
+&lt;li&gt;If that fails, try to reverse geocode it to an address at least.&lt;/li&gt;
+&lt;li&gt;If that fails too, show it on a map at least.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Right away I ran into some interesting issues. First, I needed to read the EXIF data. I found a Cordova plugin for it, but it had not been updated in two years, and I saw multiple issues reported that were not being addressed. So then I simply Googled for &amp;ldquo;exif javascript&amp;rdquo; and came across this project: &lt;a href=&#34;https://github.com/exif-js/exif-js&#34;&gt;exif-js&lt;/a&gt;. This project was also old with outstanding PRs, but I thought it might be safer to try.&lt;/p&gt;
+
+&lt;p&gt;For the most part, it just works. Here is a snippet showing it in action:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt; 
+$scope.selectPicture = function() {
+    navigator.camera.getPicture(gotPic, errHandler, {
+        sourceType:Camera.PictureSourceType.PHOTOLIBRARY,
+        destinationType:Camera.DestinationType.NATIVE_URI
+    });
+};
+    
+var errHandler = function(e) {
+    alert(&#39;Error with Camera: &#39;+e); 
+};
+    
+//utility funct based on https://en.wikipedia.org/wiki/Geographic_coordinate_conversion
+var convertDegToDec = function(arr) {
+    return (arr[0].numerator + arr[1].numerator/60 + (arr[2].numerator/arr[2].denominator)/3600).toFixed(4);
+};
+    
+var gotPic = function(u) {
+    console.log(&#39;Got image &#39;+u);
+    $scope.img.url = u;
+    //scope.apply can KMA
+    $scope.$apply();
+    
+};
+
+var img = document.querySelector(&#34;#selImage&#34;);  
+
+img.addEventListener(&#34;load&#34;, function() {
+    console.log(&#34;load event for image &#34;+(new Date()));
+    $scope.status.text = &#34;Loading EXIF data for image.&#34;;
+    EXIF.getData(document.querySelector(&#34;#selImage&#34;), function() {
+        console.log(&#34;in exif&#34;);
+            
+        //console.dir(EXIF.getAllTags(img));
+        var long = EXIF.getTag(img,&#34;GPSLongitude&#34;);
+        var lat = EXIF.getTag(img,&#34;GPSLatitude&#34;);
+        if(!long || !lat) {
+            $scope.status.text = &#34;Unfortunately, I can&#39;t find GPS info for the picture&#34;;
+            return; 
+        }
+        long = convertDegToDec(long);
+        lat = convertDegToDec(lat);
+        //handle W/S
+        if(EXIF.getTag(this,&#34;GPSLongitudeRef&#34;) === &#34;W&#34;) long = -1 * long;
+        if(EXIF.getTag(this,&#34;GPSLatitudeRef&#34;) === &#34;S&#34;) lat = -1 * lat;
+        console.log(long,lat);
+        locateAddress(long,lat);
+    });         
+}, false);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;First thing I discovered was that when you select an image in Cordova, the EXIF data is stripped down to about 4 or so different tags. Turns out this is a known bug (&lt;a href=&#34;https://issues.apache.org/jira/browse/CB-1285&#34;&gt;CF-1285&lt;/a&gt;) due to the fact that the plugin copies the original image and in that process removes the data. The bug is marked resolved, but obviously it isn&amp;rsquo;t. However, if you switch the camera source to NATIVE_URI then the problem goes away.&lt;/p&gt;
+
+&lt;p&gt;So far so good. To work with the code, you need to point it to an image in the DOM, and wait for the image to finish loading. That by itself isn&amp;rsquo;t hard, although I feel dirty when I use the DOM in Angular controllers. (I got over it.) I then discovered an issue with the library. When it loads the EXIF data, it copies the values to the DOM item for caching. I&amp;rsquo;m using the same image every time you select a new photo, so this meant the tag data was cached. I filed a bug report and in the meantime I simply edited the library to remove the cache check. That&amp;rsquo;s bad - but I got over that too.&lt;/p&gt;
+
+&lt;p&gt;The next thing I had to work with was the location stuff. As I said, the idea was to first check Foursquare, fall back to reverse geocoding, and fall back again to a static map. Let&amp;rsquo;s look at the controller code first.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var locateAddress = function(long,lat) {
+
+    $scope.status.text = &#34;Trying to locate the photo.&#34;;
+
+    Location.getInfo(long, lat).then(function(result) {
+        console.log(&#39;Result was &#39;+JSON.stringify(result));
+        if(result.type === &#39;foursquare&#39;) {
+            $scope.status.text = &#39;Your photo was taken at &#39; + result.name + &#39; located at &#39; + result.address;
+        } else if (result.type === &#39;geocode&#39;) {
+            $scope.status.text = &#39;Your photo appears to have been taken at &#39; + result.address;
+        } else {
+            var map = &#39;https://maps.googleapis.com/maps/api/staticmap?center=&#39;+lat+&#39;,&#39;+long+&#39;zoom=13&amp;size=300x300&amp;maptype=roadmap&amp;markers=color:blue%7Clabel:X%7C&#39;+lat+&#39;,&#39;+long;
+            $scope.status.text = &#39;Sorry, I\&#39;ve got nothing. But here is a map!&lt;br&gt;&lt;img class=&#34;map&#34; src=&#34;&#39; + map + &#39;&#34;&gt;&#39;; 
+        }
+    });
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not too complex, right? I just run my service and deal with the result. The service is a bit complex, but really just makes use of the various APIs I&amp;rsquo;m hitting.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;angular.module(&#39;starter.services&#39;, [])
+
+.factory(&#39;Foursquare&#39;, function($http) {
+
+    var CLIENT_ID = &#39;mahsecretismahsecret&#39;;
+    var CLIENT_SECRET = &#39;soylentgreenispeople&#39;;
+    
+    function whatsAt(long,lat) {
+        return $http.get(&#39;https://api.foursquare.com/v2/venues/search?ll=&#39;+lat+&#39;,&#39;+long+&#39;&amp;amp;intent=browse&amp;amp;radius=30&amp;amp;client_id=&#39;+CLIENT_ID+&#39;&amp;amp;client_secret=&#39;+CLIENT_SECRET+&#39;&amp;amp;v=20151201&#39;);     
+    }
+
+    return {
+        whatsAt:whatsAt
+    };
+})
+.factory(&#39;Geocode&#39;, function($http) {
+    var KEY = &#39;google should let me geocode for free&#39;;
+    
+    function lookup(long,lat) {
+        return $http.get(&#39;https://maps.googleapis.com/maps/api/geocode/json?latlng=&#39;+lat+&#39;,&#39;+long+&#39;&amp;amp;key=&#39;+KEY);
+    }
+    
+    return {
+        lookup:lookup   
+    };
+
+})
+.factory(&#39;Location&#39;, function($q,Foursquare,Geocode) {
+    
+    function getInfo(long,lat) {
+        console.log(&#39;ok, in getInfo with &#39;+long+&#39;,&#39;+lat);
+        var deferred = $q.defer();
+        Foursquare.whatsAt(long,lat).then(function(result) {
+            //console.log(&#39;back from fq with &#39;+JSON.stringify(result));
+            if(result.status === 200 &amp;amp;&amp;amp; result.data.response.venues.length &amp;gt;= 1) {
+                var bestMatch = result.data.response.venues[0];
+                //convert the result to something the caller can use consistently
+                var result = {
+                    type:&amp;quot;foursquare&amp;quot;,
+                    name:bestMatch.name,
+                    address:bestMatch.location.formattedAddress.join(&amp;quot;, &amp;quot;)
+                }
+                console.dir(bestMatch);
+                deferred.resolve(result);
+            } else {
+                //ok, time to try google
+                Geocode.lookup(long,lat).then(function(result) {
+                    console.log(&#39;back from google with &#39;);
+                    if(result.data &amp;amp;&amp;amp; result.data.results &amp;amp;&amp;amp; result.data.results.length &amp;gt;= 1) {
+                        console.log(&#39;did i come in here?&#39;);
+                        var bestMatch = result.data.results[0];
+                        console.log(JSON.stringify(bestMatch)); 
+                        var result = {
+                            type:&amp;quot;geocode&amp;quot;,
+                            address:bestMatch.formatted_address 
+                        }
+                        deferred.resolve(result);
+                    }
+                }); 
+            }
+        });
+        
+        return deferred.promise;    
+    }
+    return {
+        getInfo:getInfo 
+    };
+    
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In both cases, I&amp;rsquo;m assuming the first result from the API is the best result. That may not always be true, but it works for now. You&amp;rsquo;ve seen an example of Foursquare working, here is an example of the reverse geocode.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/geocode.png&#34; alt=&#34;geocode&#34; width=&#34;750&#34; height=&#34;779&#34; class=&#34;aligncenter size-full wp-image-7199 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And here it is with the last fallback. Yes, this is the same picture, I just temporarily disabled the Geocode service for a quick test.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/12/map.png&#34; alt=&#34;map&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7200 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;All in all, this was a fun little app to build, and as I said, I&amp;rsquo;m glad I ran into the EXIF issues. I know I&amp;rsquo;ll need that in the future. You can find the complete source code for this demo here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/photolocate&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/photolocate&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to tell if a Cordova application is running in the simulator</title>
+      <link>http://www.raymondcamden.com/2015/11/30/how-to-tell-if-a-cordova-application-is-running-in-the-simulator</link>
+      <pubDate>Mon, 30 Nov 2015 16:04:19 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/30/how-to-tell-if-a-cordova-application-is-running-in-the-simulator</guid>
+      <description>&lt;p&gt;Just a quick note here but the most recent &lt;a href=&#34;http://cordova.apache.org/news/2015/11/24/plugins-release.html&#34;&gt;plugins release&lt;/a&gt; included a cool little update to the &lt;a href=&#34;https://www.npmjs.com/package/cordova-plugin-device&#34;&gt;Device&lt;/a&gt; plugin. If you&amp;rsquo;ve never used it before, the plugin provides basic information about the app&amp;rsquo;s current working environment, including operating system and device model. In the most recent version, a new property was added: &lt;code&gt;isVirtual&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;As you can probably guess, this property will tell you if you&amp;rsquo;re running on a simulator or a real device. Now while I wouldn&amp;rsquo;t recommend &lt;i&gt;shipping&lt;/i&gt; code that uses this normally, during testing it could be real useful. As an example, here is code that simply toggles what kind of camera should be used - the device camera or the photo gallery:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+var sourceType = device.isVirtual ? Camera.PictureSourceType.PHOTOLIBRARY:Camera.PictureSourceType.CAMERA;
+    
+navigator.camera.getPicture(picDone, picFail, {
+    sourceType: sourceType,
+    destinationType:Camera.DestinationType.FILE_URI
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not rocket science, but useful. Just to be complete, here is a screen shot of the same code running on my device and simulator.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot24.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;714&#34; class=&#34;aligncenter size-full wp-image-7174&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And if you want, you can grab the source for this demo here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/checkforsim&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/checkforsim&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;For folks curious, running this on Genymotion actually shows that it is considered a simulator, not a real device, even though you run it from the command line like a real device. Surprising.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Important update for Apache Cordova and Android</title>
+      <link>http://www.raymondcamden.com/2015/11/25/important-update-for-apache-cordova-and-android</link>
+      <pubDate>Wed, 25 Nov 2015 08:58:59 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/25/important-update-for-apache-cordova-and-android</guid>
+      <description>&lt;p&gt;Those of us who work with Apache Cordova are well aware of the issues surrounding the Android simulator. Calling it &amp;ldquo;slow&amp;rdquo; does not properly describe the painful experience of actually trying to use it. In fact, every now and then when I accidentally launch it via the Cordova CLI, I say something out loud that I don&amp;rsquo;t usually include in my blog posts. (Hint - it rhymes with duck.) How bad is it? I&amp;rsquo;ve actually recommended folks go out and buy cheap Android devices instead of using the simulator. Of course, you should always test on real devices. My point is, I&amp;rsquo;d suggest using a real device instead of the simulator since it was actually &lt;i&gt;slower&lt;/i&gt; than going to the real device. Of course, even when I have a real device, half of my USB cables don&amp;rsquo;t properly let adb connect to it. Apparently I&amp;rsquo;m using the &amp;ldquo;wrong&amp;rdquo; USB cables. This is why I use iOS about 99% of the time for my Cordova work. I also recommend &lt;a href=&#34;https://www.genymotion.com/#!/&#34;&gt;Genymotion&lt;/a&gt; - a free/commercial Android simulator.&lt;/p&gt;
+
+&lt;p&gt;Anyway, this past week Google announced the beta release of a new version of &lt;a href=&#34;http://developer.android.com/tools/studio/index.html&#34;&gt;Android Studio&lt;/a&gt;. Android Studio is an IDE specifically for building Android applications. It is free, and kinda nice in the few times I&amp;rsquo;ve used it. As part of the update, the emulator was also improved. I didn&amp;rsquo;t pay much attention to this because &amp;ldquo;much improved slow crap&amp;rdquo; doesn&amp;rsquo;t really entice me, but then I came across this article: &lt;a href=&#34;http://thenextweb.com/dd/2015/11/23/the-new-emulator-in-android-studio-2-0-is-50-times-faster-than-before/&#34;&gt;The new emulator in Android Studio 2.0 is 50 times faster than before&lt;/a&gt;. 50 is a big number so I figured, let me check it out.&lt;/p&gt;
+
+&lt;p&gt;First off, it was a bit hard for me to actually find the beta download. You can find it &lt;a href=&#34;http://tools.android.com/download/studio/canary&#34;&gt;here&lt;/a&gt; on Android Studio&amp;rsquo;s Canary channel. I downloaded and installed the bits. I fired up the app and went to Tools/Android/AVD Manager.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot16.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;444&#34; class=&#34;aligncenter size-full wp-image-7141&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I had one pre-existing AVD that was marked as needing repairing, so to make things easy I just deleted it and created a new one. Over all, the UI is a bit refresher and easier to use, but I pretty much just took defaults for my new device.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot23.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot23.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;303&#34; class=&#34;aligncenter size-full wp-image-7142&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Anyway, I then dropped down to the CLI, made a new Cordova project, added Android, and told Cordova to emulate it. Surprise surprise, the new emulator popped up just fine. I suppose that is to be expected, but it was nice to see it work well.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot33.png&#34; alt=&#34;shot3&#34; width=&#34;417&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-7143&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The first launch is still not exactly speedy compared to iOS, but as I&amp;rsquo;ve seen it take 5 or so minutes in the past, it was a heck of a lot faster. The second launch was really speedy - I&amp;rsquo;d say less then 10 seconds - on par with Genymotion. (I haven&amp;rsquo;t done scientific testing, but I figure once you get below 10 seconds, it doesn&amp;rsquo;t much matter.) Genymotion though has additional benefits on top of the simulator though so you still want to check it out.&lt;/p&gt;
+
+&lt;p&gt;Thanks go to Mike Hartington for letting me know the new emulator worked well with Cordova, and even more thanks to Mike for sharing a video of this in action.&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/ztQnhAwijT0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;As an additional FYI, it can be a bit difficult to control the Android simulator in terms of rotation and stuff like that. The program menus for it are pretty much completely blank. I Googled around a bit and found results to help: &lt;a href=&#34;http://www.shortcutworld.com/en/win/Android-Emulator.html&#34;&gt;Android Emulator Shortcuts&lt;/a&gt;. But I&amp;rsquo;m surprised the app itself seems to provide no help.&lt;/p&gt;
+
+&lt;p&gt;Anyway - if you&amp;rsquo;ve avoided the Android emulator like the plague over the past few years, it&amp;rsquo;s time to finally give it a shot again.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Authorization Tokens for IBM Watson services</title>
+      <link>http://www.raymondcamden.com/2015/11/13/using-authorization-tokens-for-ibm-watson-services</link>
+      <pubDate>Fri, 13 Nov 2015 10:53:48 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/13/using-authorization-tokens-for-ibm-watson-services</guid>
+      <description>&lt;p&gt;This is a handy little trick I discovered last week. It is definitely documented (&lt;a href=&#34;https://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/getting_started/gs-tokens.shtml&#34;&gt;Using tokens with Watson services&lt;/a&gt;), but I had not run into the feature until I was investigating a Watson service. Way back in February I wrote up a blog post that discussed how to use the Visual Recognition service with a Cordova application: &lt;a href=&#34;http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova&#34;&gt;Using the new Bluemix Visual Recognition service in Cordova&lt;/a&gt;. While this worked fine, it had a big problem.&lt;/p&gt;
+
+&lt;p&gt;In order for my mobile application to talk to the remote service, I had to embed the username and password in my source code. That&amp;rsquo;s Bad&amp;trade; of course, and I finally got around to correcting that a few months ago: &lt;a href=&#34;http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic&#34;&gt;A real world app with IBM Bluemix, Node, Cordova, and Ionic&lt;/a&gt;. The solution was to setup a Node.js server that acted as a proxy between the mobile applications and the Bluemix services. That certainly wasn&amp;rsquo;t hard to do - especially since we&amp;rsquo;ve got a kick ass npm package, &lt;a href=&#34;https://www.npmjs.com/package/watson-developer-cloud&#34;&gt;watson-developer-cloud&lt;/a&gt;, that makes it rather trivial to speak to services.&lt;/p&gt;
+
+&lt;p&gt;Turns out - there&amp;rsquo;s an even simpler way. Bluemix services support the idea of authorization tokens. Instead of having your mobile app hit Node.js to simply proxy to the remote service, you can have your mobile app hit Node.js and request an authorization token. The token is good for one service so you would need to return multiple tokens if you&amp;rsquo;re using multiple services. Once you have that token, the good news is that you can then skip hitting the Node.js and instead speak directly to the remote service. Let&amp;rsquo;s look at an example. (And I highly encourage you to read the two blog entries I linked to above as the app and it&amp;rsquo;s features are described there.)&lt;/p&gt;
+
+&lt;p&gt;First, let&amp;rsquo;s show the server.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/*eslint-env node*/
+
+var express = require(&#39;express&#39;);
+var bluemix = require(&#39;./lib/bluemix.js&#39;);
+var watson = require(&#39;watson-developer-cloud&#39;);
+
+var extend = require(&#39;util&#39;)._extend;
+
+
+var cfenv = require(&#39;cfenv&#39;);
+
+var app = express();
+//app.use(express.static(__dirname + &#39;/public&#39;));
+
+var appEnv = cfenv.getAppEnv();
+
+var credentials = extend({
+   version: &#39;v1&#39;,
+   username: &#39;get from bluemix&#39;,
+   password: &#39;ditto&#39;
+}, bluemix.getServiceCreds(&#39;visual_recognition&#39;));
+
+var authorization = watson.authorization({
+  username: credentials.username,
+  password: credentials.password,
+  version: &#39;v1&#39;,
+  url: &#39;https://gateway.watsonplatform.net/authorization/api&#39;
+});
+
+app.get(&#39;/getToken&#39;, function(req, res) {
+    console.log(&#39;ok, lets do this&#39;);
+
+    var params = {
+        url: &#39;https://gateway.watsonplatform.net/visual-recognition-beta/api&#39;
+    };
+    
+    authorization.getToken(params, function (err, token) {
+        if (!token) {
+            console.log(&#39;error:&#39;, err);
+            res.send(&amp;quot;0&amp;quot;);
+        } else {
+            res.send(token);
+        }
+    });
+    
+});
+
+app.listen(appEnv.port, &#39;0.0.0.0&#39;, function() {
+    console.log(&amp;quot;server starting on &amp;quot; + appEnv.url);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first part of the code handles defaulting my credential information. I get my username and password from the Bluemix console but when I deploy my code to Bluemix, it will pick up on the environment variables instead.&lt;/p&gt;
+
+&lt;p&gt;Now take a look at the authorization section. For the most part this probably makes sense, but there is something that I guarantee will trip you up. It certainly tripped me up. Look at this section of code in particular:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var authorization = watson.authorization({
+  username: credentials.username,
+  password: credentials.password,
+  version: &#39;v1&#39;,
+  url: &#39;https://gateway.watsonplatform.net/authorization/api&#39;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The last setting there, url, is &lt;strong&gt;not&lt;/strong&gt; the URL of the API itself. We&amp;rsquo;ll get to that in a minute. Rather, it works kind of a like a &amp;ldquo;group&amp;rdquo; in terms of what kind of service you are using. Services are either &amp;ldquo;regular&amp;rdquo; or &amp;ldquo;streaming&amp;rdquo;. A regular service will use the URL you see there: &lt;a href=&#34;https://gateway.watsonplatform.net/authorization/api&#34;&gt;https://gateway.watsonplatform.net/authorization/api&lt;/a&gt;. A streaming API will use &lt;a href=&#34;https://stream.watsonplatform.net/authorization/api&#34;&gt;https://stream.watsonplatform.net/authorization/api&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Ok, so your next question is, if it isn&amp;rsquo;t obvious, how do I know what type of service I&amp;rsquo;m using? The answer is in the URL for the service itself. So for example, here is the one I&amp;rsquo;m using for visual recognition: &lt;a href=&#34;https://gateway.watsonplatform.net/visual-recognition-beta/api&#34;&gt;https://gateway.watsonplatform.net/visual-recognition-beta/api&lt;/a&gt;. See &amp;ldquo;gateway&amp;rdquo;? Yep, that&amp;rsquo;s your clue. Compare that to the endpoint for text to speech: &lt;a href=&#34;https://stream.watsonplatform.net/speech-to-text/api&#34;&gt;https://stream.watsonplatform.net/speech-to-text/api&lt;/a&gt;. You can see it has &amp;ldquo;stream&amp;rdquo; in the domain. This is all probably pretty obvious, and as I type it certainly looks obvious, but as I said, it tripped me up. Also, I discovered this entire feature by looking at the docs for another service, I did &lt;strong&gt;not&lt;/strong&gt; have the nicely written &lt;a href=&#34;https://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/getting_started/gs-tokens.shtml&#34;&gt;feature docs&lt;/a&gt; open in my browser.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s pretty much it. I set up a /getToken route and I call the authorization API. I then just return the token to the caller.&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s take a look at the JavaScript code. As I mentioned before, I won&amp;rsquo;t be going over the entire application, instead I&amp;rsquo;ll just focus on the aspect related to this change.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.controller(&#39;MainCtrl&#39;, function($scope,$ionicPlatform,$ionicLoading,$http) {
+    
+    $scope.results = [];
+    $scope.cordovaReady = false;
+
+    var token;
+    var API_URL = &amp;quot;https://gateway.watsonplatform.net/visual-recognition-beta/api&amp;quot;;
+
+    $ionicPlatform.ready(function() {
+        
+        $http.get(&#39;http://localhost:6006/getToken&#39;).then(function(res) {
+            token = res.data;
+            console.log(token);
+            $scope.cordovaReady = true;
+        }); 
+        
+    });
+
+    $scope.selectPicture = function() {
+                    
+        var gotPic = function(fileUri) {
+
+            $scope.pic = fileUri;
+            $scope.results = [];
+
+            $ionicLoading.show({template:&#39;Sending to Watson...&#39;});
+                        
+            //So now we upload it
+            var options = new FileUploadOptions();
+            
+            options.fileKey=&amp;quot;image&amp;quot;;
+            options.fileName=fileUri.split(&#39;/&#39;).pop();
+            options.headers = {&amp;quot;X-Watson-Authorization-Token&amp;quot;:token};
+            
+            var ft = new FileTransfer();
+            ft.upload(fileUri, API_URL+&amp;quot;/v1/tag/recognize&amp;quot;, function(r) {
+                var result = JSON.parse(r.response);
+
+                var results = [];
+                for(var i=0;i&amp;lt;result.images[0].labels.length;i++) {
+                    results.push(result.images[0].labels[i].label_name);    
+                }               
+
+                $scope.$apply(function() {
+                    $scope.results = results;
+                });
+                
+                $ionicLoading.hide();
+                
+
+            }, function(err) {
+                console.log(&#39;err from watsom&#39;, err);
+            }, options);
+            
+        };
+            
+        var camErr = function(e) {
+            console.log(&amp;quot;Error&amp;quot;, e);  
+        }
+        
+        navigator.camera.getPicture(gotPic, camErr, {
+            sourceType:Camera.PictureSourceType.PHOTOLIBRARY,
+            destinationType:Camera.DestinationType.FILE_URI 
+        });
+            
+    };
+    
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So the first change is that I immediately call my server to get a token. Since my entire app is &amp;ldquo;take a picture and identify crap in it&amp;rdquo; I&amp;rsquo;ve bootstrapped the button itself to that load event.&lt;/p&gt;
+
+&lt;p&gt;The next change is to the FileTransfer object. I have to add a header with the token, and obviously change the URL. Finally, I have to massage the result a bit. Previously my Node.js app did that for me. Now I&amp;rsquo;m working with the raw result from the remote service so I do that in the result hander.&lt;/p&gt;
+
+&lt;p&gt;And voila - that&amp;rsquo;s it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/Simulator-Screen-Shot-Nov-13-2015-10.51.51-AM.png&#34; alt=&#34;Simulator Screen Shot Nov 13, 2015, 10.51.51 AM&#34; width=&#34;394&#34; height=&#34;700&#34; class=&#34;aligncenter size-full wp-image-7102 imgborder&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Working with the Clipboard in Cordova apps</title>
+      <link>http://www.raymondcamden.com/2015/11/11/working-with-the-clipboard-in-cordova-apps</link>
+      <pubDate>Wed, 11 Nov 2015 14:14:51 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/11/working-with-the-clipboard-in-cordova-apps</guid>
+      <description>&lt;p&gt;Earlier this week a friend of mine on Facebook noticed something odd. Facebook recognizes when you have URLs in your clipboard:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot11.png&#34; alt=&#34;shot1&#34; width=&#34;500&#34; height=&#34;355&#34; class=&#34;aligncenter size-full wp-image-7090 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now - I think we can have a good discussion about whether or not this is creepy (I have some thoughts at the end!), but I was curious about how one would do this in a Cordova application. Turns out - it&amp;rsquo;s quite easy. VersoSolutions has a Cordova plugin that provides both read and write access to the clipboard for Windows Phone, iOS, and Android devices: &lt;a href=&#34;https://github.com/VersoSolutions/CordovaClipboard&#34;&gt;https://github.com/VersoSolutions/CordovaClipboard&lt;/a&gt;. Even nicer, &lt;a href=&#34;http://ngcordova.com/docs/plugins/clipboard/&#34;&gt;ngCordova&lt;/a&gt; supports it too. So with that in mind, I built a simple demo.&lt;/p&gt;
+
+&lt;p&gt;The app is just one textarea and nothing more:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/Simulator-Screen-Shot-Nov-11-2015-2.04.07-PM.png&#34; alt=&#34;Simulator Screen Shot Nov 11, 2015, 2.04.07 PM&#34; width=&#34;500&#34; height=&#34;229&#34; class=&#34;aligncenter size-full wp-image-7091 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;But if you copy a URL into your clipboard, the app will recognize it when your return:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/Simulator-Screen-Shot-Nov-11-2015-2.05.20-PM.png&#34; alt=&#34;Simulator Screen Shot Nov 11, 2015, 2.05.20 PM&#34; width=&#34;500&#34; height=&#34;279&#34; class=&#34;aligncenter size-full wp-image-7092 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And clicking the button will insert the text:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/Simulator-Screen-Shot-Nov-11-2015-2.05.26-PM.png&#34; alt=&#34;Simulator Screen Shot Nov 11, 2015, 2.05.26 PM&#34; width=&#34;500&#34; height=&#34;187&#34; class=&#34;aligncenter size-full wp-image-7093 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Not exactly rocket science, but you get the idea. So here&amp;rsquo;s how I built it. First, the index.html page.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;CopyPasteDemo&amp;lt;/title&amp;gt;
+
+    &amp;lt;link href=&amp;quot;lib/ionic/css/ionic.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+    &amp;lt;link href=&amp;quot;css/style.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+
+    &amp;lt;!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    &amp;lt;link href=&amp;quot;css/ionic.app.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+    --&amp;gt;
+
+    &amp;lt;!-- ionic/angularjs js --&amp;gt;
+    &amp;lt;script src=&amp;quot;lib/ionic/js/ionic.bundle.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+    &amp;lt;!-- cordova script (this will be a 404 during development) --&amp;gt;
+    &amp;lt;script src=&amp;quot;cordova.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+    &amp;lt;!-- your app&#39;s js --&amp;gt;
+    &amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  
+        &amp;lt;script src=&amp;quot;lib/ngCordova/dist/ng-cordova.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;/head&amp;gt;
+  &amp;lt;body ng-app=&amp;quot;starter&amp;quot;&amp;gt;
+
+    &amp;lt;ion-pane ng-controller=&amp;quot;MainCtrl&amp;quot;&amp;gt;
+      &amp;lt;ion-header-bar class=&amp;quot;bar-stable&amp;quot;&amp;gt;
+        &amp;lt;h1 class=&amp;quot;title&amp;quot;&amp;gt;Ionic Blank Starter&amp;lt;/h1&amp;gt;
+      &amp;lt;/ion-header-bar&amp;gt;
+      &amp;lt;ion-content&amp;gt;
+                
+                &amp;lt;div class=&amp;quot;list list-inset&amp;quot;&amp;gt;
+                    &amp;lt;label class=&amp;quot;item item-input&amp;quot;&amp;gt;
+                        &amp;lt;textarea placeholder=&amp;quot;Comments&amp;quot;ng-model=&amp;quot;comments&amp;quot;&amp;gt;&amp;lt;/textarea&amp;gt;
+                    &amp;lt;/label&amp;gt;
+                    &amp;lt;div ng-show=&amp;quot;hasURL&amp;quot;&amp;gt;
+                        &amp;lt;button class=&amp;quot;button button-full button-assertive&amp;quot; ng-click=&amp;quot;pasteURL()&amp;quot;&amp;gt;
+                            You have copied a URL. Add it?
+                        &amp;lt;/button&amp;gt;
+                    &amp;lt;/div&amp;gt;
+                &amp;lt;/div&amp;gt;
+                        
+                
+                
+      &amp;lt;/ion-content&amp;gt;
+    &amp;lt;/ion-pane&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;rsquo;s nothing particularly interesting here outside of the button which only shows up when a URL is available. Now let&amp;rsquo;s look at the code.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// Ionic Starter App
+
+// angular.module is a global place for creating, registering and retrieving Angular modules
+// &#39;starter&#39; is the name of this angular module example (also set in a &amp;lt;body&amp;gt; attribute in index.html)
+// the 2nd parameter is an array of &#39;requires&#39;
+angular.module(&#39;starter&#39;, [&#39;ionic&#39;,&#39;ngCordova&#39;])
+
+.controller(&#39;MainCtrl&#39;, function($scope,$ionicPlatform,$cordovaClipboard,$interval) {
+
+    $scope.haURL = false;
+    $scope.comments = &amp;quot;&amp;quot;;
+    
+    var theURL = &amp;quot;&amp;quot;;
+    
+    $ionicPlatform.ready(function() {
+    
+        //Begin looking for stuff in the clipboard
+        $interval(checkForURL, 4*1000);
+
+    });
+
+    var isURL = function(s) {
+        //Credit: http://stackoverflow.com/a/3809435
+        var expr = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&amp;amp;//=]*)/i;
+        var regex = new RegExp(expr);
+        var result = s.match(regex);
+        if(result) return true;
+        return false;
+    };
+    
+    var checkForURL = function() {
+        console.log(&#39;Checking the clipboard...&#39;);
+        $cordovaClipboard
+            .paste()
+            .then(function (result) {
+                console.log(result);
+                if(result &amp;amp;&amp;amp; isURL(result)) {
+                    $scope.hasURL = true;
+                    theURL = result;
+                } else {
+                    $scope.hasURL = false;
+                }
+            }, function (e) {
+                // error - do nothing cuz we don&#39;t care
+            });
+        
+    };
+    
+    $scope.pasteURL = function() {
+        console.log(&amp;quot;Paste &amp;quot;+theURL);
+        $scope.comments += theURL;      
+        //remove from clippboard
+        $cordovaClipboard.copy(&#39;&#39;).then(function () {
+            $scope.theURL = &#39;&#39;;
+        }, function () {
+            // error
+        }); 
+        $scope.hasURL = false;
+    };
+        
+})
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova &amp;amp;&amp;amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I begin by setting up an interval that runs every 4 seconds. That was somewhat arbitrary and actually a bit slow. Also, it runs forever and should be cleared when the user navigates away from this particular view. (If the application had more than one view of course.)&lt;/p&gt;
+
+&lt;p&gt;The function called every 4 seconds, checkForURL, uses the ngCordova wrapper for the clipboard plugin and simply grabs the text. If it can find any, and it is a URL, then we enable the button.&lt;/p&gt;
+
+&lt;p&gt;The pasteURL function simply handles adding the URL and clearing the clipboard. Finally, it hides the button.&lt;/p&gt;
+
+&lt;p&gt;You can find the complete source here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/copypaste/www&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/copypaste/www&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So&amp;hellip; let&amp;rsquo;s spend a minute or so talking about the privacy aspects of this. As I mentioned earlier, my friend was surprised by this and a bit put off as he didn&amp;rsquo;t even know Facebook was doing this. I can certainly see that point. I kind of figure that if the operating system itself allows for apps to read the clipboard than it must be &amp;ldquo;Ok&amp;rdquo;, but I wonder how many people know this? Obviously it would be trivial to take that clipboard content and Ajax it up to a server. For &amp;ldquo;research&amp;rdquo; purposes of course. What do you think?&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Demo of the Ionic Resources command</title>
+      <link>http://www.raymondcamden.com/2015/11/10/demo-of-the-ionic-resources-command</link>
+      <pubDate>Tue, 10 Nov 2015 10:54:39 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/10/demo-of-the-ionic-resources-command</guid>
+      <description>&lt;p&gt;One of the cool little &amp;ldquo;side&amp;rdquo; features of the Ionic CLI is the &lt;code&gt;resources&lt;/code&gt; command. If you&amp;rsquo;ve never seen it in action, it lets you create a simple source icon and splash screen and then generate icons and splash screens for the 500 different variants supported by Apache Cordova. This isn&amp;rsquo;t a &lt;i&gt;new&lt;/i&gt; feature, but I&amp;rsquo;ve been meaning to create a video tutorial of this in action so folks could see what it does. Thanks go to Mike Hartington for helping me prepare this video!&lt;/p&gt;
+
+&lt;iframe width=&#34;800&#34; height=&#34;450&#34; src=&#34;https://www.youtube.com/embed/L8JLEzPz-Dw&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Cordova, iOS, and Orientation - wondering why it is locked?</title>
+      <link>http://www.raymondcamden.com/2015/11/09/cordova-ios-and-orientation-wondering-why-it-is-locked</link>
+      <pubDate>Mon, 09 Nov 2015 10:49:07 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/09/cordova-ios-and-orientation-wondering-why-it-is-locked</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m not sure if this is new behavior, but if it isn&amp;rsquo;t, I haven&amp;rsquo;t run into this till last week. I was working on a project with Ionic (&lt;a href=&#34;http://www.raymondcamden.com/2015/11/05/cordova-demo-apple-tv-hd-video-viewer&#34;&gt;Cordova Demo – Apple TV HD Video Viewer&lt;/a&gt;) and ran into something odd. When I rotated the device, the orientation did not change. I quickly made a virgin Cordova project to see if I could confirm it there as well - and I did.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/Simulator-Screen-Shot-Nov-9-2015-10.46.48-AM.png&#34; alt=&#34;Simulator Screen Shot Nov 9, 2015, 10.46.48 AM&#34; width=&#34;700&#34; height=&#34;394&#34; class=&#34;aligncenter size-full wp-image-7077&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I knew that Cordova supports a preference to lock orientation, and I checked my config.xml to ensure there wasn&amp;rsquo;t a &amp;ldquo;lock&amp;rdquo; there. Turns out, I was half-wrong.&lt;/p&gt;
+
+&lt;p&gt;If you check the docs (&lt;a href=&#34;http://cordova.apache.org/docs/en/latest/config_ref/index.html&#34;&gt;The config.xml File&lt;/a&gt;) you&amp;rsquo;ll discover this little tidbit:&lt;/p&gt;
+
+&lt;blockquote&gt;
+Orientation (string, defaults to &lt;strong&gt;default&lt;/strong&gt;): allows you to lock orientation and prevent the interface from rotating in response to changes in orientation. Possible values are default, landscape or portrait. Example:
+&lt;/blockquote&gt;
+
+&lt;p&gt;Note the &amp;ldquo;defaults to default&amp;rdquo; aspect - that&amp;rsquo;s crucial.&lt;/p&gt;
+
+&lt;p&gt;A bit later in the doc you then see this:&lt;/p&gt;
+
+&lt;blockquote&gt;
+For iOS, to specify both portrait &amp; landscape mode you would use the platform specific value all
+&lt;/blockquote&gt;
+
+&lt;p&gt;So to be clear, for iOS, &lt;code&gt;default&lt;/code&gt; is portrait only. For Android, &lt;code&gt;default&lt;/code&gt; allows for all orientations. In order for your application to support both (well, all four technically) orientations in iOS, you will want to specifically allow that:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;
+&amp;lt;platform name=&#34;ios&#34;&amp;gt;
+    &amp;lt;preference name=&#34;Orientation&#34; value=&#34;all&#34; /&amp;gt;
+&amp;lt;/platform&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note how the preference is wrapped in a &lt;code&gt;platform&lt;/code&gt; tag. Don&amp;rsquo;t forget you can set values just for particular platforms within your config.xml file.&lt;/p&gt;
+
+&lt;p&gt;So as always - when I post stuff like this I&amp;rsquo;m always curious to know if everyone else knew this but me. Let me know in the comments below. Thanks to @riddlerdev in the Ionic Slack for helping me find this last week.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Cordova Demo - Apple TV HD Video Viewer</title>
+      <link>http://www.raymondcamden.com/2015/11/05/cordova-demo-apple-tv-hd-video-viewer</link>
+      <pubDate>Thu, 05 Nov 2015 17:27:39 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/05/cordova-demo-apple-tv-hd-video-viewer</guid>
+      <description>&lt;p&gt;So a few days ago, someone on Twitter (sorry, I forget who) mentioned that the new Apple TV has some pretty stellar screen savers. Turns out - the data for those screen savers was all driven by a public JSON file. It didn&amp;rsquo;t take long for someone to notice and then build a cool demo: &lt;a href=&#34;http://benjaminmayo.co.uk/watch-all-the-apple-tv-aerial-video-screensavers&#34;&gt;Watch All The Apple TV Aerial Video Screensavers&lt;/a&gt;. You should check it out. Seriously. Absolutely beautiful stuff.&lt;/p&gt;
+
+&lt;p&gt;Now it looks like everyone is playing with it. You can even get a &lt;a href=&#34;https://github.com/JohnCoates/Aerial&#34;&gt;OSX&lt;/a&gt; and &lt;a href=&#34;https://github.com/cDima/Aerial/&#34;&gt;Windows&lt;/a&gt; screen saver of the videos. I&amp;rsquo;m sure Apple is going to kill this off sometime soon - I mean - they have to I imagine - but in the meantime they are some darn pretty visuals to look at.&lt;/p&gt;
+
+&lt;p&gt;While exercising today, I thought I&amp;rsquo;d quickly whip up a demo of this using &lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt; and &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;. Here it is in action. And yes - for the life of me I couldn&amp;rsquo;t get it to be 100% of the canvas. I&amp;rsquo;m sure there is some way in CSS to say, &amp;ldquo;Stretch this so it covers everything and I&amp;rsquo;m OK if parts of it are off screen&amp;rdquo;, but such CSS Wizardry is beyond me.&lt;/p&gt;
+
+&lt;iframe width=&#34;800&#34; height=&#34;600&#34; src=&#34;https://www.youtube.com/embed/3CUmBl9S2l0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;So the code isn&amp;rsquo;t anything special. The front end is pretty much just the &amp;ldquo;pull to refresh&amp;rdquo; widget and a video tag:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;ion-pane&amp;gt;
+    &amp;lt;ion-header-bar class=&amp;quot;bar-dark&amp;quot;&amp;gt;
+    &amp;lt;h1 class=&amp;quot;title&amp;quot;&amp;gt;Apple Arial Viewer&amp;lt;/h1&amp;gt;
+    &amp;lt;/ion-header-bar&amp;gt;
+    &amp;lt;ion-content ng-controller=&amp;quot;MainCtrl&amp;quot;&amp;gt;
+            &amp;lt;ion-refresher
+                pulling-text=&amp;quot;Pull to select new video...&amp;quot;
+                on-refresh=&amp;quot;loadVideo()&amp;quot;&amp;gt;
+            &amp;lt;/ion-refresher&amp;gt;
+            &amp;lt;video autoplay loop id=&amp;quot;mainVideo&amp;quot; controls2&amp;gt;
+                &amp;lt;source src=&amp;quot;&amp;quot; /&amp;gt;
+            &amp;lt;/video&amp;gt;
+    &amp;lt;/ion-content&amp;gt;
+&amp;lt;/ion-pane&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here is the JavaScript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;angular.module(&#39;starter&#39;, [&#39;ionic&#39;])
+
+.controller(&#39;MainCtrl&#39;, function($scope, AppleVideoService) {
+
+    $scope.loadVideo = function() {
+        AppleVideoService.getVideo().then(function(vid) {
+            console.log(vid.url);
+            document.querySelector(&amp;quot;#mainVideo source&amp;quot;).setAttribute(&amp;quot;src&amp;quot;, vid.url);
+            document.querySelector(&amp;quot;#mainVideo&amp;quot;).load();
+            $scope.$broadcast(&#39;scroll.refreshComplete&#39;);
+        });
+    };
+    
+    $scope.loadVideo();
+        
+})
+.factory(&#39;AppleVideoService&#39;, function($http,$q) {
+
+    var jsonURL = &amp;quot;http://a1.phobos.apple.com/us/r1000/000/Features/atv/AutumnResources/videos/entries.json&amp;quot;;
+    var videoData = &amp;quot;&amp;quot;;
+    
+    //http://stackoverflow.com/a/7228322
+    var randomIntFromInterval = function (min,max) {
+        return Math.floor(Math.random()*(max-min+1)+min);
+    }
+    
+    /*
+    first, I determine if night or data
+    then, I pick a random video matching that
+    */
+    var randomVideo = function() {
+        //what time is it?
+        var hour = new Date().getHours();
+        if(hour &amp;gt; 6 &amp;amp;&amp;amp; hour &amp;lt; 18) {
+            return videoData.day[randomIntFromInterval(0, videoData.day.length)];   
+        } else {
+            return videoData.night[randomIntFromInterval(0, videoData.night.length)];               
+        }
+    };
+    
+    /*
+    I convert Apple&#39;s JSON into two array of day and night videos. That makes it easier to pick a random one.
+    */
+    var process = function(data) {
+        var processed = {night:[], day:[]};
+        for(var i=0; i&amp;lt;data.length;i++) {
+            for(var video in data[i].assets) {
+                if(data[i].assets[video].timeOfDay === &amp;quot;day&amp;quot;) {
+                    processed.day.push(data[i].assets[video]);  
+                }   else {
+                    processed.night.push(data[i].assets[video]);    
+                }
+            }   
+        }
+        return processed;
+    };
+    
+    return {
+        
+            getVideo:function() {
+                var deferred = $q.defer();
+                if(videoData === &amp;quot;&amp;quot;) {
+                    $http.get(jsonURL).success(function(data) {
+                        videoData = process(data);
+                        deferred.resolve(randomVideo());
+                    }); 
+                }   else deferred.resolve(randomVideo());
+                return deferred.promise;
+            }
+        
+    };
+    
+})
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova &amp;amp;&amp;amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+        
+        
+  });
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So the controller simply sets up a call to my service and updates the DOM with the proper HTML. I&amp;rsquo;m always unsure about how to do DOM manipulations like this with Angular. I&amp;rsquo;m guessing I should have used ng-model or something here, right?&lt;/p&gt;
+
+&lt;p&gt;The service isn&amp;rsquo;t too complex either. We load Apple&amp;rsquo;s JSON once and parse it into a list of day and night videos. We then figure out what time it is, and arbitrarily decide that 7AM to 6PM is &amp;ldquo;day&amp;rdquo;. Obviously your world may differ. Then we can just select a random video and return it.&lt;/p&gt;
+
+&lt;p&gt;And really that&amp;rsquo;s it. I could add a label to the display so folks knew what it is. I could also add support for knowing when you are offline. But I won&amp;rsquo;t. I will, however, share all the code: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/arialscreensaver&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/arialscreensaver&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Checking for platform and plugin updates in your Cordova project</title>
+      <link>http://www.raymondcamden.com/2015/11/04/checking-for-platform-and-plugin-updates-in-your-cordova-project</link>
+      <pubDate>Wed, 04 Nov 2015 14:31:55 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/04/checking-for-platform-and-plugin-updates-in-your-cordova-project</guid>
+      <description>&lt;p&gt;Earlier today the Cordova team announced an important update for the iOS platform (&lt;a href=&#34;http://cordova.apache.org/announcements/2015/11/02/cordova-ios-3-9-2.html&#34;&gt;Apache Cordova iOS 3.9.2&lt;/a&gt;). I thought it might be worthwhile to discuss how you can check your platforms and plugins for updates. It isn&amp;rsquo;t a complex process, but it is probably something to make part of your routine management in your organization. As I don&amp;rsquo;t manage one application but build lots of silly demos, I don&amp;rsquo;t necessarily have to worry so much about this. Despite that, I was curious so I did a bit of digging.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s discuss platforms first. In a Cordova project, you can type &lt;code&gt;cordova platforms&lt;/code&gt; to get a list of installed and available platforms. Here is an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;92&#34; class=&#34;aligncenter size-full wp-image-7059&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice how at the end of each installed platform the current version is printed. Cool. But given that you aren&amp;rsquo;t following the Cordova blog, how would you know a newer version of the iOS platform existed?&lt;/p&gt;
+
+&lt;p&gt;Shaz (from the Cordova team) pointed out that the CLI supports a &amp;ldquo;check&amp;rdquo; command - this was something I had missed! According to the CLI docs, running &lt;code&gt;cordova platform check&lt;/code&gt; will &amp;ldquo;list platforms which can be updated by &lt;code&gt;cordova platform update&lt;/code&gt;&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Cool. Unfortunately, in my testing, it was pretty broken. I tested against three or four projects and only once did it see an update and it never reported that my iOS platform could be updated. From what I can tell with conversations with Shaz and others, this feature hasn&amp;rsquo;t been properly tested yet so it needs some work. However, if you are reading this in the future, &lt;strong&gt;try this first&lt;/strong&gt; as it is the most direct way of reporting on your platforms. If your curious about the bugs I reported, you can find them here: &lt;a href=&#34;https://issues.apache.org/jira/browse/CB-9951&#34;&gt;CB-9951&lt;/a&gt; and &lt;a href=&#34;https://issues.apache.org/jira/browse/CB-9953&#34;&gt;CB-9953&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The alternative for now is to use npm. The platform code all exists on npm and all you need to do is figure out the package name of the platform itself. This is rather easy to guess for iOS and Android:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot2.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;128&#34; class=&#34;aligncenter size-full wp-image-7060&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you choose to update, you can simply &lt;code&gt;cordova platform update ios&lt;/code&gt; and if you decide you made a huge mistake, you can install an earlier version by doing &lt;code&gt;cordova platform update ios@X&lt;/code&gt; where X is a version. To be honest, in the past I&amp;rsquo;ve also remove and re-added a platform. That&amp;rsquo;s silly, but I&amp;rsquo;ve done it.&lt;/p&gt;
+
+&lt;p&gt;So - what about plugins? Running &lt;code&gt;cordova plugin ls&lt;/code&gt; will report on installed plugins and their versions:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot3.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;252&#34; class=&#34;aligncenter size-full wp-image-7063&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, there is no &amp;ldquo;check&amp;rdquo; command like we have with platforms (broken or not), so you&amp;rsquo;ll need to use npm info again to see if new versions exist:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot4.png&#34; alt=&#34;shot4&#34; width=&#34;750&#34; height=&#34;125&#34; class=&#34;aligncenter size-full wp-image-7064&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There is no upgrade command either, but you can rm and add a plugin in a few seconds so just do that and you&amp;rsquo;re set.&lt;/p&gt;
+
+&lt;p&gt;But wait! There&amp;rsquo;s more. Don&amp;rsquo;t forget your CLI also has a version. It is easy to check both your version and the latest release:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/shot5.png&#34; alt=&#34;shot5&#34; width=&#34;750&#34; height=&#34;103&#34; class=&#34;aligncenter size-full wp-image-7065&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So now that you&amp;rsquo;ve chewed on that a bit - let&amp;rsquo;s hear from Steven Gill, also from the Cordova project:&lt;/p&gt;
+
+&lt;blockquote&gt;
+Btw, the plan is to move towards stop advising users to update platforms independently (except patch releases like this one). Instead we will only tell users to update cli and add a command (cordova update) that would update necessary platforms and plugins based on new pinned versions in cordova-lib. (Plugins will start to be pinned soon). That way we can verify the mix of plugins, platforms and tools have been tested together.
+&lt;/blockquote&gt;
+
+&lt;p&gt;So my translation is - it&amp;rsquo;s going to get simpler. That&amp;rsquo;s &lt;strike&gt;good&lt;/strike&gt;great.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Building a hybrid mobile app? Avoid using CDNs for your libraries</title>
+      <link>http://www.raymondcamden.com/2015/10/30/building-a-hybrid-mobile-app-avoid-using-cdns-for-your-libraries</link>
+      <pubDate>Fri, 30 Oct 2015 10:50:21 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/30/building-a-hybrid-mobile-app-avoid-using-cdns-for-your-libraries</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m reading an (otherwise fascinating) article now on Ionic and came across this snippet of code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;//code.angularjs.org/1.4.3/angular.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;//code.angularjs.org/1.4.3/angular-resource.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;js/services.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;js/index.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What&amp;rsquo;s wrong with the above code? (And yes, the title mostly gives it away.)&lt;/p&gt;
+
+&lt;p&gt;By using a CDN for libraries in your hybrid mobile app, you&amp;rsquo;ve essentially ensured the application will be completely broken when offline. This is obvious, but like most of us doing client-side work, we&amp;rsquo;ve become accustomed to using CDNs for libraries.&lt;/p&gt;
+
+&lt;p&gt;Now - you may ask - what if the core functionality of the application requires you to be online? In that scenario, you still want to ensure you gracefully handle the user being offline. If your CDN libraries fail to load, most likely your application is going to crap the bed. If those libraries were stored locally within the application, you can at least still load up, detect the offline state, and then tell the user they can&amp;rsquo;t do anything while offline.&lt;/p&gt;
+
+&lt;p&gt;Even better, you can add a simple event listener for when they get back online and then start the application up again. (And of course, you&amp;rsquo;ll have an event listener for when they go back offline. Because that happens. A lot.)&lt;/p&gt;
+
+&lt;p&gt;For an example of this in action, see my earlier blog posts: &lt;a href=&#34;http://www.raymondcamden.com/2013/05/24/PhoneGap-OnlineOffline-Tip&#34;&gt;PhoneGap Online/Offline Tip&lt;/a&gt; and &lt;a href=&#34;http://www.raymondcamden.com/2015/01/13/phonegap-onlineoffline-tip-2&#34;&gt;PhoneGap Online/Offline Tip (2)&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>StrongLoop, Ionic, and IBM Bluemix</title>
+      <link>http://www.raymondcamden.com/2015/10/29/strongloop-ionic-and-ibm-bluemix</link>
+      <pubDate>Thu, 29 Oct 2015 13:26:02 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/29/strongloop-ionic-and-ibm-bluemix</guid>
+      <description>&lt;p&gt;Over the past few weeks I&amp;rsquo;ve been digging deep into &lt;a href=&#34;http://www.strongloop.com&#34;&gt;StrongLoop&lt;/a&gt; and rather enjoying the heck out of it. As I said in my earliest post - I&amp;rsquo;m not necessarily a fan of tools generating code for me or lots of &amp;ldquo;automagical&amp;rdquo; stuff at the framework level, but after working with the LoopBack framework and models I got over it pretty darn quickly. I&amp;rsquo;m definitely sold on the concept and am exciting about digging into the other parts of StrongLoop&amp;rsquo;s offering. But before I went too much further in that direction, I wanted to write up a complete example that covered a fully functioning server and mobile app running on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt;. To the end I&amp;rsquo;ve created a project and a set of videos to help guide you through the process. Let&amp;rsquo;s get started!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/wecandothis.jpg&#34; alt=&#34;wecandothis&#34; width=&#34;400&#34; height=&#34;400&#34; class=&#34;aligncenter size-full wp-image-7027&#34; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;Getting the Code and Testing&lt;/h1&gt;
+
+&lt;p&gt;You can find all of the code on GitHub: &lt;a href=&#34;https://github.com/cfjedimaster/StrongLoop-Bluemix-Ionic&#34;&gt;https://github.com/cfjedimaster/StrongLoop-Bluemix-Ionic&lt;/a&gt;. While this will give you the raw code, obviously it won&amp;rsquo;t give you all the tools you need to run through everything. For the server-side, you&amp;rsquo;ll need:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://nodejs.org&#34;&gt;Node.js&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://strongloop.com/get-started/&#34;&gt;StrongLoop&lt;/a&gt; (installs via npm, you also want to register at the site)&lt;/li&gt;
+&lt;li&gt;Sign up at &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt; and grab the cf command line tools here: &lt;a href=&#34;https://www.ng.bluemix.net/docs/#starters/install_cli.html&#34;&gt;Deploying your app with the Cloud Foundry command line interface&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For the client-side, you&amp;rsquo;ll want:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt; and some mobile platform to test on. You may be able to get buy with the &lt;a href=&#34;http://www.raymondcamden.com/2014/09/24/browser-as-a-platform-for-your-phonegapcordova-apps&#34;&gt;browser platform&lt;/a&gt; though.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; (installs via npm)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That&amp;rsquo;s a lot, but I assume if you are a developer you probably already have Node and hopefully you have Cordova done too. There are no requirements for editors but I strongly recommend &lt;a href=&#34;https://code.visualstudio.com/&#34;&gt;Visual Studio Code&lt;/a&gt;. Ok, so let&amp;rsquo;s get started!&lt;/p&gt;
+
+&lt;h2&gt;An introduction&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/fiDU06xLqzU?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In this video, I go into detail about what is being built and what components are being used. To be honest, this blog post itself explains most of that so I won&amp;rsquo;t be offended if you skip this, but I also demonstrate the final app so you can see everything come together.&lt;/p&gt;
+
+&lt;h2&gt;Server-Side Setup&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/7rL1xTDFcNc?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In this video, I walk you through creating the Node.js application using the StrongLoop command line. I then show StrongLoop Arc Composer visually designing a simple model. I then show you the API in action and quickly create a few objects to test that everything is working.&lt;/p&gt;
+
+&lt;h2&gt;Building the mobile app in Ionic&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/sDzETrISE34?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In this video, I create the application with Ionic. I don&amp;rsquo;t walk you through every line of code, but rather show the completed source code and explain how I did it. Angular&amp;rsquo;s $ngResource made this &lt;i&gt;incredibly&lt;/i&gt; simple. Shockingly simple actually.&lt;/p&gt;
+
+&lt;h2&gt;Deploying to Bluemix and adding Cloudant&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/whvSKZl1rLA?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In the final, and longest, video, I walk you through pushing the application up to Bluemix and then adding Cloudant to the mix. As I said, this is the longest part, so let me know if anything isn&amp;rsquo;t clear.&lt;/p&gt;
+
+&lt;h2&gt;Wrap Up&lt;/h2&gt;
+
+&lt;p&gt;All in all, you&amp;rsquo;ve got about 20 minutes of video, and in that time a server is created and hosted live and a front end application is setup to speak to that server via an API. That&amp;rsquo;s power. Incredible power. Obviously I&amp;rsquo;m pretty biased towards all the technologies used in the stack here but frankly I think I have reason to be. They kick butt. I hope you think so as well!&lt;/p&gt;
+
+&lt;h2&gt;Edit&lt;/h2&gt;
+
+&lt;p&gt;Just a quick FYI - after posting this article, I discovered that the StrongLoop folks actually had a four part series on the same topic! I haven&amp;rsquo;t read it yet, but part one is here: &lt;a href=&#34;https://strongloop.com/strongblog/part-1-ionic-loopback-node-js-mobile/&#34;&gt;Part 1: Ionic &amp;amp; LoopBack Frameworks – Building a REST API&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

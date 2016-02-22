@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Reprint: What in the heck is JSONP and why would you use it? &middot; Raymond Camden</title>
+    <meta name="generator" content="Hugo 0.15" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Raymond Camden">
+    
+      <meta name="description" content="">
+    
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="alternate" type="application/rss+xml" title="Raymond Camden" />
+	<link href="http://feeds.feedburner.com/raymondcamdensblog" rel="feed" type="application/rss+xml" title="Raymond Camden" />
+    <link rel="icon" href="http://www.raymondcamden.com/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.raymondcamden.com/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/style.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/css/monokai.css">
+    <link rel="stylesheet" href="http://www.raymondcamden.com/fancybox/jquery.fancybox.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/prism.css" />
+	<link rel="stylesheet" href="http://www.raymondcamden.com/css/custom.css" />
+	
+    <meta property="og:title" content="Reprint: What in the heck is JSONP and why would you use it?" />
+<meta property="og:description" content="
+Earlier this week I blogged about the demise of DevelopRIA. Last night someone pinged me about one of my articles there so I thought it would be a good idea to republish it. The article is somewhat old (4 years or so) and doesn&#39;t mention CORS at all, but hopefully it is still useful to folks. But please keep the age in mind when reading. (My god - I actually preferred XML. What was I thinking?!?!)
+
+
+
+Have you ever looked at some technology, or framework, and simply didn&#39;t understand why someone would use it? For some time now I&#39;ve never quite gotten what JSONP is, nor why someone would use it over XML. Everything finally cleared up for me last week and since I assume (I hope!) I&#39;m not alone in being confused, I thought I&#39;d share what I learned.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.raymondcamden.com/2014/03/12/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it" />
+
+
+<meta property="og:updated_time" content="2014-03-12T11:03:00&#43;06:00"/>
+
+
+
+
+
+
+
+
+
+
+    
+    
+<meta itemprop="name" content="Reprint: What in the heck is JSONP and why would you use it?">
+<meta itemprop="description" content="
+Earlier this week I blogged about the demise of DevelopRIA. Last night someone pinged me about one of my articles there so I thought it would be a good idea to republish it. The article is somewhat old (4 years or so) and doesn&#39;t mention CORS at all, but hopefully it is still useful to folks. But please keep the age in mind when reading. (My god - I actually preferred XML. What was I thinking?!?!)
+
+
+
+Have you ever looked at some technology, or framework, and simply didn&#39;t understand why someone would use it? For some time now I&#39;ve never quite gotten what JSONP is, nor why someone would use it over XML. Everything finally cleared up for me last week and since I assume (I hope!) I&#39;m not alone in being confused, I thought I&#39;d share what I learned.
+
+">
+
+
+<meta itemprop="dateModified" content="2014-03-12T11:03:00&#43;06:00" />
+<meta itemprop="wordCount" content="1142">
+
+
+
+<meta itemprop="keywords" content="adoption,books,coldfusion,design,development,flex,games,html5,javascript,jquery,misc,mobile,movies,music,uncategorized,video-games,bluemix,cordova,front-end-interview-questions,harpjs,ionic,mobilefirst,nodejs,phonegap,strongloop,swift," />
+
+    
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Reprint: What in the heck is JSONP and why would you use it?"/>
+<meta name="twitter:description" content="
+Earlier this week I blogged about the demise of DevelopRIA. Last night someone pinged me about one of my articles there so I thought it would be a good idea to republish it. The article is somewhat old (4 years or so) and doesn&#39;t mention CORS at all, but hopefully it is still useful to folks. But please keep the age in mind when reading. (My god - I actually preferred XML. What was I thinking?!?!)
+
+
+
+Have you ever looked at some technology, or framework, and simply didn&#39;t understand why someone would use it? For some time now I&#39;ve never quite gotten what JSONP is, nor why someone would use it over XML. Everything finally cleared up for me last week and since I assume (I hope!) I&#39;m not alone in being confused, I thought I&#39;d share what I learned.
+
+"/>
+<meta name="twitter:site" content="@raymondcamden"/>
+
+
+</head>
+<body>
+<div class="container">
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="http://www.raymondcamden.com/" id="logo"><i class="logo" style="background-image: url('http://www.raymondcamden.com/css/images/logo.png')"></i><span class="site-title">Raymond Camden</span></a>
+      <nav id="main-nav">
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a>
+          
+          
+          
+          <a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a>
+          
+          
+      </nav>
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="http://www.raymondcamden.com//images/avatar.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+        <div id="search-form-wrap">
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+              <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+              <button type="submit" class="search-form-submit">
+              </button>
+         </form>
+        </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tbody>
+          <tr>
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/">Home</a></td>
+          
+          
+          
+          
+          
+          
+          
+          
+
+          
+
+          
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/about/">About Me</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/speaking/">Speaking Engagements</a></td>
+          
+          
+          
+          <td><a class="main-nav-link" href="http://www.raymondcamden.com/contact/">Contact</a></td>
+          
+          
+          <td>
+          <form action="http://www.raymondcamden.com/search/" method="get" accept-charset="UTF-8" class="search-form">
+          <input type="search" name="q" results="0" class="search-form-input" placeholder="Search">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+
+<div id="container">
+   <div class="outer">
+    <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="http://www.raymondcamden.com//images/avatar.jpg">
+      <h2 id="name">Raymond Camden</h2>
+      <h3 id="title">Developer Advocate for IBM</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Earth</span>
+      
+          <a id="follow" href="https://twitter.com/raymondcamden">
+              Follow
+          </a>
+      
+    </div>
+    <div class="article-info profile-block">
+	  
+      <div class="article-info-block">
+        5647
+        <span>Posts</span>
+      </div>
+      <div class="article-info-block">
+        
+          10
+          
+        <span>
+            Tags
+        </span>
+      </div>
+	  
+    </div>
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+<td><a href="//github.com/cfjedimaster" target="_blank" title="GitHub"><i class="fa fa-github"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//youtube.com/theraymondcamden" target="_blank" title="YouTube"><i class="fa fa-youtube"></i></a></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<td><a href="//twitter.com/raymondcamden" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></td>
+
+
+          <td><a href="http://feeds.feedburner.com/raymondcamdensblog" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+	<div class="widget-wrap">
+		<div class="widget">
+
+	<a href="http://www.slatwallcommerce.com/lp/coldfusion-ecommerce/?utm_source=Raymond%20Camden%20Blog&utm_medium=display&utm_content=Open%20Source%20ColdFusion%20eCommerce%20Platform&utm_campaign=ColdFusion%20eCommerce">
+		<img src="/images/rcblog.png" class="centered">
+	</a>
+		</div>
+	</div>
+
+</aside>
+
+    
+<section id="main">
+    <article id="page-undefined" class="article article-type-page" itemscope="" itemprop="blogPost">
+
+		
+
+		<p><a href="https://hostek.com/hosting/coldfusion/vps/coldfusion-vps-hosting.html">
+			<img src="/images/ray-ad.jpg" class="centered" style="margin-bottom:10px">
+		</a></p>
+
+		
+
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    <a href="http://www.raymondcamden.com/2014/03/12/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it">
+    <h1 class="article-title" itemprop="name">
+        Reprint: What in the heck is JSONP and why would you use it?
+    </h1>
+    </a>
+    <div class="article-meta">
+		
+        <div class="article-date">
+            <i class="fa fa-calendar"></i>
+            <time datetime="2014-03-12 11:03:00 &#43;0600 &#43;0600" itemprop="datePublished">2014-03-12</time>
+        </div>
+		
+        
+        
+            
+            
+            <div class="article-category">
+                <i class="fa fa-folder"></i>
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/javascript">JavaScript</a>
+                &middot;
+                
+                <a class="article-category-link" href="http://www.raymondcamden.com/categories/jquery">jQuery</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+        
+    </div>
+</header>
+
+            <div class="article-entry" itemprop="articleBody" style="padding-bottom:10px">
+                <div class="alert alert-success">
+Earlier this week I <a href="http://www.raymondcamden.com/index.cfm/2014/3/10/Remember-DevelopRIA">blogged</a> about the demise of DevelopRIA. Last night someone pinged me about one of my articles there so I thought it would be a good idea to republish it. The article is somewhat old (4 years or so) and doesn't mention CORS at all, but hopefully it is still useful to folks. But please keep the age in mind when reading. (My god - I actually preferred XML. What was I thinking?!?!)
+</div>
+
+<p>
+Have you ever looked at some technology, or framework, and simply didn't understand why someone would use it? For some time now I've never quite gotten what JSONP is, nor why someone would use it over XML. Everything finally cleared up for me last week and since I assume (I hope!) I'm not alone in being confused, I thought I'd share what I learned.
+</p>
+
+<p>
+JSONP (JSON with Padding) was created as a workaround to the cross domain problem. The cross domain problem refers to the fact that Ajax code run from website A can't access data from website B. So as a simple example, imagine trying to load Yahoo Search results from your site:
+</p>
+
+<pre><code class="language-markup">&lt;html&gt;
+
+&lt;head&gt;
+&lt;script src=&quot;/jquery/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function() {
+    var req = 'http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=YahooDemo&amp;query=finances&amp;format=pdf&amp;output=json'
+    $.getJSON(req,{}, function(data) {
+        console.dir(data)
+    });
+});
+&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p>
+This simple example will fail immediately with this error: Access to restricted URI denied. None of this should be new to us (although I do get asked about this every few weeks). The normal way around this is to build a proxy on your own server. So the Ajax code would hit some URL on your own domain. Server side code (like ColdFusion) handles making the remote call and then returns the results to the front end Ajax code. This works well, although it does end taking a bit longer due to the extra stops along the way. I intentionally chose Yahoo's search api for my example above since Yahoo was the first provider I noticed supporting JSON/P. At the time I had assumed it simply helped support their JSON format results. I didn't quite get what else it would provide. I figured Yahoo was simply providing JSON as an alternative to XML for data size reasons (JSON can be a lot slimmer) and that people were using it along with the "proxy" setup I just described.
+</p>
+
+<p>
+Last week I came across this excellent article at IBM: <a href="http://www.ibm.com/developerworks/library/wa-aj-jsonp1/?ca=dgr-jw64JSONP-jQuery&S_TACT=105AGY46&S_CMP=grsitejw64">Cross-domain communications with JSONP, Part 1: Combine JSONP and jQuery to quickly build powerful mashups</a>. Finally, everything clicked. Turns out, there is a back door to the whole cross domain issue. If you dynamically create a new script block, you are allowed to point this new script block at any domain you want. So for example, I could dynamically create a script block that acts as if I had done:
+</p>
+
+<pre><code class="language-markup">&lt;script src="http://search.yahooapis.com/someJSLibrary.js"&gt;&lt;/script&gt;</code></pre>
+
+<p>
+So with that being possible (and with the way browsers are updated this little backdoor probably won't ever be shut) you can now dynamically request dat from another server. But how do you actually work with the data? Normally script tags like the one above load a library of code into your browser. They aren't just used to load data by itself. Another problem is handling the data. If my intent was to request Yahoo search data and present it within my own UI, I'd need to be able to make the request as well as handle the result manually. This is where the whole 'with Padding' thing comes to play. An API that supports JSONP will return not only the pure JSON data you want, but will also wrap it in a function call. So in English, I can tell Yahoo: "Please return search results for 'finances'. I want the data in JSON format and I want you to wrap it in a call to a function called handleIt that I've defined below."
+</p>
+
+<p>
+To see an example of this, open the following URL in your browser:
+</p>
+
+<p>
+<a href="http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=YahooDemo&query=finances&format=pdf&output=json
+">http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=YahooDemo&query=finances&format=pdf&output=json</a>
+</p>
+
+<p>
+Notice the result is simple JSON. Now modify the URL a bit to request a callback:
+</p>
+
+<p>
+<a href="http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=YahooDemo&query=finances&format=pdf&output=json&callback=loadit
+">http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=YahooDemo&query=finances&format=pdf&output=json&callback=loadit</a>
+</p>
+
+<p>
+Now the JSON code is wrapped in a function call to something called loadit. If I had a function named loadit on my page, it would have been run and the search result data passed to it. To bring this together into a real working example, I'll demonstrate using jQuery. jQuery provides builtin support for JSONP. You don't have to worry about writing any of the code to inject a new SCRIPT tag into the DOM. All you end up doing is modifying the URL to tip off jQuery that a JSONP call is being made. From the <a href="http://docs.jquery.com/Ajax/jQuery.getJSON#urldatacallback">docs</a> for getJSON, we see that by ending your URL with a ?, jQuery will treat the request like a JSONP call. You don't have to specify a function name yourself. jQuery will take care of that. Here is a full example:
+</p>
+
+<pre><code class="language-markup">&lt;html&gt;
+
+&lt;head&gt;
+&lt;script src=&quot;/jquery/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+var baseurl = 'http://search.yahooapis.com/ImageSearchService/V1/imageSearch?appid=YahooDemo&amp;output=json&amp;query='
+
+function search() {
+    var search = $(&quot;#search&quot;).val()
+    console.log(search)
+    var surl = baseurl + escape(search) + '&amp;callback=?'
+    $.getJSON(surl, function(data) {
+        var res = '&lt;h1&gt;Search for '+search+'&lt;/h1&gt;'
+        res += '&lt;p&gt;There were '+data.ResultSet.totalResultsAvailable+' results.&lt;/p&gt;'
+        for(var i=0; i&lt;data.ResultSet.Result.length; i++) {
+            var result = data.ResultSet.Result[i]
+            var resultStr = '&lt;img src=&quot;'+result['Thumbnail']['Url']+'&quot; align=&quot;left&quot;&gt;';
+            resultStr += '&lt;a href=&quot;'+result['ClickUrl']+'&quot;&gt;'+result['Title']+'&lt;/a&gt;&lt;br clear=&quot;left&quot;/&gt;'
+            res+=resultStr
+        }
+        $(&quot;#result&quot;).html(res)
+    })
+}
+
+$(document).ready(function() {
+    $(&quot;#searchBtn&quot;).click(search)
+});
+
+&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;input type=&quot;text&quot; name=&quot;search&quot; id=&quot;search&quot;&gt; &lt;input type=&quot;button&quot; value=&quot;Search&quot; id=&quot;searchBtn&quot;&gt;
+    &lt;div id=&quot;result&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p>
+I built a simple form and tied it my search function. I had created a base URL for Yahoo so that all I need to do is append the current search term from the from. After that I added callback=?. Again - this tips off jQuery that it needs to treat the request like JSONP. I can then supply an inline function to handle the results. I won't go into detail about the code there as it is mostly HTML handling, but I think you get the idea.
+</p>
+
+<p>
+Interesting technique - but would I use it? First, you can only use it with APIs that support JSONP (anyone have a good list of them?). Secondly, even if an API does support JSONP, you may still prefer the proxy support for a few reasons. First, it may be easier to massage the results on the server side. You may want to filter, for example, the search results to items that match with certain products in your database. That could be done with further Ajax calls, but it may be simpler to just do one call to your server and let it do all the handiwork. Using a proxy also makes it a bit easier to handle errors. Again, you could do that client side, but you may want to revert to server side cached results in the case where Yahoo fails to respond.
+</p>
+
+<p>
+I'd love to hear from people using this in production!
+</p>
+
+            </div>
+        </div>
+
+    </article>
+
+		
+    <section id="comments">
+        <div id="disqus_thread">
+            
+<script>
+var disqus_config = function () {
+
+this.page.url = 'http://www.raymondcamden.com\/2014\/03\/12\/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it'; 
+this.page.identifier = '/?p=5173'; 
+
+};
+
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//raymondcamden.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+    </section>
+	
+</section>
+
+    <aside id="sidebar">
+
+	<div class="widget-wrap">
+		<h3 class="widget-title">
+			Sponsors
+		</h3>
+		<div class="widget">
+			<a href="http://www.fusion-reactor.com/?affiliate=raymondcamden"><img src="/images/frad150.png" title="FusionReactor"></a>
+		</div>
+	</div>
+
+  	
+    
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Recents
+    </h3>
+    <div class="widget">
+        <ul id="recent-post">
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/03/12/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/comicbooks.jpg)" alt="Reprint: What in the heck is JSONP and why would you use it?" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/22/building-a-twitter-bot-to-display-random-comic-book-covers" class="title">Building a Twitter bot to display random comic book covers</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-22 10:42:00 -0700 -0700" itemprop="datePublished">2016-02-22</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/03/12/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/18/creating-an-unread-count-for-a-static-site" class="title">Creating an unread count for a static site</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-18 14:23:00 -0700 -0700" itemprop="datePublished">2016-02-18</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/03/12/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it" class="thumbnail">
+                    
+                        <span style="background-image:url(http://www.raymondcamden.com//images/banners/phonegap-logo.png)" alt="Reprint: What in the heck is JSONP and why would you use it?" class="thumbnail-image"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/development">
+                        Development
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/17/my-phonegap-day-2016-presentation" class="title">My PhoneGap Day 2016 Presentation</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-17 08:41:00 -0700 -0700" itemprop="datePublished">2016-02-17</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/03/12/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                        ColdFusion
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released" class="title">Adobe ColdFusion 2016 Released</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-16 05:35:00 -0700 -0700" itemprop="datePublished">2016-02-16</time>
+                    </p>
+                </div>
+            </li>
+            
+            <li>
+                <div class="item-thumbnail">
+                    <a href="http://www.raymondcamden.com/2014/03/12/Reprint-What-in-the-heck-is-JSONP-and-why-would-you-use-it" class="thumbnail">
+                    
+                        <span class="thumbnail-image thumbnail-none"></span>
+                    
+                    </a>
+                </div>
+                <div class="item-inner">
+                    
+                    <p class="item-category">
+                        <a class="article-category-link" href="http://www.raymondcamden.com/categories/misc">
+                        Misc
+                        </a>
+                    </p>
+                    
+                    <p class="item-title"><a href="http://www.raymondcamden.com/2016/02/15/missing-devnexus" class="title">Missing DevNexus</a></p>
+                    <p class="item-date">
+                        <time datetime="2016-02-15 14:44:00 -0700 -0700" itemprop="datePublished">2016-02-15</time>
+                    </p>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/adoption">
+                    adoption
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/books">
+                    books
+                </a>
+                <span class="category-list-count">39</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/coldfusion">
+                    coldfusion
+                </a>
+                <span class="category-list-count">3128</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/design">
+                    design
+                </a>
+                <span class="category-list-count">32</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/development">
+                    development
+                </a>
+                <span class="category-list-count">706</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/flex">
+                    flex
+                </a>
+                <span class="category-list-count">189</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/games">
+                    games
+                </a>
+                <span class="category-list-count">5</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/html5">
+                    html5
+                </a>
+                <span class="category-list-count">273</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/javascript">
+                    javascript
+                </a>
+                <span class="category-list-count">592</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/jquery">
+                    jquery
+                </a>
+                <span class="category-list-count">329</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/misc">
+                    misc
+                </a>
+                <span class="category-list-count">1157</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/mobile">
+                    mobile
+                </a>
+                <span class="category-list-count">458</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/movies">
+                    movies
+                </a>
+                <span class="category-list-count">31</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/music">
+                    music
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/uncategorized">
+                    uncategorized
+                </a>
+                <span class="category-list-count">13</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/categories/video-games">
+                    video-games
+                </a>
+                <span class="category-list-count">74</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tags
+    </h3>
+    <div class="widget">
+        <ul class="category-list">
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/bluemix">
+                    bluemix
+                </a>
+                <span class="category-list-count">21</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/cordova">
+                    cordova
+                </a>
+                <span class="category-list-count">51</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/front-end-interview-questions">
+                    front-end-interview-questions
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/harpjs">
+                    harpjs
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/ionic">
+                    ionic
+                </a>
+                <span class="category-list-count">66</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/mobilefirst">
+                    mobilefirst
+                </a>
+                <span class="category-list-count">25</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/nodejs">
+                    nodejs
+                </a>
+                <span class="category-list-count">3</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/phonegap">
+                    phonegap
+                </a>
+                <span class="category-list-count">2</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/strongloop">
+                    strongloop
+                </a>
+                <span class="category-list-count">10</span>
+            </li>
+            
+            <li class="category-list-item">
+                <a class="category-list-link" href="http://www.raymondcamden.com/tags/swift">
+                    swift
+                </a>
+                <span class="category-list-count">1</span>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+    
+
+
+<div class="widget-wrap">
+    <h3 class="widget-title">
+        Tag cloud
+    </h3>
+    <div class="widget tagcloud">
+        
+        <a href="http://www.raymondcamden.com/tags/bluemix" style="font-size: 12px;">bluemix</a>
+        
+        <a href="http://www.raymondcamden.com/tags/cordova" style="font-size: 12px;">cordova</a>
+        
+        <a href="http://www.raymondcamden.com/tags/front-end-interview-questions" style="font-size: 12px;">front-end-interview-questions</a>
+        
+        <a href="http://www.raymondcamden.com/tags/harpjs" style="font-size: 12px;">harpjs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/ionic" style="font-size: 12px;">ionic</a>
+        
+        <a href="http://www.raymondcamden.com/tags/mobilefirst" style="font-size: 12px;">mobilefirst</a>
+        
+        <a href="http://www.raymondcamden.com/tags/nodejs" style="font-size: 12px;">nodejs</a>
+        
+        <a href="http://www.raymondcamden.com/tags/phonegap" style="font-size: 12px;">phonegap</a>
+        
+        <a href="http://www.raymondcamden.com/tags/strongloop" style="font-size: 12px;">strongloop</a>
+        
+        <a href="http://www.raymondcamden.com/tags/swift" style="font-size: 12px;">swift</a>
+        
+    </div>
+</div>
+
+
+
+	
+
+    <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016
+      Powered by <a href="//gohugo.io">Hugo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-70863-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://www.raymondcamden.com/fancybox/jquery.fancybox.pack.js"></script>
+<script src="http://www.raymondcamden.com/js/script.js"></script>
+<script src="http://www.raymondcamden.com/js/prism.js"></script>
+
+
+</body>
+</html>

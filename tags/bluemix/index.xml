@@ -1,0 +1,2188 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bluemix on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/tags/bluemix/</link>
+    <description>Recent content in Bluemix on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Nov 2015 10:53:48 +0600</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/tags/bluemix/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Using Authorization Tokens for IBM Watson services</title>
+      <link>http://www.raymondcamden.com/2015/11/13/using-authorization-tokens-for-ibm-watson-services</link>
+      <pubDate>Fri, 13 Nov 2015 10:53:48 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/11/13/using-authorization-tokens-for-ibm-watson-services</guid>
+      <description>&lt;p&gt;This is a handy little trick I discovered last week. It is definitely documented (&lt;a href=&#34;https://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/getting_started/gs-tokens.shtml&#34;&gt;Using tokens with Watson services&lt;/a&gt;), but I had not run into the feature until I was investigating a Watson service. Way back in February I wrote up a blog post that discussed how to use the Visual Recognition service with a Cordova application: &lt;a href=&#34;http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova&#34;&gt;Using the new Bluemix Visual Recognition service in Cordova&lt;/a&gt;. While this worked fine, it had a big problem.&lt;/p&gt;
+
+&lt;p&gt;In order for my mobile application to talk to the remote service, I had to embed the username and password in my source code. That&amp;rsquo;s Bad&amp;trade; of course, and I finally got around to correcting that a few months ago: &lt;a href=&#34;http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic&#34;&gt;A real world app with IBM Bluemix, Node, Cordova, and Ionic&lt;/a&gt;. The solution was to setup a Node.js server that acted as a proxy between the mobile applications and the Bluemix services. That certainly wasn&amp;rsquo;t hard to do - especially since we&amp;rsquo;ve got a kick ass npm package, &lt;a href=&#34;https://www.npmjs.com/package/watson-developer-cloud&#34;&gt;watson-developer-cloud&lt;/a&gt;, that makes it rather trivial to speak to services.&lt;/p&gt;
+
+&lt;p&gt;Turns out - there&amp;rsquo;s an even simpler way. Bluemix services support the idea of authorization tokens. Instead of having your mobile app hit Node.js to simply proxy to the remote service, you can have your mobile app hit Node.js and request an authorization token. The token is good for one service so you would need to return multiple tokens if you&amp;rsquo;re using multiple services. Once you have that token, the good news is that you can then skip hitting the Node.js and instead speak directly to the remote service. Let&amp;rsquo;s look at an example. (And I highly encourage you to read the two blog entries I linked to above as the app and it&amp;rsquo;s features are described there.)&lt;/p&gt;
+
+&lt;p&gt;First, let&amp;rsquo;s show the server.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/*eslint-env node*/
+
+var express = require(&#39;express&#39;);
+var bluemix = require(&#39;./lib/bluemix.js&#39;);
+var watson = require(&#39;watson-developer-cloud&#39;);
+
+var extend = require(&#39;util&#39;)._extend;
+
+
+var cfenv = require(&#39;cfenv&#39;);
+
+var app = express();
+//app.use(express.static(__dirname + &#39;/public&#39;));
+
+var appEnv = cfenv.getAppEnv();
+
+var credentials = extend({
+   version: &#39;v1&#39;,
+   username: &#39;get from bluemix&#39;,
+   password: &#39;ditto&#39;
+}, bluemix.getServiceCreds(&#39;visual_recognition&#39;));
+
+var authorization = watson.authorization({
+  username: credentials.username,
+  password: credentials.password,
+  version: &#39;v1&#39;,
+  url: &#39;https://gateway.watsonplatform.net/authorization/api&#39;
+});
+
+app.get(&#39;/getToken&#39;, function(req, res) {
+    console.log(&#39;ok, lets do this&#39;);
+
+    var params = {
+        url: &#39;https://gateway.watsonplatform.net/visual-recognition-beta/api&#39;
+    };
+    
+    authorization.getToken(params, function (err, token) {
+        if (!token) {
+            console.log(&#39;error:&#39;, err);
+            res.send(&amp;quot;0&amp;quot;);
+        } else {
+            res.send(token);
+        }
+    });
+    
+});
+
+app.listen(appEnv.port, &#39;0.0.0.0&#39;, function() {
+    console.log(&amp;quot;server starting on &amp;quot; + appEnv.url);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first part of the code handles defaulting my credential information. I get my username and password from the Bluemix console but when I deploy my code to Bluemix, it will pick up on the environment variables instead.&lt;/p&gt;
+
+&lt;p&gt;Now take a look at the authorization section. For the most part this probably makes sense, but there is something that I guarantee will trip you up. It certainly tripped me up. Look at this section of code in particular:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var authorization = watson.authorization({
+  username: credentials.username,
+  password: credentials.password,
+  version: &#39;v1&#39;,
+  url: &#39;https://gateway.watsonplatform.net/authorization/api&#39;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The last setting there, url, is &lt;strong&gt;not&lt;/strong&gt; the URL of the API itself. We&amp;rsquo;ll get to that in a minute. Rather, it works kind of a like a &amp;ldquo;group&amp;rdquo; in terms of what kind of service you are using. Services are either &amp;ldquo;regular&amp;rdquo; or &amp;ldquo;streaming&amp;rdquo;. A regular service will use the URL you see there: &lt;a href=&#34;https://gateway.watsonplatform.net/authorization/api&#34;&gt;https://gateway.watsonplatform.net/authorization/api&lt;/a&gt;. A streaming API will use &lt;a href=&#34;https://stream.watsonplatform.net/authorization/api&#34;&gt;https://stream.watsonplatform.net/authorization/api&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Ok, so your next question is, if it isn&amp;rsquo;t obvious, how do I know what type of service I&amp;rsquo;m using? The answer is in the URL for the service itself. So for example, here is the one I&amp;rsquo;m using for visual recognition: &lt;a href=&#34;https://gateway.watsonplatform.net/visual-recognition-beta/api&#34;&gt;https://gateway.watsonplatform.net/visual-recognition-beta/api&lt;/a&gt;. See &amp;ldquo;gateway&amp;rdquo;? Yep, that&amp;rsquo;s your clue. Compare that to the endpoint for text to speech: &lt;a href=&#34;https://stream.watsonplatform.net/speech-to-text/api&#34;&gt;https://stream.watsonplatform.net/speech-to-text/api&lt;/a&gt;. You can see it has &amp;ldquo;stream&amp;rdquo; in the domain. This is all probably pretty obvious, and as I type it certainly looks obvious, but as I said, it tripped me up. Also, I discovered this entire feature by looking at the docs for another service, I did &lt;strong&gt;not&lt;/strong&gt; have the nicely written &lt;a href=&#34;https://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/getting_started/gs-tokens.shtml&#34;&gt;feature docs&lt;/a&gt; open in my browser.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s pretty much it. I set up a /getToken route and I call the authorization API. I then just return the token to the caller.&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s take a look at the JavaScript code. As I mentioned before, I won&amp;rsquo;t be going over the entire application, instead I&amp;rsquo;ll just focus on the aspect related to this change.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.controller(&#39;MainCtrl&#39;, function($scope,$ionicPlatform,$ionicLoading,$http) {
+    
+    $scope.results = [];
+    $scope.cordovaReady = false;
+
+    var token;
+    var API_URL = &amp;quot;https://gateway.watsonplatform.net/visual-recognition-beta/api&amp;quot;;
+
+    $ionicPlatform.ready(function() {
+        
+        $http.get(&#39;http://localhost:6006/getToken&#39;).then(function(res) {
+            token = res.data;
+            console.log(token);
+            $scope.cordovaReady = true;
+        }); 
+        
+    });
+
+    $scope.selectPicture = function() {
+                    
+        var gotPic = function(fileUri) {
+
+            $scope.pic = fileUri;
+            $scope.results = [];
+
+            $ionicLoading.show({template:&#39;Sending to Watson...&#39;});
+                        
+            //So now we upload it
+            var options = new FileUploadOptions();
+            
+            options.fileKey=&amp;quot;image&amp;quot;;
+            options.fileName=fileUri.split(&#39;/&#39;).pop();
+            options.headers = {&amp;quot;X-Watson-Authorization-Token&amp;quot;:token};
+            
+            var ft = new FileTransfer();
+            ft.upload(fileUri, API_URL+&amp;quot;/v1/tag/recognize&amp;quot;, function(r) {
+                var result = JSON.parse(r.response);
+
+                var results = [];
+                for(var i=0;i&amp;lt;result.images[0].labels.length;i++) {
+                    results.push(result.images[0].labels[i].label_name);    
+                }               
+
+                $scope.$apply(function() {
+                    $scope.results = results;
+                });
+                
+                $ionicLoading.hide();
+                
+
+            }, function(err) {
+                console.log(&#39;err from watsom&#39;, err);
+            }, options);
+            
+        };
+            
+        var camErr = function(e) {
+            console.log(&amp;quot;Error&amp;quot;, e);  
+        }
+        
+        navigator.camera.getPicture(gotPic, camErr, {
+            sourceType:Camera.PictureSourceType.PHOTOLIBRARY,
+            destinationType:Camera.DestinationType.FILE_URI 
+        });
+            
+    };
+    
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So the first change is that I immediately call my server to get a token. Since my entire app is &amp;ldquo;take a picture and identify crap in it&amp;rdquo; I&amp;rsquo;ve bootstrapped the button itself to that load event.&lt;/p&gt;
+
+&lt;p&gt;The next change is to the FileTransfer object. I have to add a header with the token, and obviously change the URL. Finally, I have to massage the result a bit. Previously my Node.js app did that for me. Now I&amp;rsquo;m working with the raw result from the remote service so I do that in the result hander.&lt;/p&gt;
+
+&lt;p&gt;And voila - that&amp;rsquo;s it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/11/Simulator-Screen-Shot-Nov-13-2015-10.51.51-AM.png&#34; alt=&#34;Simulator Screen Shot Nov 13, 2015, 10.51.51 AM&#34; width=&#34;394&#34; height=&#34;700&#34; class=&#34;aligncenter size-full wp-image-7102 imgborder&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>StrongLoop, Ionic, and IBM Bluemix</title>
+      <link>http://www.raymondcamden.com/2015/10/29/strongloop-ionic-and-ibm-bluemix</link>
+      <pubDate>Thu, 29 Oct 2015 13:26:02 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/29/strongloop-ionic-and-ibm-bluemix</guid>
+      <description>&lt;p&gt;Over the past few weeks I&amp;rsquo;ve been digging deep into &lt;a href=&#34;http://www.strongloop.com&#34;&gt;StrongLoop&lt;/a&gt; and rather enjoying the heck out of it. As I said in my earliest post - I&amp;rsquo;m not necessarily a fan of tools generating code for me or lots of &amp;ldquo;automagical&amp;rdquo; stuff at the framework level, but after working with the LoopBack framework and models I got over it pretty darn quickly. I&amp;rsquo;m definitely sold on the concept and am exciting about digging into the other parts of StrongLoop&amp;rsquo;s offering. But before I went too much further in that direction, I wanted to write up a complete example that covered a fully functioning server and mobile app running on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt;. To the end I&amp;rsquo;ve created a project and a set of videos to help guide you through the process. Let&amp;rsquo;s get started!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/wecandothis.jpg&#34; alt=&#34;wecandothis&#34; width=&#34;400&#34; height=&#34;400&#34; class=&#34;aligncenter size-full wp-image-7027&#34; /&gt;&lt;/p&gt;
+
+&lt;h1&gt;Getting the Code and Testing&lt;/h1&gt;
+
+&lt;p&gt;You can find all of the code on GitHub: &lt;a href=&#34;https://github.com/cfjedimaster/StrongLoop-Bluemix-Ionic&#34;&gt;https://github.com/cfjedimaster/StrongLoop-Bluemix-Ionic&lt;/a&gt;. While this will give you the raw code, obviously it won&amp;rsquo;t give you all the tools you need to run through everything. For the server-side, you&amp;rsquo;ll need:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://nodejs.org&#34;&gt;Node.js&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://strongloop.com/get-started/&#34;&gt;StrongLoop&lt;/a&gt; (installs via npm, you also want to register at the site)&lt;/li&gt;
+&lt;li&gt;Sign up at &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt; and grab the cf command line tools here: &lt;a href=&#34;https://www.ng.bluemix.net/docs/#starters/install_cli.html&#34;&gt;Deploying your app with the Cloud Foundry command line interface&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For the client-side, you&amp;rsquo;ll want:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt; and some mobile platform to test on. You may be able to get buy with the &lt;a href=&#34;http://www.raymondcamden.com/2014/09/24/browser-as-a-platform-for-your-phonegapcordova-apps&#34;&gt;browser platform&lt;/a&gt; though.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; (installs via npm)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That&amp;rsquo;s a lot, but I assume if you are a developer you probably already have Node and hopefully you have Cordova done too. There are no requirements for editors but I strongly recommend &lt;a href=&#34;https://code.visualstudio.com/&#34;&gt;Visual Studio Code&lt;/a&gt;. Ok, so let&amp;rsquo;s get started!&lt;/p&gt;
+
+&lt;h2&gt;An introduction&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/fiDU06xLqzU?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In this video, I go into detail about what is being built and what components are being used. To be honest, this blog post itself explains most of that so I won&amp;rsquo;t be offended if you skip this, but I also demonstrate the final app so you can see everything come together.&lt;/p&gt;
+
+&lt;h2&gt;Server-Side Setup&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/7rL1xTDFcNc?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In this video, I walk you through creating the Node.js application using the StrongLoop command line. I then show StrongLoop Arc Composer visually designing a simple model. I then show you the API in action and quickly create a few objects to test that everything is working.&lt;/p&gt;
+
+&lt;h2&gt;Building the mobile app in Ionic&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/sDzETrISE34?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In this video, I create the application with Ionic. I don&amp;rsquo;t walk you through every line of code, but rather show the completed source code and explain how I did it. Angular&amp;rsquo;s $ngResource made this &lt;i&gt;incredibly&lt;/i&gt; simple. Shockingly simple actually.&lt;/p&gt;
+
+&lt;h2&gt;Deploying to Bluemix and adding Cloudant&lt;/h2&gt;
+
+&lt;iframe width=&#34;853&#34; height=&#34;480&#34; src=&#34;https://www.youtube.com/embed/whvSKZl1rLA?rel=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;In the final, and longest, video, I walk you through pushing the application up to Bluemix and then adding Cloudant to the mix. As I said, this is the longest part, so let me know if anything isn&amp;rsquo;t clear.&lt;/p&gt;
+
+&lt;h2&gt;Wrap Up&lt;/h2&gt;
+
+&lt;p&gt;All in all, you&amp;rsquo;ve got about 20 minutes of video, and in that time a server is created and hosted live and a front end application is setup to speak to that server via an API. That&amp;rsquo;s power. Incredible power. Obviously I&amp;rsquo;m pretty biased towards all the technologies used in the stack here but frankly I think I have reason to be. They kick butt. I hope you think so as well!&lt;/p&gt;
+
+&lt;h2&gt;Edit&lt;/h2&gt;
+
+&lt;p&gt;Just a quick FYI - after posting this article, I discovered that the StrongLoop folks actually had a four part series on the same topic! I haven&amp;rsquo;t read it yet, but part one is here: &lt;a href=&#34;https://strongloop.com/strongblog/part-1-ionic-loopback-node-js-mobile/&#34;&gt;Part 1: Ionic &amp;amp; LoopBack Frameworks – Building a REST API&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>NodeSchool for IBM Bluemix and Node.js</title>
+      <link>http://www.raymondcamden.com/2015/10/27/nodeschool-for-ibm-bluemix-and-node-js</link>
+      <pubDate>Tue, 27 Oct 2015 11:51:26 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/27/nodeschool-for-ibm-bluemix-and-node-js</guid>
+      <description>&lt;p&gt;Nearly two years ago I &lt;a href=&#34;http://www.raymondcamden.com/2013/11/01/Check-out-nodeschoolio&#34;&gt;blogged&lt;/a&gt; about the cool set of tutorials available at &lt;a href=&#34;http://nodeschool.io&#34;&gt;NodeSchool&lt;/a&gt;. I loved the interface of the system and thought it was an excellent way to learn Node. Since that time, there have been an incredible amount of lessons added to the core package, including WebGL, ES6, and React. I&amp;rsquo;m happy to say there is also a cool package for working with &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Simply &lt;code&gt;npm install -g bluemix-workshop&lt;/code&gt; and you&amp;rsquo;ll get a set of lessons that help walk you through learning how to build Node.js apps on the IBM Bluemix platform.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot19.png&#34; alt=&#34;shot1&#34; width=&#34;610&#34; height=&#34;515&#34; class=&#34;aligncenter size-full wp-image-7002&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Each lesson walks you through a few simple sets and even provides a verification system.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot29.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;395&#34; class=&#34;aligncenter size-full wp-image-7003&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;What I like about these lessons is that it is all command line driven. Most of my experience with Bluemix is with the web console. I knew the &lt;code&gt;cf&lt;/code&gt; CLI did everything the web site did, I just didn&amp;rsquo;t realize how easy it was. I&amp;rsquo;ve learned some new things already. I can say I ran into a few bugs around the debugging/trace area (see my issues on the &lt;a href=&#34;https://github.com/jasnell/bluemix-workshop&#34;&gt;GitHub&lt;/a&gt; repo), but they don&amp;rsquo;t prevent you from moving on to the next lessons.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Building my own iPhone Availability Web App</title>
+      <link>http://www.raymondcamden.com/2015/10/20/building-my-own-iphone-availability-web-app</link>
+      <pubDate>Tue, 20 Oct 2015 11:16:06 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/20/building-my-own-iphone-availability-web-app</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Before I begin, a quick disclaimer. What I&amp;rsquo;m building here is completely for fun and because I thought it might be interesting. I&amp;rsquo;m critiquing and improving a form that was built by people smarter than me and more than adequate for 99.99% of users. Basically, I saw something I wanted to build and I did it.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m currently the owner of an HTC M8 phone - my foray back into Android after using an iPhone for a couple of versions. I like the HTC UI, and in general, the phone was pretty incredible, but after the most recent Android OS update, my phone began to get more and more sluggish. It got to a point where just opening up the phone to take a picture would take 30-60 seconds for it to respond. Phone calls, which I don&amp;rsquo;t get many of, were even worse. When I missed a call because my phone&amp;rsquo;s basic UI wouldn&amp;rsquo;t respond I nearly threw the thing in the pool. I tried many things but eventually wiped the phone and restored from a back up. It &amp;ldquo;helped&amp;rdquo;, but the phone is still chunky. I decided it was time to switch back to iOS and I figured the iPhone 6S+ would be a great phone to pick up. I also decided that the new &lt;a href=&#34;http://www.apple.com/shop/iphone/iphone-upgrade-program&#34;&gt;iPhone upgrade program&lt;/a&gt; would be a good fit. From what I&amp;rsquo;ve read it is better than ATT&amp;rsquo;s Next program. The only problem is that you must go to an Apple store to sign up for the program. My nearest Apple store is in Baton Rouge, about an hour away. Worth a drive, but only if I know I&amp;rsquo;ll have a device there to pick up.&lt;/p&gt;
+
+&lt;p&gt;Luckily, Apple has a cool &lt;a href=&#34;https://reserve.cdn-apple.com/US/en_US/reserve/iPhone/availability?returnURL=http%3A%2F%2Fwww.apple.com%2Fshop%2Fbuy-iphone%2Fiphone6s&amp;channel=1&amp;iPP=Y&#34;&gt;form&lt;/a&gt; you can use to see if your desired phone is available. You select your state, your store, your model, and then your carrier:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot16.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;708&#34; class=&#34;aligncenter size-full wp-image-6961 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, none are available. (Sigh.) You can switch to SIM-free of course (and I checked, my HTC and the 6S+ use the same type of SIM). What bothered me about this form were a couple of issues.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First off - you can&#39;t use it before 8AM. No, wait, stop laughing, I&#39;m serious. It&#39;s a web based system with &#34;open&#34; hours like a retail store. There&#39;s probably a data reason for that. I spoke with an Apple rep last week and they mentioned they get new inventory data at 8. I&#39;d like to imagine that Apple stores have some sophisticated real time hook into inventory but that&#39;s probably not the case. Still, it is kind of shocking to see a &#34;closed&#34; sign at a web site.
+&lt;li&gt;When I was in CA last week, I tried to search around me. Every time you switch stores, the form rebuilds. So if I&#39;ve selected 6S+ and ATT, I lose those selections. Now, the reason for this makes sense. It is possible that the other store doesn&#39;t have 6S+ or ATT available, but it still annoying. That&#39;s the kind of problem that intelligent front-end code could handle gracefully. There were 5-6 stores around me in South San Francisco and I checked every day there and those damn drop downs annoyed me every day. (As I said on top though, I&#39;m probably not the target user here.)
+&lt;li&gt;Finally, it would have been &lt;i&gt;really&lt;/i&gt; nice if I could have simply said, &#34;Tell me when a 6S+ for ATT or SIM-free is available in gray or silver that has 64 GB since 16 is just plain stupid.&#34; But apparently Apple isn&#39;t having any difficulty selling iPhones so such a system probably isn&#39;t a high priority for them. (And to be clear, this is &lt;strong&gt;just&lt;/strong&gt; for the upgrade program. Obviously the &#39;regular&#39; store lets you buy right now.)
+&lt;/ul&gt;
+
+&lt;p&gt;So - bored this weekend - I did what any self-respecting web dev does - I opened up dev tools while using the form. First thing I noticed was that the app was hitting JSON files to drive the drop downs:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot26.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;264&#34; class=&#34;aligncenter size-full wp-image-6962 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I then opened each of those files and took a look at the JSON. &lt;code&gt;stores.json&lt;/code&gt; was a literal listing of all the stores with availability. Here is a snippet:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&#34;stores&#34; : [ {
+    &#34;storeNumber&#34; : &#34;R414&#34;,
+    &#34;storeName&#34; : &#34;4th Street&#34;,
+    &#34;storeEnabled&#34; : false,
+    &#34;storeState&#34; : &#34;California&#34;,
+    &#34;sellEdition&#34; : false,
+    &#34;storeCity&#34; : &#34;Berkeley&#34;
+  }, {
+    &#34;storeNumber&#34; : &#34;R177&#34;,
+    &#34;storeName&#34; : &#34;ABQ Uptown&#34;,
+    &#34;storeEnabled&#34; : true,
+    &#34;storeState&#34; : &#34;New Mexico&#34;,
+    &#34;sellEdition&#34; : false,
+    &#34;storeCity&#34; : &#34;Albuquerque&#34;
+  }, {&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;availability.json&lt;/code&gt; was availability data of course. Here is a snippet from it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;  &#34;R327&#34; : {
+    &#34;MKVJ2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQA2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT62LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKQX2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKR92LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKVV2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKW72LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKRQ2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKTM2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQ62LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKTA2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT72LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKRR2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKV32LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKVW2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKW82LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKTN2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKRE2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKR82LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKWD2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQ72LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKRC2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKVX2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKW92LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKVU2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKW62LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKRF2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKUQ2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKV22LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKQY2LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKTY2LL/A&#34; : &#34;NONE&#34;,
+    &#34;MKV52LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT92LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKT32LL/A&#34; : &#34;ALL&#34;,
+    &#34;MKQ82LL/A&#34; : &#34;ALL&#34;,
+    &#34;timeSlot&#34; : {
+      &#34;en_US&#34; : {
+        &#34;timeslotTime&#34; : &#34;11:00 AM&#34;,
+        &#34;contractTimeslotTime&#34; : &#34;11:00 AM&#34;
+      }
+    },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The key there is the store and each line item (except for timeSlot) represents a model/color/carrier/size line item. So given that I could get the data (right click in dev tools and open them in a new tab, then save as), I began work on a web app that would let me parse the data my own way. Specifically I wanted a few things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Let me specify a store, and then multiple stores.&lt;/li&gt;
+&lt;li&gt;Let me specify any model I want.&lt;/li&gt;
+&lt;li&gt;Let me specify multiple carriers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I also wanted to ignore 16GB, but at the end decided against that. I began working on my own code that would suck in the JSON files (my local copy) and let me parse it myself. I&amp;rsquo;ll show the result first and then talk about the code. And yes - mine is far less pretty than Apple&amp;rsquo;s.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot33.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;361&#34; class=&#34;aligncenter size-full wp-image-6963 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;On top you can see a state drop down and store selector. As I said, my initial plan was to provide for adding multiple stores, but I never got around to that.&lt;/p&gt;
+
+&lt;p&gt;Below it you can see the carrier and model selections. Below it is the grid of options. I used CSS (woot) to gray/blur options that weren&amp;rsquo;t available. How did I get the Apple iPhone colors? Did you know Firefox has a color picker builtin to their dev tools?&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot43.png&#34; alt=&#34;shot4&#34; width=&#34;272&#34; height=&#34;73&#34; class=&#34;aligncenter size-full wp-image-6964 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The circles on the Apple store actually have nice gradients as you move from the center of the circle to the outside. I just clicked &amp;ldquo;in the middle-ish&amp;rdquo; to get a value that looked good to me.&lt;/p&gt;
+
+&lt;p&gt;Ok, so let&amp;rsquo;s now get into the code. I began with a simple setup routine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;$(document).ready(function() {
+    console.log(&#34;Make it so.&#34;);
+    
+    //load json files
+    var storeReq = $.getJSON(&#34;data/stores.json&#34;);
+    var availReq = $.getJSON(&#34;data/availability.json&#34;);
+    $.when(storeReq,availReq).then(function(stores, avail) {
+        storeList = stores[0].stores;
+        availabilityData = avail[0];
+        doStoresForStates();
+        doStateDropDowns();
+        startUp();      
+    });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;ll skip &lt;code&gt;doStoresForStates&lt;/code&gt;, that simply gives me a root variable keyed by state that includes an array of stores. doStateDropDowns populates the state drop down. As I mentioned, the idea was to make it so you could add multiple stores, but I never got to that.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function doStateDropDowns() {
+    var dds = $(&#34;.stateDD&#34;);
+    //generate the option HTML list, but only once
+    if(stateOptionHTML === &#34;&#34;) {
+        var states = [];
+        for(var i=0;i&amp;lt;storeList.length;i++) {
+            if(states.indexOf(storeList[i].storeState) === -1) states.push(storeList[i].storeState);
+        }
+        states.sort();
+        var s = &#34;&lt;option value=\&#34;\&#34;&gt;-- State --&lt;/option&gt;&#34;;
+        for(var i=0;i&amp;lt;states.length;i++) {
+            s += &#34;&lt;option&gt;&#34; + states[i] + &#34;&lt;/option&gt;&#34;;
+        }
+        stateOptionHTML = s;
+    }
+    dds.each(function(index) {
+        console.log(&#34;doing &#34;+index);
+        var options = $(&#34;option&#34;, this);
+        if(options.length === 0) {
+            $(this).html(stateOptionHTML);
+        }
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The state drop down has an event listener to respond to changes. The only thing kinda nice here is the use of &lt;code&gt;next(&amp;ldquo;select&amp;rdquo;)&lt;/code&gt; to get the drop down next to it.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function doStores() {
+    var selected = $(this).val();
+    if(selected === &#34;&#34;) return;
+    var storeHTML = &#34;&lt;option value=\&#34;\&#34;&gt;-- Location --&lt;/option&gt;&#34;;
+    for(var i=0;i&lt;storeData[selected].length;i++) {
+        storeHTML += &#34;&lt;option value=\&#34;&#34; + storeData[selected][i].number + &#34;\&#34;&gt;&#34; + storeData[selected][i].city + &#34;, &#34; + storeData[selected][i].name + &#34;&lt;/option&gt;&#34;;   
+    }
+    $(this).next(&#34;select&#34;).html(storeHTML);
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so now came the scary part - building the actual &amp;ldquo;based on what you select, filter results&amp;rdquo; stuff. The first issue I ran into was model data. As I said, every model/capacity/color/carrier had a unique ID. I could have typed this all by hand, but instead, I used dev tools:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var ray = [];$(&#34;.form-choice-selector&#34;).each(function(idx) { ray.push($(this).val()); }); copy(JSON.stringify(ray));&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What you are seeing is code I ran in the browser console. It fetched each &amp;ldquo;cell&amp;rdquo; of the display, got the value (which was the product id), and then used &lt;code&gt;copy&lt;/code&gt; to put it in my clipboard. I could then paste into my code. There are 5 carriers and 2 models, so I had to do this 10 times, but it took all of 1 or 2 minutes so it wasn&amp;rsquo;t a big deal.&lt;/p&gt;
+
+&lt;p&gt;The filtering code is a big hot mess. Like, seriously. It seems to work, but I put no warranty on it. Here it is - don&amp;rsquo;t laugh too hard at me.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function doFilter() {
+    //get all locations
+    var locations = [];
+    var selectedModels = [];
+    var selectedCarriers = [];
+    
+    $(&amp;quot;.locationDD&amp;quot;).each(function(idx) {
+        if($(this).val() != &#39;&#39;) locations.push($(this).val());
+    });
+    
+    //if no locations, do nothing
+    if(locations.length === 0) return;
+    
+    $(&amp;quot;.modelCB&amp;quot;).each(function(idx) {
+        if($(this).is(&#39;:checked&#39;)) {
+            selectedModels.push($(this).val());
+        };  
+    });
+
+    $(&amp;quot;.carrierCB&amp;quot;).each(function(idx) {
+        if($(this).is(&#39;:checked&#39;)) {
+            selectedCarriers.push($(this).val());
+        };  
+    });
+    
+    console.log(&amp;quot;Begin to filter. &amp;quot;+JSON.stringify(locations)+&amp;quot; &amp;quot;+JSON.stringify(selectedModels)+&amp;quot; &amp;quot;+JSON.stringify(selectedCarriers));
+            
+    /*
+    logic is: for each color/capacity, determine if ON/OFF
+    */
+    for(var i=0;i&amp;lt;capacityData.length;i++) {
+        var capacity = capacityData[i];
+        for(var j=0;j&amp;lt;colorData.length;j++) {
+            var color = colorData[j];
+            var models = getModels(capacity, color, selectedCarriers, selectedModels);
+            
+            console.log(&amp;quot;check &amp;quot;+capacity+&amp;quot; &amp;quot;+color+&amp;quot; models=&amp;quot;+JSON.stringify(models));
+            
+            var enabled = false;
+            
+            //did we filter by location?
+            if(locations.length &amp;gt; 0) {
+                for(var z = 0;z&amp;lt;locations.length;z++) {
+                    var location = locations[z];
+                    for(var k=0;k&amp;lt;models.length;k++) {
+                        //console.log(availabilityData[location][models[k]]);
+                        if(availabilityData[location][models[k]] === &amp;quot;ALL&amp;quot;) {
+                            enabled=true;
+                            break;
+                        }
+                    }
+                }       
+            }
+            console.log(&amp;quot;ENABLED&amp;quot;,enabled);
+            var cell = $(&amp;quot;.&amp;quot; + color + &amp;quot;.cap&amp;quot; + capacity);
+            if(!enabled) {
+                cell.addClass(&amp;quot;outofstock&amp;quot;);
+            } else {
+                cell.removeClass(&amp;quot;outofstock&amp;quot;);               
+            }
+        }   
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Basically - I loop over a capacity and color array and then check the availability at each location. (Again, remember I was going to support multiple locations.) &lt;code&gt;getModels&lt;/code&gt; is a utility function that parses the model data I gleaned from dev tools. I then simply add in/remove a CSS class to add the nice gray/blur affect.&lt;/p&gt;
+
+&lt;p&gt;That was the front end. In order to keep the application up to date I wrapped the whole thing up in a Node.js app running on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. All I needed was the ability to suck down the JSON files from Apple on a scheduled basis, and for that I used a cron library I used over at &lt;a href=&#34;http://www.coldfusionbloggers.org&#34;&gt;ColdFusion Bloggers&lt;/a&gt;. Here is the entirety of the app:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/*eslint-env node*/
+
+var https = require(&#39;https&#39;);
+var fs = require(&#39;fs&#39;);
+
+// This application uses express as its web server
+// for more info, see: http://expressjs.com
+var express = require(&#39;express&#39;);
+
+// cfenv provides access to your Cloud Foundry environment
+// for more info, see: https://www.npmjs.com/package/cfenv
+var cfenv = require(&#39;cfenv&#39;);
+
+// create a new express server
+var app = express();
+
+// serve the files out of ./public as our main files
+app.use(express.static(__dirname + &#39;/public&#39;));
+
+// get the app environment from Cloud Foundry
+var appEnv = cfenv.getAppEnv();
+
+
+//fire and forget sync method
+var sync = function() {
+    var writeStream1 = fs.createWriteStream(&#39;./public/data/availability.json&#39;);
+    https.request(&#39;https://reserve.cdn-apple.com/US/en_US/reserve/iPhone/availability.json&#39;, function(res) {
+        res.pipe(writeStream1);
+    }).end();
+
+    var writeStream2 = fs.createWriteStream(&#39;./public/data/stores.json&#39;);
+    https.request(&#39;https://reserve.cdn-apple.com/US/en_US/reserve/iPhone/stores.json&#39;, function(res) {
+        res.pipe(writeStream2);
+    }).end();
+}
+
+var cron = require(&#39;cron&#39;);
+var cronJob = cron.job(&#39;* */2 * * *&#39;, function() {
+    sync();
+    console.log(&#39;cron job complete&#39;);
+});
+cronJob.start();
+
+// start server on the specified port and binding host
+app.listen(appEnv.port, function() {
+    // print a message when the server starts listening
+    console.log(&#34;server starting on &#34; + appEnv.url);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I don&amp;rsquo;t have any error handling on the sync function so it is brittle as heck, but it gets the job down. I also set it up to hit Apple once ever 2 hours. I figured that was gentle and wouldn&amp;rsquo;t over tax Apple.com. I also built in a route I could use for manual testing, but I removed that when I deployed it up to Bluemix.&lt;/p&gt;
+
+&lt;p&gt;You can see it yourself here: &lt;a href=&#34;http://applestorechecker.mybluemix.net/&#34;&gt;http://applestorechecker.mybluemix.net/&lt;/a&gt;. As I said, it is somewhat brittle. I could also add a simple &amp;lsquo;data files last updated at X&amp;rsquo; to the header so you know how fresh the data is. If I weren&amp;rsquo;t being lazy, I could also add the ability for you to register when your desired model/color/carrier/store has product available, but, alas, I&amp;rsquo;m lazy today.&lt;/p&gt;
+
+&lt;p&gt;Any way, check it out, and let me know if you have any questions!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adding localization to your Ionic application with IBM Bluemix</title>
+      <link>http://www.raymondcamden.com/2015/10/14/adding-localization-to-your-ionic-application-with-ibm-bluemix</link>
+      <pubDate>Wed, 14 Oct 2015 13:16:26 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/14/adding-localization-to-your-ionic-application-with-ibm-bluemix</guid>
+      <description>&lt;p&gt;Localization is an important topic for mobile developers and one that is - in my opinion - not discussed enough. It is a difficult and complex topic, but like testing, it isn&amp;rsquo;t something that should be ignored just because it isn&amp;rsquo;t easy. Today I&amp;rsquo;m going to discuss one aspect of creating an internationalized hybrid application with Ionic - the localization of your UI. In my next post, I&amp;rsquo;ll talk about formatting data values. To create the localized version of a sample application, I&amp;rsquo;m going to use two services. First, I&amp;rsquo;ll use a beta &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt; service for machine-based translation. Then I&amp;rsquo;ll use an Angular library to employ the results of that service. Ready?&lt;/p&gt;
+
+&lt;h1&gt;Part One - Doing the Translation&lt;/h1&gt;
+
+&lt;p&gt;Let&amp;rsquo;s begin by talking about the translation service. The service we&amp;rsquo;ll use is a beta one which means you can only find it in the &lt;a href=&#34;https://console.ng.bluemix.net/catalog/labs/&#34;&gt;Bluemix Labs Catalog&lt;/a&gt; of services. We&amp;rsquo;ll use the &lt;a href=&#34;https://ibm.biz/bmglobalize&#34;&gt;IBM Globalization&lt;/a&gt; service.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/g.png&#34; alt=&#34;g&#34; width=&#34;372&#34; height=&#34;354&#34; class=&#34;aligncenter size-full wp-image-6932&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To be clear, we&amp;rsquo;re talking about &lt;b&gt;machine&lt;/b&gt; translation. This will &lt;b&gt;not&lt;/b&gt; be perfect. However, this service is more than appropriate for development and testing. You can hire professional translators at a later time to come in and proof-read what &lt;strike&gt;Skynet&lt;/strike&gt;Bluemix provided for you.&lt;/p&gt;
+
+&lt;p&gt;Once you sign up for Bluemix (and hey, you know you can do that for free, right?), you can then add this service. You do not need to bind it to any application as it runs &amp;ldquo;on it&amp;rsquo;s own&amp;rdquo; just fine. After you&amp;rsquo;ve added it, you can then begin working with it. You&amp;rsquo;ll start off by adding a new project.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/db.png&#34; alt=&#34;db&#34; width=&#34;750&#34; height=&#34;405&#34; class=&#34;aligncenter size-full wp-image-6933&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the next page, simply enter a name for your project, and a source language. For now, this must be English.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s2.png&#34; alt=&#34;s2&#34; width=&#34;750&#34; height=&#34;403&#34; class=&#34;aligncenter size-full wp-image-6934 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can also select the language you wish to support. You can add more languages later.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s3.png&#34; alt=&#34;s3&#34; width=&#34;750&#34; height=&#34;388&#34; class=&#34;aligncenter size-full wp-image-6935 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, now that the project is created, you get a &amp;lsquo;dashboard&amp;rsquo; view of your languages.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s4.png&#34; alt=&#34;s4&#34; width=&#34;750&#34; height=&#34;273&#34; class=&#34;aligncenter size-full wp-image-6936 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, my other languages have no data yet, so let&amp;rsquo;s fix that. Clicking the little Upload icon by English prompts you to select a file. Note that they ask you for a format. What&amp;rsquo;s cool is that you can upload as any format and then download as any format.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s45.png&#34; alt=&#34;s45&#34; width=&#34;750&#34; height=&#34;463&#34; class=&#34;aligncenter size-full wp-image-6937 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While my first guess at what the JSON format required was correct, you can see all the formats documented in the &lt;a href=&#34;https://www.ng.bluemix.net/docs/services/Globalization/index.html#globalizationOverview&#34;&gt;Globalization docs&lt;/a&gt;. Here is the one I built for my initial test.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+    &#34;age&#34;: &#34;Age&#34;,
+    &#34;email&#34;: &#34;Email&#34;,
+    &#34;firstname&#34;: &#34;First Name&#34;,
+    &#34;lastname&#34;: &#34;Last Name&#34;,
+    &#34;register&#34;: &#34;Register&#34;,
+    &#34;username&#34;: &#34;Username&#34;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After uploading it, the service parses it and shows you a set of keys and values:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s5.png&#34; alt=&#34;s5&#34; width=&#34;750&#34; height=&#34;291&#34; class=&#34;aligncenter size-full wp-image-6938 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once back on the project dashboard, you&amp;rsquo;ll get a status message about each language. In my testing this was instantaneous, but I&amp;rsquo;d assume it won&amp;rsquo;t always be that fast.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s6.png&#34; alt=&#34;s6&#34; width=&#34;750&#34; height=&#34;182&#34; class=&#34;aligncenter size-full wp-image-6939 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can click on a language and see how it translated, as well as provide your own edits if you know better. My &amp;ldquo;expert&amp;rdquo; on Chinese is my 12 year old daughter as I&amp;rsquo;m not home right now, I&amp;rsquo;ll trust Bluemix.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s7.png&#34; alt=&#34;s7&#34; width=&#34;750&#34; height=&#34;297&#34; class=&#34;aligncenter size-full wp-image-6940 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The next step is to simply download the translation:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s8.png&#34; alt=&#34;s8&#34; width=&#34;750&#34; height=&#34;323&#34; class=&#34;aligncenter size-full wp-image-6941 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it! As I said, you should not expect perfect translations, but I was amazed at how easy this was and how quickly it worked.&lt;/p&gt;
+
+&lt;h1&gt;Part Two - Using the Translation&lt;/h1&gt;
+
+&lt;p&gt;In my &amp;ldquo;research&amp;rdquo; in how to use translation files with Angular (and by research I mean some Googling and Slack conversations), I was pointed to two different libraries: &lt;a href=&#34;https://github.com/angular-translate/angular-translate&#34;&gt;angular-translate&lt;/a&gt; and &lt;a href=&#34;https://github.com/doshprompt/angular-localization&#34;&gt;angular-localization&lt;/a&gt;. (Hat tip to @northmccormick on Slack for the later.) angular-translate seemed powerful, but almost too powerful. All I really wanted (at least for this demo) was the ability to translate UI strings into a language-appropriate format. angular-localization did just that and worked well, however the documentation was pretty poor. I&amp;rsquo;ll detail what I did to use it and point out what wasn&amp;rsquo;t clear in the docs.&lt;/p&gt;
+
+&lt;p&gt;To begin with, you need to ensure you both name and store your localization files correctly. angular-translate expects a root folder for the files and beneath that a folder for each locale you support. Finally, and this was the weird part, what you name your file will drive how it is addressed in code. So for example, if you name your file cat.json, then &amp;ldquo;cat&amp;rdquo; acts like a grouping of translations. The idea is that you can have multiple different groups of key/value pairs for your translations. That&amp;rsquo;s nice, but it wasn&amp;rsquo;t clearly spelled out. To make it easier for me, I just used app.json. Here&amp;rsquo;s my folder structure. (I didn&amp;rsquo;t bother downloading the German translation. Sorry Germany.)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/s10.png&#34; alt=&#34;s10&#34; width=&#34;362&#34; height=&#34;264&#34; class=&#34;aligncenter size-full wp-image-6942 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at the code. After installing the core library, I began by configuring the service. This is done via value objects.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.value(&#39;localeConf&#39;, {
+    basePath: &#39;lang&#39;,
+    defaultLocale: &#39;en-US&#39;,
+    sharedDictionary: &#39;common&#39;,
+    fileExtension: &#39;.json&#39;,
+    persistSelection: false,
+    cookieName: &#39;COOKIE_LOCALE_LANG&#39;,
+    observableAttrs: new RegExp(&#39;^data-(?!ng-|i18n)&#39;),
+    delimiter: &#39;::&#39;
+}).value(&#39;localeSupported&#39;, [
+    &#39;en-US&#39;,
+    &#39;zh-CHS&#39;,
+    &#39;fr-FR&#39;
+]);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first portion is just high level configuration stuff. The library requires you to pass everything even if you are only tweaking one value. In my case, it was &lt;code&gt;basePath&lt;/code&gt; being set to &amp;ldquo;lang&amp;rdquo;. The next value, &lt;code&gt;localeSupported&lt;/code&gt;, is required, even though it isn&amp;rsquo;t (from what I saw) documented that it is. If you don&amp;rsquo;t tell the service what languages you support, then you can&amp;rsquo;t change languages. (Which, by the way, &lt;i&gt;also&lt;/i&gt; isn&amp;rsquo;t documented.)&lt;/p&gt;
+
+&lt;p&gt;Ok, so next I set up some simple HTML using the format the service requires:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;p data-i18n=&amp;quot;app.username&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p data-i18n=&amp;quot;app.register&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p data-i18n=&amp;quot;app.firstname&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p data-i18n=&amp;quot;app.lastname&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+
+&amp;lt;button class=&amp;quot;button&amp;quot; ng-click=&amp;quot;setChinese()&amp;quot;&amp;gt;Test Chinese&amp;lt;/button&amp;gt;
+&amp;lt;button class=&amp;quot;button&amp;quot; ng-click=&amp;quot;setFrench()&amp;quot;&amp;gt;Test French&amp;lt;/button&amp;gt;
+&amp;lt;button class=&amp;quot;button&amp;quot; ng-click=&amp;quot;setEnglish()&amp;quot;&amp;gt;Test English&amp;lt;/button&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note how localiztion is done. You specify the key (and remember, &amp;lsquo;app&amp;rsquo; is the file name of the translation JSON) and the service will automatically provide the right translation. In case your curious, if you provide a key that doesn&amp;rsquo;t exist, you&amp;rsquo;ll get %%KEY_NOT_FOUND%% as the result. That makes it nice and obvious. Note I&amp;rsquo;ve added three buttons to help me test. As I complained about above, angular-translate doesn&amp;rsquo;t actually tell you how to set a language. I had to dig around a while to figure it out (and again, @northmccormick helped me out). Here is the code for my controller:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.controller(&#39;Main&#39;, function($scope, locale) {
+    
+    $scope.setChinese = function() {
+        console.log(&#39;set chinese&#39;); 
+        locale.setLocale(&#39;zh-CHS&#39;);     
+    };
+
+    $scope.setFrench = function() {
+        console.log(&#39;set french&#39;);  
+        locale.setLocale(&#39;fr-FR&#39;);      
+    };
+
+    $scope.setEnglish = function() {
+        console.log(&#39;set english&#39;); 
+        locale.setLocale(&#39;en-US&#39;);      
+    };
+    
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not too complex, and yes, I could have used one function, but this was just my first test. The result is pretty much what you expect. Here are are two examples:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Screen-Shot-2015-10-14-at-11.56.57.png&#34; alt=&#34;Screen Shot 2015-10-14 at 11.56.57&#34; width=&#34;596&#34; height=&#34;491&#34; class=&#34;aligncenter size-full wp-image-6943 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Screen-Shot-2015-10-14-at-11.57.07.png&#34; alt=&#34;Screen Shot 2015-10-14 at 11.57.07&#34; width=&#34;596&#34; height=&#34;491&#34; class=&#34;aligncenter size-full wp-image-6944 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Woot! So the next question is - how do we automate the locale? angular-translate does &lt;i&gt;not&lt;/i&gt; do this for you. They do document this, but I wish they had bolded and underlined this point. In order to handle this, I added the &lt;a href=&#34;https://www.npmjs.com/package/cordova-plugin-globalization&#34;&gt;Cordova Globalization&lt;/a&gt; plugin. As it stands, I&amp;rsquo;m going to use that for the second part anyway so that works out just fine. The modification was pretty simple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.run(function($ionicPlatform, locale) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova &amp;&amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+        
+        navigator.globalization.getLocaleName(function(l) {
+            console.log(l);
+            locale.setLocale(l.value);
+        }, function(err) {
+            console.log(&#39;get local err&#39;, err);
+        });
+        
+  });
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On the front end, I changed my demo code to a simple form:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;div class=&amp;quot;list&amp;quot;&amp;gt;
+    &amp;lt;label class=&amp;quot;item item-input item-stacked-label&amp;quot;&amp;gt;
+        &amp;lt;span class=&amp;quot;input-label&amp;quot; data-i18n=&amp;quot;app.username&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+        &amp;lt;input type=&amp;quot;text&amp;quot;&amp;gt;
+    &amp;lt;/label&amp;gt;
+    &amp;lt;label class=&amp;quot;item item-input item-stacked-label&amp;quot;&amp;gt;
+        &amp;lt;span class=&amp;quot;input-label&amp;quot; data-i18n=&amp;quot;app.firstname&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+        &amp;lt;input type=&amp;quot;text&amp;quot;&amp;gt;
+    &amp;lt;/label&amp;gt;
+    &amp;lt;label class=&amp;quot;item item-input item-stacked-label&amp;quot;&amp;gt;
+        &amp;lt;span class=&amp;quot;input-label&amp;quot; data-i18n=&amp;quot;app.lastname&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+        &amp;lt;input type=&amp;quot;text&amp;quot;&amp;gt;
+    &amp;lt;/label&amp;gt;
+    &amp;lt;label class=&amp;quot;item item-input item-stacked-label&amp;quot;&amp;gt;
+        &amp;lt;span class=&amp;quot;input-label&amp;quot; data-i18n=&amp;quot;app.email&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+        &amp;lt;input type=&amp;quot;text&amp;quot;&amp;gt;
+    &amp;lt;/label&amp;gt;
+    &amp;lt;label class=&amp;quot;item item-input item-stacked-label&amp;quot;&amp;gt;
+        &amp;lt;span class=&amp;quot;input-label&amp;quot; data-i18n=&amp;quot;app.age&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+        &amp;lt;input type=&amp;quot;text&amp;quot;&amp;gt;
+    &amp;lt;/label&amp;gt;
+    &amp;lt;button class=&amp;quot;button button-block button-positive&amp;quot; data-i18n=&amp;quot;app.register&amp;quot;&amp;gt;&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here it is in action in the iOS Simulator - after I set my locale to French.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Simulator-Screen-Shot-Oct-14-2015-12.12.15-PM.png&#34; alt=&#34;Simulator Screen Shot Oct 14, 2015, 12.12.15 PM&#34; width=&#34;750&#34; height=&#34;1015&#34; class=&#34;aligncenter size-full wp-image-6945 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As a completely random aside, if you change the locale of your iOS Simulator and all of a sudden remember that your high school French has been blown away by Star Wars trivia and raising six kids, you can reset your simulator by doing: Simulator/Reset Content and Settings. Not that that happened to me. Honest.&lt;/p&gt;
+
+&lt;p&gt;So that&amp;rsquo;s it. I&amp;rsquo;ve put up the source code here: &lt;a href=&#34;https://github.com/cfjedimaster/Cordova-Examples/tree/master/globalex&#34;&gt;https://github.com/cfjedimaster/Cordova-Examples/tree/master/globalex&lt;/a&gt;. The simpler first version is under &lt;code&gt;www v1&lt;/code&gt;. Let me know what you think below. As I said, tomorrow we&amp;rsquo;ll look at globalizing numeric/date values.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Working with StrongLoop (Part Two)</title>
+      <link>http://www.raymondcamden.com/2015/10/13/working-with-strongloop-part-two</link>
+      <pubDate>Tue, 13 Oct 2015 11:55:16 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/13/working-with-strongloop-part-two</guid>
+      <description>&lt;p&gt;Yesterday I blogged about StrongLoop and the ability to quickly generate APIs (&lt;a href=&#34;http://www.raymondcamden.com/2015/10/12/working-with-strongloop-part-one&#34;&gt;Working with StrongLoop (Part One)&lt;/a&gt;). Today I&amp;rsquo;m going to write up a short post detailing how to switch from the in-memory database storage system to a &amp;lsquo;real&amp;rsquo; persistent one. If you haven&amp;rsquo;t read the previous entry, be sure to quickly scan it over or none of this will make sense.&lt;/p&gt;
+
+&lt;p&gt;To set up a persistence system with your StrongLoop-enabled app, you&amp;rsquo;ll want to set up a datasource. In the screen shot below you can see five different data source types. Clicking one will open up the appropriate editor.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot14.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;379&#34; class=&#34;aligncenter size-full wp-image-6919&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For my testing, I decided to first try MySQL. I&amp;rsquo;ve got a local MySQL server running so I made a new database and user just for testing my local application. I entered the appropriate details and tried to save. I then got this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot24.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;112&#34; class=&#34;aligncenter size-full wp-image-6920&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This was surprising. Since I saw the icons in the nav I just assumed it was already supported. Luckily the error message not only tells you what is wrong but gives you a link to correct it. I literally spent the 2 seconds to use npm to add the connector and that&amp;rsquo;s all it took. The web admin also provides a test button you may miss if you aren&amp;rsquo;t paying attention. It is at the very bottom of the data source form.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot1a.png&#34; alt=&#34;shot1a&#34; width=&#34;592&#34; height=&#34;154&#34; class=&#34;aligncenter size-full wp-image-6921 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The next step is to go to your model, each model, and update the data source to point to your new source.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot3b.png&#34; alt=&#34;shot3b&#34; width=&#34;750&#34; height=&#34;256&#34; class=&#34;aligncenter size-full wp-image-6922 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Remember, you need to do this for &lt;i&gt;each&lt;/i&gt; model. I imagine most folks will use one data source per API, but certainly it makes sense to allow for multiple. What&amp;rsquo;s cool too is that you can have an existing site with various models and then you can use the in-memory data source to test something new.&lt;/p&gt;
+
+&lt;p&gt;So at this point, you&amp;rsquo;re done, right? Nope. I went to the explorer to test creating a new cat. When I did my POST, I got:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot-3.5.png&#34; alt=&#34;shot 3.5&#34; width=&#34;750&#34; height=&#34;246&#34; class=&#34;aligncenter size-full wp-image-6923&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is easy to fix - when you change the data source, click that &amp;ldquo;Migrate Model&amp;rdquo; button I had not noticed before:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot42.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot42.png&#34; alt=&#34;shot4&#34; width=&#34;750&#34; height=&#34;138&#34; class=&#34;aligncenter size-full wp-image-6924 imgborder&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Again, you will want to do this for each model. StrongLoop also provides a JavaScript API for data migration if you want to programmatically handle moving from one data source to another.&lt;/p&gt;
+
+&lt;p&gt;Once I did that for my cat and dog models, I hopped back over to the MySQL GUI and confirmed it:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot51.png&#34; alt=&#34;shot5&#34; width=&#34;438&#34; height=&#34;460&#34; class=&#34;aligncenter size-full wp-image-6925&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I then ran my POST to add a cat and confirmed it persisted as well:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot61.png&#34; alt=&#34;shot6&#34; width=&#34;750&#34; height=&#34;524&#34; class=&#34;aligncenter size-full wp-image-6926 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And that was it! To be clear, everything I did visually with the StrongLoop web admin could also be done via the CLI or just pure files. In case you&amp;rsquo;re curious, here is the datasources.json file I have for my application:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  &#34;db&#34;: {
+    &#34;name&#34;: &#34;db&#34;,
+    &#34;connector&#34;: &#34;memory&#34;
+  },
+  &#34;mysqldb1&#34;: {
+    &#34;host&#34;: &#34;localhost&#34;,
+    &#34;port&#34;: 3306,
+    &#34;url&#34;: &#34;&#34;,
+    &#34;database&#34;: &#34;strongloop1&#34;,
+    &#34;password&#34;: &#34;12345&#34;,
+    &#34;name&#34;: &#34;mysqldb1&#34;,
+    &#34;connector&#34;: &#34;mysql&#34;,
+    &#34;user&#34;: &#34;slc&#34;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So that&amp;rsquo;s MySQL, what about Cloudant on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt;? The good news is that is also easy. My coworker Andy Trice covers it well here: &lt;a href=&#34;https://developer.ibm.com/bluemix/2015/09/10/getting-started-node-js-loopback-framework-ibm-cloudant/&#34;&gt;Getting Started with Node.js LoopBack Framework and IBM Cloudant&lt;/a&gt;. Essentially, once you&amp;rsquo;ve gotten your Cloudant service up, it is one more npm call to install a connector, and then you can edit your datasources.json file to include the relevant information.&lt;/p&gt;
+
+&lt;p&gt;All in all - pretty darn nice. I love how I can quickly go from a quick in-memory test to a &amp;lsquo;real&amp;rsquo; setup in a persistence system, and I like how many different options I have as well.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Working with StrongLoop (Part One)</title>
+      <link>http://www.raymondcamden.com/2015/10/12/working-with-strongloop-part-one</link>
+      <pubDate>Mon, 12 Oct 2015 10:26:21 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/12/working-with-strongloop-part-one</guid>
+      <description>&lt;p&gt;A few weeks back when I was shuttling back and forth between this side of the planet and the other, IBM purchased &lt;a href=&#34;http://www.strongloop.com&#34;&gt;StrongLoop&lt;/a&gt;. I&amp;rsquo;ll be honest and say that before this purchase, I had never heard of them. A quick perusal of their home page will tell you this:&lt;/p&gt;
+
+&lt;blockquote&gt;Built on top of the open source LoopBack framework, StrongLoop allows you to visually develop REST APIs in Node and get them connected to your data. StrongLoop also features built-in mBaaS features like push and offline sync, plus graphical tools for clustering, profiling and monitoring Node apps.&lt;/blockquote&gt;
+
+&lt;p&gt;This seemed interesting to me. Right now I&amp;rsquo;m at an interesting point in my Node.js development. I can write code. Not great code, and I need to copy and paste quite a bit, but I can build an application. On the hosting side, I&amp;rsquo;ve got multiple different ways of moving my application to production, including, of course, &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;What I haven&amp;rsquo;t really gotten yet is the ecosystem around tools to help me build Node.js apps quicker as well as debugging and performance tuning. I feel like I&amp;rsquo;m just now getting to the point where it makes sense for me to learn more about this area and the StrongLoop acquisition is the perfect opportunity for me to do so.&lt;/p&gt;
+
+&lt;p&gt;StrongLoop has a number of features related to Node.js development, but for today&amp;rsquo;s post, I&amp;rsquo;m going to focus on just one - the API Composer. At the simplest level, this is &amp;ldquo;just&amp;rdquo; a code generator, and I&amp;rsquo;ve got a bad history with code generators in general. I tried like heck to get behind Yeoman, but it simply never clicked for me and how I develop web apps. StrongLoop&amp;rsquo;s tooling though works really well (as I hope you&amp;rsquo;ll see) and so far I&amp;rsquo;m incredibly impressed.&lt;/p&gt;
+
+&lt;p&gt;The API Composer (and technically, I&amp;rsquo;m going to be showing the CLI as well as the graphic interface) is focused around building APIs. This is especially appealing to me because the more I work on the client-side, the leaner my server becomes. This is why I&amp;rsquo;ve been moving away from ColdFusion. I simply don&amp;rsquo;t need my server to do much beyond simply proxying of API calls to various data sources. The more intelligent my front-end becomes the less intelligent (and complex) my back-end becomes. Let&amp;rsquo;s consider a simple demo of what I&amp;rsquo;m talking about.&lt;/p&gt;
+
+&lt;p&gt;As a quick aside, if you are following along and actually doing these steps, you will eventually need to register at StrongLoop. You can do so &lt;a href=&#34;https://strongloop.com/register/&#34;&gt;here&lt;/a&gt;. This is free, and will be required to test the graphical stuff. I&amp;rsquo;m also assuming you have Node.js installed because, well, why wouldn&amp;rsquo;t you?&lt;/p&gt;
+
+&lt;p&gt;The first thing you&amp;rsquo;ll want to do is install StrongLoop itself. This can be done via npm:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm install -g strongloop&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This gives you the CLI tools as well as everything required to run the graphical portion as well.&lt;/p&gt;
+
+&lt;p&gt;Now, we&amp;rsquo;ll build a sample app. At the command line, run this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;slc loopback&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://loopback.io/&#34;&gt;LoopBack&lt;/a&gt; is an open source Node.js framework that StrongLoop created, and their tooling runs on top of it. Some of what you&amp;rsquo;ll see below is available in LoopBack and some just within StrongLoop itself. Running the above command will begin the app creation process.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot13.png&#34; alt=&#34;shot1&#34; width=&#34;750&#34; height=&#34;398&#34; class=&#34;aligncenter size-full wp-image-6895&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After naming your app and entering a directory, the CLI will layout the app and end with this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot23.png&#34; alt=&#34;shot2&#34; width=&#34;750&#34; height=&#34;317&#34; class=&#34;aligncenter size-full wp-image-6896&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Fire up the application and you&amp;rsquo;ll get two endpoints:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot32.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;83&#34; class=&#34;aligncenter size-full wp-image-6897&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The home page just reports some startup info, but the explorer is where things get cool.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot41.png&#34; alt=&#34;shot4&#34; width=&#34;750&#34; height=&#34;213&#34; class=&#34;aligncenter size-full wp-image-6898 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;What you are seeing is automatic documentation for a simple modal called user. This is baked into the sample code and obviously you can rip this out if you don&amp;rsquo;t need it. Clicking User expands the full list of methods available on it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Screen-Shot-2015-10-12-at-09.26.17.png&#34; alt=&#34;Screen Shot 2015-10-12 at 09.26.17&#34; width=&#34;750&#34; height=&#34;622&#34; class=&#34;aligncenter size-full wp-image-6899 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And you can then expand one particular method for more detail:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot5.png&#34; alt=&#34;shot5&#34; width=&#34;750&#34; height=&#34;416&#34; class=&#34;aligncenter size-full wp-image-6900&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice that not only do you get quite a bit of information, you also get the ability to &lt;i&gt;test&lt;/i&gt; the API directly on the page too. This is all really slick and well done, but let&amp;rsquo;s actually make a proper model for our new application. We&amp;rsquo;ll use the CLI first.&lt;/p&gt;
+
+&lt;p&gt;You begin by typing &lt;code&gt;slc loopback:model&lt;/code&gt;. You&amp;rsquo;ll be asked for the name of the model. Be sure to use the singular version as a later question will be what the plural should be. After entering the name of the model, you&amp;rsquo;ll be asked about the data-source. Out of the box, you can use an in-memory database for testing. This is slick, but remember that every time you stop the Node.js app, the data will be cleared. (Not your models, they are store as files, but instances I mean.) If you want to play with the models and keep your data around, you may want to use one tab to run the application and one to use the CLI. You&amp;rsquo;ll be asked a few more questions that you can just accept as default. StrongLoop supports things like MySQL and Mongo, and can be extended to support other data providers like Cloudant. (You&amp;rsquo;ll see this in the next post!)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot6.png&#34; alt=&#34;shot6&#34; width=&#34;750&#34; height=&#34;214&#34; class=&#34;aligncenter size-full wp-image-6901&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;re next asked to enter properties. Obviously this will depend on what your data is exposing. In the screen shot below I added three properties - name, gender, and color. I set these as strings, but I could have used different data types.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot7.png&#34; alt=&#34;shot7&#34; width=&#34;750&#34; height=&#34;620&#34; class=&#34;aligncenter size-full wp-image-6902&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(Note - the deprecation warnings there aren&amp;rsquo;t important and can be ignored.)&lt;/p&gt;
+
+&lt;p&gt;When done, I simply hit enter. Before we even look at the code, let&amp;rsquo;s look at the API explorer again. As you can see, cat has been added as a model, and the properties match what I set up.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot8.png&#34; alt=&#34;shot8&#34; width=&#34;750&#34; height=&#34;530&#34; class=&#34;aligncenter size-full wp-image-6903 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Cool. I scrolled down to the Put command and decided to build a cat (surprisingly easy to do compared to building a real cat):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Screen-Shot-2015-10-12-at-09.43.56.png&#34; alt=&#34;Screen Shot 2015-10-12 at 09.43.56&#34; width=&#34;750&#34; height=&#34;752&#34; class=&#34;aligncenter size-full wp-image-6904&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The final test though was the raw API itself. I hit the GET API at &lt;a href=&#34;http://localhost:3000/api/cats&#34;&gt;http://localhost:3000/api/cats&lt;/a&gt; and got a list of my cats:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;750&#34; height=&#34;172&#34; class=&#34;aligncenter size-full wp-image-6905 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The API also has a butt-ton (marketing term) of filtering, sorting, limiting options built in too. We haven&amp;rsquo;t yet looked at the code, so let&amp;rsquo;s check it out. The core file for the Node.js app is really simple. Obviously a lot is going on behind the scenes, but the initial file is simple and not overwhelming.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var loopback = require(&#39;loopback&#39;);
+var boot = require(&#39;loopback-boot&#39;);
+
+var app = module.exports = loopback();
+
+app.start = function() {
+  // start the web server
+  return app.listen(function() {
+    app.emit(&#39;started&#39;);
+    var baseUrl = app.get(&#39;url&#39;).replace(/\/$/, &#39;&#39;);
+    console.log(&#39;Web server listening at: %s&#39;, baseUrl);
+    if (app.get(&#39;loopback-component-explorer&#39;)) {
+      var explorerPath = app.get(&#39;loopback-component-explorer&#39;).mountPath;
+      console.log(&#39;Browse your REST API at %s%s&#39;, baseUrl, explorerPath);
+    }
+  });
+};
+
+// Bootstrap the application, configure models, datasources and middleware.
+// Sub-apps like REST API are mounted via boot scripts.
+boot(app, __dirname, function(err) {
+  if (err) throw err;
+
+  // start the server if `$ node server.js`
+  if (require.main === module)
+    app.start();
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is all boiler plate, so let&amp;rsquo;s look at how &amp;ldquo;cat&amp;rdquo; was added to the application. After I ran the CLI, two files were added to my &lt;code&gt;common/models&lt;/code&gt; folder: cat.js and cat.json. cat.js is blank, well, mostly blank:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;module.exports = function(Cat) {
+
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The idea here is that you can add customized logic for your API calls. Perhaps the &amp;ldquo;free&amp;rdquo; version of your application only returns male cats. Whatever you want - you can easily add here. cat.json is the actual definition:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  &#34;name&#34;: &#34;cat&#34;,
+  &#34;plural&#34;: &#34;cats&#34;,
+  &#34;base&#34;: &#34;PersistedModel&#34;,
+  &#34;idInjection&#34;: true,
+  &#34;options&#34;: {
+    &#34;validateUpsert&#34;: true
+  },
+  &#34;properties&#34;: {
+    &#34;name&#34;: {
+      &#34;type&#34;: &#34;string&#34;,
+      &#34;required&#34;: true
+    },
+    &#34;gender&#34;: {
+      &#34;type&#34;: &#34;string&#34;,
+      &#34;required&#34;: true
+    },
+    &#34;color&#34;: {
+      &#34;type&#34;: &#34;string&#34;,
+      &#34;required&#34;: true
+    }
+  },
+  &#34;validations&#34;: [],
+  &#34;relations&#34;: {},
+  &#34;acls&#34;: [],
+  &#34;methods&#34;: {}
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, this is all rather simple and easy to modify if you want to skip the CLI. You can also see optional items like validation support. I&amp;rsquo;m just barely scratching the surface here for the blog post.&lt;/p&gt;
+
+&lt;p&gt;At this point - I think we have something really freaking cool. Again, if you imagine a scenario where your server app is just a proxy between the client and databases, then what you&amp;rsquo;ve seen gets you a heck of a long way towards the finish line. Heck, you can build out a proof of concept server in minutes! Now let&amp;rsquo;s take it a step further and look at the API Composer.&lt;/p&gt;
+
+&lt;p&gt;Technically what I&amp;rsquo;m going to show here is called &lt;a href=&#34;https://strongloop.com/node-js/arc/&#34;&gt;Arc&lt;/a&gt;. Arc is a set of visual tools for your Node.js application. The API composer is just one small part of it. You begin by firing up the server:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;slc arc&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This opens up the web site in your default browser.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot10.png&#34; alt=&#34;shot10&#34; width=&#34;750&#34; height=&#34;721&#34; class=&#34;aligncenter size-full wp-image-6906&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now - I warned you above but it may be easy to forget. Even though this is your local server, you need to &lt;a href=&#34;https://strongloop.com/register/&#34;&gt;register&lt;/a&gt; at StrongLoop before you login here. I tried admin/admin which did not work. Once you login, just click the Composer link. The Composer gives you the ability to work with your model just like the CLI did. Here you can see the Cat model we just built.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Screen-Shot-2015-10-12-at-09.59.54.png&#34; alt=&#34;Screen Shot 2015-10-12 at 09.59.54&#34; width=&#34;750&#34; height=&#34;368&#34; class=&#34;aligncenter size-full wp-image-6907&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I can then easily add a whole new model:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Screen-Shot-2015-10-12-at-10.02.02.png&#34; alt=&#34;Screen Shot 2015-10-12 at 10.02.02&#34; width=&#34;750&#34; height=&#34;352&#34; class=&#34;aligncenter size-full wp-image-6908&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After saving the model, I can use the little Play icon the UI to restart the app so it picks up on the changes:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot111.png&#34; alt=&#34;shot11&#34; width=&#34;750&#34; height=&#34;540&#34; class=&#34;aligncenter size-full wp-image-6909&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I built my - admittedly - simple dog model in about 60 seconds - restarted and then was able to hit &lt;code&gt;&lt;a href=&#34;http://localhost:3000/api/dogs&#34;&gt;http://localhost:3000/api/dogs&lt;/a&gt;&lt;/code&gt; and it freaking &lt;i&gt;worked&lt;/i&gt; and that is awesome. I mean, I like visual building tools even less than I do generators and I&amp;rsquo;m 100% sold on this. (And to be clear, yes, I work for IBM, I&amp;rsquo;m supposed to like our stuff, but I hope my honest appreciation for this is coming through.)&lt;/p&gt;
+
+&lt;p&gt;As I said in the beginning, this is only one part of what StrongLoop offers. As I learn these tools I&amp;rsquo;m going to share my experience on the blog. If you have used StrongLoop, or LoopBack, I&amp;rsquo;d love to hear about your experiences below. Leave a comment and let me know what you think.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Testing Ionic Push Webhooks with IBM Bluemix</title>
+      <link>http://www.raymondcamden.com/2015/10/07/testing-ionic-push-webhooks-with-ibm-bluemix</link>
+      <pubDate>Wed, 07 Oct 2015 09:45:33 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/07/testing-ionic-push-webhooks-with-ibm-bluemix</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Disclaimer: Ionic Services are currently in Alpha status. While the feature I&amp;rsquo;m talking about will surely exist when Ionic&amp;rsquo;s Push service goes Gold, the &lt;i&gt;details&lt;/i&gt; of what I&amp;rsquo;m covering today will surely change. Please keep that in mind.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been going over the various Ionic Services as I prepare for my &lt;a href=&#34;http://www.meetup.com/Ionic-SF/events/225612872/&#34;&gt;presentation&lt;/a&gt; next week. One of the aspects of Ionic&amp;rsquo;s Push service that I had not used yet is &lt;a href=&#34;http://docs.ionic.io/docs/push-server-setup&#34;&gt;webhooks&lt;/a&gt;. Ionic lets you define a webhook (a URL really) that they will call whenever someone registers for push, unregisters for push, or simply has a device that becomes invalid. I thought I&amp;rsquo;d create a quick Node.js application so I could test this feature for myself. To host this application, I&amp;rsquo;ll make use of &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt;, our PaaS solution that makes Node.js hosting quite easy. As an aside, Bluemix supports Push by itself and you may wish to use that instead of Ionic&amp;rsquo;s Push service. One of the nice things about Bluemix is the ability to mix and match services as you see fit.&lt;/p&gt;
+
+&lt;p&gt;To begin, I created a simple Push demo. You can find the complete source code for this demo here: &lt;a href=&#34;https://github.com/cfjedimaster/IonicServicesPresentation/tree/master/demos/push1_user&#34;&gt;https://github.com/cfjedimaster/IonicServicesPresentation/tree/master/demos/push1_user&lt;/a&gt;. I&amp;rsquo;m not going to show the code here in the blog entry as it isn&amp;rsquo;t necessarily relevant. All it does is register the application for push and associate it with an Ionic User. That by itself is interesting as the docs don&amp;rsquo;t show a complete example of this yet, but I&amp;rsquo;ll save that for a blog entry later this week. The important thing is that I&amp;rsquo;ve got an application I can fire up on my device and do real push tests.&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s turn our attention to the &lt;a href=&#34;http://docs.ionic.io/docs/push-server-setup&#34;&gt;webhook&lt;/a&gt; feature. The main purpose of this feature is to give you the ability to know when a user registers (or unregisters) for push. You can use &lt;i&gt;any&lt;/i&gt; server technology you want for this, which for me means Node.js. I began by going to Bluemix and signing in (which is free, by the way!) and creating a new app using the Node.js starter. I downloaded the sample code (which has gotten quite a bit simpler since I first began using Bluemix), and ran &lt;code&gt;npm install&lt;/code&gt; to get things prepared locally. I&amp;rsquo;ve talked about how to use Bluemix for Node.js before, but in case you need a refresher, check out my article here: &lt;a href=&#34;http://www.raymondcamden.com/2015/03/02/hosting-node-js-apps-on-bluemix&#34;&gt;Hosting Node.js apps on Bluemix&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;For my application, I decided that it will respond to Ionic&amp;rsquo;s calls by storing the registration data in &lt;a href=&#34;https://ibm.biz/Bluemix-Cloudant&#34;&gt;Cloudant&lt;/a&gt;. There&amp;rsquo;s a great Node.js &lt;a href=&#34;https://www.npmjs.com/package/cloudant&#34;&gt;package&lt;/a&gt; for it so I knew using it in the application would be simple. You can easily add the Cloudant service to your Bluemix app from the catalog:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot11.png&#34; alt=&#34;shot1&#34; width=&#34;407&#34; height=&#34;225&#34; class=&#34;aligncenter size-full wp-image-6883&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once I added the service, I then went into the administrator and created a database called &amp;ldquo;registrations&amp;rdquo;. Now I opened up my code and started writing. Believe it or not, I wrote everything below in one sitting and I didn&amp;rsquo;t make any mistakes. Seriously. (Ok, I may be off by a factor of ten or so.) Here is the code I used to handle calls from the webhook:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/*eslint-env node*/
+
+var express = require(&#39;express&#39;);
+
+// cfenv provides access to your Cloud Foundry environment
+// for more info, see: https://www.npmjs.com/package/cfenv
+var cfenv = require(&#39;cfenv&#39;);
+
+var Cloudant = require(&#39;cloudant&#39;);
+
+var cdMe = &amp;quot;&amp;quot;;
+var cdPassword = &amp;quot;&amp;quot;;
+if(process.env.VCAP_SERVICES) {
+    var info = JSON.parse(process.env.VCAP_SERVICES);
+    cdMe = info.cloudantNoSQLDB[0].credentials.username;
+    cdPassword = info.cloudantNoSQLDB[0].credentials.password;  
+} else {
+    cdMe = &amp;quot;the username from the Bluemix console&amp;quot;;
+    cdPassword = &amp;quot;ditto&amp;quot;;
+}
+
+
+var cloudant = Cloudant({account:cdMe, password:cdPassword});
+var registrationDb = cloudant.db.use(&#39;registrations&#39;);
+
+var app = express();
+
+// serve the files out of ./public as our main files
+app.use(express.static(__dirname + &#39;/public&#39;));
+
+var jsonBody = require(&amp;quot;body/json&amp;quot;);
+
+// get the app environment from Cloud Foundry
+var appEnv = cfenv.getAppEnv();
+
+function getRegistrationMode(body) {
+    if(body.token_invalid) return &amp;quot;invalid&amp;quot;;
+    if(body.unregister &amp;amp;&amp;amp; body.unregister == true) return &amp;quot;unregister&amp;quot;;
+    return &amp;quot;register&amp;quot;;    
+}
+
+app.post(&#39;/register&#39;, function(req, res) {
+    console.log(&#39;running register&#39;);
+
+    jsonBody(req, function(err,body) {
+        console.log(body);
+        
+        var tokens = [];
+
+        /*
+        There are 3 &#39;modes&#39; of the hook: register, invalid, unregister,
+        but there is no simple flag for this. We&#39;ll do the ugly code in a
+        function and when Ionic improves this, we can fix it there.
+        */
+        var mode = getRegistrationMode(body);
+        console.log(&#39;registration mode is &#39;+mode);
+        
+        if(mode === &#39;register&#39;) {
+
+            if(body._push.android_tokens) {
+                body._push.android_tokens.forEach(function(token) {
+                    tokens.push(token);
+                });
+            }
+            if(body._push.ios_tokens) {
+                body._push.ios_tokens.forEach(function(token) {
+                    tokens.push(token);
+                });
+            }
+            console.log(&amp;quot;Going to add tokens &amp;quot;+tokens);
+            tokens.forEach(function(token) {
+                //do a get to see if exists
+                registrationDb.get(token, function(err, dbBody) {
+                    if(err) {
+                        console.log(&#39;inserting &#39;+token);
+                        //console.log(arguments);
+                        registrationDb.insert({_id:token,time:new Date().getTime()}, function(err, body, header) {
+                            //console.log(&amp;quot;cloudant db response: &amp;quot;+JSON.stringify(arguments));
+                        });
+                    } else {
+                        console.log(&#39;updating &#39;+token);
+                        registrationDb.insert({_id:token,time:new Date().getTime(),_rev:dbBody._rev}, function(err, body, header) {
+                            //console.log(&amp;quot;cloudant db response: &amp;quot;+JSON.stringify(arguments));
+                        });
+                    }
+                });
+            });
+        } else {
+            //for both unregister, invalid we just delete, but how we get the tokens is different
+            if(mode === &amp;quot;unregister&amp;quot;) {
+                if(body._push.android_tokens) {
+                    body._push.android_tokens.forEach(function(token) {
+                        tokens.push(token);
+                    });
+                }
+                if(body._push.ios_tokens) {
+                    body._push.ios_tokens.forEach(function(token) {
+                        tokens.push(token);
+                    });
+                }                               
+            } else {
+                    if(body.android_token) tokens = [body.android_token];
+                    if(body.ios_token) tokens = [body.ios_token];
+            }
+            console.log(&amp;quot;Removing &amp;quot;+tokens);
+            tokens.forEach(function(token) {
+                //do a get to see if exists
+                registrationDb.get(token, function(err, dbBody) {
+                    if(!err){
+                        registrationDb.destroy(token,dbBody._rev, function(err, body, header) {
+                            //console.log(&amp;quot;cloudant db response: &amp;quot;+JSON.stringify(arguments));
+                        });
+                    }
+                });
+            });         
+        }
+    });
+    
+    res.send(1);
+});
+
+app.get(&#39;/list&#39;, function(req, res) {
+    var results = [];
+    registrationDb.list(function(err, body) {
+        if(!err) {
+            body.rows.forEach(function(doc) {
+                results.push(doc);
+            }); 
+            res.send(JSON.stringify(results));
+        }
+    });
+});
+
+// start server on the specified port and binding host
+app.listen(appEnv.port, function() {
+    // print a message when the server starts listening
+    console.log(&amp;quot;server starting on &amp;quot; + appEnv.url);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before we dive into this, let me just clarify that I wrote the &lt;i&gt;bare minimum&lt;/i&gt; here to get my tests working. This code could be organized quite a bit better. I&amp;rsquo;m sorry.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/sorry.jpg&#34; alt=&#34;sorry&#34; width=&#34;400&#34; height=&#34;393&#34; class=&#34;aligncenter size-full wp-image-6884&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s work our way from the top down. For the most part, the first few lines are just simple require statements. Notice that I get my Cloudant credentials either via an environment variable or via a hard coded value. Don&amp;rsquo;t forget you can get your credentials in the Bluemix console by clicking on the &amp;ldquo;Show Credentials&amp;rdquo; link of the service itself:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot22.png&#34; alt=&#34;shot2&#34; width=&#34;369&#34; height=&#34;450&#34; class=&#34;aligncenter size-full wp-image-6885&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Moving on down - the next critical aspect is &lt;code&gt;getRegistrationMode&lt;/code&gt;. If you read the docs for how Ionic will hit your URL, you will notice that it is bit difficult to tell one &amp;ldquo;mode&amp;rdquo; form the other. I spoke with the developer behind this service and he agrees it can be simpler, but for now, I wrote a simple function to look at the data and figure out the mode. In the &lt;code&gt;/register&lt;/code&gt; route, we then use that function to figure out what in the heck we are doing.&lt;/p&gt;
+
+&lt;p&gt;If we are adding, then we get the tokens and figure out if they exist already in our database. If they do, we update, if they don&amp;rsquo;t, we insert. I&amp;rsquo;m including a time stamp along with the registration. I could include other things as well. Both the &amp;lsquo;unregister&amp;rsquo; and invalid status we end up removing the token.&lt;/p&gt;
+
+&lt;p&gt;Finally, I built a &lt;code&gt;/list&lt;/code&gt; route so I could quickly see if it was working. And that&amp;rsquo;s it. As I said, I wrote this all in one fell swoop without any errors. (Actually I did something kind of spectacularly stupid - read the p.s. at the bottom for details.)&lt;/p&gt;
+
+&lt;p&gt;I ran this on my local machine first, and to test, I copied the sample JSON packets from Ionic&amp;rsquo;s docs and used the &lt;a href=&#34;https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en&#34;&gt;Postman Chrome app&lt;/a&gt; to test. Postman has been around for years, but I never got around to playing with it till yesterday. It is awesome. Here it is in action:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/postman.png&#34; alt=&#34;postman&#34; width=&#34;650&#34; height=&#34;371&#34; class=&#34;aligncenter size-full wp-image-6886&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I really can&amp;rsquo;t praise this app enough. It certainly isn&amp;rsquo;t a &amp;ldquo;use every day&amp;rdquo; type thing but it is incredibly useful. Once I had my app working fine, I pushed it up to Bluemix: &lt;code&gt;cf push IonicPushRegistration&lt;/code&gt;. I waited for it to get setup, and then ran this at the command line to tell Ionic about the webhook: &lt;code&gt;ionic push webhook_url &lt;a href=&#34;http://ionicpushregistration.mybluemix.net/register&#34;&gt;http://ionicpushregistration.mybluemix.net/register&lt;/a&gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;At the time I write this, there is no way for you to determine if an Ionic app is using a web hook. Again, I&amp;rsquo;ve reported this to Ionic and they know it is an issue.&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it really. Outside of the data packet from Ionic needing a bit of organization, the feature works as expected. You can hit the &lt;a href=&#34;http://ionicpushregistration.mybluemix.net/list&#34;&gt;/list&lt;/a&gt; URL yourself and see the tokens I&amp;rsquo;ve tested.&lt;/p&gt;
+
+&lt;p&gt;Once Ionic&amp;rsquo;s services hit 1.0, I&amp;rsquo;ll consider releasing a complete Node.js application to handle this. Just remind me!&lt;/p&gt;
+
+&lt;p&gt;p.s. So yeah, my &amp;ldquo;epic&amp;rdquo; screw up. I was trying to write code that said, &amp;ldquo;If I have an environment variable for my Cloudant auth crap, use it, otherwise default to these values.&amp;rdquo; While doing that, I ended up completely breaking process.env by setting it to a new object that wiped away everything else. That kinda screwed up multiple things. Yep, I still suck at Node.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Speaking on Cordova, Ionic, and MobileFirst/Bluemix in Manilla</title>
+      <link>http://www.raymondcamden.com/2015/09/03/speaking-on-cordova-ionic-and-mobilefirstbluemix-in-manilla</link>
+      <pubDate>Thu, 03 Sep 2015 11:30:09 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/09/03/speaking-on-cordova-ionic-and-mobilefirstbluemix-in-manilla</guid>
+      <description>&lt;p&gt;So I mentioned my &lt;a href=&#34;http://www.raymondcamden.com/2015/08/31/upcoming-ionicbluemix-presentations-in-asia&#34;&gt;other presentations in Asia&lt;/a&gt; next week, but here is the final one - an event in Manilla covering Apache Cordova, Ionic, and MobileFirst/Bluemix. Free for all - attend just to see how crazy tired I am by this point.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.meetup.com/Manila-IBM-Bluemix-Cloud-Computing-and-PaaS-Meetup/events/224664318/&#34;&gt;Build your Hybrid Mobile App with Ionic, MobileFirst and Bluemix Workshop&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Upcoming Ionic/Bluemix Presentations in Asia</title>
+      <link>http://www.raymondcamden.com/2015/08/31/upcoming-ionicbluemix-presentations-in-asia</link>
+      <pubDate>Mon, 31 Aug 2015 13:05:59 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/31/upcoming-ionicbluemix-presentations-in-asia</guid>
+      <description>&lt;p&gt;After spending last week in Australia and New Zealand (NZ wins for best food and beer), I&amp;rsquo;ll be heading around the planet again next week for more sessions on Apache Cordova, Ionic, and Bluemix. Next week I&amp;rsquo;ll be hitting Kuala Lumpur, Singapore, and Manilla. I&amp;rsquo;ve got details for my sessions for the first two cities and will post the Manilla links when I can.&lt;/p&gt;
+
+&lt;p&gt;(A quick note - the details on these sessions may change a bit.)&lt;/p&gt;
+
+&lt;p&gt;The first session is possibly not titled entirely well, but here it is: &lt;a href=&#34;http://www.meetup.com/mybluemix/events/224783610/&#34;&gt;Zero to Hero with IBM Bluemix&lt;/a&gt;. While the title doesn&amp;rsquo;t mention it, I&amp;rsquo;ll be spending about one hour on Ionic and then the next part on Bluemix and how you can use it with Ionic.&lt;/p&gt;
+
+&lt;p&gt;The next session, &lt;a href=&#34;http://www.meetup.com/mybluemix/events/224783628/&#34;&gt;Zero to Hero with IBM Bluemix&lt;/a&gt; is a longer block (9AM - 2PM with lunch included I believe - don&amp;rsquo;t quote me on that) where I&amp;rsquo;ll be running a lab where you can bring your laptop and learn Cordova, Ionic, and Bluemix.&lt;/p&gt;
+
+&lt;p&gt;After Kuala Lumpur I&amp;rsquo;ll then be in Singapore. My first session is &lt;a href=&#34;http://www.meetup.com/bluemixsg/events/224365620/&#34;&gt;Bluemix SG Meetup #4: Rapid Mobile Development with Ionic Framework&lt;/a&gt;. This is a multi hour event due to food and stuff, but is mainly an hour of me talking about Ionic.&lt;/p&gt;
+
+&lt;p&gt;Then I have a three hour block: &lt;a href=&#34;http://www.meetup.com/bluemixsg/events/224877089/&#34;&gt;[Workshop] Build your Hybrid Mobile App with Ionic, MobileFirst and Bluemix&lt;/a&gt;. This will be another session where you can bring your laptop along.&lt;/p&gt;
+
+&lt;p&gt;Please note that all of these sessions are 100% free and I&amp;rsquo;ll be brining some schwag with me to give away.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>A real world app with IBM Bluemix, Node, Cordova, and Ionic</title>
+      <link>http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic</link>
+      <pubDate>Wed, 05 Aug 2015 17:01:10 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/08/05/a-real-world-app-with-ibm-bluemix-node-cordova-and-ionic</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m still working on my &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;large SauceDB project&lt;/a&gt;, but during a meeting at work earlier this week my coworkers and I came up with a simple project that may be a nicer introduction to working with &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt; and &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;. What follows is a complete application (both back and front end) that is also somewhat simple. There&amp;rsquo;s multiple moving parts here so it does require some setup, but I think this guide would be a good introduction for developers. Of course, the entire thing is also up on GitHub (&lt;a href=&#34;https://github.com/cfjedimaster/IonicBluemixDemo&#34;&gt;https://github.com/cfjedimaster/IonicBluemixDemo&lt;/a&gt;) with the instructions mirrored there as well. Alright, let&amp;rsquo;s get started!&lt;/p&gt;
+
+&lt;h2&gt;What are we building?&lt;/h2&gt;
+
+&lt;p&gt;Before we get to the code, what are we actually building? We&amp;rsquo;re building an application that makes use of the &lt;a href=&#34;http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/visual-recognition.html&#34;&gt;Watson Visual Recognition&lt;/a&gt; service. We&amp;rsquo;ll create a mobile application that lets you select a picture and send it to the Watson service so it can try and find what&amp;rsquo;s in the picture. If this sounds familiar, it should. I &lt;a href=&#34;http://www.raymondcamden.com/2015/02/06/using-the-new-bluemix-visual-recognition-service-in-cordova&#34;&gt;blogged&lt;/a&gt; about this back in February. However, back then I built a simple Cordova-only demo with the service credentials hard coded into the code. That was bad. This version is &amp;ldquo;proper&amp;rdquo; with a Node.js server running as a proxy to Watson on Bluemix. Here&amp;rsquo;s a screen show of the mobile app on start:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/iOS-Simulator-Screen-Shot-Aug-5-2015-10.40.39-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Aug 5, 2015, 10.40.39 AM&#34; width=&#34;500&#34; height=&#34;323&#34; class=&#34;aligncenter size-full wp-image-6588 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Clicking the button brings up a prompt to select an image. Note - it would be trivial to make this use a real camera - but by using the photo gallery it is easier to run on a simulator. And obviously you could use two buttons so the user could choose.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/iOS-Simulator-Screen-Shot-Aug-5-2015-10.42.25-AM1.png&#34; alt=&#34;iOS Simulator Screen Shot Aug 5, 2015, 10.42.25 AM&#34; width=&#34;259&#34; height=&#34;300&#34; class=&#34;aligncenter size-full wp-image-6590 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After you select the image, it will be uploaded to the Node.js server, sent to Watson for processing (I imagine Watson as millions of tiny minions), and the results returned to the mobile app. Watson includes both labels for things it believe it found as well as scores, but for this app, we&amp;rsquo;ll just display the labels.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/iOS-Simulator-Screen-Shot-Aug-5-2015-10.44.48-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Aug 5, 2015, 10.44.48 AM&#34; width=&#34;338&#34; height=&#34;600&#34; class=&#34;aligncenter size-full wp-image-6591 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Prereqs&lt;/h2&gt;
+
+&lt;p&gt;In order to build this project, there&amp;rsquo;s a few things you&amp;rsquo;ll need to get started.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://cordova.apache.org&#34;&gt;Apache Cordova&lt;/a&gt; should be installed, and at least one of the mobile SDKs. I tested with iOS, but this should work fine in Android and other platforms as well. In theory, you could try the &lt;a href=&#34;http://view.ionic.io/&#34;&gt;Ionic View&lt;/a&gt; application, but there is one part that I&#39;m fairly certain will not work well. I&#39;m going to test that a bit later.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;A &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;Bluemix&lt;/a&gt; account. Remember, this is 100% free. Yes you will be asked for a credit card after 30 days, but even then you can run Bluemix, and every service on there, at a free tier appropriate for testing. I think our verbiage is a bit unclear on this, but you can run it for free. Free. Did I say it was free? Yes, free.&lt;/li&gt;
+&lt;li&gt;Node.js installed so you can test locally.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Set up&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s begin by creating the application on Bluemix. Assuming you&amp;rsquo;ve logged in, begin by clicking Create App under Cloud Foundry Apps.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot1.png&#34; alt=&#34;shot1&#34; width=&#34;500&#34; height=&#34;217&#34; class=&#34;aligncenter size-full wp-image-6593&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then select Mobile for the type of app you are creating. To be clear, this will only set some default services. You can, and we will in this project, also create a web site via your Node.js application.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot2.png&#34; alt=&#34;shot2&#34; width=&#34;500&#34; height=&#34;204&#34; class=&#34;aligncenter size-full wp-image-6594&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now select the Mobile option that supports hybrid. To be clear, even though you aren&amp;rsquo;t picking iOS 8, you can still deploy to iOS 8. All we&amp;rsquo;re doing is driving what&amp;rsquo;s automatically added to our application in Bluemix.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot3.png&#34; alt=&#34;shot3&#34; width=&#34;500&#34; height=&#34;246&#34; class=&#34;aligncenter size-full wp-image-6595&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click Continue and then give this bad boy a name. I like to name my applications optimistically:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot4.png&#34; alt=&#34;shot4&#34; width=&#34;500&#34; height=&#34;220&#34; class=&#34;aligncenter size-full wp-image-6596&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click Finish and let Bluemix set stuff up for you. When done, you&amp;rsquo;ll get a confirmation screen with some tips for where to go next.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot5.png&#34; alt=&#34;shot5&#34; width=&#34;600&#34; height=&#34;490&#34; class=&#34;aligncenter size-full wp-image-6597&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Just hit continue, and then select the &lt;strong&gt;Start Coding&lt;/strong&gt; link in the left hand nav. This next page has a few important links on it:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot6.png&#34; alt=&#34;shot6&#34; width=&#34;510&#34; height=&#34;600&#34; class=&#34;aligncenter size-full wp-image-6598 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That first item, &amp;ldquo;Download CF Command Line Interface&amp;rdquo;, is a &lt;strong&gt;one time&lt;/strong&gt; download to get the command line tool. The command line tool, cf, lets you push up your code to the Bluemix server. You&amp;rsquo;ll do this when you want to deploy the app live to the Internet. For our project here you won&amp;rsquo;t ever &lt;i&gt;need&lt;/i&gt; to do that, but can if you want to show your app to others.&lt;/p&gt;
+
+&lt;p&gt;The second item, &amp;ldquo;Download Start Code&amp;rdquo;, gives you the Node.js code to start your server. Normally you could download this to get started on a new application. But our project exists up on GitHub already. Before diving into the code, let&amp;rsquo;s go ahead and set up the service our application will load. Click &amp;ldquo;Overview&amp;rdquo; to return to the main application home page, and then &amp;ldquo;Add a Service or API&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot8.png&#34; alt=&#34;shot8&#34; width=&#34;600&#34; height=&#34;456&#34; class=&#34;aligncenter size-full wp-image-6600&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Bluemix offers quite a few services, and while I can see &amp;ldquo;Visual Recognition&amp;rdquo; there clearly, you may not. You can use the search field on top to quickly narrow down your search. When you click on the Visual Recognition service it will give you a confirmation of the price (free, well, beta, but free!) and where the service will be installed. For now you can accept the defaults.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;700&#34; height=&#34;368&#34; class=&#34;aligncenter size-full wp-image-6601&#34; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Recap&lt;/h2&gt;
+
+&lt;p&gt;Ok, just to recap. We create a new application in Bluemix and added one new service to it, Watson Visual Recognition.
+Now it&amp;rsquo;s time to crack the code!&lt;/p&gt;
+
+&lt;h2&gt;The Server&lt;/h2&gt;
+
+&lt;p&gt;At the command line, check out the repo: &lt;a href=&#34;https://github.com/cfjedimaster/IonicBluemixDemo&#34;&gt;https://github.com/cfjedimaster/IonicBluemixDemo&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This will give you two folders: server and mobile. The server folder is where the Node.js code will run and the mobile folder is where the Cordova/Ionic code will run. We&amp;rsquo;ll worry about the mobile side in a second. For now, go into the server folder via your Terminal and type:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm install&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This will install the necessary dependencies the application needs. Now, let&amp;rsquo;s open the core file of the application, app.js.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var express  = require(&#39;express&#39;),
+    app         = express(),
+    ibmbluemix  = require(&#39;ibmbluemix&#39;),
+    config      = {
+        // change to real application route assigned for your application
+        applicationRoute : &amp;quot;put your route here&amp;quot;,
+        // change to real application ID generated by Bluemix for your application
+        applicationId : &amp;quot;put your id here...&amp;quot;
+    };
+
+var watson = require(&#39;watson-developer-cloud&#39;);
+var fs = require(&#39;fs&#39;);
+    
+var formidable = require(&#39;formidable&#39;);
+
+/* This could be read from environment variables on Bluemix */
+var visual_recognition = watson.visual_recognition({
+  username: &#39;get this from the BM services panel for Visual Recog&#39;,
+  password: &#39;ditto&#39;,
+  version: &#39;v1&#39;
+});
+
+// init core sdk
+ibmbluemix.initialize(config);
+var logger = ibmbluemix.getLogger();
+
+//redirect to cloudcode doc page when accessing the root context
+app.get(&#39;/&#39;, function(req, res){
+    res.sendfile(&#39;public/index.html&#39;);
+});
+
+app.get(&#39;/desktop&#39;, function(req, res){
+    res.sendfile(&#39;public/desktop.html&#39;);
+});
+
+app.post(&#39;/uploadpic&#39;, function(req, result) {
+    
+    console.log(&#39;uploadpic&#39;);
+    
+    var form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    
+    form.parse(req, function(err, fields, files) {
+        var params = {
+            image_file: fs.createReadStream(files.image.path)
+        };
+     
+        visual_recognition.recognize(params, function(err, res) {
+          if (err)
+            console.log(err);
+          else {
+              var results = [];
+              for(var i=0;i&amp;lt;res.images[0].labels.length;i++) {
+                results.push(res.images[0].labels[i].label_name);  
+              }
+              console.log(&#39;got &#39;+results.length+&#39; labels from good ole watson&#39;);
+
+              /* simple toggle for desktop/mobile mode */
+              if(!fields.mode) {
+                  result.send(results);
+              } else {              
+                result.send(&amp;quot;&amp;lt;h2&amp;gt;Results from Watson&amp;lt;/h2&amp;gt;&amp;quot;+results.join(&#39;, &#39;));  
+              }
+          }
+        });
+
+    });
+    
+});
+
+// init service sdks 
+app.use(function(req, res, next) {
+    req.logger = logger;
+    next();
+});
+
+// init basics for an express app
+app.use(require(&#39;./lib/setup&#39;));
+
+var ibmconfig = ibmbluemix.getConfig();
+
+logger.info(&#39;mbaas context root: &#39;+ibmconfig.getContextRoot());
+// &amp;quot;Require&amp;quot; modules and files containing endpoints and apply the routes to our application
+app.use(ibmconfig.getContextRoot(), require(&#39;./lib/staticfile&#39;));
+
+app.listen(ibmconfig.getPort());
+logger.info(&#39;Server started at port: &#39;+ibmconfig.getPort());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, let&amp;rsquo;s break this down. The first thing you&amp;rsquo;ll notice is a config block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;config   = {
+    // change to real application route assigned for your application
+    applicationRoute : &#34;put your route here&#34;,
+    // change to real application ID generated by Bluemix for your application
+    applicationId : &#34;put your id here...&#34;
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You need to change these values to the ones specified in the Bluemix console. If you go back to that web page and click the &lt;code&gt;Mobile Options&lt;/code&gt; link, you&amp;rsquo;ll see the values there:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot7.png&#34; alt=&#34;shot7&#34; width=&#34;420&#34; height=&#34;120&#34; class=&#34;aligncenter size-full wp-image-6599&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the screen shot above, the &lt;code&gt;app key&lt;/code&gt; value is the &lt;code&gt;applicationId&lt;/code&gt; value in code.&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at this portion:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var watson = require(&#39;watson-developer-cloud&#39;);
+// ... stuff
+
+var visual_recognition = watson.visual_recognition({
+  username: &#39;get this from the BM services panel for Visual Recog&#39;,
+  password: &#39;ditto&#39;,
+  version: &#39;v1&#39;
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So first off, we&amp;rsquo;ve added a library called &lt;a href=&#34;https://www.npmjs.com/package/watson-developer-cloud&#34;&gt;watson-developer-cloud&lt;/a&gt; to our application. This provides simple access to various Watson services including the visual recognition one. In order to use the service you need to configure access by supplying the username and password. You can find it by clicking the &amp;ldquo;Show Credentials&amp;rdquo; link for the service.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot10.png&#34; alt=&#34;shot10&#34; width=&#34;400&#34; height=&#34;374&#34; class=&#34;aligncenter size-full wp-image-6602&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I want to point out something kinda important here. When your app runs in the Bluemix environment, you have access to environment variables for everything, including services and their authentication information. A &lt;i&gt;better&lt;/i&gt; approach here would be for my code to sniff for those variable and use hard coded values when they aren&amp;rsquo;t available. For now though we&amp;rsquo;re keeping it simple. This will let us run the code locally and on Bluemix. Let&amp;rsquo;s carry on through the code. (Note - I&amp;rsquo;m skipping over some code from the boilerplate that isn&amp;rsquo;t necessarily important. If there is something you want to ask me about, just use the comments below.)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;app.get(&#39;/desktop&#39;, function(req, res){
+    res.sendfile(&#39;public/desktop.html&#39;);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This block will be used to give us a simple web based version of our service. It&amp;rsquo;s going to point to the same API our mobile application will use. By creating this HTML version we end up with a simple (and fast) way to test the functionality of the application before moving to the device.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;app.post(&#39;/uploadpic&#39;, function(req, result) {
+    
+    console.log(&#39;uploadpic&#39;);
+    
+    var form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    
+    form.parse(req, function(err, fields, files) {
+        var params = {
+            image_file: fs.createReadStream(files.image.path)
+        };
+     
+        visual_recognition.recognize(params, function(err, res) {
+          if (err)
+            console.log(err);
+          else {
+              var results = [];
+              for(var i=0;i&amp;lt;res.images[0].labels.length;i++) {
+                results.push(res.images[0].labels[i].label_name);  
+              }
+              console.log(&#39;got &#39;+results.length+&#39; labels from good ole watson&#39;);
+
+              /* simple toggle for desktop/mobile mode */
+              if(!fields.mode) {
+                  result.send(results);
+              } else {              
+                result.send(&amp;quot;&amp;lt;h2&amp;gt;Results from Watson&amp;lt;/h2&amp;gt;&amp;quot;+results.join(&#39;, &#39;));  
+              }
+          }
+        });
+
+    });
+    
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so this is the main API that listens for images. To process the form I&amp;rsquo;m using a Node package called &lt;a href=&#34;https://github.com/felixge/node-formidable&#34;&gt;Formidable&lt;/a&gt;. This is a super simple package that makes working with file uploads very easy in Node. I create an instance of a form using their API and then ask it to keep extensions. Why? By default Formidable is going to store the file in the operating system&amp;rsquo;s temporary directory. It saves the file with a unique name that has no extension. This file is a valid copy of the binary data you sent to it, but if you try to send it to Watson, the service can&amp;rsquo;t handle the lack of an extension. So I simply tell Formidable to keep the same extension I used when uploading.&lt;/p&gt;
+
+&lt;p&gt;So - finally - we can use the Visual Recognition service to check the file. It is a simple matter of specifying the file (we get that from Formidable) and then pass it to Watson. The result is a complex object including both labels ans scores, but I copy out just the labels to make it easy.&lt;/p&gt;
+
+&lt;p&gt;This final portion:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/* simple toggle for desktop/mobile mode */
+if(!fields.mode) {
+    result.send(results);
+} else {                
+result.send(&amp;quot;&amp;lt;h2&amp;gt;Results from Watson&amp;lt;/h2&amp;gt;&amp;quot;+results.join(&#39;, &#39;));  
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;is a somewhat lame way of handling mobile vs desktop testing. A &amp;ldquo;proper&amp;rdquo; API would check the headers of the requester to see if it wanted HTML versus JSON and respond accordingly. Since I&amp;rsquo;m just testing, I use a form field flag to handle this instead.&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. The desktop form is just that - a simple form (you can see all the code &lt;a href=&#34;https://github.com/cfjedimaster/IonicBluemixDemo/blob/master/server/public/desktop.html&#34;&gt;here&lt;/a&gt;), but let&amp;rsquo;s take a look at what this renders in the browser.&lt;/p&gt;
+
+&lt;p&gt;At the command line, fire up the server by typing &lt;code&gt;node app&lt;/code&gt; then open your browser to the port mentioned in the last line of your terminal:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot11.png&#34; alt=&#34;shot11&#34; width=&#34;400&#34; height=&#34;53&#34; class=&#34;aligncenter size-full wp-image-6603&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Given that your port is probably 3000, open your browser to localhost:3000/desktop:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot12.png&#34; alt=&#34;shot12&#34; width=&#34;274&#34; height=&#34;97&#34; class=&#34;aligncenter size-full wp-image-6604 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Select an image and then submit the form. We don&amp;rsquo;t have any validation on the upload for now so be sure to select a valid image. When done, you&amp;rsquo;ll get a result.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the source image:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/Bj1dYR8IUAAaDE4.jpg&#34; alt=&#34;Bj1dYR8IUAAaDE4&#34; width=&#34;300&#34; height=&#34;300&#34; class=&#34;aligncenter size-full wp-image-6605&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And here is the result:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/08/shot13.png&#34; alt=&#34;shot13&#34; width=&#34;500&#34; height=&#34;82&#34; class=&#34;aligncenter size-full wp-image-6606 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, time to turn to the mobile device!&lt;/p&gt;
+
+&lt;h2&gt;The Mobile Client&lt;/h2&gt;
+
+&lt;p&gt;As mentioned above, the front end is going to be built using Apache Cordova and Ionic. If you check out the &lt;a href=&#34;https://github.com/cfjedimaster/IonicBluemixDemo&#34;&gt;Git repo&lt;/a&gt; for the project you&amp;rsquo;ve got the code already. You will want to create a new Ionic project using the www folder from the Git project as the source. At the time I write this post, the Ionic CLI doesn&amp;rsquo;t make it clear (I filed a bug report and it looks to be fixed already) that you can create a new Ionic project based on a local folder. At your terminal, you can do this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ionic start mymobileapp ./mobile/www&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This assumes you are in the same directory as the Git checkout and you want to call your new folder, mymobileapp. You can call it whatever you want obviously.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll want to add your desired platform (for example, &lt;code&gt;ionic platform add ios&lt;/code&gt;) and then add the following plugins:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;cordova-plugin-camera&lt;/li&gt;
+&lt;li&gt;cordova-plugin-file-transfer&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can also use &lt;code&gt;ionic state restore&lt;/code&gt; to load plugins from the package.json file.&lt;/p&gt;
+
+&lt;p&gt;In theory, you&amp;rsquo;ll be able to test the app right away, but let&amp;rsquo;s take a quick look at the code. First, the index.html page.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;&amp;lt;/title&amp;gt;
+
+    &amp;lt;link href=&amp;quot;lib/ionic/css/ionic.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+    &amp;lt;link href=&amp;quot;css/style.css&amp;quot; rel=&amp;quot;stylesheet&amp;quot;&amp;gt;
+
+    &amp;lt;script src=&amp;quot;lib/ionic/js/ionic.bundle.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+    &amp;lt;script src=&amp;quot;cordova.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+    &amp;lt;!-- your app&#39;s js --&amp;gt;
+    &amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body ng-app=&amp;quot;starter&amp;quot;&amp;gt;
+
+    &amp;lt;ion-pane ng-controller=&amp;quot;MainCtrl&amp;quot;&amp;gt;
+      &amp;lt;ion-header-bar class=&amp;quot;bar-stable&amp;quot;&amp;gt;
+        &amp;lt;h1 class=&amp;quot;title&amp;quot;&amp;gt;Ionic + Bluemix + Watson Demo&amp;lt;/h1&amp;gt;
+      &amp;lt;/ion-header-bar&amp;gt;
+      &amp;lt;ion-content class=&amp;quot;padding&amp;quot;&amp;gt;
+                &amp;lt;button class=&amp;quot;button button-energized button-block&amp;quot; ng-click=&amp;quot;selectPicture()&amp;quot; ng-disabled=&amp;quot;!cordovaReady&amp;quot;&amp;gt;Select Picture&amp;lt;/button&amp;gt;
+                
+                &amp;lt;p&amp;gt;
+                &amp;lt;img ng-src=&amp;quot;{{pic}}&amp;quot; class=&amp;quot;selPicture&amp;quot;&amp;gt;
+                &amp;lt;/p&amp;gt;
+                
+                &amp;lt;ion-list class=&amp;quot;list-inset&amp;quot;&amp;gt;
+                    &amp;lt;ion-item ng-repeat=&amp;quot;result in results&amp;quot;&amp;gt;{{result}}&amp;lt;/ion-item&amp;gt;
+                &amp;lt;/ion-list&amp;gt;
+                
+      &amp;lt;/ion-content&amp;gt;
+    &amp;lt;/ion-pane&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The good stuff starts inside the &amp;lt;body&amp;gt; so let&amp;rsquo;s focus there. The app has a grand total of one screen so we aren&amp;rsquo;t using the fancy State router or views even - we just have one view right inside the index.html file. On top is the button that we&amp;rsquo;ll use to select an image. We then have a blank image that will render the one you selected. Finally, I use a simple &amp;lt;ion-list&amp;gt; to render the results from Watson. Now let&amp;rsquo;s look at the JavaScript.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;// Ionic Starter App
+
+// angular.module is a global place for creating, registering and retrieving Angular modules
+// &#39;starter&#39; is the name of this angular module example (also set in a &amp;lt;body&amp;gt; attribute in index.html)
+// the 2nd parameter is an array of &#39;requires&#39;
+angular.module(&#39;starter&#39;, [&#39;ionic&#39;])
+
+.controller(&#39;MainCtrl&#39;, function($scope,$ionicPlatform,$ionicLoading) {
+    
+    $scope.results = [];
+    $scope.cordovaReady = false;
+
+    $ionicPlatform.ready(function() {   
+        $scope.$apply(function() {
+            $scope.cordovaReady = true;
+        });
+    });
+
+    $scope.selectPicture = function() {
+                    
+        var gotPic = function(fileUri) {
+
+            $scope.pic = fileUri;
+            $scope.results = [];
+
+            $ionicLoading.show({template:&#39;Sending to Watson...&#39;});
+                        
+            //So now we upload it
+            var options = new FileUploadOptions();
+            
+            options.fileKey=&amp;quot;image&amp;quot;;
+            options.fileName=fileUri.split(&#39;/&#39;).pop();
+            
+            var ft = new FileTransfer();
+            ft.upload(fileUri, &amp;quot;http://localhost:3000/uploadpic&amp;quot;, function(r) {
+
+                //async call to Node, which calls Watson, which gives us an array of crap
+                $scope.$apply(function() {
+                    $scope.results = JSON.parse(r.response);
+                });
+                
+                $ionicLoading.hide();
+                
+
+            }, function(err) {
+                console.log(&#39;err from node&#39;, err);
+            }, options);
+            
+        };
+            
+        var camErr = function(e) {
+            console.log(&amp;quot;Error&amp;quot;, e);  
+        }
+        
+        navigator.camera.getPicture(gotPic, camErr, {
+            sourceType:Camera.PictureSourceType.PHOTOLIBRARY,
+            destinationType:Camera.DestinationType.FILE_URI 
+        });
+            
+    };
+    
+})
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova &amp;amp;&amp;amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Alright - let&amp;rsquo;s look at this. The core logic begins with the &lt;code&gt;selectPicture&lt;/code&gt; function. As I mentioned, we&amp;rsquo;re only using the photo library, but you could switch to the camera or use both if you would like. When the camera has a selected picture, then the fun begins. We use an instance of the FileTransfer object to send the image to our server. Make a note of this line: &lt;code&gt;ft.upload(fileUri, &amp;ldquo;&lt;a href=&#34;http://localhost:3000/uploadpic&amp;quot;&#34;&gt;http://localhost:3000/uploadpic&amp;quot;&lt;/a&gt;, function&amp;reg; {&lt;/code&gt;. This URL assumes you are testing in the simulator on your computer. You need to change this to either a real IP of your machine if testing on a device or the address of your Bluemix server. And that&amp;rsquo;s it. Node.js and Watson handle the crunching. We get back an array of results we can then just add to the scope.&lt;/p&gt;
+
+&lt;h2&gt;Wrap Up&lt;/h2&gt;
+
+&lt;p&gt;I hope that you have found this a simple, if not necessarily tiny, example of using IBM Bluemix, Node.js, Apache Cordova, and Ionic in a real application. Remember that you can get all of the code here (&lt;a href=&#34;https://github.com/cfjedimaster/IonicBluemixDemo&#34;&gt;https://github.com/cfjedimaster/IonicBluemixDemo&lt;/a&gt;). I&amp;rsquo;ll be updating the readme of the repo tomorrow to be a bit more verbose. If you have any questions, comments, or suggests, just leave me a note below!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SauceDB: Writing data back</title>
+      <link>http://www.raymondcamden.com/2015/07/29/saucedb-writing-data-back</link>
+      <pubDate>Wed, 29 Jul 2015 17:28:48 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/29/saucedb-writing-data-back</guid>
+      <description>&lt;p&gt;Welcome to another post on my ongoing series exploring building an &lt;a href=&#34;http://www.ionicframework.com/&#34;&gt;Ionic&lt;/a&gt; hybrid mobile app making use of Node.js running on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. Today I&amp;rsquo;m going to talk about writing data back to the server. Spoiler - this won&amp;rsquo;t be quite as cool as bringing sexy back. In my &lt;a href=&#34;http://www.raymondcamden.com/2015/07/24/saucedb-handling-the-sauce-view&#34;&gt;last post&lt;/a&gt;, I described a few minor updates to help flesh out the views of the mobile app. This included building the &amp;ldquo;Sauce view&amp;rdquo; (sauce plus reviews) for the application. Today I built another major aspect of the application - actual review writing.&lt;/p&gt;
+
+&lt;p&gt;Getting review writing working is actually a multistep process. Before you add a review, the application asks you to name the sauce you&amp;rsquo;re going to review. The idea was to autocomplete on the name so you can quickly select one that already exists. I had built this functionality on the client side already (&lt;a href=&#34;http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end&#34;&gt;SauceDB – Working on the front end&lt;/a&gt;), so at this point, all I needed to do was actually get the server-side version of it working.&lt;/p&gt;
+
+&lt;p&gt;I began by creating a &lt;a href=&#34;https://cloudant.com/for-developers/search/&#34;&gt;Cloudant Search Index&lt;/a&gt;. This is a pretty darn powerful tool. You simply create an index in your database of the field you want to search and their API will use a Lucene search engine to interface with the data.&lt;/p&gt;
+
+&lt;p&gt;Here is the index I created. My data consists of Sauces with names, so I simply index the name. I want to get the name back in searches, so I tell the index to include the value.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot113.png&#34; alt=&#34;shot1&#34; width=&#34;800&#34; height=&#34;503&#34; class=&#34;aligncenter size-full wp-image-6548&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This worked well enough, but it took me a good hour of banging my head against the wall to get search working. Why? In the term area, you need to include a field. So for example, this returns nothing:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot26.png&#34; alt=&#34;shot2&#34; width=&#34;407&#34; height=&#34;156&#34; class=&#34;aligncenter size-full wp-image-6549&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;But when I added the actual field name, &amp;ldquo;name&amp;rdquo;, it worked:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot33.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot33.png&#34; alt=&#34;shot3&#34; width=&#34;600&#34; height=&#34;269&#34; class=&#34;aligncenter size-full wp-image-6550&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so that&amp;rsquo;s cool. I then needed to work with this on the server-side in my Node code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;app.get(ibmconfig.getContextRoot()+&#39;/search/:term&#39;, function(req, res) {
+    console.log(&#34;searching for &#34;+req.params.term);
+    //we need to manipulate term a bit
+    var term = &#34;name:&#34; + req.params.term;
+    term += &#34;*&#34;;
+    console.log(term);
+    db.search(&#39;SauceName&#39;,&#39;SauceName&#39;, {q:term}, function(err, results) {
+        if(err) throw err;
+        var result = [];
+        for(var i=0;i&amp;lt;results.rows.length;i++) {
+            //console.dir(results.rows[i]);
+            result.push({id:results.rows[i].id, name:results.rows[i].fields.name}); 
+        }
+        console.dir(result);
+        res.setHeader(&#39;Content-Type&#39;, &#39;application/json&#39;);
+        res.json(result);       
+    });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see I do a bit of manipulation on the input and then just use the Search API provided by the Cloudant Node module. So back in the client-side code, I then removed my mock code in the service layer and replaced it with Cloud Code calls back to Node:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var searchSauce = function(term) {
+    var deferred = $q.defer();
+    term = term.toLowerCase();
+                
+    cc.get(&#34;/search/&#34;+term).then(function(data){
+        data = JSON.parse(data);            
+        deferred.resolve(data);
+        
+    },function(err){
+        console.log(err);
+    });
+    
+    return deferred.promise;
+
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that was pretty much it. (I did change the view template a tiny bit.) Here it is running in the emulator with real data powering the autocomplete.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-29-2015-5.10.47-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 29, 2015, 5.10.47 PM&#34; width=&#34;394&#34; height=&#34;700&#34; class=&#34;aligncenter size-full wp-image-6551 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so at this point, we load up a form to let you write your review. I had already built this out and included logic to recognize a new sauce via an existing one. So for example, an existing sauce just asks you to write the text and select the rating.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-29-2015-5.13.27-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 29, 2015, 5.13.27 PM&#34; width=&#34;750&#34; height=&#34;657&#34; class=&#34;aligncenter size-full wp-image-6552 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Whereas a new sauce requires a name and company:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-29-2015-5.14.33-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 29, 2015, 5.14.33 PM&#34; width=&#34;700&#34; height=&#34;818&#34; class=&#34;aligncenter size-full wp-image-6553 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Alrighty&amp;hellip; so&amp;hellip; here comes the fun part. We now need to communicate back to the server. That&amp;rsquo;s a simple post. But remember that we need to include information in the post that signifies that the user is logged in. I already described how I&amp;rsquo;m using &lt;a href=&#34;https://github.com/ccoenraets/OpenFB&#34;&gt;OpenFB&lt;/a&gt; for Facebook integration and I&amp;rsquo;ve got a login token I copy to $rootScope. I also blogged (&lt;a href=&#34;http://www.raymondcamden.com/2015/07/10/combining-client-side-social-login-and-server-side-authorization-with-cordova-and-node&#34;&gt;Combining client-side social login and server-side authorization with Cordova and Node&lt;/a&gt;) about how you can combine client-side login with server-side authorization in Node. All I had to do was bring those parts together.&lt;/p&gt;
+
+&lt;p&gt;First - I built in my login middleware. This will check the Facebook token sent by the user to ensure it is valid. I also want to get user information including their name and profile picture. I store all of this in a Node session so I don&amp;rsquo;t have to fetch it again.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function secure(req, result, next) {    
+    if(req.session.tokenchecked) {
+        next();   
+    } else {
+        console.log(&#39;need to check token &#39;);
+        var token = req.body.token;
+        //check to ensure token is good
+        https.get(&#39;https://graph.facebook.com/me?fields=email,name,picture&amp;access_token=&#39;+token, function(res) {
+            var str = &#39;&#39;;
+            res.on(&#39;data&#39;, function(chunk) {
+                str += chunk;
+            })
+            res.on(&#39;end&#39;, function() {
+                var response = JSON.parse(str);
+                //store name and image
+                console.dir(response);
+                if(response.id) {
+                    console.log(&#39;good&#39;);
+                    req.session.tokenchecked = 1;
+                    req.session.name = response.name;
+                    req.session.img = response.picture.data.url;
+                    next();
+                } else {
+                    console.log(&#39;bad&#39;);
+                    result.send(&#34;0&#34;);
+                }
+            })
+        }).end();
+    
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at adding a review. This has to handle two cases - adding a new sauce with a review as well as adding a review to an existing sauce. My code does not validate that a sauce name is unique. I figure&amp;hellip; that&amp;rsquo;s a bit too much for now.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;app.post(ibmconfig.getContextRoot()+&#39;/addreview&#39;, secure, function(req, res) {
+    console.log(&#34;adding review &#34;+JSON.stringify(req.body));
+    
+    var newReview = {
+        posted:new Date(),
+        rating:req.body.rating,
+        text:req.body.text,
+            user:{
+                name:req.session.name,
+                img:req.session.img
+            }
+    };
+    console.log(&#34;New Review:&#34;, JSON.stringify(newReview));
+
+    //So first q, is this a new sauce?
+    
+    if(!req.body.sauce.id) {
+        console.log(&#39;i need to make a new sauce&#39;);
+        
+        db.insert({
+            name:req.body.sauce.name,
+            company:req.body.sauce.company,
+            avgrating:newReview.rating,
+            reviews:[newReview]     
+        }, function(err, body) {
+            if(err) throw err;
+            res.setHeader(&#39;Content-Type&#39;, &#39;application/json&#39;);
+            res.json(body.id);      
+        }); 
+    } else {
+        //not new, so get, then add 
+        db.get(req.body.sauce.id, function(err, body) {
+            if(err) throw err;
+            body.reviews.push(newReview);
+
+            //calculate avgrate
+            var totalRating = 0;
+            for(var i=0;i&amp;lt;body.reviews.length;i++) {
+                totalRating += parseInt(body.reviews[i].rating,10); 
+            }
+            body.avgrating = totalRating/body.reviews.length;
+            db.insert(body, function(err, body) {
+                if(err) throw err;
+                res.setHeader(&#39;Content-Type&#39;, &#39;application/json&#39;);
+                res.json(body.id);      
+            }); 
+                    
+        }); 
+    }
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that&amp;rsquo;s it. Here&amp;rsquo;s my last review:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-29-2015-5.21.22-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 29, 2015, 5.21.22 PM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6554 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s still plenty of rough edges in this code. For example, going back to the feed doesn&amp;rsquo;t get a fresh copy. I&amp;rsquo;m going to fix that with a cool Ionic widget in my next post. There&amp;rsquo;s also some view caching going on that needs cleaning. You get the idea. But it&amp;rsquo;s getting there!&lt;/p&gt;
+
+&lt;p&gt;Remember, you can view the source code here: &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SauceDB - Handling the Sauce view</title>
+      <link>http://www.raymondcamden.com/2015/07/24/saucedb-handling-the-sauce-view</link>
+      <pubDate>Fri, 24 Jul 2015 09:03:27 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/24/saucedb-handling-the-sauce-view</guid>
+      <description>&lt;p&gt;&amp;ldquo;Handling the Sauce view&amp;rdquo; - how immature would I sound if I said that title made me laugh? Today&amp;rsquo;s post isn&amp;rsquo;t terribly exciting. I&amp;rsquo;m basically going to cover how I got one more screen in my app working. But I&amp;rsquo;m ok with this being kind of boring. As I document this process, somethings will be complex and some will simple. This is one of the simple items that I think is still useful to cover.&lt;/p&gt;
+
+&lt;p&gt;If you remember, in the &lt;a href=&#34;http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix&#34;&gt;last post&lt;/a&gt;, I detailed the setup of the back end using &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. I got a Node.js application up and running (both in the cloud and locally) and I connected my first data view from Cloudant, to Node, to my &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt;. The mobile-side was especially simple as all I had to do was update my service to call Node.js instead of creating random data.&lt;/p&gt;
+
+&lt;p&gt;In today&amp;rsquo;s update, I&amp;rsquo;m building the &amp;ldquo;Sauce view&amp;rdquo;, or what you see when you click on review. It should show information about the sauce and all the reviews. I began by building the server side. I&amp;rsquo;ve already got a connection to Cloudant, so I literally just needed to add a route and a call.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;app.get(ibmconfig.getContextRoot()+&#39;/sauce/:id&#39;,  function(req, res) {
+    console.log(&#39;Requesting sauce &#39;+req.params.id);
+
+    db.get(req.params.id, function(err, body) {
+        console.dir(body);
+        //TODO: Handle a bad id
+        var result = {};
+        //for now, just copy it
+        result = body;
+        res.setHeader(&#39;Content-Type&#39;, &#39;application/json&#39;);
+        res.json(result);       
+    });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Unlike the call I did to get reviews, I&amp;rsquo;m not modifying the result. In theory, this is kind of bad because I&amp;rsquo;m passing data back to the client that i don&amp;rsquo;t need, specifically a &lt;code&gt;_rev&lt;/code&gt; key that my front-end doesn&amp;rsquo;t need:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot19.png&#34; alt=&#34;shot1&#34; width=&#34;606&#34; height=&#34;326&#34; class=&#34;aligncenter size-full wp-image-6531&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;But for now, I don&amp;rsquo;t care. I just mention it as something to consider. JSON is small, and Ajax is awesome, but we still shouldn&amp;rsquo;t be wasteful about the crap we send back and forth, right?&lt;/p&gt;
+
+&lt;p&gt;On the client-side, the change was simpler. Here is the getSauce method:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var getSauce = function(id) {
+    var deferred = $q.defer();
+    
+    cc.get(&#34;/sauce/&#34;+id).then(function(data){
+        data = JSON.parse(data);            
+        //to be consistent w/ the Feed, copy _id to id
+        data.id = data._id;
+        console.log(&#39;got &#39;,data);
+        deferred.resolve(data);
+        
+    },function(err){
+        console.log(err);
+    });
+    
+    return deferred.promise;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;cc&lt;/code&gt; is an instance of the Cloud Code API I&amp;rsquo;m sharing in the service. I do modify the code a bit here, changing _id to id. I also slightly modify the result in getFeed too. Thinking about this, I believe it may be best for me to do all these modifications on the server so that my client-side code can use it as is. I don&amp;rsquo;t think that&amp;rsquo;s a super crucial modification so I won&amp;rsquo;t worry about it now.&lt;/p&gt;
+
+&lt;p&gt;Finally, I can run this baby in the emulator and see my live data:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-24-2015-8.51.38-AM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 24, 2015, 8.51.38 AM&#34; width=&#34;450&#34; height=&#34;800&#34; class=&#34;aligncenter size-full wp-image-6532 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, that&amp;rsquo;s it for now. Don&amp;rsquo;t forget you can see the complete source code here: &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;. Next, I&amp;rsquo;m going to try building the Add Sauce view. This will require a valid login as well as security on the Node side.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SauceDB - Building the back end with IBM Bluemix</title>
+      <link>http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix</link>
+      <pubDate>Mon, 20 Jul 2015 14:40:36 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/20/saucedb-building-the-back-end-with-ibm-bluemix</guid>
+      <description>&lt;p&gt;Welcome to another post detailing my efforts to build an &lt;a href=&#34;http://ionicframework.com&#34;&gt;Ionic&lt;/a&gt;-based mobile app backed by Node.js and Cloudant on &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. In my &lt;a href=&#34;http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end&#34;&gt;last post&lt;/a&gt;, I focused on the front end of the application. I talked about the various screens I built and how my service layer used mock data to generate data. In today&amp;rsquo;s post, I&amp;rsquo;m going to setup, design, and connect a back end server to start replacing some of that mock data with real information. As a reminder, you can find the initial post in this series &lt;a href=&#34;http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb&#34;&gt;here&lt;/a&gt;,&lt;/p&gt;
+
+&lt;p&gt;Alright - so as I mentioned, I&amp;rsquo;m going to use &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt; to host the application. I&amp;rsquo;ve talked about Bluemix before, but let me give you a quick refresher on what it offers.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/Bluemix-logo-right.png&#34; alt=&#34;Bluemix-logo-right&#34; width=&#34;450&#34; height=&#34;167&#34; class=&#34;aligncenter size-full wp-image-6429&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Bluemix is a PaaS offering. If you aren&amp;rsquo;t up to date on the latest acronyms the cool kids use, this is &amp;ldquo;Platform as a Service&amp;rdquo;. In short, it lets you set up applications and services on the cloud all via a simple dashboard and command line. There&amp;rsquo;s a variety of different services, some I&amp;rsquo;ve already blogged about here before, and a large library of code you can add to your application to make using those services even easier. I&amp;rsquo;ve already set up my application in Bluemix, but let me walk you through what the process was like.&lt;/p&gt;
+
+&lt;p&gt;After signing in (and you can sign up for a trial for free), I clicked on Create App:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot16.png&#34; alt=&#34;shot1&#34; width=&#34;800&#34; height=&#34;408&#34; class=&#34;aligncenter size-full wp-image-6430&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then selected Mobile:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot23.png&#34; alt=&#34;shot2&#34; width=&#34;800&#34; height=&#34;341&#34; class=&#34;aligncenter size-full wp-image-6431&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And then the option for Hybrid:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot31.png&#34; alt=&#34;shot3&#34; width=&#34;800&#34; height=&#34;404&#34; class=&#34;aligncenter size-full wp-image-6432&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I clicked continue on the detail and then named the app. Note that in the screen shot below I used a slightly different name so as to not conflict with the app I already created.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot42.png&#34; alt=&#34;shot4&#34; width=&#34;800&#34; height=&#34;386&#34; class=&#34;aligncenter size-full wp-image-6433&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After you hit finish, your application is going to be staged and a number of default services assigned to it.&lt;/p&gt;
+
+&lt;p&gt;At this point, you have a few options. You can take an existing Node.js app and configure to work with Bluemix services, or you can take their boilerplate code and work with that. Since this is a new app, I recommend getting the boilerplate. You can find that by clicking &amp;ldquo;Start coding&amp;rdquo; in the left hand nav:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot6.png&#34; alt=&#34;shot6&#34; width=&#34;350&#34; height=&#34;317&#34; class=&#34;aligncenter size-full wp-image-6435&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This leads you to a documentation page where you can download both the command line interface, something you&amp;rsquo;ll only need to do once, and the boilerplate. As I said, I recommend getting the boilerplate as it has the required modules to work with Bluemix already defined in the package.json. It also includes some sample code that you&amp;rsquo;ll probably want to remove. For example, I&amp;rsquo;m not using the Mobile Application Security service so I don&amp;rsquo;t need the package. But it is a good place to start.&lt;/p&gt;
+
+&lt;p&gt;In case your curious, the &amp;ldquo;Enable Node.js app&amp;rdquo; you&amp;rsquo;ll see on top&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot5.png&#34; alt=&#34;shot5&#34; width=&#34;800&#34; height=&#34;463&#34; class=&#34;aligncenter size-full wp-image-6434&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;is just another link to documentation that you can read later. Whenever I see this UI I assume that is a &lt;i&gt;required&lt;/i&gt; link, but it is not. To be clear, your Bluemix app itself is ready to kick butt right away, you don&amp;rsquo;t need to flip some toggle. You do need to upload your code using the cf command line. That &amp;ldquo;Start coding&amp;rdquo; link I just mentioned explains how to do that. It&amp;rsquo;s fairly simple and I won&amp;rsquo;t repeat it here.&lt;/p&gt;
+
+&lt;p&gt;For SauceDB, I needed to modify the services set up by Bluemix. Here is what you get by default:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot7.png&#34; alt=&#34;shot7&#34; width=&#34;800&#34; height=&#34;322&#34; class=&#34;aligncenter size-full wp-image-6436&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Since I&amp;rsquo;m not using them, I removed both Mobile Application Security and Mobile Data. You can do that using the little gear icon in the upper right side of each service. To add in support for Cloudant, you simply click &amp;ldquo;Add a Service or API&amp;rdquo; and find the Cloudant service on the next page. As I said, Bluemix provides access to a bunch of services, so you can use the search form on top to filter them out:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot8.png&#34; alt=&#34;shot8&#34; width=&#34;600&#34; height=&#34;550&#34; class=&#34;aligncenter size-full wp-image-6437&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so that was a lot, so let me quickly review. I use Bluemix to setup a new mobile application, gave it a new name, and then added a Cloudant service. I can now start building my Node.js app (again, using their boilerplate as a starting point), and then push to Bluemix when I want to deploy. For everything I&amp;rsquo;ve done with SauceDB so far, I have yet to actually push my app to Bluemix, which is good because I can work much quicker locally during development.&lt;/p&gt;
+
+&lt;p&gt;So, enough with the consoles and crap, let&amp;rsquo;s talk code. First off, everything I&amp;rsquo;m showing below is available up on the Github project: &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One of the first things I did was look for a npm module for cloudant. Here&amp;rsquo;s the one I used: &lt;a href=&#34;https://www.npmjs.com/package/cloudant&#34;&gt;https://www.npmjs.com/package/cloudant&lt;/a&gt;. After adding it to my package.json and installing, I added the library to my app.js code and pointed to a database.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var cloudant = require(&#39;cloudant&#39;)(credentials.cloudant_access_url);
+var db = cloudant.use(&#34;sauces&#34;);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The URL value you see there, which comes from a credentials.json file that will &lt;i&gt;not&lt;/i&gt; be in Github, comes from the service description in the Bluemix console. You can see it by simply clicking the &amp;ldquo;Show credentials&amp;rdquo; link:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot9.png&#34; alt=&#34;shot9&#34; width=&#34;443&#34; height=&#34;600&#34; class=&#34;aligncenter size-full wp-image-6438&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Alright&amp;hellip; so I&amp;rsquo;m connecting to a database called sauces, which doesn&amp;rsquo;t actually exist yet. If you click the Cloudant service &amp;hellip; um&amp;hellip; &amp;ldquo;box&amp;rdquo; I suppose, the detail page will include a link to launch the Cloudant console:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot10.png&#34; alt=&#34;shot10&#34; width=&#34;800&#34; height=&#34;473&#34; class=&#34;aligncenter size-full wp-image-6439 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;At this point, you can use the &amp;ldquo;Add New Database&amp;rdquo; button to add a new database. I did this for &amp;ldquo;sauces&amp;rdquo;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot111.png&#34; alt=&#34;shot11&#34; width=&#34;800&#34; height=&#34;407&#34; class=&#34;aligncenter size-full wp-image-6440&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;My goal now was to create some data so that my Node.js app could pick it up and send it back to the mobile app. If you remember the &lt;a href=&#34;http://www.raymondcamden.com/2015/07/15/saucedb-working-on-the-front-end&#34;&gt;last post&lt;/a&gt;, my application begins with a &amp;ldquo;feed&amp;rdquo; of reviews. Every review is made by a user and involves a sauce. Cloudant lets you create new docs by hand, so I built a sauce object to start off with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+  &#34;_id&#34;: &#34;786fe8d99eaf2c7e5927afe9d2afe44c&#34;,
+  &#34;name&#34;: &#34;Sauce 1&#34;,
+  &#34;company&#34;: &#34;Company 1&#34;,
+  &#34;reviews&#34;: [
+    {
+      &#34;posted&#34;: &#34;2014/05/21 10:00:00&#34;,
+      &#34;rating&#34;: 2,
+      &#34;text&#34;: &#34;This was a bad sauce.&#34;,
+      &#34;user&#34;: {
+        &#34;name&#34;: &#34;Joe&#34;,
+        &#34;img&#34;: &#34;http://placekitten.com/g/40/40&#34;
+      }
+    },
+    {
+      &#34;posted&#34;: &#34;2014/12/21 10:00:00&#34;,
+      &#34;rating&#34;: 2,
+      &#34;text&#34;: &#34;December This was a bad sauce.&#34;,
+      &#34;user&#34;: {
+        &#34;name&#34;: &#34;Joe&#34;,
+        &#34;img&#34;: &#34;http://placekitten.com/g/40/40&#34;
+      }
+    },
+    {
+      &#34;posted&#34;: &#34;2015/6/1 10:00:00&#34;,
+      &#34;rating&#34;: 2,
+      &#34;text&#34;: &#34;NO IM MORE RECENT This was a bad sauce.&#34;,
+      &#34;user&#34;: {
+        &#34;name&#34;: &#34;Joe&#34;,
+        &#34;img&#34;: &#34;http://placekitten.com/g/40/40&#34;
+      }
+    }
+  ]
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User&amp;rsquo;s should probably be a look up reference, but I just wanted some sample data. This data represents one sauce with three reviews. I created a second sauce with one review. At this point I realized I had a problem. It isn&amp;rsquo;t difficult to get all the documents in a database. But that&amp;rsquo;s not what I want. In my case, I need the &lt;i&gt;reviews&lt;/i&gt; from the objects, and I need to sort them. I spent a good few hours in the &lt;a href=&#34;https://docs.cloudant.com/&#34;&gt;Cloudant docs&lt;/a&gt;, and I discovered that a &amp;ldquo;View&amp;rdquo; could do what I needed. I&amp;rsquo;m not going to pretend that this is the &lt;strong&gt;best&lt;/strong&gt; answer, but it seemed to work well.&lt;/p&gt;
+
+&lt;p&gt;I set up a new design document, and using the Cloudant dashboard, I was able to both write my view and test it interactively, which was a big help. Here&amp;rsquo;s the code I used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function(doc) {
+  if(doc.reviews.length === 0) return;
+  for(var i=0;i&amp;lt;doc.reviews.length;i++) {
+      var review = doc.reviews[i];
+      emit(review.posted, {review:review,sauce_name:doc.name,sauce_company:doc.company});
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here it is in the dashboard with the output to the right.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot121.png&#34; alt=&#34;shot12&#34; width=&#34;800&#34; height=&#34;408&#34; class=&#34;aligncenter size-full wp-image-6441&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s cool is - using the Cloudant npm library, it was incredibly trivial to get this view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;db.view(&#34;Reviews&#34;, &#34;reviews&#34;, {descending:true}, function(err, body) {&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s simple as heck - but there&amp;rsquo;s one more aspect to this whole thing that I needed to setup. One of the features you can use with your hybrid mobile application is called &lt;a href=&#34;https://hub.jazz.net/project/bluemixmobilesdk/ibmcloudcode-javascript/overview&#34;&gt;Cloud Code&lt;/a&gt;. While it offers a couple features, in general, you can think of it as way to &amp;ldquo;short cut&amp;rdquo; your calls to your Node.js application. Using this requires a few changes in your hybrid application. Obviously you have to get the JavaScript library and include it in your HTML.&lt;/p&gt;
+
+&lt;p&gt;Next, you need to initialize Bluemix from within your code. Mine is in app.js, inside $ionicPlatform.ready:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova &amp;&amp; window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+    
+    var config = {
+      applicationId:&#39;38a0a550-b018-4a10-b879-aec68868c249&#39;,
+      applicationRoute:&#39;http://saucedb.mybluemix.net&#39;,
+      applicationSecret:&#39;735c7d0de828ab956bae772e996a55620676ff05&#39;
+    };
+    
+    IBMBluemix.initialize(config).then(function() {
+      console.log(&#39;ok maybe?&#39;);
+    }, function(err) {
+       console.log(&#39;crap your pants time&#39;);
+    });
+    
+    
+  });
+})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Obviously I&amp;rsquo;m not actually handling the error case here, but it&amp;rsquo;s something I&amp;rsquo;ll worry about later. (Famous last words.) That sets up basic configuration - and this is where Cloud Code comes in. I can hit my Node.js app with the following code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var cc = IBMCloudCode.initializeService();
+cc.get(&#34;/feed&#34;).then(function(data){
+    data = JSON.parse(data);
+},function(err){
+    console.log(err);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note how I just request /feed and nothing more. Because of the earlier configuration code where I specified my application tokens, the Bluemix code knows how to route my requests to my Node.js application on Bluemix. But I just said I was running locally - so how do I fix that?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var cc = IBMCloudCode.initializeService();
+cc.setBaseUrl(&#39;http://localhost:3000&#39;);
+cc.get(&#34;/feed&#34;).then(function(data){
+    data = JSON.parse(data);
+},function(err){
+    console.log(err);
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the actual full call now in my services.js file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var getFeed = function() {
+    var deferred = $q.defer();
+    
+    //fake it till we make it
+    var feed = [];
+
+        //now try the app
+        var cc = IBMCloudCode.initializeService();
+        cc.setBaseUrl(&#39;http://localhost:3000&#39;);
+        cc.get(&#34;/feed&#34;).then(function(data){
+            data = JSON.parse(data);
+            for(var i=0;i&amp;lt;data.length;i++) {
+                var result = data[i];
+                console.log(&#39;did i run&#39;);
+                var item = {
+                    id:result.id,
+                    posted:result.review.posted,
+                    sauce:{
+                        name:result.sauce_name,
+                        company:result.sauce_company
+                    },
+                    rating:result.review.rating,
+                    avgrating:0,
+                    text:result.review.text,
+                    user:{
+                        img:result.review.user.img,
+                        name:result.review.user.name
+                    }
+                };
+                feed.push(item);
+            }
+            console.log(&#39;sending &#39;+feed);
+            deferred.resolve(feed);
+            
+        },function(err){
+            console.log(err);
+        });
+
+    
+    return deferred.promise;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On the server side, I have to slightly modify how I create my route. Instead of just app.get(&amp;lsquo;&amp;hellip;.&amp;rsquo;), I do something slightly different:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var ibmconfig = ibmbluemix.getConfig();
+app.get(ibmconfig.getContextRoot()+&#39;/feed&#39;,  function(req, res) {
+    console.log(&#39;Requesting feed&#39;);
+
+    db.view(&#34;Reviews&#34;, &#34;reviews&#34;, {descending:true}, function(err, body) {
+        //stuff cut out here to keep the code snippet simpler
+    });
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I get an instance of the ibmbluemix config object and grab the context root. This essentially creates a special path that is coordinated (may not be the best word) with the mobile side.&lt;/p&gt;
+
+&lt;p&gt;Whew! That was a lot. Did it feel like a lot to you? To be fair, this post covered a &lt;i&gt;lot&lt;/i&gt; of setup. We got a server up and running on Bluemix (technically all we did was provision it and we&amp;rsquo;re running code locally), we set up Cloudant, and we created an API to fetch feed data and display it in the mobile app. The end result is real, ok, hand-written essentially, data being driven by Cloudant:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/iOS-Simulator-Screen-Shot-Jul-20-2015-2.33.22-PM.png&#34; alt=&#34;iOS Simulator Screen Shot Jul 20, 2015, 2.33.22 PM&#34; width=&#34;422&#34; height=&#34;750&#34; class=&#34;aligncenter size-full wp-image-6442 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Remember, you can see all the source code here:  &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for now. In the next post, I&amp;rsquo;ll continue to flesh out the views and start writing data from the mobile app back to the server.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New Demo Project: SauceDB</title>
+      <link>http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb</link>
+      <pubDate>Tue, 14 Jul 2015 10:27:56 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/14/new-demo-project-saucedb</guid>
+      <description>&lt;p&gt;Today I&amp;rsquo;m kicking off a new project for the purposes of demonstrating &lt;a href=&#34;http://www.ionicframework.com&#34;&gt;Ionic&lt;/a&gt; and &lt;a href=&#34;https://ibm.biz/IBM-Bluemix&#34;&gt;IBM Bluemix&lt;/a&gt;. While I&amp;rsquo;m not sure I&amp;rsquo;ll actually release this application (I&amp;rsquo;m building something I actually &lt;i&gt;want&lt;/i&gt;, so I kinda want to), my intent here is to build a full application demonstrating multiple facets of Ionic with Bluemix handling the back end. Let me start off by talking about what this application actually does.&lt;/p&gt;
+
+&lt;h2&gt;The App&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;m a huge fan of &lt;a href=&#34;https://untappd.com/&#34;&gt;Untappd&lt;/a&gt; and &lt;a href=&#34;https://www.goodreads.com/&#34;&gt;Goodreads&lt;/a&gt;. For me, these apps help me organize two of my favorite passions in life - good beer and good books. (And hey, Budweiser, you can officially take your anti-micro-brew campaign and shove it where the sun doesn&amp;rsquo;t shine.) Both sites/apps follow the same basic principle - they allow you to track and rate things are you consuming. I have pretty crap memory, so I find both apps to be incredibly useful. Both also include a social aspect to them that - honestly - I don&amp;rsquo;t really care about. I &lt;i&gt;do&lt;/i&gt; like to know what beers my friends are enjoying and what books they&amp;rsquo;ve read, but I typically talk about that in the real world. I can&amp;rsquo;t honestly remember the last time I used either app to check what &lt;i&gt;other&lt;/i&gt; people are doing.&lt;/p&gt;
+
+&lt;p&gt;My application, SauceDB, is basically a BBQ Sauce version of Untappd. The features will be:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Sauce stream (um, that sounds kinda gross): Essentially a &#39;feed&#39; of the most recent sauce ratings. As I mentioned, I don&#39;t necessarily care much for the social aspect, so this app won&#39;t have &#34;friends&#34;. Basically you see what everyone has posted. (And since this is a &#39;proof of concept&#39; with few users, it will make it easier to see content.)&lt;/li&gt;
+&lt;li&gt;Add a sauce review: Sauces include a name, a company, your rating, and a description of the sauce. Optionally a picture as well. The app will recognize existing sauces and not add a new record for the sauce if it already exists.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I whipped up a quick prototype on paper first. Here is my completely incomprehensible attempt at drawing screens.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/IMAG2260.jpg&#34; alt=&#34;IMAG2260&#34; width=&#34;565&#34; height=&#34;1000&#34; class=&#34;aligncenter size-full wp-image-6383&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m actually pretty impressed by how bad my drawing is. If I was a D&amp;amp;D character and Drawing was a skill, I&amp;rsquo;d have a -5 in it. In case you can&amp;rsquo;t read my chicken scratch, the screens are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Login&lt;/li&gt;
+&lt;li&gt;Feed&lt;/li&gt;
+&lt;li&gt;Feed item (ie, a sauce review)&lt;/li&gt;
+&lt;li&gt;Search to add a new review&lt;/li&gt;
+&lt;li&gt;New item (ie, adding a new sauce + review)&lt;/li&gt;
+&lt;li&gt;New review only (adding a review to an existing sauce&lt;/lli&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I don&amp;rsquo;t create prototypes often, but I definitely see the value. Just typing out the list there makes me realize I don&amp;rsquo;t have a page that is Sauce-centric, ie a Sauce with all the reviews. I went ahead and set up a &amp;ldquo;real&amp;rdquo; prototype using &lt;a href=&#34;http://creator.ionic.io&#34;&gt;Ionic Creator.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/Ionic_Creator.png&#34; alt=&#34;Ionic_Creator&#34; width=&#34;800&#34; height=&#34;659&#34; class=&#34;aligncenter size-full wp-image-6384 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I essentially built all the screens you saw from the pen drawing above and added some basic interactivity. So for example, the login button goes right to the feed. Doing this was also helpful. For example, the &amp;lsquo;feed&amp;rsquo; page (see the shot above) used a list view, but I&amp;rsquo;m pretty sure I&amp;rsquo;ll switch to a card view to give the reviews more space.&lt;/p&gt;
+
+&lt;p&gt;Ionic Creator has multiple export options, including a way to use it as a seed for a new project.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/shot13.png&#34; alt=&#34;shot1&#34; width=&#34;462&#34; height=&#34;241&#34; class=&#34;aligncenter size-full wp-image-6385 imgborder&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I find the output of Ionic Creator to be a bit undesirable, so I used this in a new project just for the Creator output. I then &lt;a href=&#34;https://surge.sh&#34;&gt;Surged&lt;/a&gt; it up to a real site: &lt;a href=&#34;http://jittery-bait.surge.sh&#34;&gt;http://jittery-bait.surge.sh&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;The Tech&lt;/h2&gt;
+
+&lt;p&gt;So what does my stack look like?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Obviously, Ionic. I&#39;ve made no secret of my opinion that Ionic is the absolute best tool to use for building hybrid mobile applications with Cordova. 
+&lt;li&gt;&lt;a href=&#34;https://github.com/ccoenraets/OpenFB&#34;&gt;OpenFB&lt;/a&gt;, a Facebook API library by Christophe Coenraets. I&#39;ve used &lt;a href=&#34;https://github.com/nraboy/ng-cordova-oauth&#34;&gt;ng-cordova-oauth&lt;/a&gt; in the past, but I just need FB now and I need a way to use their API as well.
+&lt;li&gt;Node.js running on Bluemix. This will essentially be a proxy to...
+&lt;li&gt;&lt;a href=&#34;https://cloudant.com/&#34;&gt;IBM Cloudant&lt;/a&gt; for the database. 
+&lt;/ul&gt;
+
+&lt;p&gt;Some &amp;ldquo;possible&amp;rdquo; stuff I want to add too - time permitting:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ionic Analytics
+&lt;li&gt;Pictures (no idea where I&#39;ll store the file blobs yet)
+&lt;li&gt;Push (maybe a notice for every new review - again - this will be a pretty low used app)
+&lt;/ul&gt;
+
+&lt;p&gt;I&amp;rsquo;ll also be sharing everything I&amp;rsquo;ve built up on Github. My code base is currently a bit messy, so the repo is empty, but it will be here: &lt;a href=&#34;https://github.com/cfjedimaster/SauceDB&#34;&gt;https://github.com/cfjedimaster/SauceDB&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

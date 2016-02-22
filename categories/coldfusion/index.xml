@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Coldfusion on Raymond Camden</title>
+    <link>http://www.raymondcamden.com/categories/coldfusion/</link>
+    <description>Recent content in Coldfusion on Raymond Camden</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Feb 2016 05:35:00 -0700</lastBuildDate>
+    <atom:link href="http://www.raymondcamden.com/categories/coldfusion/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Adobe ColdFusion 2016 Released</title>
+      <link>http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released</link>
+      <pubDate>Tue, 16 Feb 2016 05:35:00 -0700</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2016/02/16/adobe-coldfusion-2016-released</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/cflogo.jpg&#34; style=&#34;float:left;margin-right:10px;margin-bottom:10px&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;This morning Adobe released the latest version of ColdFusion, &lt;a href=&#34;https://www.adobe.com/products/coldfusion-family.html&#34;&gt;Adobe ColdFusion 2016&lt;/a&gt;. Yep, they switched from a simple version number to a year, which frankly I prefer so I think this is a good change. This also applies to ColdFusion Builder as well. So what&amp;rsquo;s new and should you upgrade?&lt;/p&gt;
+
+&lt;h2 id=&#34;the-good-ish:bde72512bcc5cf1a24c7af91c38b3ca8&#34;&gt;The Good(ish)&lt;/h2&gt;
+
+&lt;p&gt;You can start off by looking at a broad overview of &lt;a href=&#34;https://helpx.adobe.com/coldfusion/whats-new.html#main-pars_imageandtext&#34;&gt;what&amp;rsquo;s new&lt;/a&gt; in ColdFusion 2016. I won&amp;rsquo;t repeat what&amp;rsquo;s there as you can read it yourself just fine, but will point out that the specific section
+on &lt;a href=&#34;https://helpx.adobe.com/coldfusion/2016/language-enhancements.html#main-pars_minitoc&#34;&gt;language enhancements&lt;/a&gt; may be of interest to developers. The &amp;ldquo;Safe Navigation&amp;rdquo; feature can let you simplify your code a bit, but note that the docs for this in the previous link are poorly done. You can now do both ordered and sorted structs, which I know some folks really want. I always thought of structs as inherently unordered, but I understand that adding order/sorts to them are useful in some situations. Unfortunately, the docs don&amp;rsquo;t demonstrate how to use these features in short notation. I haven&amp;rsquo;t typed &lt;code&gt;structNew&lt;/code&gt; since &lt;code&gt;{}&lt;/code&gt; was added. I&amp;rsquo;m also happy to see that you can now disable scope search by adding &lt;code&gt;searchImplicitScopes=false&lt;/code&gt; to your Application.cfc file. Unfortunately this feature isn&amp;rsquo;t mentioned in the docs and as we can&amp;rsquo;t edit/comment on the docs anymore, hopefully it gets corrected soon.&lt;/p&gt;
+
+&lt;p&gt;In fact, from what I can tell, none of the docs are updated yet. A new function, &lt;code&gt;valueArray&lt;/code&gt;, is &lt;a href=&#34;https://helpx.adobe.com/coldfusion/cfml-reference/coldfusion-functions/functions-t-z/valuearray.html#main-pars_header&#34;&gt;documented&lt;/a&gt; but not discoverable in the search. I&amp;rsquo;m assuming this is just a temporary issue. You can&amp;rsquo;t even find the PDFs for the CF2016 docs. &lt;em&gt;Update&lt;/em&gt; - I see the new docs now - somewhat. The missing item in App.cfc is still missing. I also heard from an Adobian that this should be cleared up by the end of the day. Let&amp;rsquo;s be blunt though. It is 2016. If you can&amp;rsquo;t schedule a product release with documentation then you are failing at doing your job. This may be totally out of the ColdFusion&amp;rsquo;s team hands - but customers don&amp;rsquo;t care whose fault it is. It is ridiculous, unprofessional, and something that should have been addressed years ago.&lt;/p&gt;
+
+&lt;p&gt;For a better list of language enhancements, check out the &lt;a href=&#34;https://helpx.adobe.com/coldfusion/2016/other-enhancements.html#main-pars_text&#34;&gt;New and Changed Functions/Tags&lt;/a&gt; page. &lt;code&gt;querySort&lt;/code&gt; and &lt;code&gt;queryEach&lt;/code&gt; are especially nice additions.&lt;/p&gt;
+
+&lt;p&gt;The other big update is the addition of a &lt;a href=&#34;https://helpx.adobe.com/coldfusion/2016/command-line-interface.html#main-pars_minitoc&#34;&gt;CLI&lt;/a&gt;, which is nice too. I can&amp;rsquo;t say how it compares to &lt;a href=&#34;https://www.ortussolutions.com/products/commandbox&#34;&gt;CommandBox&lt;/a&gt; though which has been available for a while now. At minimum, CommandBox is free and available to people using ColdFusion 11 so there&amp;rsquo;s that.&lt;/p&gt;
+
+&lt;p&gt;Another big update is the &lt;a href=&#34;https://helpx.adobe.com/coldfusion/api-manager/features-summary.html#main-pars_text&#34;&gt;API manager&lt;/a&gt;. This is something I didn&amp;rsquo;t get a chance to test (more on that later), but it is a pretty impressive feature, much more than &lt;code&gt;CFCLIENT&lt;/code&gt; was in my opinion. It provides a large set of features around documenting, handling, analyzing, your APIs. As this is something I&amp;rsquo;m digging deep into on the Node side, I&amp;rsquo;m impressed to see ColdFusion support it. There&amp;rsquo;s some good videos on this feature (and others) available &lt;a href=&#34;https://www.adobe.com/products/coldfusion-enterprise/features.html&#34;&gt;here&lt;/a&gt;. Just try to ignore the robo-voice and you&amp;rsquo;ll see what I mean.&lt;/p&gt;
+
+&lt;p&gt;Finally (and to be clear, I&amp;rsquo;m just calling out some items I think are interesting), ColdFusion Builder 2016 includes a cool little feature called the Security Analyzer. Right from your editor you can get a scan of your code for common security issues. To be clear, this does &lt;em&gt;not&lt;/em&gt; replace a real, very deep, security analysis of your code. However, I think it could be really useful for getting some of the simpler stuff out of the way before the real/deeper scan is done later.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/images/2016/02/cfb2016.gif&#34; alt=&#34;CFB2016&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, this feature is tied to your ColdFusion server and only works with ColdFusion Enterprise. I cannot stress enough how much of a mistake I think this is. Yes, you do get 3 copies of CFB 2016 with your purchase, but I can&amp;rsquo;t imagine a ColdFusion team using Enterprise with only three people. I think CFB is worth the price, don&amp;rsquo;t get me wrong, and I say that even though I pretty much despise Eclipse, but I think this upgrade is &lt;em&gt;not&lt;/em&gt; worth charging for. It should be a free upgrade to CFB. To be clear, &lt;em&gt;nothing&lt;/em&gt; else changed outside of the syntax library.&lt;/p&gt;
+
+&lt;p&gt;And by the way, if you are not planning on upgrading to CFB2016, you can download the trial and then copy the library definitions to your CFB3 install following the instructions &lt;a href=&#34;https://www.monkehworks.com/coldfusion-builder-custom-dictionaries/&#34;&gt;here&lt;/a&gt;. I did a quick test and can confirm it worked for my copy of CFB3.&lt;/p&gt;
+
+&lt;p&gt;But it just seems insane to me to make a security feature, one that can help ColdFusion as a product in general, is Enterprise only. It was just two months ago that ColdFusion turned up on a &lt;a href=&#34;http://motherboard.vice.com/read/new-analysis-the-most-hackable-programming-language-is-php-by-a-mile&#34;&gt;list&lt;/a&gt; of insecure languages. &lt;em&gt;This is not how you fight that perception.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-bad:bde72512bcc5cf1a24c7af91c38b3ca8&#34;&gt;The Bad&lt;/h2&gt;
+
+&lt;p&gt;I was a member of the Pre Release for ColdFusion 2016. Obviously the details of the PR are under NDA. I do not believe what I&amp;rsquo;m about to say will break the rules of that NDA.&lt;/p&gt;
+
+&lt;p&gt;I love the ColdFusion community. I even did a &lt;a href=&#34;http://www.raymondcamden.com/2014/12/15/a-quick-message-for-the-coldfusion-community/&#34;&gt;sappy video&lt;/a&gt; about my love for this community back in 2014.&lt;/p&gt;
+
+&lt;p&gt;In regards to the Adobe ColdFusion team, I know almost everyone on that team and have met them multiple times. I like them. But I cannot describe how deeply disappointed I am in how they behaved on the PR. It got to a point that I had to actively ignore the PR for a month or so because I was so upset, so frustrated, that I felt like I couldn&amp;rsquo;t offer anything positive anymore.&lt;/p&gt;
+
+&lt;p&gt;Why?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Multiple times builds would be posted with little to no notice to the group, or even release notes. Multiple times members of the PR had to ask for this. That&amp;rsquo;s insane. Release notes aren&amp;rsquo;t &amp;ldquo;special&amp;rdquo;. That&amp;rsquo;s a basic given for testing a product.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The bug tracker (specifically, the one used for the PR) would not send notices to the people who filed the bugs. So unless you monitored your own bug, or unless Adobe pinged you back for a comment, you were never notified of an update. This is unacceptable. The bug tracker is a ColdFusion app. It could have been fixed by Adobe in an hour. (Ok, I&amp;rsquo;ve not seen the code myself so I&amp;rsquo;m taking a guess here. But based on my own work on my own bug tracker and having built a similar feature, I&amp;rsquo;ve got an idea of how complex it is.) If there wasn&amp;rsquo;t enough time to fix this, then my God, how small is the team and how little concern is there for such basic functionality to &lt;em&gt;help&lt;/em&gt; the people testing your product - for free. Speaking of bugs, multiple times now, and both on the PR and publicly, I&amp;rsquo;ve asked Adobe to share their test suite. When they fix a bug, we assume they write a test for it, and seeing the test we (again, the folks doing this for free) could find issues with how they confirmed the fix. This is something I&amp;rsquo;ve never gotten a response on.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;It was the &lt;em&gt;norm&lt;/em&gt;, not the exception, for forum posts to be ignored. This is what truly sent me over the edge. Just yesterday I saw a thread created &lt;em&gt;four&lt;/em&gt; months ago that specifically requested Adobe input and had been ignored. To be fair, not every thread needed Adobe input. And yes - sometimes if Adobe were asked multiple times to chime in they would. But damnit, you shouldn&amp;rsquo;t have to freaking beg to get a response. And again, this isn&amp;rsquo;t &amp;ldquo;special&amp;rdquo; - the ColdFusion PR testers aren&amp;rsquo;t &amp;ldquo;needy&amp;rdquo;, that&amp;rsquo;s basic freaking community management.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I&amp;rsquo;ll tell you a secret. I&amp;rsquo;m probably borderline autistic, like a lot of programmers. While I love being on stage, one on one conversations with people, even my friends, is stressful. It&amp;rsquo;s not that I dislike people. I love people. But I stress over holding up my part of the conversation, saying the wrong thing, and, well, every single aspect of the relationship/communication. It&amp;rsquo;s difficult for me and I recognize that. So I&amp;rsquo;ve trained myself to try to combat that. If you ask me about my job, I want to answer you and then I want to be quiet. I don&amp;rsquo;t do that. I ask about your job back. I have to force myself to do it, but I know it is the right thing to do.&lt;/p&gt;
+
+&lt;p&gt;If the members of the ColdFusion team suck at community management, and frankly, they all do but Anit, then recognize it and work on it. Force yourself to look at the threads and respond to every single one whether you want to or not.&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s sad is that I know others will bring this up. I know members of the CF team will promise to improve communication. But we&amp;rsquo;ve had this same discussion time and time again. They either need to promote Anit and clone him or hire someone to help because I do not see it improving. Nor will I participate in the next pre release unless things are 100% better.&lt;/p&gt;
+
+&lt;h2 id=&#34;wrap-up:bde72512bcc5cf1a24c7af91c38b3ca8&#34;&gt;Wrap Up&lt;/h2&gt;
+
+&lt;p&gt;So&amp;hellip; should you upgrade? Unless the API manager really sells you on it, I don&amp;rsquo;t think it makes sense to do so. I&amp;rsquo;m at a point now where I recommend Node for future development, but if you&amp;rsquo;re a ColdFusion shop, then by all means, continue with ColdFusion, but I don&amp;rsquo;t see the 2016 release as being worth the price. You certainly want to wait till a few hot fixes have been released. As for CFB, again, I like CFB, but I wouldn&amp;rsquo;t bother upgrading. If you don&amp;rsquo;t own it, go ahead and buy it, but if you have CFB3, I&amp;rsquo;d stick with it.&lt;/p&gt;
+
+&lt;p&gt;Finally, I&amp;rsquo;ll leave you with a link to Adam&amp;rsquo;s post, which has an epic title: &lt;a href=&#34;http://blog.adamcameron.me/2016/02/coldfusion-2016-adobe-finally-abandons.html&#34;&gt;ColdFusion 2016: Adobe finally abandons CFML&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Status of RIAForge</title>
+      <link>http://www.raymondcamden.com/2015/10/25/status-of-riaforge</link>
+      <pubDate>Sun, 25 Oct 2015 18:27:54 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/25/status-of-riaforge</guid>
+      <description>&lt;p&gt;A bit over 9 years ago I launched RIAForge (&lt;a href=&#34;http://www.raymondcamden.com/2006/10/18/Announcing-RIAForge&#34;&gt;Announcing RIAForge&lt;/a&gt;). The brainchild of &lt;a href=&#34;http://www.forta.com&#34;&gt;Ben Forta&lt;/a&gt;, the idea was to make it easier for people using Adobe technologies to create open source projects. At the time, that made a lot of sense. I believe GitHub was around then, but it certainly wasn&amp;rsquo;t as popular as it is now. Sourceforge was there, but at least for me it wasn&amp;rsquo;t the easiest solution in the world. RIAForge made it incredibly easy. You could launch your project and get a blog, forums, a bug tracker, even a wiki.&lt;/p&gt;
+
+&lt;p&gt;I was - and still am - rather proud of the site. Over thirteen hundred projects are hosted there and there have been over two million downloads since the site launched.&lt;/p&gt;
+
+&lt;p&gt;That being said - the benefits that RIAForge provided are not necessarily as valuable now in 2015 as they were back in 2006. While there are more options than GitHub, let&amp;rsquo;s be honest, GitHub has &amp;ldquo;won&amp;rdquo; for the most part. If you are hosting an open source project that you want others to work with, there really is no reason not to be there. Also, Git in itself has become the most popular version control system and RIAForge&amp;rsquo;s Subversion server really isn&amp;rsquo;t up to date.&lt;/p&gt;
+
+&lt;p&gt;After getting a few error emails from the site last week, I really began to think about the site and came to the conclusion that it is time for my involvement with the site to end. I reached out to Rakshith on the ColdFusion team and asked him if they wanted to take it over. While RIAForge isn&amp;rsquo;t just for ColdFusion projects, ColdFusion (and ColdFusion Builder) dominates the site. If Adobe had said no, my plan was to set RIAForge to read only mode and then eventually move it to static, but, that is not to be. Rakshith, and Adobe, have agreed to take over management of the site. I handed over login info today and &amp;ldquo;officially&amp;rdquo; I&amp;rsquo;m no longer in charge.&lt;/p&gt;
+
+&lt;p&gt;Ben, and Adobe in general, deserve a lot of credit for launching this initiative and funding it. (Yes, I was paid to develop the site initially!) Going forward though I&amp;rsquo;d probably recommend people just use GitHub, even if you are launching a ColdFusion project. If you have projects on RIAForge now, don&amp;rsquo;t forget you can edit the project to point to external (like GitHub) sites. I&amp;rsquo;d set up on GitHub and then edit your RIAForge listing to point to the new location. Or just stay on RIAForge; it&amp;rsquo;s up to you. :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Some cool things in Lucee</title>
+      <link>http://www.raymondcamden.com/2015/10/01/some-cool-things-in-lucee</link>
+      <pubDate>Thu, 01 Oct 2015 16:39:39 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/10/01/some-cool-things-in-lucee</guid>
+      <description>&lt;p&gt;I really haven&amp;rsquo;t spoken much about &lt;a href=&#34;http://lucee.org/&#34;&gt;Lucee&lt;/a&gt; since the initial announcement a few months back. It seems like a lot of &amp;ldquo;things&amp;rdquo; are going on, and frankly, I figured I&amp;rsquo;d just see where things settle down later this year. It just so happened that I ended up on the &lt;a href=&#34;http://docs.lucee.org/reference/tags/application.html&#34;&gt;cfapplication doc&lt;/a&gt; for Lucee and I was pretty surprised by what I saw. Here are some of the cool things Lucee is doing with Applications versus ColdFusion. This probably isn&amp;rsquo;t everything, but here is what I found and what I thought was cool or interesting.&lt;/p&gt;
+
+&lt;p&gt;By the way, just in case it isn&amp;rsquo;t obvious - this list comes from the documentation for the cfapplication tag and is presented as arguments for the tag. Each of these works as &amp;ldquo;this&amp;rdquo; scope values in App.cfc too. That is implied, but it may not be obvious from the docs themselves.&lt;/p&gt;
+
+&lt;h2&gt;action&lt;/h2&gt;
+
+&lt;p&gt;So this falls into the &amp;ldquo;interesting but not sure I&amp;rsquo;d use it&amp;rdquo; bucket. Lucee provides an &lt;code&gt;action&lt;/code&gt; attribute for applications that allow you to update settings for an existing application. Personally, changing application settings on the fly feels like a bad idea, but it &lt;i&gt;feels&lt;/i&gt; like something that should exist and it is cool that it is supported. I&amp;rsquo;m sure folks will tell me plenty of reasons why this makes sense in the wild, and frankly, I don&amp;rsquo;t really care, it jut makes me happy that it is supported. (Ok, I do care, and would love to hear some practical uses for this.)&lt;/p&gt;
+
+&lt;h2&gt;sessionStorage&lt;/h2&gt;
+
+&lt;p&gt;This one is cool as heck. You can use a database for session storage versus just plain RAM. You can setup the DSN in the admin enable this feature by checking the &amp;ldquo;Storage&amp;rdquo; checkbox:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/Lucee_Server_Administrator.png&#34; alt=&#34;Lucee_Server_Administrator&#34; width=&#34;750&#34; height=&#34;44&#34; class=&#34;aligncenter size-full wp-image-6855&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While I was writing this, I was curious how this would be done in App.cfc code instead. I just now discovered that the Lucee admin will actually tell you how to define your DSN in code. THAT IS EPIC.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot21.png&#34; alt=&#34;shot2&#34; width=&#34;1382&#34; height=&#34;398&#34; class=&#34;aligncenter size-full wp-image-6856&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One cool thing this allows for is ad hoc queries against the database for things like checking the number of active sessions or gathering up session data in general. That&amp;rsquo;s doable now with the Server Monitoring API in ColdFusion, but that&amp;rsquo;s Enterprise only and requires admin-level access. This would require a database query.&lt;/p&gt;
+
+&lt;h2&gt;bufferOutput&lt;/h2&gt;
+
+&lt;p&gt;I had to ask for help on this one - thanks go to Harry Klein and Gert Franz on the Lucee google group. I&amp;rsquo;m going to quote Gert here:&lt;/p&gt;
+
+&lt;blockquote&gt;
+If there is an error or abort inside the function or the silent tag and the setting bufferoutput is set to true any generated output will bee visible. If set to false it will not generate any output at all.
+&lt;/blockquote&gt;
+
+&lt;p&gt;Interesting. Apparently this helps in memory consumption. I don&amp;rsquo;t see how - but I trust Gert and Harry.&lt;/p&gt;
+
+&lt;h2&gt;requestTimeout&lt;/h2&gt;
+
+&lt;p&gt;You know how you can set a request timeout value in the cfsetting tag? From what I see, this is the same thing, but for the application. Nice.&lt;/p&gt;
+
+&lt;h2&gt;componentPaths&lt;/h2&gt;
+
+&lt;p&gt;It looks as if Lucee supports mappings for cfinclude, custom tag paths for custom tags, and component paths for CFCs. This seems like a nice separation of concerns. I dig it.&lt;/p&gt;
+
+&lt;h2&gt;typeChecking&lt;/h2&gt;
+
+&lt;p&gt;Nice - you know how you can disable type checking in the ColdFusion Administrator? It can be a good performance boost. I&amp;rsquo;ve seen it significantly help out Model-Glue applications. Well this is the same thing - but at the Application level.&lt;/p&gt;
+
+&lt;h2&gt;compression&lt;/h2&gt;
+
+&lt;p&gt;This allows you to enable GZip compression for the application. I kinda feel like this should be done on the web server and not the app server, but meh, it works well and is incredibly easy to enable. Here is a page with the setting turned off:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot31.png&#34; alt=&#34;shot3&#34; width=&#34;750&#34; height=&#34;359&#34; class=&#34;aligncenter size-full wp-image-6857&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I then added &lt;code&gt;this.compression=true;&lt;/code&gt; to my App.cfc:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/10/shot4a1.png&#34; alt=&#34;shot4a&#34; width=&#34;750&#34; height=&#34;377&#34; class=&#34;aligncenter size-full wp-image-6861&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s a pretty big change there.&lt;/p&gt;
+
+&lt;h2&gt;suppressRemoteComponentContent&lt;/h2&gt;
+
+&lt;p&gt;So yeah, this is a weird one. Imagine bad code like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;remote function sayhello() {
+    writeoutput(&#34;MOO&#34;);
+    return &#34;hello #now()#&#34;;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, I&amp;rsquo;m both outputting stuff and returning a value. If you set the suppress setting to false, you will actually see &amp;ldquo;MOO&amp;rdquo; in the remote output. I see no reason why you would ever desire that.&lt;/p&gt;
+
+&lt;h2&gt;localmode&lt;/h2&gt;
+
+&lt;p&gt;This one was pretty confusing. @nicholasc on Slack helped me understand it. Given this line in a method &lt;code&gt;x=1;&lt;/code&gt;, by default this will write to the variables scope unless local.x was already set. If you use &lt;code&gt;this.localmode=&amp;ldquo;modern&amp;rdquo;&lt;/code&gt; in your App.cfc, it will set to the local scope instead. This seems like a great idea.&lt;/p&gt;
+
+&lt;h2&gt;tag&lt;/h2&gt;
+
+&lt;p&gt;My favorite change. You can specify default attribute/value pairs for tags across your application. Here is an example I took from the docs:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;this.tag = {
+    &#34;location&#34;:{
+        &#34;addtoken&#34;:true
+    }
+};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I freaking love this. I kinda remember arguing against this in ColdFusion about 5 or so versions ago. At the time I was concerned about some setting somewhere modifying code and developers getting confused, but having it in app.cfc makes it easy to reference and notice.&lt;/p&gt;
+
+&lt;h2&gt;locale/timezone/webcharset/resourcecharset&lt;/h2&gt;
+
+&lt;p&gt;These all apply different language/locale type settings to your application.&lt;/p&gt;
+
+&lt;h2&gt;scopeCascading&lt;/h2&gt;
+
+&lt;p&gt;Ok, I lied - this is my favorite feature. If you output a variable without scope, this defines the &amp;ldquo;look&amp;rdquo; up process. You have three values. &amp;ldquo;standard&amp;rdquo; is your standard lookup table and will hit variables, CFI, URL, Form, and Cookie. &amp;ldquo;small&amp;rdquo; will hit just variables, URL, and Form. My favorite though is &amp;ldquo;strict&amp;rdquo;. If you specify this, it will only look at the Variables scope. My own personal rules are to always scope for everything but Variables so I definitely approve of this change.&lt;/p&gt;
+
+&lt;h2&gt;And more...&lt;/h2&gt;
+
+&lt;p&gt;There&amp;rsquo;s some cool cache settings you can tweak and CFC property stuff, but they weren&amp;rsquo;t interesting enough for me to actually write up.&lt;/p&gt;
+
+&lt;p&gt;But&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Yeah&amp;hellip; this is what I like. This is exactly the type of developer-centric language changes I&amp;rsquo;d like to see in ColdFusion 12.&lt;/p&gt;
+
+&lt;p&gt;At this point, someone may chime in and suggest I file ERs in the Adobe bug tracker. I certainly could - but I assume the Adobe ColdFusion team naturally tracks what Lucee is doing. It just makes sense. Surely they watch Lucee, look at developers who get excited about it, and take note of that. To assume otherwise would be to assume a ColdFusion team that is so disconnected from the developer community that it thinks it doesn&amp;rsquo;t matter what other CFML engines do. And surely that can&amp;rsquo;t be the case.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>New ColdFusion docs (and some tips for handling it)</title>
+      <link>http://www.raymondcamden.com/2015/09/30/new-coldfusion-docs-and-some-tips-for-handling-it</link>
+      <pubDate>Wed, 30 Sep 2015 05:55:33 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/09/30/new-coldfusion-docs-and-some-tips-for-handling-it</guid>
+      <description>&lt;p&gt;Yesterday, the Adobe CF team announced an update to the ColdFusion docs: &lt;a href=&#34;http://blogs.coldfusion.com/post.cfm/coldfusion-documentation-update#comments&#34;&gt;ColdFusion documentation update&lt;/a&gt;. The summary is that the wiki we have used for a while now is gone and the docs are back in a non-editable, and non-commentable (not really a word, sorry) form. Apparently this isn&amp;rsquo;t a permanent change and in the future sometime it will move to something that allows for more collaboration. You may also run into an SSL issue while browsing the docs (yes, seriously), and if you want to know how to get around that, Adobe as posted a blog entry on that as well (although personally I think they could have fixed it in the time it took to write the blog entry) - &lt;a href=&#34;http://blogs.coldfusion.com/post.cfm/ssl-certification-issue-with-wikidocs-link&#34;&gt;SSL certification issue with wikidocs link&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can find thew new home here: &lt;a href=&#34;https://helpx.adobe.com/support.html#/product/coldfusion&#34;&gt;https://helpx.adobe.com/support.html#/product/coldfusion&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As an FYI, you can still download the docs &lt;a href=&#34;https://helpx.adobe.com/coldfusion/home.html&#34;&gt;here&lt;/a&gt; and find the older versions &lt;a href=&#34;https://helpx.adobe.com/coldfusion/archive.html&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can also find &lt;i&gt;much quicker&lt;/i&gt; versions of the tag/function docs at Pete&amp;rsquo;s site: &lt;a href=&#34;http://cfdocs.org/&#34;&gt;http://cfdocs.org/&lt;/a&gt;. But note that this is just tags and functions - nothing about Application.cfc or building ColdFusion apps in general. But the search will be much better there. As an example, I searched for cfabort on the Adobe docs, and the CF11 reference for the tag/function didn&amp;rsquo;t show up in the first page of results.&lt;/p&gt;
+
+&lt;p&gt;You can also use the CF docs via &lt;a href=&#34;https://kapeli.com/dash&#34;&gt;Dash&lt;/a&gt;, a commercial, OSX-only doc viewer that I &lt;i&gt;really&lt;/i&gt; recommend. I hope these changes don&amp;rsquo;t impact the availability of docs in the app.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Is it time to stop using ColdFusion for remote APIs?</title>
+      <link>http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis</link>
+      <pubDate>Fri, 04 Sep 2015 16:55:13 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/09/04/is-it-time-to-stop-using-coldfusion-for-remote-apis</guid>
+      <description>&lt;p&gt;So, let me begin by saying I&amp;rsquo;m a bit frustrated, and so this blog post may be one I regret later on, but, I try to be as honest as possible here and right now, I&amp;rsquo;m kinda ticked off about something and I want to get it off my chest. For a long time now I&amp;rsquo;ve had an incredible amount of respect for how ColdFusion makes it easy to access data from client-side code (or remote servers). As much as I&amp;rsquo;m digging Node.js these days, the fact that I can write up a CFC and get an API that can be used by JavaScript is pretty darn powerful. This feature has come a long way. When it first came out, the only option for output was WDDX. You can now output anything, from WDDX, to SOAP, to XML, plain strings, and of course, JSON.&lt;/p&gt;
+
+&lt;p&gt;In fact, I like this feature so much that I proposed a topic for it at this years &lt;a href=&#34;https://cfsummit.adobeevents.com/&#34;&gt;ColdFusion Summit&lt;/a&gt;. My session will be an overview of how to generate output for remote consumption and cover everything from the beginning (ColdFusion MX and earlier) to the upcoming release (12).&lt;/p&gt;
+
+&lt;p&gt;However&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Since the beginning of &lt;i&gt;native&lt;/i&gt; JSON support in ColdFusion (ColdFusion 8), there have been consistent issues with serialization. This all drives from the fact that ColdFusion variables are typeless and therefore the server has to (or does it?) make guesses as to how to convert values into JSON. Over the past three releases, I&amp;rsquo;ve seen multiple bugs, and multiple fixes, and while I had no real proof (more on that in a minute), my gut told me that things had simmered down a bit and that ColdFusion 11 had this problem licked.&lt;/p&gt;
+
+&lt;p&gt;Or so I thought.&lt;/p&gt;
+
+&lt;p&gt;Turns out &lt;a href=&#34;https://bugbase.adobe.com/index.cfm?event=bug&amp;id=3337394&#34;&gt;bug 3337394&lt;/a&gt;, created nearly &lt;i&gt;three&lt;/i&gt; years ago, oh one marked closed and fixed, is still very much an issue for serialization. If you have data in a struct, and it has the string value &amp;ldquo;No&amp;rdquo;, ColdFusion will convert it to false. Here is a sample:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;x = {&#34;name&#34;:&#34;No&#34;};
+y = queryNew(&#34;id,name&#34;, &#34;integer,varchar&#34;, [{&#34;id&#34;:1, &#34;name&#34;:&#34;ray&#34;},{&#34;id&#34;:2, &#34;name&#34;:&#34;No&#34;}]); 
+writeoutput(serializeJSON(x));
+writeoutput(&#34;&lt;p/&gt;&#34;);
+writeoutput(serializeJSON(y,&#34;struct&#34;));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Which gives you:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+{&#34;name&#34;:false}
+
+[{&#34;ID&#34;:1,&#34;NAME&#34;:&#34;ray&#34;},{&#34;ID&#34;:2,&#34;NAME&#34;:&#34;No&#34;}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, the struct is broken, the query works fine. (As reported in the bug itself.)&lt;/p&gt;
+
+&lt;p&gt;Another issue involves strings that contain numbers. Consider these two examples:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;z = {&#34;productkey&#34;:&#34;89900909130939081290830983019819023&#34;};
+z2 = queryNew(&#34;id,name&#34;, &#34;integer,varchar&#34;, [{&#34;id&#34;:1, &#34;name&#34;:&#34;ray&#34;},{&#34;id&#34;:2, &#34;name&#34;:&#34;89900909130939081290830983019819023&#34;}]);
+
+writeoutput(&#34;&lt;p/&gt;&#34;);
+writeoutput(serializeJSON(z));
+writeoutput(&#34;&lt;p/&gt;&#34;);
+writeoutput(serializeJSON(z2));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This returns:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+{&#34;productkey&#34;:89900909130939081290830983019819023}
+
+{&#34;COLUMNS&#34;:[&#34;ID&#34;,&#34;NAME&#34;],&#34;DATA&#34;:[[1,&#34;ray&#34;],[2,&#34;89900909130939081290830983019819023&#34;]]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, productkey is now a number, and one that will be converted to 8.990090913093909e+34 in JavaScript.&lt;/p&gt;
+
+&lt;p&gt;So&amp;hellip;. yeah. In all cases, there are workarounds. But let me ask you this. Would you use a database that randomly changed values on you?&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/09/aw_hell_no.png&#34; alt=&#34;aw_hell_no&#34; width=&#34;380&#34; height=&#34;285&#34; class=&#34;aligncenter size-full wp-image-6735&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It seems ridiculous that this is still a problem now. It may be &lt;i&gt;incredibly&lt;/i&gt; difficult. Heck, I won&amp;rsquo;t pretend to be able to solve it. But here are some suggestions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Obviously the ColdFusion team has a unit test for this. They must. So when the unit test is updated for the items found in the bug, share it with us. I know there are &lt;i&gt;multiple&lt;/i&gt; people in the community who would give their time to help flesh out the unit test, or heck, just have it locally and test when new versions come up. So that&#39;s my first request - let us see the tests for JSON serialization. Speaking of unit tests, the last time this bug was fixed, why not share the test immediately? I mean, we won&#39;t see it working, but I &lt;i&gt;promise&lt;/i&gt; you people who have asked why a bug involving data serialization had a test that only tested queries (and CFCs I believe). I don&#39;t want to harp on the engineer who fixed this - we all make mistakes - but why not post the test when you write it and share it with us? 
+
+Of course, one could write essays on the lack of communication that goes on sometimes on the bug tracker, which is a real shame. You know, I get that some people don&#39;t like to engage or are basically shy. But there&#39;s no excuse for it anymore. I&#39;m very shy too. When someone speaks to me, I have to work hard to respond to their questions with questions of my own. I recognize my lack of engagement in basic human communication and force myself to hack around my lack of social skills. Make a list and put it on a PostIt next to your monitor. &#34;When I fix a bug, respond with details about how I fixed it, how I tested it, and what I may be concerned about. The reporter may have good input!&#34;&lt;/li&gt;
+&lt;li&gt;Given that the &#34;glue&#34; aspect of ColdFusion is one of its greatest selling points, make JSON serialization a priority for ColdFusion 12. Obviously the issue isn&#39;t licked yet, which, ok, fine, it&#39;s been years but fine. The ColdFusion 12 road map says this: &#34;Ability to manage, monitor, regulate, secure REST and SOAP web services – API management&#34;. Before I manage my APIs, I want 100% certainty that they actually process data correctly.&lt;/li&gt;
+&lt;li&gt;And hey - how about the nuclear option? If the very nature of ColdFusion variables means the problem is not 100% solvable, then remove the feature. Seriously.  Ok, maybe that&#39;s overkill, but there are things in ColdFusion now that haven&#39;t been updated in a while, look abandoned, and maybe should be dropped. So if they can&#39;t fix it, remove it.
+&lt;/ul&gt;
+
+&lt;p&gt;So I started this blog entry with a somewhat bold title - is it time to stop using ColdFusion for remote APIs? Many of us in the community have already argued against using &lt;a href=&#34;http://www.raymondcamden.com/2014/01/23/Im-not-going-to-tell-you-to-stop-using-ColdFusion-UI-tags-anymore&#34;&gt;ColdFusion UI features&lt;/a&gt;. If we can&amp;rsquo;t trust the data coming out of CF&amp;rsquo;s built-in JSON serialization than is it time to stop using it completely? What do you think?&lt;/p&gt;
+
+&lt;p&gt;p.s. Don&amp;rsquo;t forget you can switch to Nadel&amp;rsquo;s excellent &lt;a href=&#34;http://www.bennadel.com/blog/2505-jsonserializer-cfc---a-data-serialization-utility-for-coldfusion.htm&#34;&gt;JSONSerializer.cfc&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;p.s. On top I made the point that ColdFusion has to guess at the data type. Adam Cameron makes a great comment in the bug about this: &amp;ldquo;You speak good sense Peter: it&amp;rsquo;s inconvenient but understood that CF can&amp;rsquo;t infer data types in situations like this, so - on that basis - &lt;em&gt;don&amp;rsquo;t try&lt;/em&gt;. If you know you can&amp;rsquo;t do something&amp;hellip; don&amp;rsquo;t then go ahead and try do it anyhow.&amp;rdquo; Given that &amp;ldquo;No&amp;rdquo; is a string, don&amp;rsquo;t convert it. If someone is using No for false in their data, then why not punish &lt;i&gt;them&lt;/i&gt; instead of everyone else?&lt;/p&gt;
+
+&lt;p&gt;p.s. As I was writing this, it occurred to me that we have other places where things get a bit fuzzy with data. Math, for example, breaks down in large numbers. I get that that&amp;rsquo;s an issue across other languages, and certainly we shouldn&amp;rsquo;t remove arithmetic from ColdFusion because of it, but it just &lt;i&gt;feels&lt;/i&gt; like a different domain than what I&amp;rsquo;m seeing in JSON serialization.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Happy 20th, ColdFusion</title>
+      <link>http://www.raymondcamden.com/2015/07/02/happy-20th-coldfusion</link>
+      <pubDate>Thu, 02 Jul 2015 09:12:42 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/07/02/happy-20th-coldfusion</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/cf20.jpg&#34; alt=&#34;cf20&#34; width=&#34;600&#34; height=&#34;809&#34; class=&#34;aligncenter size-full wp-image-6338&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Today is the 20th anniversary of the release of ColdFusion. While I don&amp;rsquo;t do nearly as much ColdFusion as I used to, I&amp;rsquo;ll always be appreciative of how much ColdFusion has helped me in my career. To this day, ColdFusion remains one of the most powerful, easy to use application servers out there. It also has one of the best communities you can ask for. I can still remember the first time I used ColdFusion. I had been using Perl CGIs for web apps for a while, but the company I worked for got a client that needed integration with SQL Server. At that time I &lt;i&gt;believe&lt;/i&gt; ColdFusion 2 or 3 had been released. I downloaded the software and had a working prototype in about thirty minutes. I was sold. I gradually dropped Perl and began doing all my web development in ColdFusion. I began to share my code (via the Allaire Tag Gallery, remember that?) and present at conferences. In fact, I was lucky enough to speak at the first ColdFusion conference in Fort Collins:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/firstconf.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/firstconf.png&#34; alt=&#34;firstconf&#34; width=&#34;495&#34; height=&#34;750&#34; class=&#34;alignnone size-full wp-image-6340&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(Thanks go to Cameron Childress for sharing that pic - his collection of shots from the conference may be found &lt;a href=&#34;https://www.flickr.com/photos/cameronc/sets/72157594241477610/&#34;&gt;here&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;I can also thank ColdFusion for giving me an opportunity to get published. I think ever avid reader dreams of writing a book, and while I had always hoped to be the next Stephen King, I can still remember the excitement of seeing my name in a &lt;i&gt;real live&lt;/i&gt; book.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/07/51X47A29TTL.jpg&#34; alt=&#34;51X47A29TTL&#34; width=&#34;394&#34; height=&#34;475&#34; class=&#34;alignnone size-full wp-image-6343&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It would take a few more revisions before my contribution was enough to get my name on the cover. ;)&lt;/p&gt;
+
+&lt;p&gt;Adobe is currently working on ColdFusion 12, and I&amp;rsquo;m excited to see what will be added. I&amp;rsquo;m also excited about the upcoming &lt;a href=&#34;https://cfsummit.adobeevents.com/&#34;&gt;ColdFusion summit&lt;/a&gt; this fall. To learn more about ColdFusion&amp;rsquo;s history and this anniversary, check out the official ColdFusion blog: &lt;a href=&#34;http://blogs.coldfusion.com/post.cfm/twenty-years-of-making-web-happen-happy-birthday-coldfusion&#34;&gt;Twenty years of making web happen – Happy Birthday, ColdFusion!&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Also, for the next nine hours or so, you can get a free copy of Matt Gifford&amp;rsquo;s excellent &lt;a href=&#34;https://www.packtpub.com/packt/offers/free-learning&#34;&gt;Object-Oriented Programming in ColdFusion book&lt;/a&gt;!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Finding the owner of a file with ColdFusion</title>
+      <link>http://www.raymondcamden.com/2015/05/29/finding-the-owner-of-a-file-with-coldfusion</link>
+      <pubDate>Fri, 29 May 2015 08:30:53 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/29/finding-the-owner-of-a-file-with-coldfusion</guid>
+      <description>&lt;p&gt;A reader asked me last night if it was possible to find the owner of a file using ColdFusion. You may think &lt;a href=&#34;https://wikidocs.adobe.com/wiki/display/coldfusionen/GetFileInfo&#34;&gt;getFileInfo&lt;/a&gt; would return this but it does not. Luckily it is relatively simple to get to it from Java.&lt;/p&gt;
+
+&lt;p&gt;The first result I found via Google sent me to a &lt;a href=&#34;http://stackoverflow.com/a/23152140/52160&#34;&gt;Stack Overflow&lt;/a&gt; answer that worked fine once I converted it to work within ColdFusion:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;pathOb = createObject(&#34;java&#34;, &#34;java.nio.file.Paths&#34;);
+//Hard coded path here, but obviously this would be dynamic
+path = pathOb.get(&#34;/Applications/ColdFusion11/cfusion/wwwroot/test.cfm&#34;,[]);
+files = createObject(&#34;java&#34;, &#34;java.nio.file.Files&#34;);
+fav = createObject(&#34;java&#34;,&#34;java.nio.file.attribute.FileOwnerAttributeView&#34;);
+oav = files.getFileAttributeView(path, fav.getClass(), []);
+owner = oav.getOwner();
+writeoutput(owner);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You could easily wrap this up into a UDF so it is easier to call. Ok, Ray, don&amp;rsquo;t be lazy. Here is a UDF version with an example call:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function getFileOwner(p) {
+    var pathOb = createObject(&#34;java&#34;, &#34;java.nio.file.Paths&#34;);
+    var path = pathOb.get(p,[]);
+    var files = createObject(&#34;java&#34;, &#34;java.nio.file.Files&#34;);
+    var fav = createObject(&#34;java&#34;,&#34;java.nio.file.attribute.FileOwnerAttributeView&#34;);
+    var oav = files.getFileAttributeView(path, fav.getClass(), []);
+    return oav.getOwner();
+}
+
+writeoutput(getFileOwner(expandPath(&#34;./Application.cfc&#34;)));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And because I was bored, I rewrote the UDF as one line that would be a pain in the rear to debug.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;
+function getFileOwner(p) {
+    return createObject(&#34;java&#34;, &#34;java.nio.file.Files&#34;).getFileAttributeView(createObject(&#34;java&#34;, &#34;java.nio.file.Paths&#34;).get(p,[]), createObject(&#34;java&#34;,&#34;java.nio.file.attribute.FileOwnerAttributeView&#34;).getClass(), []).getOwner();
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Fascinating cftry/cfcatch/cfoutput bug with ColdFusion</title>
+      <link>http://www.raymondcamden.com/2015/05/18/fascinating-cftrycfcatchcfoutput-bug-with-coldfusion</link>
+      <pubDate>Mon, 18 May 2015 06:08:50 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/18/fascinating-cftrycfcatchcfoutput-bug-with-coldfusion</guid>
+      <description>&lt;p&gt;This was reported to me by Brian Paulson and I have to admit I was pretty surprised when I saw it. Consider the following code block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;cfoutput&amp;gt;
+    &amp;lt;cftry&amp;gt;
+    &amp;lt;cfset cdata =&amp;quot;Test&amp;quot;&amp;gt;
+    &amp;lt;cfdump var=&amp;quot;#variables#&amp;quot;&amp;gt;
+    #outputTest(&amp;quot;test&amp;quot;,{&amp;quot;cdata&amp;quot;=cdata})#
+    
+    &amp;lt;cfcatch type=&amp;quot;any&amp;quot;&amp;gt;
+        &amp;lt;cfdump var=&amp;quot;#cfcatch#&amp;quot;&amp;gt;
+    &amp;lt;/cfcatch&amp;gt;
+    &amp;lt;/cftry&amp;gt;
+&amp;lt;/cfoutput&amp;gt;
+
+&amp;lt;cffunction name=&amp;quot;outputTest&amp;quot; output=&amp;quot;false&amp;quot;&amp;gt;
+    &amp;lt;cfargument name=&amp;quot;id&amp;quot; type=&amp;quot;string&amp;quot; default=&amp;quot;&amp;quot;&amp;gt;
+    &amp;lt;cfargument name=&amp;quot;options&amp;quot; type=&amp;quot;struct&amp;quot;&amp;gt;
+    &amp;lt;!--- dont need to do anything in here ---&amp;gt;
+    &amp;lt;cfreturn id&amp;gt;
+&amp;lt;/cffunction&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Right away you may think, that cfoutput should be inside the cftry, and you&amp;rsquo;re right, but it doesn&amp;rsquo;t &lt;i&gt;have&lt;/i&gt; to be, except for the fact that when you run this code, you get: &lt;strong&gt;Variable CDATA is not defined&lt;/strong&gt;. Since CDATA has special meaning in XML, I thought perhaps it was a bug with ColdFusion&amp;rsquo;s parser, but renaming it doesn&amp;rsquo;t help. Note the cfdump of variables there. If I remove the outputTest UDF call I clearly see CDATA as a variable. In the UDF call I tried variables.cdata and it didn&amp;rsquo;t work. Using &amp;ldquo;variables&amp;rdquo; by itself though did work. I also tried making a new structure, s, with cdata as a value inside and then passed s to the UDF and that worked fine too.&lt;/p&gt;
+
+&lt;p&gt;The main issue seems to be the placement of the cfoutput. Moving them inside makes it work properly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markup&#34;&gt;&amp;lt;cftry&amp;gt;
+&amp;lt;cfoutput&amp;gt;
+&amp;lt;cfset cdata =&amp;quot;Test&amp;quot;&amp;gt;
+#outputTest(&amp;quot;test&amp;quot;,{&amp;quot;cdata&amp;quot;=cdata})#
+&amp;lt;/cfoutput&amp;gt;
+&amp;lt;cfcatch type=&amp;quot;any&amp;quot;&amp;gt;
+    &amp;lt;cfdump var=&amp;quot;#cfcatch#&amp;quot;&amp;gt;
+&amp;lt;/cfcatch&amp;gt;
+&amp;lt;/cftry&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Brian filed a bug report for it you can view here: &lt;a href=&#34;https://bugbase.adobe.com/index.cfm?event=bug&amp;id=3989302&#34;&gt;https://bugbase.adobe.com/index.cfm?event=bug&amp;id=3989302&lt;/a&gt;. I tested it in Lucee and it works as expected.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Online ColdFusion Meetup Back in Action</title>
+      <link>http://www.raymondcamden.com/2015/05/11/online-coldfusion-meetup-back-in-action</link>
+      <pubDate>Mon, 11 May 2015 06:01:11 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/05/11/online-coldfusion-meetup-back-in-action</guid>
+      <description>&lt;p&gt;After a hiatus, the &lt;a href=&#34;http://www.meetup.com/coldfusionmeetup/&#34;&gt;Online ColdFusion Meetup&lt;/a&gt; is now back! As you can tell by the title, this is a user group for ColdFusion developers that meets online only. Run by &lt;a href=&#34;http://carehart.org/&#34;&gt;Charlie Arehart&lt;/a&gt;, it has a long history of great presenters and content, and since it is 100% free with no travel costs, it is definitely worth your time checking out. The next meeting will be on Thursday, May 28, and will be Charlie himself discussing updating ColdFusion servers: &lt;a href=&#34;http://www.meetup.com/coldfusionmeetup/events/222404392/?a=ea1_grp&amp;rv=ea1&amp;_af=event&amp;_af_eid=222404392&#34;&gt;&amp;ldquo;Updating/Hotf­ixing ColdFusion: Tips and Traps&amp;rdquo; with Charlie Arehart&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can also browse all the old meetings here: &lt;a href=&#34;http://www.meetup.com/coldfusionmeetup/pages/Recordings_of_the_ColdFusion_Meetup/&#34;&gt;http://www.meetup.com/coldfusionmeetup/pages/Recordings_of_the_ColdFusion_Meetup/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ColdFusion Updates Released Today</title>
+      <link>http://www.raymondcamden.com/2015/04/14/coldfusion-updates-released-today</link>
+      <pubDate>Tue, 14 Apr 2015 17:14:53 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/04/14/coldfusion-updates-released-today</guid>
+      <description>&lt;p&gt;As the title says, multiple updates were released for ColdFusion today. One is an update to ColdFusion 10 (details may be found &lt;a href=&#34;https://helpx.adobe.com/coldfusion/kb/coldfusion-10-update-16.html&#34;&gt;here&lt;/a&gt;) and the other is a rather big update to ColdFusion 11, &lt;a href=&#34;https://helpx.adobe.com/coldfusion/kb/coldfusion-11-update-5.html&#34;&gt;Update 5&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can see the complete list of bug fixes here: &lt;a href=&#34;https://helpx.adobe.com/coldfusion/kb/bugs-fixed-in-coldfusion-11-update-5.html&#34;&gt;Bugs fixed in ColdFusion 11 Update 5&lt;/a&gt;. I want to call out one bug in particular that I&amp;rsquo;m happy is fixed: &lt;a href=&#34;https://bugbase.adobe.com/index.cfm?event=bug&amp;id=3818767&#34;&gt;3818767: Serialization of query does not respect case&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;ColdFusion 11 added a new way to serialize queries - &amp;ldquo;struct&amp;rdquo;. You could pass this to the serializeJSON function or simply specify it as a default in Application.cfc. I discussed this in detail here: &lt;a href=&#34;http://www.raymondcamden.com/2014/05/08/ColdFusion-11s-new-Struct-format-for-JSON-and-how-to-use-it-in-ColdFusion-10&#34;&gt;ColdFusion 11’s new Struct format for JSON (and how to use it in ColdFusion 10)&lt;/a&gt;. While this was cool, the columns were all uppercased when the JSON string was generated. So for example:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;[{&amp;ldquo;NAME&amp;rdquo;:&amp;ldquo;ray&amp;rdquo;,&amp;ldquo;AGE&amp;rdquo;:30}]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;While still a better format, most people prefer lowercase. Now ColdFusion let&amp;rsquo;s you specify a setting to tell ColdFusion to use the same case you used in the query. To enable this feature, add &lt;code&gt;this.serialization.preserveCaseForQueryColumn=&amp;ldquo;true&amp;rdquo;&lt;/code&gt; to your Application.cfc file. Here is a complete example.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;component {
+    this.name=&#34;root&#34;;
+    this.serialization.serializequeryas=&#34;struct&#34;;
+    this.serialization.preserveCaseForQueryColumn=&#34;true&#34;;   
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now your query will serialize and respect the case you used when writing your SQL.&lt;/p&gt;
+
+&lt;p&gt;Adobe forgot to update the docs for this, but luckily I still have edit access to the wiki. You can see this, and the other Application.cfc variables, here at the reference: &lt;a href=&#34;https://wikidocs.adobe.com/wiki/display/coldfusionen/Application+variables&#34;&gt;Application variables&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Cool ColdFusion site on Kickstarter</title>
+      <link>http://www.raymondcamden.com/2015/04/07/cool-coldfusion-site-on-kickstarter</link>
+      <pubDate>Tue, 07 Apr 2015 08:31:11 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/04/07/cool-coldfusion-site-on-kickstarter</guid>
+      <description>&lt;p&gt;SPY, a &amp;ldquo;real world, live action&amp;rdquo; game, is up on Kickstarter - &lt;a href=&#34;https://www.kickstarter.com/projects/1186555722/spy-real-world-live-action-espionage&#34;&gt;SPY: Real World, Live-Action Espionage&lt;/a&gt;. I&amp;rsquo;m sharing this because the back end for the game is all built in ColdFusion. It looks like a pretty interesting idea!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/spy.gif&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/04/spy.gif&#34; alt=&#34;spy&#34; width=&#34;699&#34; height=&#34;437&#34; class=&#34;alignnone size-full wp-image-5966&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Traffic on ColdFusion Bloggers</title>
+      <link>http://www.raymondcamden.com/2015/02/18/traffic-on-coldfusion-bloggers</link>
+      <pubDate>Wed, 18 Feb 2015 09:22:42 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/18/traffic-on-coldfusion-bloggers</guid>
+      <description>&lt;p&gt;So a reader of mine pinged me today with this question:&lt;/p&gt;
+
+&lt;blockquote&gt;
+Hi Ray,
+I hope that things are good with you!
+
+Do you have any stats on the number of articles posted on CFBloggers &amp; number of views over the years?
+
+I&#39;ve been doing CF for 15 years, for places like Cornell Med Ctr in NYC, The Mayo Clinic in Rochester, Mn &amp; many other Fortune 500 companies.
+
+Right now the State of (Top Secret) is looking to move to Grails or Rails from CF.
+
+Is the CF gravy train coming to a halt and how quickly?
+&lt;/blockquote&gt;
+
+&lt;p&gt;I can share information about CFBloggers easily enough. To be fair, I don&amp;rsquo;t think web traffic is a good metric for this site. Since it is an aggregator, I&amp;rsquo;d think most folks would use the RSS feed as a means to monitor the site. Also, everything is Tweeted so I&amp;rsquo;m thinking a lot of folks may skip hitting the page directly. Lastly, when I move the site from ColdFusion to Node I decided to stop proxying the hits. What I mean is - previously - when you clicked a link from CFB you would hit the site first, I&amp;rsquo;d log it, and then I&amp;rsquo;d forward you to the external blog entry. Now I just send you straight there.&lt;/p&gt;
+
+&lt;p&gt;Ok, so with that in mind, here is a chart showing page views, per month, since the site went live in 2007.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/cfb1.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/cfb1.png&#34; alt=&#34;cfb1&#34; width=&#34;800&#34; height=&#34;186&#34; class=&#34;alignnone size-full wp-image-5701&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, there is a great jump in 2009, one I wish I could explain. I thought perhaps it was adding Twitter support, but that was &lt;a href=&#34;http://www.raymondcamden.com/2008/7/14/Follow-ColdFusion-Bloggers-on-Twitter&#34;&gt;done&lt;/a&gt; in July of 2008, a good year before the jump.&lt;/p&gt;
+
+&lt;p&gt;As you can see though it has slowly declined over time. I&amp;rsquo;m not sure that&amp;rsquo;s necessarily indicative of ColdFusion but blogging in general. I don&amp;rsquo;t have research to back this up, but it seems like more and more people are abandoning blogs versus starting new ones. My own traffic has gone up and down over the years, but is mostly up though. If you&amp;rsquo;re curious, here is the history of  my blog in page views.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/rkc.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/rkc.png&#34; alt=&#34;rkc&#34; width=&#34;800&#34; height=&#34;137&#34; class=&#34;alignnone size-full wp-image-5702&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So yeah, let&amp;rsquo;s hit that last statement, the one that isn&amp;rsquo;t controversial at all.&lt;/p&gt;
+
+&lt;blockquote&gt;
+Is the CF gravy train coming to a halt and how quickly?
+&lt;/blockquote&gt;
+
+&lt;p&gt;Let me begin by saying that I am 100% completely the wrong person to try to answer this. I&amp;rsquo;m not wise about the industry. I know crap about business. I like to write code, write about code, and talk about code. What follows are my personal observations and nothing more.&lt;/p&gt;
+
+&lt;p&gt;More and more the server seems to be less important than it used to be. I&amp;rsquo;ve been learning about Node.js, and I think it is cool. (It has been a while since I used Groovy but it was cool too!) But I find myself doing much of the same stuff I did in ColdFusion. Listen for requests, hit a database, and output crap. ColdFusion was awesome because it made that &lt;strong&gt;incredibly&lt;/strong&gt; easy. It still does! But the issue is that it isn&amp;rsquo;t the &lt;i&gt;only&lt;/i&gt; thing that makes it incredibly easy. Looking at the landscape of server technologies out there, I still think ColdFusion is the most approachable technology for non-computer professionals. (As an aside, some people may refer to these folks as &amp;ldquo;Five Taggers&amp;rdquo;, but I just look at them as programmers in training, or, people who need to get shit done. They don&amp;rsquo;t overuse pound signs or skip using frameworks because they are stupid - they&amp;rsquo;re just human and may not have the time to learn their craft like the rest of us. I wish some folks in our community would have a bit more patience and understanding.) However, outside of this demographic I don&amp;rsquo;t know how much &amp;ldquo;ease of use&amp;rdquo; ColdFusion offers over other solutions. Groovy is a good example of that. Again, I&amp;rsquo;m &lt;i&gt;years&lt;/i&gt; rusty with it, but it made Java coding a heck of lot easier from what I remember. By the same token, if you already know JavaScript, then learning Node means you&amp;rsquo;ve already got a huge leg up on beginning.&lt;/p&gt;
+
+&lt;p&gt;Keeping in mind my focus for the past few years has been on client-side and mobile, I&amp;rsquo;m not seeing a lot of &lt;i&gt;new&lt;/i&gt; people using ColdFusion. The ColdFusion questions I get tend to be from folks I already know, or from folks who are maintaining existing code. I don&amp;rsquo;t have access to the number of developers using ColdFusion (Adobe would have that, and obviously it would only cover their customers, not necessarily people using Railo or Lucee), but I&amp;rsquo;d assume that number is growing well.&lt;/p&gt;
+
+&lt;p&gt;Growing the developer base has been discussed by a &lt;strong&gt;lot&lt;/strong&gt; of people far smarter than I. I do not know what it will take to do it. I think &lt;a href=&#34;http://lucee.org/&#34;&gt;Lucee&lt;/a&gt; is really exciting and could possibly attract folks, but again, this really isn&amp;rsquo;t my area.&lt;/p&gt;
+
+&lt;p&gt;I think ColdFusion will continue for a few years, I just don&amp;rsquo;t think it will &lt;i&gt;grow&lt;/i&gt; any more. I think we&amp;rsquo;ll see a ColdFusion 12, but after that, I&amp;rsquo;m not sure. I&amp;rsquo;d expect Adobe to can it the minute it becomes unprofitable, which to be fair, is probably totally expected for a business. I do want to see ColdFusion 13 just because I think it would be a cool number to get too. ;)&lt;/p&gt;
+
+&lt;p&gt;Myself, and others in the ColdFusion community, have been saying for nearly ten years now, that if you only know ColdFusion, you are making a huge mistake. That applies to &lt;i&gt;any&lt;/i&gt; skill. As a web developer, you &lt;strong&gt;need&lt;/strong&gt; to have a good set of skills in your wheelhouse. You certainly don&amp;rsquo;t need to know everything (yeah, good luck with even attempting that), but having multiple complementary skill sets is a must.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>A few examples of \&#34;tag as script\&#34; in ColdFusion 11</title>
+      <link>http://www.raymondcamden.com/2015/02/12/a-few-examples-of-tag-as-script-in-coldfusion-11</link>
+      <pubDate>Thu, 12 Feb 2015 05:34:50 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/12/a-few-examples-of-tag-as-script-in-coldfusion-11</guid>
+      <description>&lt;p&gt;Yesterday I &lt;a href=&#34;http://www.raymondcamden.com/2015/02/11/reminder-stop-using-the-old-cfc-based-tags-in-coldfusion-11&#34;&gt;posted&lt;/a&gt; a reminder that ColdFusion 11 developers can stop using the old &amp;ldquo;CFCs for Tags&amp;rdquo; feature that provided support for certain things in script. I mentioned that &lt;i&gt;everything&lt;/i&gt; could be used in cfscript now and that the old CFCs were (sometimes, not always) a bit buggy.&lt;/p&gt;
+
+&lt;p&gt;Brad Wood suggested I actually provide an example of this and I thought it was a good idea. I wrote up two quick demos that demonstrate the new syntax. This isn&amp;rsquo;t super deep or anything, but hopefully it gives you a basic idea of how this new syntax looks. First, an example of a few different tags:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;cfhttp(url=&#34;http://www.cnn.com&#34;,result=&#34;cnnReq&#34;);
+writeDump(cnnReq.responseHeader);
+
+cfhttp(url=&#34;http://www.cnn.com&#34;,result=&#34;cnnReq&#34;,method=&#34;post&#34;) {
+    cfhttpparam(type=&#34;formfield&#34;,name=&#34;something&#34;,value=createUUID());  
+}
+writeDump(cnnReq.responseHeader);
+
+cfsearch(collection=&#34;test1&#34;, criteria=&#34;cat&#34;, name=&#34;searchResults&#34;);
+writeDump(searchResults);
+
+cffeed(action=&#34;read&#34;, source=&#34;http://feeds.feedburner.com/raymondcamdensblog&#34;, query=&#34;feed&#34;);
+writeDump(feed);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make note of how you can&amp;rsquo;t use a result (ie, foo = goo()) in any of these calls and instead use an argument. That could be easily fixed and should be. Second, note how child tags are handled in the second cfhttp call. I don&amp;rsquo;t have anything to add to it, but as I said, just note the syntax.&lt;/p&gt;
+
+&lt;p&gt;For the heck of it, I then wrote a second demo. This one takes an array of RSS URLs and uses cfthread to fetch them in parallel. It then merges the resultant queries and sorts them. A mini-aggregator if you will.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;feeds = [&#34;http://feeds.feedburner.com/raymondcamdensblog&#34;,&#34;http://www.cflib.org/rss&#34;,&#34;http://feeds.feedburner.com/ColdfusionbloggersorgFeed&#34;];
+threads = [];
+
+//for each feed, use a thread to fetch rss
+feeds.each(function(f,x) {
+    var name = &#34;get_#x#&#34;;
+    threads.append(name);
+    cfthread(name=name,feed=f) {
+        cffeed(action=&#34;read&#34;, source=attributes.feed, query=&#34;feed&#34;);
+        thread.feed = feed;
+    }
+}); 
+
+cfthread(action=&#34;join&#34;,name=threads.toList());
+//copy thread queries out and create sql merge statement
+sql = &#34;&#34;;
+feeds.each(function(f,x) {
+    variables[&#34;feed#x#&#34;] = cfthread[&#34;get_#x#&#34;].feed;
+    if(x &amp;gt; 1) {
+        sql &amp;= &#34; union &#34;;
+    }
+    sql &amp;= &#34;select * from feed#x#&#34;;
+});
+merged = queryExecute(sql,{},{dbtype:&#34;query&#34;});
+//credit Vince Collins: https://vincentcollins.wordpress.com/2008/02/22/cffeed-dont-forget-you-can-cast-the-resulting-query-column/
+merged = queryExecute(&#34;select content, title, rsslink, cast(publisheddate as date) as publisheddate from merged order by publisheddate desc&#34;, {}, {dbtype:&#34;query&#34;});
+writedump(var=merged,top=20);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I hope this helps!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Reminder - stop using the old CFC-based tags in ColdFusion 11</title>
+      <link>http://www.raymondcamden.com/2015/02/11/reminder-stop-using-the-old-cfc-based-tags-in-coldfusion-11</link>
+      <pubDate>Wed, 11 Feb 2015 05:57:56 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/11/reminder-stop-using-the-old-cfc-based-tags-in-coldfusion-11</guid>
+      <description>&lt;p&gt;Earlier last week I was helping someone diagnose a ColdFusion issue when I noticed he was using the old CFC-based tags in cfscript. Specifically:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;httpService = new http();
+httpService.setMethod(&#34;put&#34;);
+httpService.setCharset(&#34;utf-8&#34;);
+httpService.setUrl(someURL);
+httpService.addParam(type=&#34;file&#34;,name=&#34;stuff&#34;,file=&#34;c:\inetpub\wwwroot\test.csv&#34;,mimetype=&#34;Content-type:text/csv&#34;);
+httpService.addParam(type=&#34;formfield&#34;,name=&#34;filename&#34;,value=&#34;Test&#34;);
+result = LOCAL.httpService.send().getPrefix();&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Back around ColdFusion 9 I believe Adobe made CFCs to support a few different tags in cfscript. They were: cfcollection, cfdbinfo, cffeed, cfftp, cfhttp, cfimap, cfindex, cfldap, cfmail, cfpdf, cfpop, cfquery, cfsearch, cfstoredproc, cfstoredprocresult.&lt;/p&gt;
+
+&lt;p&gt;I used a few of these quite a bit, and in general they worked ok, but I ran into bugs from time to time. Surprisingly these CFCs are &lt;strong&gt;not&lt;/strong&gt; encrypted. You can find them in an com.adobe.coldfusion folder under your server&amp;rsquo;s CustomTags folder. Because they weren&amp;rsquo;t encrypted, I actually wrote my own fixes from time to time.&lt;/p&gt;
+
+&lt;p&gt;But the point is - in ColdFusion 11, you should not be using any of these, and should be using the built-in support for tags in script. The documentation for this may be a bit hard to find. The feature as a whole may be found here: &lt;a href=&#34;https://wikidocs.adobe.com/wiki/display/coldfusionen/cfscript#cfscript-Scriptsupportfortags&#34;&gt;Script support for tags&lt;/a&gt;, but as far as I know, &lt;i&gt;none&lt;/i&gt; of the wiki pages shows examples of this in regards to individual tags.&lt;/p&gt;
+
+&lt;p&gt;Adam Cameron does a good &lt;a href=&#34;http://blog.adamcameron.me/2015/01/cfml-evolution-of-functionality.html&#34;&gt;write up&lt;/a&gt; about some of the mistakes in Adobe&amp;rsquo;s implementation. I don&amp;rsquo;t agree they are quite as bad as he points out, but I strongly agree that &amp;ldquo;cf&amp;rdquo; should have been removed from the calls and the need to pass in a result argument should have been fixed. Maybe ColdFusion 12 will correct that. (Or Luccee. :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Can&#39;t run ColdFusion Builder 3 on OS X? Read This.</title>
+      <link>http://www.raymondcamden.com/2015/02/03/cant-run-coldfusion-builder-3-on-osx-read-this</link>
+      <pubDate>Tue, 03 Feb 2015 15:08:50 +0600</pubDate>
+      
+      <guid>http://www.raymondcamden.com/2015/02/03/cant-run-coldfusion-builder-3-on-osx-read-this</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m working on a new machine and as part of my install process discovered I couldn&amp;rsquo;t run ColdFusion Builder 3. It had installed just fine, but running it gave me:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/cfb-warning.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/cfb-warning.png&#34; alt=&#34;cfb warning&#34; width=&#34;840&#34; height=&#34;318&#34; class=&#34;alignnone size-full wp-image-5640&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I kinda remembered this from before, but when I clicked the link I was taken to an obviously abandoned, broken page on Apple.com:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/badsite.png&#34;&gt;&lt;img src=&#34;http://www.raymondcamden.com/wp-content/uploads/2015/02/badsite.png&#34; alt=&#34;badsite&#34; width=&#34;750&#34; height=&#34;375&#34; class=&#34;alignnone size-full wp-image-5641&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Nothing on that page worked so I was pretty much stuck. I reached out to Adobe (still kinda weird to think of them as someone I &lt;i&gt;don&amp;rsquo;t&lt;/i&gt; work for) and got help from Krishna Reddy on the ColdFusion team. He acknowledged this appears to be an issue and shared the right URL for downloading the proper Java bits: &lt;a href=&#34;http://support.apple.com/kb/DL1572&#34;&gt;Java for OS X 2014-001&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Hopefully this becomes a non-issue for CFB going forward.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
