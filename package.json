@@ -1,0 +1,22 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified.\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cfjedimaster/staticraymondcamden.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cfjedimaster/staticraymondcamden/issues"
+  },
+  "homepage": "https://github.com/cfjedimaster/staticraymondcamden#readme",
+  "devDependencies": {
+    "surge": "^0.17.7"
+  }
+}
